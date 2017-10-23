@@ -42,7 +42,7 @@ if(cardToSave == null){
 
 If the returned `Card` is null, error states will show on the fields that need to be fixed. 
 
-Once you have a non-null `Card` object from the widget, you can call [addCard](#addCard).
+Once you have a non-null `Card` object from the widget, you can call [addCard](##addCard).
 
 ## Init library
 You should initialize the library. 
@@ -126,7 +126,7 @@ var session_id = Paymentez.getSessionId();
 Once you have the Session ID, you can pass it to your server to charge the user.
 
 
-# PaymentForm Complete Reference
+# PaymentezForm Complete Reference
 
 ## Manual Insertion
 
