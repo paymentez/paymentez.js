@@ -1,0 +1,14 @@
+.paymentez-form .cvc-container {
+  width: 50%;
+  float: right;
+}
+
+.paymentez-form .cvc-wrapper {
+  box-sizing: border-box;
+  margin-left: 5px;
+}
+
+.paymentez-form .cvc-wrapper .cvc {
+  display: block;
+  width: 100%;
+}

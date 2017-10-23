@@ -1,0 +1,43 @@
+{
+  "name": "paymentez-js",
+  "authors": [
+    "Martín Mucito <mmucito@paymentez>"
+  ],
+  "description": "Credit Card input form with validation and allows you to create a token with credit/debit card details in your web apps, by preventing sensitive card data from crossing your server (More information, read PCI compliance).",
+  "version": "1.0.1",
+  "main": "./paymentez-js.min.js",
+  "homepage": "https://paymentez.com",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "Paymentez",
+    "Credit Card Input",
+    "Credit Card Form",
+    "Credit Card Validation",
+    "Tokenize Card"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paymentez/paymentez.js"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependences": {},
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-less": "^1.0.0",
+    "grunt-contrib-nodeunit": "~0.4.1",
+    "grunt-contrib-uglify": "~0.5.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-cssmin": "0.11.0"
+  }
+}
