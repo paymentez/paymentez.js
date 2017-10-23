@@ -9,13 +9,14 @@ PaymentezJS is a library that allows developers to easily connect to the Payment
 
 # Installation
 
-- Bower: `bower install paymentez-js --save`
-- NPM: `npm install paymentez-js`
-- Source: [Download](https://github.com/paymentez/paymentez.js)
+You will need to include jQuery and both `paymentez.min.js` and `paymentez.min.css` into your web page.
 
-You will need to include both `paymentez.min.js` and `paymentez.min.css` into your web page.
+```html
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
-
+<link href="http://cdn.paymentez.com/js/1.0.1/paymentez.min.css" rel="stylesheet" type="text/css" />
+<script src="http://cdn.paymentez.com/js/1.0.1/paymentez.min.js"></script>
+```
 
 
 # Usage
@@ -42,7 +43,7 @@ if(cardToSave == null){
 
 If the returned `Card` is null, error states will show on the fields that need to be fixed. 
 
-Once you have a non-null `Card` object from the widget, you can call [addCard](##addCard).
+Once you have a non-null `Card` object from the widget, you can call [addCard](#addcard).
 
 ## Init library
 You should initialize the library. 
