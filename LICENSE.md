@@ -1,6 +1,7 @@
 MIT License
 
-Copyright (c) 2016 Colin Stannard
+Copyright (c) 2017 Paymentez
+Copyright (c) 2016 Colin Stannard (https://github.com/CardJs/CardJs)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
