@@ -1,10 +1,11 @@
 # PaymentezJS
+===================
 
 PaymentezJS is a library that allows developers to easily connect to the Paymentez CREDITCARDS API
 
 [View working example >](https://developers.paymentez.com/docs/payments/#javascript)
 
-# Installation
+## Installation
 
 You will need to include jQuery and both `paymentez.min.js` and `paymentez.min.css` into your web page.
 
@@ -16,11 +17,11 @@ You will need to include jQuery and both `paymentez.min.js` and `paymentez.min.c
 ```
 
 
-# Usage
+## Usage
 
 For working examples of using PaymentezJS, see the [examples](https://github.com/paymentez/paymentez.js/tree/master/examples) folder of this project.
 
-## Using the Paymentez Form
+### Using the Paymentez Form
 Any elements with the class `paymentez-form` will be automatically converted into a basic credit card input with the expiry date and CVC check.
 
 The easiest way to get started with PaymentezForm is to insert the snippet of code:
@@ -42,7 +43,7 @@ If the returned `Card` is null, error states will show on the fields that need t
 
 Once you have a non-null `Card` object from the widget, you can call [addCard](#addcard).
 
-## Init library
+### Init library
 You should initialize the library. 
 
 ```javascript
@@ -56,7 +57,7 @@ You should initialize the library.
 Paymentez.setEnvironment(true, 'PAYMENTEZ_CLIENT_APP_CODE', 'PAYMENTEZ_CLIENT_APP_KEY');
 ```
 
-## addCard
+### addCard
 
 addCard converts sensitive card data to a single-use token which you can safely pass to your server to charge the user. 
 
@@ -112,7 +113,7 @@ The third argument to addCard is a Card object. A Card contains the following fi
 + cvc: card security code as a string, e.g. '123'.
 
 
-## getSessionId
+### getSessionId
 
 The Session ID is a parameter Paymentez use for fraud purposes. 
 Call this method if you want to Collect your user's Device Information.
@@ -124,9 +125,9 @@ var session_id = Paymentez.getSessionId();
 Once you have the Session ID, you can pass it to your server to charge the user.
 
 
-# PaymentezForm Complete Reference
+## PaymentezForm Complete Reference
 
-## Manual Insertion
+### Manual Insertion
 
 If you wish to manually alter the fields used by PaymentezForm to add additional classes or set the input field name or id etc,
 you can pre-populate the form fields as show below.
@@ -146,7 +147,7 @@ you can pre-populate the form fields as show below.
 
 
 
-## Reading Values
+### Reading Values
 
 PaymentezForm provides functionality allowing you to read the form field values directly with JavaScript. This can be useful if you wish to submit the values via Ajax.
 
@@ -174,7 +175,7 @@ var cvc = myCard.PaymentezForm('cvc');
 
 
 
-## Functions
+### Functions
 
 To call a function on a PaymentezForm element, follow the pattern below.
 Replace the text 'function' with the name of the function you wish to call.
@@ -197,7 +198,7 @@ The functions available are listed below:
 
 
 
-### CardType Function
+#### CardType Function
 
 The `cardType` function will return one of the following strings based on the card number entered.
 If the card type cannot be determined an empty string will be given instead.
@@ -217,19 +218,19 @@ If the card type cannot be determined an empty string will be given instead.
 
 
 
-## Static functions
+### Static functions
 
 If you just want to perform simple operations without the PaymentezForm form, there are a number of static functions provided
 by the PaymentezForm library that are made available.
 
 
-### Card Type from Card Number
+#### Card Type from Card Number
 ```javascript
 var cardNumber = '4242 4242 4242 4242'; // Spacing is not important
 var cardType = PaymentezForm.cardTypeFromNumber(cardNumber);
 ```
 
-### Cleaning and Masking
+#### Cleaning and Masking
 ```javascript
 // var formatMask = 'XXXX XXXX XXXX XXXX'; // You can manually define an input mask
 // var formatMask = 'XX+X X XXXX XXXX XXXX'; // You can add characters other than spaces to the mask
@@ -239,7 +240,7 @@ var cardNumberWithoutSpaces = PaymentezForm.numbersOnlyString(cardNumber);
 var formattedCardNumber = PaymentezForm.applyFormatMask(cardNumberWithoutSpaces, formatMask);
 ```
 
-#### Masks
+##### Masks
 
 | Variable Name                             | Mask
 | :---------------------------------------- | :------------------ |
@@ -253,7 +254,7 @@ var formattedCardNumber = PaymentezForm.applyFormatMask(cardNumberWithoutSpaces,
 
 
 
-## Card Expiry Validation
+### Card Expiry Validation
 The expiry month can be in the range: 1 = January to 12 = December
 
 ```javascript
