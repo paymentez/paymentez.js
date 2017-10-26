@@ -4,9 +4,6 @@ PaymentezJS is a library that allows developers to easily connect to the Payment
 
 [View working example >](https://developers.paymentez.com/docs/payments/#javascript)
 
-![Example](https://developers.paymentez.com/wp-content/uploads/2017/10/example-1.png)
-
-
 # Installation
 
 You will need to include jQuery and both `paymentez.min.js` and `paymentez.min.css` into your web page.
