@@ -2,9 +2,9 @@
 
 PaymentezJS is a library that allows developers to easily connect to the Paymentez CREDITCARDS API
 
-[View working example >](https://developers.paymentez.com/)
+[View working example >](https://developers.paymentez.com/docs/payments/#javascript)
 
-![Example](img/example.png)
+![Example](https://developers.paymentez.com/wp-content/uploads/2017/10/example-1.png)
 
 
 # Installation
@@ -14,14 +14,14 @@ You will need to include jQuery and both `paymentez.min.js` and `paymentez.min.c
 ```html
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
-<link href="http://cdn.paymentez.com/js/1.0.1/paymentez.min.css" rel="stylesheet" type="text/css" />
-<script src="http://cdn.paymentez.com/js/1.0.1/paymentez.min.js"></script>
+<link href="https://cdn.paymentez.com/js/1.0.1/paymentez.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.paymentez.com/js/1.0.1/paymentez.min.js"></script>
 ```
 
 
 # Usage
 
-For working examples of using PaymentezJS, see the [examples](examples) folder of this project.
+For working examples of using PaymentezJS, see the [examples](https://github.com/paymentez/paymentez.js/tree/master/examples) folder of this project.
 
 ## Using the Paymentez Form
 Any elements with the class `paymentez-form` will be automatically converted into a basic credit card input with the expiry date and CVC check.
