@@ -11,30 +11,38 @@ PaymentezForm.prototype.constructor = PaymentezForm ;
  */
 function PaymentezForm(elem) {
   this.elem = jQuery(elem);
-
+  const current_data = this.elem.children("div");
   this.cardType = '';
 
+  this.captureEmail = this.elem.data("capture-email") ? this.elem.data("capture-email") : false;
+  this.captureCellPhone = this.elem.data("capture-cellphone") ? this.elem.data("capture-cellphone") : false;
   this.captureName = this.elem.data("capture-name") ? this.elem.data("capture-name") : false;
   this.iconColour = this.elem.data("icon-colour") ? this.elem.data("icon-colour") : false;
 
   // Initialise
   this.cvcLenght = 3;
+  this.initEmailInput();
+  this.initCellPhoneInput();  
   this.initNameInput();
   this.initCardNumberInput();  
   this.initExpiryMonthInput();
   this.initExpiryYearInput();
   this.initCvcInput();
 
-
+  
   this.elem.empty();
 
 
   // Setup display
-  this.setupNameInput();
+  this.setupEmailInput();
+  this.setupCellPhoneInput();
+  this.setupNameInput();    
   this.setupCardNumberInput();  
   this.setupExpiryInput();
   this.setupCvcInput();
 
+  
+  this.elem.append(current_data);
 
   // Set icon colour
   if(this.iconColour) {
@@ -45,6 +53,7 @@ function PaymentezForm(elem) {
 
   this.refreshCreditCardTypeIcon();
 
+  
 }
 
 
@@ -85,6 +94,8 @@ PaymentezForm.prototype.creditCardNumberMask = PaymentezForm.CREDIT_CARD_NUMBER_
 //PaymentezForm.CREDIT_CARD_NUMBER_PLACEHOLDER = "Card number";
 PaymentezForm.CREDIT_CARD_NUMBER_PLACEHOLDER = "Número de tarjeta";
 PaymentezForm.NAME_PLACEHOLDER =  "Nombre del titular";
+PaymentezForm.EMAIL_PLACEHOLDER =  "E-mail";
+PaymentezForm.CELLPHONE_PLACEHOLDER =  "Celular";
 PaymentezForm.EXPIRY_MASK = "XX / XX";
 PaymentezForm.EXPIRY_PLACEHOLDER = "MM / YY";
 PaymentezForm.EXPIRY_USE_DROPDOWNS = false;
@@ -93,6 +104,15 @@ PaymentezForm.CVC_MASK_3 = "XXX";
 PaymentezForm.CVC_MASK_4 = "XXXX";
 PaymentezForm.CVC_PLACEHOLDER =  "CVC";
 
+PaymentezForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" xmlns:xlink="http://www.w3.org/1999/xlink">'+
+'<g>'+
+'<path class="svg" d="M19.494,0H7.948C6.843,0,5.951,0.896,5.951,1.999v23.446c0,1.102,0.892,1.997,1.997,1.997h11.546'+
+'c1.103,0,1.997-0.895,1.997-1.997V1.999C21.491,0.896,20.597,0,19.494,0z M10.872,1.214h5.7c0.144,0,0.261,0.215,0.261,0.481'+
+'s-0.117,0.482-0.261,0.482h-5.7c-0.145,0-0.26-0.216-0.26-0.482C10.612,1.429,10.727,1.214,10.872,1.214z M13.722,25.469'+
+'c-0.703,0-1.275-0.572-1.275-1.276s0.572-1.274,1.275-1.274c0.701,0,1.273,0.57,1.273,1.274S14.423,25.469,13.722,25.469z'+
+' M19.995,21.1H7.448V3.373h12.547V21.1z"/>'+
+'</g>'+
+'</svg>';
 
 PaymentezForm.CREDIT_CARD_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ' +
   'x="0px" y="3px" width="24px" height="17px" viewBox="0 0 216 146" enable-background="new 0 0 216 146" xml:space="preserve">' +
@@ -701,9 +721,11 @@ PaymentezForm.prototype.isValidData = function() {
   var is_date_valid = this.refreshExpiryMonthValidation();
   var is_cvc_valid = this.refreshCvcValidation();
   var is_card_holder_valid = this.refreshCardHolderNameValidation();
+  var is_email_valid = this.refreshEmailValidation();
+  var is_cellphone_valid = this.refreshCellPhoneValidation();
   var is_card_number_valid = this.refreshCardNumberValidation();  
 
-  var valid = is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid;
+  var valid = is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid && is_email_valid && is_cellphone_valid;
   return valid;
 };
 
@@ -723,6 +745,26 @@ PaymentezForm.prototype.refreshCardHolderNameValidation = function() {
     return true;
   }else{
     this.nameInput.parent().addClass("has-error");
+    return false;
+  }
+};
+
+PaymentezForm.prototype.refreshEmailValidation = function() {
+  if(this.isEmailValid()){
+    this.emailInput.parent().removeClass("has-error");
+    return true;
+  }else{
+    this.emailInput.parent().addClass("has-error");
+    return false;
+  }
+};
+
+PaymentezForm.prototype.refreshCellPhoneValidation = function() {
+  if(this.isCellPhoneValid()){
+    this.cellPhoneInput.parent().removeClass("has-error");
+    return true;
+  }else{
+    this.cellPhoneInput.parent().addClass("has-error");
     return false;
   }
 };
@@ -754,6 +796,21 @@ PaymentezForm.prototype.isCvcValid = function() {
 PaymentezForm.prototype.isCardHolderNameValid = function() {
   if(this.captureName)
     return this.getName() != null && this.getName().length >= 5;
+  else
+    return true;
+}
+
+PaymentezForm.prototype.isEmailValid = function() {
+  if(this.captureEmail){
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return this.getEmail() != null && this.getEmail().length >= 5 && re.test(this.getEmail());
+  }else
+    return true;
+}
+
+PaymentezForm.prototype.isCellPhoneValid = function() {
+  if(this.captureCellPhone)
+    return this.getCellPhone() != null && this.getCellPhone().length >= 5;
   else
     return true;
 }
@@ -839,6 +896,23 @@ PaymentezForm.prototype.getName = function() {
   return this.nameInput.val();
 };
 
+/**
+ * Get the email inputted.
+ *
+ * @returns {string}
+ */
+PaymentezForm.prototype.getEmail = function() {
+  return this.emailInput.val();
+};
+
+/**
+ * Get the cellphone inputted.
+ *
+ * @returns {string}
+ */
+PaymentezForm.prototype.getCellPhone = function() {
+  return this.cellPhoneInput.val();
+};
 
 /**
  * Get the expiry month inputted.
@@ -1199,7 +1273,7 @@ PaymentezForm.prototype.initNameInput = function() {
 
   // Ensure the name element has a field name
   if (!PaymentezForm.elementHasAttribute(this.nameInput, "name")) {
-    this.nameInput.attr("name", "card-number");
+    this.nameInput.attr("name", "card-holder");
   }
 
   // Ensure the name element has a placeholder
@@ -1207,6 +1281,62 @@ PaymentezForm.prototype.initNameInput = function() {
     this.nameInput.attr("placeholder", PaymentezForm.NAME_PLACEHOLDER);
   }
 };
+
+/**
+ * Initialise the email input
+ */
+PaymentezForm.prototype.initEmailInput = function() {
+  
+    // Enable email input if a field has been created
+    if(!this.captureEmail)
+      this.captureEmail = this.elem.find(".email")[0] != null;
+  
+    // Find or create the email input element
+    this.emailInput = PaymentezForm.detachOrCreateElement(this.elem, ".email", "<input class='email' />");
+  
+    // Ensure the email element has a field email
+    if (!PaymentezForm.elementHasAttribute(this.emailInput, "name")) {
+      this.emailInput.attr("name", "email");
+    }
+  
+    // Ensure the email element has a placeholder
+    if (!PaymentezForm.elementHasAttribute(this.emailInput, "placeholder")) {
+      this.emailInput.attr("placeholder", PaymentezForm.EMAIL_PLACEHOLDER);
+    }
+
+    this.emailInput.attr("type", "email");
+    this.emailInput.attr("autocorrect", "off");
+    this.emailInput.attr("spellcheck", "off");
+    this.emailInput.attr("autocapitalize", "off");
+  };
+
+  /**
+ * Initialise the cellphone input
+ */
+PaymentezForm.prototype.initCellPhoneInput = function() {
+  
+    // Enable cellphone input if a field has been created
+    if(!this.captureCellPhone)
+      this.captureCellPhone = this.elem.find(".cellphone")[0] != null;
+  
+    // Find or create the cellphone input element
+    this.cellPhoneInput = PaymentezForm.detachOrCreateElement(this.elem, ".cellphone", "<input class='cellphone' />");
+  
+    // Ensure the cellphone element has a field cellphone
+    if (!PaymentezForm.elementHasAttribute(this.cellPhoneInput, "name")) {
+      this.cellPhoneInput.attr("name", "cellphone");
+    }
+  
+    // Ensure the cellphone element has a placeholder
+    if (!PaymentezForm.elementHasAttribute(this.cellPhoneInput, "placeholder")) {
+      this.cellPhoneInput.attr("placeholder", PaymentezForm.CELLPHONE_PLACEHOLDER);
+    }
+
+    this.cellPhoneInput.attr("type", "tel");
+    this.cellPhoneInput.attr("autocorrect", "off");
+    this.cellPhoneInput.attr("spellcheck", "off");
+    this.cellPhoneInput.attr("autocapitalize", "off");
+  };
 
 
 /**
@@ -1282,6 +1412,27 @@ PaymentezForm.prototype.setupNameInput = function() {
     wrapper.append(this.nameInput);
     wrapper.append("<div class='icon'></div>");
     wrapper.find(".icon").append(PaymentezForm.USER_SVG);
+  }
+};
+
+PaymentezForm.prototype.setupEmailInput = function() {  
+  if (this.captureEmail) {    
+    this.elem.append("<div class='email-container'><div class='email-wrapper'></div></div>");
+    var wrapper = this.elem.find(".email-wrapper");
+    wrapper.append(this.emailInput);
+    wrapper.append("<div class='icon'></div>");
+    wrapper.find(".icon").append(PaymentezForm.MAIL_SVG);
+
+  }
+};
+
+PaymentezForm.prototype.setupCellPhoneInput = function() {  
+  if (this.captureCellPhone) {    
+    this.elem.append("<div class='cellphone-container'><div class='cellphone-wrapper'></div></div>");
+    var wrapper = this.elem.find(".cellphone-wrapper");
+    wrapper.append(this.cellPhoneInput);
+    wrapper.append("<div class='icon'></div>");
+    wrapper.find(".icon").append(PaymentezForm.CELLPHONE_SVG);
   }
 };
 
@@ -1405,6 +1556,12 @@ PaymentezForm.prototype.setupExpiryInput = function() {
     });
     this.nameInput.blur(function() {
       $this.refreshCardHolderNameValidation();
+    });
+    this.emailInput.blur(function() {
+      $this.refreshEmailValidation();
+    });
+    this.cellPhoneInput.blur(function() {
+      $this.refreshCellPhoneValidation();
     });
     this.cardNumberInput.blur(function() {
       $this.refreshCardNumberValidation();

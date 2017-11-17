@@ -61,18 +61,30 @@ Paymentez.createToken = function(createTokenRequest, successCallback, erroCallba
     xmlhttp.setRequestHeader("Content-Type", 'application/json');
     xmlhttp.setRequestHeader("Auth-Token", Paymentez.getAuthToken(Paymentez.PAYMENTEZ_CLIENT_APP_CODE, Paymentez.PAYMENTEZ_CLIENT_APP_KEY));  
   
+    
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4        
-            var objResponse = JSON.parse(xmlhttp.responseText);
-            if (xmlhttp.status == 200) {            
-                successCallback(objResponse);            
-            }
-            else if (xmlhttp.status == 400) {
-                erroCallback(objResponse);
-            }
-            else {
-                erroCallback(objResponse);
-            }
+            try{
+                var objResponse = JSON.parse(xmlhttp.responseText);
+                if (xmlhttp.status == 200) {                    
+                    successCallback(objResponse);            
+                }
+                else if (xmlhttp.status == 400) {                    
+                    erroCallback(objResponse);
+                }
+                else {                    
+                    erroCallback(objResponse);
+                }
+            }catch(e){
+                var server_error = {
+                    "error": {
+                      "type": "Server Error",
+                      "help": "Server Error",
+                      "description": "Server Error"
+                    }
+                  }                      
+                erroCallback(server_error);
+            }    
         }
     };
     xmlhttp.send(JSON.stringify(createTokenRequest));

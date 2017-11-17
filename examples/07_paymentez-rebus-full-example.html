@@ -6,12 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
+  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
   <link href="https://cdn.paymentez.com/js/1.0.1/paymentez.min.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.paymentez.com/js/1.0.1/paymentez.min.js"></script>
 
   <style>
     .panel {
       margin: 0 auto;
+      max-width: 480px;
       background-color: #F5F5F7;
       border: 1px solid #ddd;
       padding: 20px;
@@ -22,10 +24,10 @@
     }
     .btn {
       background: rgb(140,197,65); /* Old browsers */
-      background: -moz-linear-gradient(top, rgba(140,197,65,1) 0%, rgba(20,167,81,1) 100%); /* FF3.6-15 */
-      background: -webkit-linear-gradient(top, rgba(140,197,65,1) 0%,rgba(20,167,81,1) 100%); /* Chrome10-25,Safari5.1-6 */
-      background: linear-gradient(to bottom, rgba(140,197,65,1) 0%,rgba(20,167,81,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#44afe7', endColorstr='#3198df',GradientType=0 );
+      background: -moz-linear-gradient(top, #F46C73 0%, #ed1c27 100%); /* FF3.6-15 */
+      background: -webkit-linear-gradient(top, #F46C73 0%, #ed1c27 100%); /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(to bottom, #F46C73 0%, #ed1c27 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F46C73', endColorstr='#ed1c27',GradientType=0 );
       color: #fff;
       display: block;
       width: 100%;
@@ -40,6 +42,7 @@
       font-weight: bold;
       display : block;
       margin-top: 20px;
+      font-family: 'Nunito', sans-serif !important;
     }
 
     .btn:hover {
@@ -51,8 +54,8 @@
 <body>
   <div class="panel">
     <form id="add-card-form">
-      <div class="paymentez-form" id="my-card" data-capture-name="true"></div>
-      <button class="btn">Save</button>
+      <div class="paymentez-form rebus" id="my-card" data-capture-name="true"></div>
+      <button class="btn">Guardar Tarjeta</button>
       <br/>
       <div id="messages"></div>
     </form>
@@ -86,7 +89,7 @@ $(function() {
    * @param paymentez_client_app_code provided by Paymentez.
    * @param paymentez_client_app_key provided by Paymentez.
    */
-  Paymentez.setEnvironment(true, 'PAYMENTEZ_CLIENT_APP_CODE', 'PAYMENTEZ_CLIENT_APP_KEY');
+  Paymentez.setEnvironment(true, 'RBUS-CO-CLIENT', 'ctO5x1wQK9zu6mHnGFvmtBvt32AiBp');
   
   var form              = $("#add-card-form");
   var submitButton            = form.find("button");
@@ -97,9 +100,9 @@ $(function() {
     $('#messages').text("");
     var cardToSave = myCard.PaymentezForm('card');
     if(cardToSave == null){
-      $('#messages').text("Invalid Card Data");
+      $('#messages').text("Datos Inválidos");
     }else{
-      submitButton.attr("disabled", "disabled").text("Card Processing...");    
+      submitButton.attr("disabled", "disabled").text("Procesando Transacción...");    
       
       /*
       After passing all the validations cardToSave should have the following structure:

@@ -1,11 +1,17 @@
 .paymentez-form .card-number-wrapper,
+.paymentez-form .email-container,
+.paymentez-form .installments-wrapper,
+.paymentez-form .cvc-wrapper,
 .paymentez-form .name-wrapper {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .paymentez-form .card-number-wrapper,
+.paymentez-form .installments-wrapper,
 .paymentez-form .name-wrapper,
 .paymentez-form .expiry-wrapper,
+.paymentez-form .cellphone-wrapper,
+.paymentez-form .email-wrapper,
 .paymentez-form .cvc-wrapper {
   -webkit-box-shadow:0 1px 0 rgba(255,255,255,0.7),inset 0 1px 0 rgba(255,255,255,0.7);
   -moz-box-shadow:0 1px 0 rgba(255,255,255,0.7),inset 0 1px 0 rgba(255,255,255,0.7);
@@ -18,8 +24,11 @@
 
 
 .paymentez-form .card-number-wrapper,
+.paymentez-form .installments-wrapper,
 .paymentez-form .name-wrapper,
 .paymentez-form .cvc-container,
+.paymentez-form .cellphone-container,
+.paymentez-form .email-container,
 .paymentez-form .expiry-container {
   display: inline-block;
 }
@@ -63,10 +72,16 @@
 
 .paymentez-form select {
   -moz-appearance: none;
+  -webkit-appearance: none;
   text-indent: 0.01px;
+  padding-right: 5px;
   text-overflow: '';
-}
+  width: 100%;
+  
 
+
+  
+}
 
 .paymentez-form input[disabled],
 .paymentez-form select[disabled] {
@@ -92,13 +107,14 @@
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
 }
 
-
 .paymentez-form input[readonly="readonly"]:not([disabled]),
 .paymentez-form input[readonly]:not([disabled]) {
    background-color: #fff;
    cursor: pointer;
  }
 
+ .paymentez-form .has-error select,
+ .paymentez-form .has-error select:focus,
 .paymentez-form .has-error input,
 .paymentez-form .has-error input:focus {
   border-color: #F64B2F;
@@ -114,14 +130,17 @@
 
 
 .paymentez-form .card-number-wrapper,
+.paymentez-form .installments-wrapper,
 .paymentez-form .name-wrapper{
   width: 100%;
 }
 
-
 .paymentez-form input.card-number,
 .paymentez-form input.name,
+.paymentez-form input.email,
+.paymentez-form input.cellphone,
 .paymentez-form input.cvc {
   padding-left: 38px;
+  padding-right: 5px;
   width: 100%;
 }

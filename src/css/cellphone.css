@@ -1,0 +1,14 @@
+.paymentez-form .cellphone-container {
+  width: 50%;
+  float: right;
+}
+
+.paymentez-form .cellphone-wrapper {
+  box-sizing: border-box;
+  margin-left: 5px;
+}
+
+.paymentez-form .cellphone-wrapper .cellphone {
+  display: block;
+  width: 100%;
+}

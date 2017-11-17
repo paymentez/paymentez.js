@@ -38,7 +38,7 @@
   $.fn.PaymentezForm = function(methodOrOptions) {
     if(methods[methodOrOptions]) {
       return methods[methodOrOptions].apply(this, Array.prototype.slice.call(arguments, 1));
-    } else if(typeof methodOrOptions === "object" || !methodOrOptions) {
+    } else if(typeof methodOrOptions === "object" || !methodOrOptions) {      
       return methods.init.apply( this, arguments );
     } else {
       $.error("Method " +  methodOrOptions + " does not exist on jQuery.Paymentez");
@@ -52,7 +52,7 @@
 // Initialise for all elements with paymentez-js class.
 //
 $(function() {
-  $(".paymentez-form").each(function(i, obj) {
+  $(".paymentez-form").not('.checkout').each(function(i, obj) {
     $(obj).PaymentezForm();
   });
 });
