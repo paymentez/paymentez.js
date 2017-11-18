@@ -129,23 +129,20 @@ Once you have the Session ID, you can pass it to your server to charge the user.
 
 ### Manual Insertion
 
-If you wish to manually alter the fields used by PaymentezForm to add additional classes or set the input field name or id etc,
-you can pre-populate the form fields as show below.
+If you wish to manually alter the fields used by PaymentezForm to add additional classes or set the input field placeholder, name or id etc, you can pre-populate the form fields as show below.
 
+This could be helpful in case you want to Render the Form in another Language, or to reference some input by reference or name.
+
+For example if you want to render the form in English and add a custom class to card-number
 ```html
 <div class="paymentez-form">
-  <input class="card-number my-custom-class" name="card-number">
-  <input class="name" id="the-card-name-id" name="card-holders-name" placeholder="Name on card">
+  <input class="card-number my-custom-class" name="card-number" placeholder="Card number">
+  <input class="name" id="the-card-name-id" name="card-holders-name" placeholder="Card Holders Name">
   <input class="expiry-month" name="expiry-month">
   <input class="expiry-year" name="expiry-year">
   <input class="cvc" name="cvc">
 </div>
 ```
-
-
-
-
-
 
 ### Reading Values
 
