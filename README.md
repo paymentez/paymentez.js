@@ -131,7 +131,7 @@ Once you have the Session ID, you can pass it to your server to charge the user.
 
 If you wish to manually alter the fields used by PaymentezForm to add additional classes or set the input field placeholder, name or id etc, you can pre-populate the form fields as show below.
 
-This could be helpful in case you want to Render the Form in another Language, or to reference some input by reference or name.
+This could be helpful in case you want to Render the Form in another Language (by default the Form is Rendered in Spanish), or to reference some input by name or id.
 
 For example if you want to render the form in English and add a custom class to card-number
 ```html
