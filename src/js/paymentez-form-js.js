@@ -403,7 +403,6 @@ PaymentezForm.applyFormatMask = function(string, mask) {
 };
 
 
-
 /**
  * Establish the type of a card from the number.
  *
@@ -411,6 +410,11 @@ PaymentezForm.applyFormatMask = function(string, mask) {
  * @returns {string}
  */
 PaymentezForm.cardTypeFromNumber = function(number) {
+
+  // Credisensa
+  re = new RegExp("^(000029|960018)");
+  if (number.match(re) != null)
+    return "Credisensa";
 
   // Diners - Carte Blanche
   re = new RegExp("^30[0-5]");
@@ -1022,6 +1026,9 @@ PaymentezForm.prototype.setCardTypeIconFromNumber = function(number) {
     case "Mastercard":
       this.setCardTypeAsMasterCard();
       break;
+    case "Credisensa":
+      this.setCardTypeAsCredisensa();
+      break;
     case "AMEX":
       this.setCardTypeAsAmericanExpress();
       break;
@@ -1104,6 +1111,12 @@ PaymentezForm.prototype.setCardTypeIconAsAmericanExpress = function() {
   this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show american-express");
 };
 
+/**
+ * Set the card type icon as - Credisensa
+ */
+PaymentezForm.prototype.setCardTypeIconAsCredisensa = function() {
+  this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show credisensa");
+};
 
 /**
  * Set the card type icon as - Discover
@@ -1174,6 +1187,15 @@ PaymentezForm.prototype.setCardTypeAsAmericanExpress = function() {
   this.setCvc4();
 };
 
+/**
+ * Set the card type as - American Express (AMEX)
+ */
+PaymentezForm.prototype.setCardTypeAsCredisensa = function() {
+  this.cardType = 'cs';
+  this.setCardTypeIconAsCredisensa();
+  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_MASTERCARD_MASK);
+  this.setCvc3();
+};
 
 /**
  * Set the card type as - Discover

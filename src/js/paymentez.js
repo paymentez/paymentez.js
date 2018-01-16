@@ -1,5 +1,6 @@
 Paymentez.prototype.constructor = Paymentez ;
 
+Paymentez.ENV_MODE = '';
 Paymentez.TEST_MODE = true;
 Paymentez.PAYMENTEZ_CLIENT_APP_CODE = '';
 Paymentez.PAYMENTEZ_CLIENT_APP_KEY = '';
@@ -9,7 +10,9 @@ Paymentez.KOUNT_ENVIRONMENT = '';
 Paymentez.KOUN_TEST_ENVIRONMENT = 'https://tst.kaptcha.com/';
 Paymentez.KOUN_PROD_ENVIRONMENT = 'https://ssl.kaptcha.com/';
 
-Paymentez.SERVER_DEV_URL = "https://ccapi-stg.paymentez.com";
+Paymentez.SERVER_LOCAL_URL = "http://localhost:8000";
+Paymentez.SERVER_DEV_URL = "https://ccapi-dev.paymentez.com";
+Paymentez.SERVER_STG_URL = "https://ccapi-stg.paymentez.com";
 Paymentez.SERVER_PROD_URL = "https://ccapi.paymentez.com";
 
 function Paymentez() {
@@ -49,12 +52,26 @@ Paymentez.getHash= function(message) {
 }
 
 Paymentez.createToken = function(createTokenRequest, successCallback, erroCallback) {
-    var SERVER_URL = Paymentez.SERVER_DEV_URL;    
-    if(Paymentez.TEST_MODE){
-        SERVER_URL = Paymentez.SERVER_DEV_URL;
+    var SERVER_URL = Paymentez.SERVER_STG_URL;    
+    if(Paymentez.ENV_MODE === ''){
+        if(Paymentez.TEST_MODE){
+            SERVER_URL = Paymentez.SERVER_STG_URL;
+        }else{
+            SERVER_URL = Paymentez.SERVER_PROD_URL;
+        }
     }else{
-        SERVER_URL = Paymentez.SERVER_PROD_URL;
+        if(Paymentez.ENV_MODE === 'dev'){
+            SERVER_URL = Paymentez.SERVER_DEV_URL;
+        }else if(Paymentez.ENV_MODE === 'stg'){
+            SERVER_URL = Paymentez.SERVER_STG_URL;
+        }else if(Paymentez.ENV_MODE === 'prod'){
+            SERVER_URL = Paymentez.SERVER_PROD_URL;
+        }else{
+            SERVER_URL = Paymentez.SERVER_LOCAL_URL;
+        }
     }
+
+    
     
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", SERVER_URL + "/v2/card/add", true);
@@ -91,13 +108,22 @@ Paymentez.createToken = function(createTokenRequest, successCallback, erroCallba
 };
 
 Paymentez.dataCollector = function(session_id) {
-    if (Paymentez.TEST_MODE){
-        Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_TEST_ENVIRONMENT;
-  
+    if(Paymentez.ENV_MODE === ''){
+        if (Paymentez.TEST_MODE){
+            Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_TEST_ENVIRONMENT;
+      
+        }else{
+            Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_PROD_ENVIRONMENT;  
+        }
     }else{
-        Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_PROD_ENVIRONMENT;
-  
+        if (Paymentez.ENV_MODE === 'prod'){
+            Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_PROD_ENVIRONMENT;
+      
+        }else{
+            Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_TEST_ENVIRONMENT;  
+        }
     }
+    
     var body, e, iframe, image;
     if (typeof document !== 'undefined' && typeof document.body !== 'undefined' && document.body && (document.readyState === 'interactive' || document.readyState === 'complete')) {
       
@@ -137,7 +163,21 @@ Paymentez.setEnvironment = function(test_mode, paymentez_client_app_code, paymen
     Paymentez.PAYMENTEZ_CLIENT_APP_CODE = paymentez_client_app_code;
     Paymentez.PAYMENTEZ_CLIENT_APP_KEY = paymentez_client_app_key;      
 };
+
+/**
+ * Setting your credentials and environment
+ *
+ * @param env_mode `prod`, `stg`, `dev`, `local` to change environment. Default is `stg`
+ * @param paymentez_client_app_code provided by Paymentez.
+ * @param paymentez_client_app_key provided by Paymentez.
+ */
+Paymentez.init = function(env_mode, paymentez_client_app_code, paymentez_client_app_key) {    
+    Paymentez.ENV_MODE = env_mode;
+    Paymentez.PAYMENTEZ_CLIENT_APP_CODE = paymentez_client_app_code;
+    Paymentez.PAYMENTEZ_CLIENT_APP_KEY = paymentez_client_app_key;      
+};
   
+
 /**
  * The simplest way to create a token, using a Card
  * 

@@ -28,6 +28,9 @@
 .paymentez-form .card-number-wrapper .card-type-icon.american-express {
   background: url(ic_amex.svg);
 }
+.paymentez-form .card-number-wrapper .card-type-icon.credisensa {
+  background: url(ic_credisensa.png);
+}
 .paymentez-form .card-number-wrapper .card-type-icon.discover {
   background: url(ic_discover.svg);
 }

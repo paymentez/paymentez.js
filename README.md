@@ -50,11 +50,11 @@ You should initialize the library.
 /**
   * Init library
   *
-  * @param test_mode false to use production environment
+  * @param env_mode `prod`, `stg`, `dev`, `local` to change environment. Default is `stg`
   * @param paymentez_client_app_code provided by Paymentez.
   * @param paymentez_client_app_key provided by Paymentez.
   */
-Paymentez.setEnvironment(true, 'PAYMENTEZ_CLIENT_APP_CODE', 'PAYMENTEZ_CLIENT_APP_KEY');
+Paymentez.init('stg', 'PAYMENTEZ_CLIENT_APP_CODE', 'PAYMENTEZ_CLIENT_APP_KEY');
 ```
 
 ### addCard

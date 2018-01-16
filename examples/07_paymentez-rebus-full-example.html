@@ -85,11 +85,11 @@ $(function() {
   /**
    * Init library
    *
-   * @param test_mode false to use production environment
+   * @param env_mode `prod`, `stg`, `dev`, `local` to change environment. Default is `stg`
    * @param paymentez_client_app_code provided by Paymentez.
    * @param paymentez_client_app_key provided by Paymentez.
    */
-  Paymentez.setEnvironment(true, 'RBUS-CO-CLIENT', 'ctO5x1wQK9zu6mHnGFvmtBvt32AiBp');
+  Paymentez.init('stg', 'RBUS-CO-CLIENT', 'ctO5x1wQK9zu6mHnGFvmtBvt32AiBp');
   
   var form              = $("#add-card-form");
   var submitButton            = form.find("button");
