@@ -447,7 +447,7 @@ PaymentezForm.cardTypeFromNumber = function(number) {
     return "Visa";
 
   // Mastercard
-  re = new RegExp("^5[1-5]");
+  re = new RegExp("^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[01]|2720)");
   if (number.match(re) != null)
     return "Mastercard";
 
@@ -458,7 +458,6 @@ PaymentezForm.cardTypeFromNumber = function(number) {
 
   return "";
 };
-
 
 /**
  * Get the caret start position of the given element.
