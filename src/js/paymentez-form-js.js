@@ -407,10 +407,10 @@ PaymentezForm.useExito = function(){
  * @returns {string}
  */
 PaymentezForm.cardTypeFromNumber = function(number) {
-  number = number.replace(" ","");
+  var number = number.replace(" ","");
 
   // Credisensa
-  re = new RegExp("^(000029|960018)");
+  var re = new RegExp("^(000029|960018)");
   if (number.match(re) != null)
     return "Credisensa";
 
@@ -881,7 +881,7 @@ PaymentezForm.prototype.isCardNumberValid = function() {
  * @returns {boolean}
  */
 PaymentezForm.prototype.fiscalNumberAdded = function() {
-  fNumber = this.elem.find(".fiscal-number-wrapper");
+  var fNumber = this.elem.find(".fiscal-number-wrapper");
   return fNumber.length >= 1;
 }
 
@@ -903,7 +903,7 @@ PaymentezForm.prototype.isFiscalNumberValid = function() {
  * @returns {boolean}
  */
 PaymentezForm.prototype.expiryContainerAdded = function() {
-  exContainter = this.elem.find(".expiry-container");
+  var exContainter = this.elem.find(".expiry-container");
   return exContainter.length >= 1;
 }
 
@@ -913,7 +913,7 @@ PaymentezForm.prototype.expiryContainerAdded = function() {
  * @returns {boolean}
  */
 PaymentezForm.prototype.validationModeOption = function() {
-  valOption = this.elem.find(".validation-container");
+  var valOption = this.elem.find(".validation-container");
   return valOption.length >= 1;
 }
 
@@ -923,7 +923,7 @@ PaymentezForm.prototype.validationModeOption = function() {
  * @returns {boolean}
  */
 PaymentezForm.prototype.cvcContainerAdded = function() {
-  cvcContainer = this.elem.find(".cvc-container");
+  var cvcContainer = this.elem.find(".cvc-container");
   return cvcContainer.length >= 1;
 }
 
@@ -1645,14 +1645,14 @@ PaymentezForm.prototype.initFiscalNumberInput = function() {
  * Initialise the validation option by Cvc
  */
 PaymentezForm.prototype.initValidationCvc = function() {
-  wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-cvc", "<div class='validation-wrapper-cvc'></div>");
-  label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>CVC</label>");
+  var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-cvc", "<div class='validation-wrapper-cvc'></div>");
+  var label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>CVC</label>");
   label.attr("class", "validation-label");
-  optionCvc = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input checked='checked' value='cvc'/>");
+  var optionCvc = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input checked='checked' value='cvc'/>");
   optionCvc.attr("type", "radio");
   optionCvc.attr("name", "validate-option");
   optionCvc.attr("class", "validate-option");
-  span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
+  var span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
   label.append(optionCvc);
   label.append(span);
   wrapper.append(label);
@@ -1663,14 +1663,14 @@ PaymentezForm.prototype.initValidationCvc = function() {
  * Initialise the validation option by Otp
  */
 PaymentezForm.prototype.initValidationOtp = function() {
-  wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-otp", "<div class='validation-wrapper-otp'></div>");
-  label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>OTP</label>");
+  var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-otp", "<div class='validation-wrapper-otp'></div>");
+  var label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>OTP</label>");
   label.attr("class", "validation-label");
-  optionOtp = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input value='otp'/>");
+  var optionOtp = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input value='otp'/>");
   optionOtp.attr("type", "radio");
   optionOtp.attr("name", "validate-option");
   optionOtp.attr("class", "validate-option");
-  span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
+  var span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
   label.append(optionOtp);
   label.append(span);
   wrapper.append(label);
