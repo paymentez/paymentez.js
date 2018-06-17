@@ -812,7 +812,11 @@ PaymentezForm.prototype.refreshValidationOption = function() {
  * @returns {boolean}
  */
 PaymentezForm.prototype.isCvcValid = function() {
-  return this.getCvc() != null && this.getCvc().trim().length == this.cvcLenght;
+  if (this.getValidationOption() == "cvc") {
+    return this.getCvc() != null && this.getCvc().trim().length == this.cvcLenght;
+  } else {
+    return true;
+  }
 }
 
 /**
@@ -1042,7 +1046,11 @@ PaymentezForm.prototype.getValidationOption = function() {
  * @returns {number}
  */
 PaymentezForm.prototype.getCvc = function() {
+  if (this.getValidationOption() == "cvc") {
     return this.cvcInput.val();
+  }else{
+    return "";
+  }
 };
 
 // --- --- --- --- --- --- --- --- --- --- ---
