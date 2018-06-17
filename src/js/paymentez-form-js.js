@@ -1,6 +1,5 @@
 PaymentezForm.prototype.constructor = PaymentezForm ;
 
-
 /**
  * @class PaymentezForm
  *
@@ -9,6 +8,7 @@ PaymentezForm.prototype.constructor = PaymentezForm ;
  * @param elem
  * @constructor
  */
+
 function PaymentezForm(elem) {
   this.elem = jQuery(elem);
   const current_data = this.elem.children("div");
@@ -18,6 +18,8 @@ function PaymentezForm(elem) {
   this.captureCellPhone = this.elem.data("capture-cellphone") ? this.elem.data("capture-cellphone") : false;
   this.captureName = this.elem.data("capture-name") ? this.elem.data("capture-name") : false;
   this.iconColour = this.elem.data("icon-colour") ? this.elem.data("icon-colour") : false;
+  this.useExito = this.elem.data("use-exito") ? this.elem.data("use-exito") : false;
+
 
   // Initialise
   this.cvcLenght = 3;
@@ -29,9 +31,7 @@ function PaymentezForm(elem) {
   this.initExpiryYearInput();
   this.initCvcInput();
 
-  
   this.elem.empty();
-
 
   // Setup display
   this.setupEmailInput();
@@ -40,7 +40,6 @@ function PaymentezForm(elem) {
   this.setupCardNumberInput();  
   this.setupExpiryInput();
   this.setupCvcInput();
-
   
   this.elem.append(current_data);
 
@@ -48,16 +47,10 @@ function PaymentezForm(elem) {
   if(this.iconColour) {
     this.setIconColour(this.iconColour);
   }
-
   // --- --- --- --- --- --- --- --- --- ---
 
   this.refreshCreditCardTypeIcon();
-
-  
 }
-
-
-
 
 PaymentezForm.KEYS = {
   "0" : 48,
@@ -80,8 +73,6 @@ PaymentezForm.KEYS = {
 };
 
 
-
-
 PaymentezForm.CREDIT_CARD_NUMBER_DEFAULT_MASK    = "XXXX XXXX XXXX XXXX";
 PaymentezForm.CREDIT_CARD_NUMBER_VISA_MASK       = "XXXX XXXX XXXX XXXX";
 PaymentezForm.CREDIT_CARD_NUMBER_MASTERCARD_MASK = "XXXX XXXX XXXX XXXX";
@@ -89,13 +80,14 @@ PaymentezForm.CREDIT_CARD_NUMBER_DISCOVER_MASK   = "XXXX XXXX XXXX XXXX";
 PaymentezForm.CREDIT_CARD_NUMBER_JCB_MASK        = "XXXX XXXX XXXX XXXX";
 PaymentezForm.CREDIT_CARD_NUMBER_AMEX_MASK       = "XXXX XXXXXX XXXXX";
 PaymentezForm.CREDIT_CARD_NUMBER_DINERS_MASK     = "XXXX XXXX XXXX XX";
+PaymentezForm.CREDIT_CARD_NUMBER_EXITO_MASK      = "XXXX XXXX XXXX XXXX";
 
 PaymentezForm.prototype.creditCardNumberMask = PaymentezForm.CREDIT_CARD_NUMBER_DEFAULT_MASK;
-//PaymentezForm.CREDIT_CARD_NUMBER_PLACEHOLDER = "Card number";
 PaymentezForm.CREDIT_CARD_NUMBER_PLACEHOLDER = "Número de tarjeta";
 PaymentezForm.NAME_PLACEHOLDER =  "Nombre del titular";
 PaymentezForm.EMAIL_PLACEHOLDER =  "E-mail";
 PaymentezForm.CELLPHONE_PLACEHOLDER =  "Celular";
+PaymentezForm.FISCAL_NUMBER_PLACEHOLDER =  "Número fiscal";
 PaymentezForm.EXPIRY_MASK = "XX / XX";
 PaymentezForm.EXPIRY_PLACEHOLDER = "MM / YY";
 PaymentezForm.EXPIRY_USE_DROPDOWNS = false;
@@ -103,6 +95,7 @@ PaymentezForm.EXPIRY_NUMBER_OF_YEARS = 10;
 PaymentezForm.CVC_MASK_3 = "XXX";
 PaymentezForm.CVC_MASK_4 = "XXXX";
 PaymentezForm.CVC_PLACEHOLDER =  "CVC";
+PaymentezForm.VALIDATION_METHOD_LEGEND =  "Método de validacion";
 
 PaymentezForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" xmlns:xlink="http://www.w3.org/1999/xlink">'+
 '<g>'+
@@ -403,6 +396,10 @@ PaymentezForm.applyFormatMask = function(string, mask) {
 };
 
 
+PaymentezForm.useExito = function(){
+  return PaymentezForm.prototype.useExito;
+}
+
 /**
  * Establish the type of a card from the number.
  *
@@ -410,6 +407,7 @@ PaymentezForm.applyFormatMask = function(string, mask) {
  * @returns {string}
  */
 PaymentezForm.cardTypeFromNumber = function(number) {
+  number = number.replace(" ","");
 
   // Credisensa
   re = new RegExp("^(000029|960018)");
@@ -442,7 +440,7 @@ PaymentezForm.cardTypeFromNumber = function(number) {
     return "Visa Electron";
 
   // Visa
-  var re = new RegExp("^4");
+  re = new RegExp("^4");
   if (number.match(re) != null)
     return "Visa";
 
@@ -451,6 +449,11 @@ PaymentezForm.cardTypeFromNumber = function(number) {
   if (number.match(re) != null)
     return "Mastercard";
 
+  // Exito
+  re = ["590309", "570423", "590312"];
+  if (re.indexOf(number.substring(0, 6)) != -1)
+    return "Exito";
+
   // Discover
   re = new RegExp("^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)");
   if (number.match(re) != null)
@@ -458,6 +461,7 @@ PaymentezForm.cardTypeFromNumber = function(number) {
 
   return "";
 };
+
 
 /**
  * Get the caret start position of the given element.
@@ -727,8 +731,8 @@ PaymentezForm.prototype.isValidData = function() {
   var is_email_valid = this.refreshEmailValidation();
   var is_cellphone_valid = this.refreshCellPhoneValidation();
   var is_card_number_valid = this.refreshCardNumberValidation();  
-
-  var valid = is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid && is_email_valid && is_cellphone_valid;
+  var is_fiscal_number_valid = this.refreshFiscalNumberValidation();
+  var valid = is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid && is_email_valid && is_cellphone_valid && is_fiscal_number_valid;
   return valid;
 };
 
@@ -782,13 +786,33 @@ PaymentezForm.prototype.refreshCardNumberValidation = function() {
   }
 };
 
+PaymentezForm.prototype.refreshFiscalNumberValidation = function() {
+  if (this.fiscalNumberAdded() && this.isFiscalNumberValid()) {
+    this.fiscalNumberInput.parent().removeClass("has-error");
+    return true;
+  } else if (this.fiscalNumberAdded() && !this.isFiscalNumberValid()) {
+    this.fiscalNumberInput.parent().addClass("has-error");
+    return false;
+  } else {
+    return true;
+  }
+};
+
+PaymentezForm.prototype.refreshValidationOption = function() {
+  if (this.getValidationOption() == "otp"){
+    this.removeCvcContainer();
+  } else {
+    this.addCvcContainer();
+  }
+};
+
 /**
  * Is the given input a valid cvc?
  *
  * @returns {boolean}
  */
 PaymentezForm.prototype.isCvcValid = function() {
-  return this.getCvc() != null && this.getCvc().trim().length == this.cvcLenght;    
+  return this.getCvc() != null && this.getCvc().trim().length == this.cvcLenght;
 }
 
 /**
@@ -848,6 +872,58 @@ PaymentezForm.prototype.isCardNumberValid = function() {
 }
 
 /**
+ * Validate if exists the fiscal number in the form
+ *
+ * @returns {boolean}
+ */
+PaymentezForm.prototype.fiscalNumberAdded = function() {
+  fNumber = this.elem.find(".fiscal-number-wrapper");
+  return fNumber.length >= 1;
+}
+
+/**
+ * Is the given input a valid FiscalNumber?
+ *
+ * @returns {boolean}
+ */
+PaymentezForm.prototype.isFiscalNumberValid = function() {
+  if(this.fiscalNumberAdded())
+    return this.getFiscalNumber() != null && this.getFiscalNumber().length >= 8;
+  else
+    return true
+}
+
+/**
+ * Validate if exists the expiry date in the form
+ *
+ * @returns {boolean}
+ */
+PaymentezForm.prototype.expiryContainerAdded = function() {
+  exContainter = this.elem.find(".expiry-container");
+  return exContainter.length >= 1;
+}
+
+/**
+ * Validate if the validation mode is active
+ *
+ * @returns {boolean}
+ */
+PaymentezForm.prototype.validationModeOption = function() {
+  valOption = this.elem.find(".validation-container");
+  return valOption.length >= 1;
+}
+
+/**
+ * Validate if the cvc is displayed
+ *
+ * @returns {boolean}
+ */
+PaymentezForm.prototype.cvcContainerAdded = function() {
+  cvcContainer = this.elem.find(".cvc-container");
+  return cvcContainer.length >= 1;
+}
+
+/**
  * Get the card object.
  *
  * @returns {object}
@@ -871,12 +947,11 @@ PaymentezForm.prototype.getCard = function() {
         "expiry_year": Number(year),
         "expiry_month": Number(this.getExpiryMonth()),
         "type": this.cardType,
-        "cvc": this.getCvc()      
+        "cvc": this.getCvc()
       }
     };
   }
   
-
   return data;
 };
 
@@ -926,7 +1001,6 @@ PaymentezForm.prototype.getExpiryMonth = function() {
   return this.expiryMonthInput.val();
 };
 
-
 /**
  * Get the expiry year inputted.
  *
@@ -936,6 +1010,31 @@ PaymentezForm.prototype.getExpiryYear = function() {
   return this.expiryYearInput.val();
 };
 
+/**
+ * Get the fiscal number inputted.
+ *
+ * @returns {number}
+ */
+PaymentezForm.prototype.getFiscalNumber = function() {
+  if (this.fiscalNumberAdded()){
+    return this.fiscalNumberInput.val();
+  } else {
+    return '';
+  }
+};
+
+/**
+ * Get the type of validation
+ *
+ * @returns {number}
+ */
+PaymentezForm.prototype.getValidationOption = function() {
+  if (this.validationModeOption()) {
+    return this.elem.find("input[type='radio']:checked").val();
+  } else {
+    return "cvc"
+  }
+};
 
 /**
  * Get the CVC number inputted.
@@ -943,22 +1042,10 @@ PaymentezForm.prototype.getExpiryYear = function() {
  * @returns {number}
  */
 PaymentezForm.prototype.getCvc = function() {
-  return this.cvcInput.val();
+    return this.cvcInput.val();
 };
-
 
 // --- --- --- --- --- --- --- --- --- --- ---
-
-
-/**
- * Set the icon colour.
- *
- * @param colour
- */
-PaymentezForm.prototype.setIconColour = function(colour) {
-  this.elem.find(".icon .svg").css({"fill": colour});
-};
-
 
 /**
  * Set the icon colour.
@@ -1041,6 +1128,9 @@ PaymentezForm.prototype.setCardTypeIconFromNumber = function(number) {
     case "JCB":
       this.setCardTypeAsJcb();
       break;
+    case "Exito":
+      this.setCardTypeAsExito();
+      break;
     default:
       this.clearCardType();
   }
@@ -1074,7 +1164,6 @@ PaymentezForm.prototype.setCvc4 = function() {
   this.cvcLenght = 4;
   this.cvcInput.attr("maxlength", PaymentezForm.CVC_MASK_4.length);
 };
-
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
@@ -1141,6 +1230,14 @@ PaymentezForm.prototype.setCardTypeIconAsJcb = function() {
 };
 
 
+/**
+ * Set the card type icon as - Exito
+ */
+PaymentezForm.prototype.setCardTypeIconAsExito = function() {
+  this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show exito");
+};
+
+
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 
@@ -1151,6 +1248,7 @@ PaymentezForm.prototype.clearCardType = function() {
   this.clearCardTypeIcon();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_DEFAULT_MASK);
   this.setCvc3();
+  this.removeExitoChanges();
 };
 
 
@@ -1162,6 +1260,7 @@ PaymentezForm.prototype.setCardTypeAsVisa = function() {
   this.setCardTypeIconAsVisa();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_VISA_MASK);
   this.setCvc3();
+  this.removeExitoChanges();
 };
 
 
@@ -1173,6 +1272,7 @@ PaymentezForm.prototype.setCardTypeAsMasterCard = function() {
   this.setCardTypeIconAsMasterCard();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_MASTERCARD_MASK);
   this.setCvc3();
+  this.removeExitoChanges();
 };
 
 
@@ -1184,16 +1284,18 @@ PaymentezForm.prototype.setCardTypeAsAmericanExpress = function() {
   this.setCardTypeIconAsAmericanExpress();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_AMEX_MASK);
   this.setCvc4();
+  this.removeExitoChanges();
 };
 
 /**
- * Set the card type as - American Express (AMEX)
+ * Set the card type as - Credisensa
  */
 PaymentezForm.prototype.setCardTypeAsCredisensa = function() {
   this.cardType = 'cs';
   this.setCardTypeIconAsCredisensa();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_MASTERCARD_MASK);
   this.setCvc3();
+  this.removeExitoChanges();
 };
 
 /**
@@ -1204,6 +1306,7 @@ PaymentezForm.prototype.setCardTypeAsDiscover = function() {
   this.setCardTypeIconAsDiscover();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_DISCOVER_MASK);
   this.setCvc3();
+  this.removeExitoChanges();
 };
 
 
@@ -1215,6 +1318,7 @@ PaymentezForm.prototype.setCardTypeAsDiners = function() {
   this.setCardTypeIconAsDiners();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_DINERS_MASK);
   this.setCvc3();
+  this.removeExitoChanges();
 };
 
 
@@ -1226,9 +1330,109 @@ PaymentezForm.prototype.setCardTypeAsJcb = function() {
   this.setCardTypeIconAsJcb();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_JCB_MASK);
   this.setCvc3();
+  this.removeExitoChanges();
 };
 
 
+/**
+ * Set the card type as - Exito
+ */
+PaymentezForm.prototype.setCardTypeAsExito = function() {
+  this.cardType = 'ex';
+  this.setCardTypeIconAsExito();
+  if (this.useExito) {
+    this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_EXITO_MASK);
+    this.setCvc4();
+    this.addExitoChanges();
+  }
+};
+
+
+// --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+/**
+ * Change the method of validation
+ */
+PaymentezForm.prototype.addValidationOptions = function() {
+  if (!this.validationModeOption()) {
+    this.initValidationCvc();
+    this.initValidationOtp();
+    this.setupValidationOptionSet();
+    this.setIconColour(this.iconColour);
+  }
+};
+
+PaymentezForm.prototype.addFiscalNumber = function() {
+  if (!this.fiscalNumberAdded()) {
+    this.initFiscalNumberInput();
+    this.setupFiscalNumberInput();
+    this.setIconColour(this.iconColour);
+  }
+};
+
+PaymentezForm.prototype.removeFiscalNumber = function() {
+  if (this.fiscalNumberAdded()) {
+    this.elem.find(".fiscal-number-wrapper").remove();
+  }
+};
+
+PaymentezForm.prototype.removeValidationOptions = function() {
+  if (this.validationModeOption()) {
+    this.elem.find(".validation-container").remove();
+  }
+};
+
+PaymentezForm.prototype.removeExpiryContainer = function() {
+  if (this.expiryContainerAdded()) {
+    this.elem.find(".expiry-container").remove();
+    this.elem.find(".cvc-container").addClass("center-cvc");
+  }
+};
+
+PaymentezForm.prototype.addExpiryContainer = function() {
+  if (!this.expiryContainerAdded()) {
+    this.elem.find(".cvc-container").removeClass("center-cvc")
+    this.initExpiryMonthInput();
+    this.initExpiryYearInput();
+    this.setupExpiryInput();
+    this.setIconColour(this.iconColour);
+  }
+};
+
+PaymentezForm.prototype.removeCvcContainer = function() {
+  if(this.cvcContainerAdded()) {
+    this.elem.find(".cvc-container").remove();
+  }
+}
+
+PaymentezForm.prototype.addCvcContainer = function() {
+  if(!this.cvcContainerAdded()) {
+    this.initCvcInput();
+    this.setupCvcInput();
+    this.setIconColour(this.iconColour);
+    if (!this.expiryContainerAdded()) {
+      this.elem.find(".cvc-container").addClass("center-cvc")
+    }
+    if(this.getCardType() == "Exito") {
+      this.setCvc4();
+    }
+  }
+}
+// --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+/**
+ * The next methods are temporary because only exito use the methods of validation
+ */
+PaymentezForm.prototype.addExitoChanges = function() {
+  this.addFiscalNumber();
+  this.addValidationOptions();
+  this.removeExpiryContainer();
+}
+
+PaymentezForm.prototype.removeExitoChanges = function() {
+  this.addExpiryContainer();
+  this.addCvcContainer();
+  this.removeFiscalNumber();
+  this.removeValidationOptions();
+}
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 
@@ -1410,10 +1614,62 @@ PaymentezForm.prototype.initCvcInput = function() {
   });
 };
 
+/**
+ * Initialise the fiscal number input
+ */
+PaymentezForm.prototype.initFiscalNumberInput = function() {
 
+  // Find or create the fiscal number input element
+  this.fiscalNumberInput = PaymentezForm.detachOrCreateElement(this.elem, ".fiscal-number", "<input class='fiscal-number' />");
+
+  // Ensure the fiscal number element has a field name
+  if (!PaymentezForm.elementHasAttribute(this.fiscalNumberInput, "name")) {
+    this.fiscalNumberInput.attr("name", "fiscal-number");
+  }
+
+  // Ensure the fiscal number element has a placeholder
+  if (!PaymentezForm.elementHasAttribute(this.fiscalNumberInput, "placeholder")) {
+    this.fiscalNumberInput.attr("placeholder", PaymentezForm.FISCAL_NUMBER_PLACEHOLDER);
+  }
+};
+
+/**
+ * Initialise the validation option by Cvc
+ */
+PaymentezForm.prototype.initValidationCvc = function() {
+  wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-cvc", "<div class='validation-wrapper-cvc'></div>");
+  label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>CVC</label>");
+  label.attr("class", "validation-label");
+  optionCvc = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input checked='checked' value='cvc'/>");
+  optionCvc.attr("type", "radio");
+  optionCvc.attr("name", "validate-option");
+  optionCvc.attr("class", "validate-option");
+  span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
+  label.append(optionCvc);
+  label.append(span);
+  wrapper.append(label);
+  this.validationOptionByCvc = wrapper;
+};
+
+/**
+ * Initialise the validation option by Otp
+ */
+PaymentezForm.prototype.initValidationOtp = function() {
+  wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-otp", "<div class='validation-wrapper-otp'></div>");
+  label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>OTP</label>");
+  label.attr("class", "validation-label");
+  optionOtp = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input value='otp'/>");
+  optionOtp.attr("type", "radio");
+  optionOtp.attr("name", "validate-option");
+  optionOtp.attr("class", "validate-option");
+  span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
+  label.append(optionOtp);
+  label.append(span);
+  wrapper.append(label);
+  this.validationOptionByOtp = wrapper;
+};
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-
 
 
 PaymentezForm.prototype.setupCardNumberInput = function() {  
@@ -1424,7 +1680,6 @@ PaymentezForm.prototype.setupCardNumberInput = function() {
   wrapper.append("<div class='icon'></div>");
   wrapper.find(".icon").append(PaymentezForm.CREDIT_CARD_SVG);
 };
-
 
 PaymentezForm.prototype.setupNameInput = function() {  
   if (this.captureName) {    
@@ -1456,8 +1711,6 @@ PaymentezForm.prototype.setupCellPhoneInput = function() {
     wrapper.find(".icon").append(PaymentezForm.CELLPHONE_SVG);
   }
 };
-
-
 
 PaymentezForm.prototype.setupExpiryInput = function() {
   this.elem.append("<div class='expiry-container'><div class='expiry-wrapper'></div></div>");
@@ -1605,7 +1858,6 @@ PaymentezForm.prototype.setupExpiryInput = function() {
   wrapper.find(".icon").append(PaymentezForm.CALENDAR_SVG);
 };
 
-
 PaymentezForm.prototype.setupCvcInput = function() {
   this.elem.append("<div class='cvc-container'><div class='cvc-wrapper'></div></div>");
   var wrapper = this.elem.find(".cvc-wrapper");
@@ -1616,8 +1868,36 @@ PaymentezForm.prototype.setupCvcInput = function() {
   //wrapper.find(".icon.right").append(PaymentezForm.INFORMATION_SVG);
 };
 
+PaymentezForm.prototype.setupValidationOptionSet = function() {
+  var card = this.elem.find(".card-number-wrapper");
+  card.after("<div class='validation-container'><fieldset class='validation-fieldset'><legend class='validation-legend'>"+ 
+    PaymentezForm.VALIDATION_METHOD_LEGEND + "</legend></fieldset></div>");
+  var fieldset = this.elem.find(".validation-fieldset");
+  fieldset.append(this.validationOptionByCvc);
+  fieldset.append(this.validationOptionByOtp);
+  this.validationOptions = this.elem.find("input[name=validate-option]:radio");
 
+  // Events for validationOptions
+  var $this = this;
+  this.validationOptions.change(function() {
+    $this.refreshValidationOption();
+  });
+};
 
+PaymentezForm.prototype.setupFiscalNumberInput = function() {
+  var name = this.elem.find(".name-wrapper");
+  name.after("<div class='fiscal-number-wrapper'></div>");
+  var wrapper = this.elem.find(".fiscal-number-wrapper");
+  wrapper.append(this.fiscalNumberInput);
+  wrapper.append("<div class='icon'></div>");
+  wrapper.find(".icon").append(PaymentezForm.USER_SVG);
+
+  // Events for fiscalNumberInput
+  var $this = this;
+  this.fiscalNumberInput.blur(function() {
+    $this.refreshFiscalNumberValidation();
+  });
+};
 
 PaymentezForm.prototype.expiryMonth = function() {
   if(!this.EXPIRY_USE_DROPDOWNS && this.expiryMonthYearInput != null) {
@@ -1633,13 +1913,15 @@ PaymentezForm.prototype.expiryMonth = function() {
  * Refresh whether the expiry month is valid (update display to reflect)
  */
 PaymentezForm.prototype.refreshExpiryMonthValidation = function() {
-  if(PaymentezForm.isExpiryValid(this.getExpiryMonth(), this.getExpiryYear())){
-    this.setExpiryMonthAsValid();
-    return true;
-  }else{
-    this.setExpiryMonthAsInvalid();
-    return false;
-  }
+  if (this.expiryContainerAdded()) {
+    if(PaymentezForm.isExpiryValid(this.getExpiryMonth(), this.getExpiryYear())){
+      this.setExpiryMonthAsValid();
+      return true;
+    }else{
+      this.setExpiryMonthAsInvalid();
+      return false;
+    }
+  } else { return true; }
 };
 
 

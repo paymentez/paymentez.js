@@ -2,10 +2,12 @@
   width: 50%;
   float: left;
 }
+
 .paymentez-form .expiry-wrapper {
   box-sizing: border-box;
   margin-right: 5px;
 }
+
 .paymentez-form .expiry-wrapper .expiry {
   display: block;
   width: 100%;
@@ -23,13 +25,10 @@
   border-left: 0;
 }
 
-
 .paymentez-form .expiry-wrapper .expiry-month,
 .paymentez-form .expiry-wrapper .expiry-year {
   display: inline-block;
 }
-
-
 
 .paymentez-form .expiry-wrapper .expiry {
   width: 100%;

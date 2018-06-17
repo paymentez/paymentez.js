@@ -1,4 +1,6 @@
 .paymentez-form .card-number-wrapper,
+.paymentez-form .fiscal-number-wrapper,
+.paymentez-form .validation-container,
 .paymentez-form .email-container,
 .paymentez-form .installments-wrapper,
 .paymentez-form .cvc-wrapper,
@@ -7,6 +9,7 @@
 }
 
 .paymentez-form .card-number-wrapper,
+.paymentez-form .fiscal-number-wrapper,
 .paymentez-form .installments-wrapper,
 .paymentez-form .name-wrapper,
 .paymentez-form .expiry-wrapper,
@@ -18,14 +21,14 @@
   -ms-box-shadow:0 1px 0 rgba(255,255,255,0.7),inset 0 1px 0 rgba(255,255,255,0.7);
   -o-box-shadow: 0 1px 0 rgba(255,255,255,0.7),inset 0 1px 0 rgba(255,255,255,0.7);
   box-shadow:0 1px 0 rgba(255,255,255,0.7),inset 0 1px 0 rgba(255,255,255,0.7);
-
   position: relative;
 }
-
 
 .paymentez-form .card-number-wrapper,
 .paymentez-form .installments-wrapper,
 .paymentez-form .name-wrapper,
+.paymentez-form .fiscal-number-wrapper,
+.paymentez-form .validation-container,
 .paymentez-form .cvc-container,
 .paymentez-form .cellphone-container,
 .paymentez-form .email-container,
@@ -33,17 +36,11 @@
   display: inline-block;
 }
 
-
 .paymentez-form::after {
   content: ' ';
   display: table;
   clear: both;
 }
-
-
-
-
-
 
 .paymentez-form input,
 .paymentez-form select {
@@ -69,7 +66,6 @@
   transition: border-color .15s linear,box-shadow .15s linear;
 }
 
-
 .paymentez-form select {
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -77,10 +73,6 @@
   padding-right: 5px;
   text-overflow: '';
   width: 100%;
-  
-
-
-  
 }
 
 .paymentez-form input[disabled],
@@ -89,14 +81,9 @@
   color: #555;
 }
 
-
-
 .paymentez-form select option[hidden] {
   color: #ABA9A9;
 }
-
-
-
 
 .paymentez-form input:focus,
 .paymentez-form select:focus {
@@ -113,22 +100,16 @@
    cursor: pointer;
  }
 
- .paymentez-form .has-error select,
- .paymentez-form .has-error select:focus,
+.paymentez-form .has-error select,
+.paymentez-form .has-error select:focus,
 .paymentez-form .has-error input,
 .paymentez-form .has-error input:focus {
   border-color: #F64B2F;
   box-shadow: none;
 }
 
-
-
-
-
-
-
-
-
+.paymentez-form .validation-container,
+.paymentez-form .fiscal-number-wrapper,
 .paymentez-form .card-number-wrapper,
 .paymentez-form .installments-wrapper,
 .paymentez-form .name-wrapper{
@@ -136,6 +117,8 @@
 }
 
 .paymentez-form input.card-number,
+.paymentez-form input.fiscal-number,
+.paymentez-form input.validation-option,
 .paymentez-form input.name,
 .paymentez-form input.email,
 .paymentez-form input.cellphone,

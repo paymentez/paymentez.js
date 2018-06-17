@@ -165,6 +165,7 @@ var name = myCard.PaymentezForm('name');
 var expiryMonth = myCard.PaymentezForm('expiryMonth');
 var expiryYear = myCard.PaymentezForm('expiryYear');
 var cvc = myCard.PaymentezForm('cvc');
+var fiscalNumber = myCard.PaymentezForm('fiscalNumber');
 ```
 
 
