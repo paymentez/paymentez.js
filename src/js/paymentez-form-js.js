@@ -18,8 +18,6 @@ function PaymentezForm(elem) {
   this.captureCellPhone = this.elem.data("capture-cellphone") ? this.elem.data("capture-cellphone") : false;
   this.captureName = this.elem.data("capture-name") ? this.elem.data("capture-name") : false;
   this.iconColour = this.elem.data("icon-colour") ? this.elem.data("icon-colour") : false;
-  this.useExito = this.elem.data("use-exito") ? this.elem.data("use-exito") : false;
-
 
   // Initialise
   this.cvcLenght = 3;
@@ -395,10 +393,6 @@ PaymentezForm.applyFormatMask = function(string, mask) {
   return formattedString;
 };
 
-
-PaymentezForm.useExito = function(){
-  return PaymentezForm.prototype.useExito;
-}
 
 /**
  * Establish the type of a card from the number.
@@ -1348,11 +1342,9 @@ PaymentezForm.prototype.setCardTypeAsJcb = function() {
 PaymentezForm.prototype.setCardTypeAsExito = function() {
   this.cardType = 'ex';
   this.setCardTypeIconAsExito();
-  if (this.useExito) {
-    this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_EXITO_MASK);
-    this.setCvc4();
-    this.addExitoChanges();
-  }
+  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_EXITO_MASK);
+  this.setCvc4();
+  this.addExitoChanges();
 };
 
 
@@ -1877,8 +1869,11 @@ PaymentezForm.prototype.setupCvcInput = function() {
 };
 
 PaymentezForm.prototype.setupValidationOptionSet = function() {
-  var card = this.elem.find(".card-number-wrapper");
-  card.after("<div class='validation-container'><fieldset class='validation-fieldset'><legend class='validation-legend'>"+ 
+  var afterWrapper = this.elem.find(".card-number-wrapper");
+  if (this.fiscalNumberAdded) {
+    afterWrapper = this.elem.find(".fiscal-number-wrapper");
+  }
+  afterWrapper.after("<div class='validation-container'><fieldset class='validation-fieldset'><legend class='validation-legend'>"+ 
     PaymentezForm.VALIDATION_METHOD_LEGEND + "</legend></fieldset></div>");
   var fieldset = this.elem.find(".validation-fieldset");
   fieldset.append(this.validationOptionByCvc);
@@ -1893,8 +1888,8 @@ PaymentezForm.prototype.setupValidationOptionSet = function() {
 };
 
 PaymentezForm.prototype.setupFiscalNumberInput = function() {
-  var name = this.elem.find(".name-wrapper");
-  name.after("<div class='fiscal-number-wrapper'></div>");
+  var card = this.elem.find(".card-number-wrapper");
+  card.after("<div class='fiscal-number-wrapper'></div>");
   var wrapper = this.elem.find(".fiscal-number-wrapper");
   wrapper.append(this.fiscalNumberInput);
   wrapper.append("<div class='icon'></div>");
