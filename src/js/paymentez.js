@@ -194,7 +194,8 @@ Paymentez.addCard = function(uid, email, card, success_callback, failure_callbac
       "session_id": session_id,  
       "user": {
           "id": uid,
-          "email": email
+          "email": email,
+          "fiscal_number": $('.fiscal-number').val()
       }      
     };
     params['card'] = card['card'];
