@@ -886,7 +886,7 @@ PaymentezForm.prototype.fiscalNumberAdded = function() {
  */
 PaymentezForm.prototype.isFiscalNumberValid = function() {
   if(this.fiscalNumberAdded())
-    return this.getFiscalNumber() != null && this.getFiscalNumber().length >= 8;
+    return this.getFiscalNumber() != null && this.getFiscalNumber().length >= 6;
   else
     return true
 }
