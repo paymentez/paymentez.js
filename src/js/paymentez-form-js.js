@@ -21,6 +21,7 @@ function PaymentezForm(elem) {
 
   // Initialise
   this.cvcLenght = 3;
+  this.nipLenght = 4;
   this.initEmailInput();
   this.initCellPhoneInput();  
   this.initNameInput();
@@ -93,6 +94,7 @@ PaymentezForm.EXPIRY_NUMBER_OF_YEARS = 10;
 PaymentezForm.CVC_MASK_3 = "XXX";
 PaymentezForm.CVC_MASK_4 = "XXXX";
 PaymentezForm.CVC_PLACEHOLDER =  "CVC";
+PaymentezForm.NIP_PLACEHOLDER = "NIP";
 PaymentezForm.VALIDATION_METHOD_LEGEND =  "Método de validacion";
 
 PaymentezForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" xmlns:xlink="http://www.w3.org/1999/xlink">'+
@@ -726,7 +728,9 @@ PaymentezForm.prototype.isValidData = function() {
   var is_cellphone_valid = this.refreshCellPhoneValidation();
   var is_card_number_valid = this.refreshCardNumberValidation();  
   var is_fiscal_number_valid = this.refreshFiscalNumberValidation();
-  var valid = is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid && is_email_valid && is_cellphone_valid && is_fiscal_number_valid;
+  var is_nip_valid = this.refreshNipValidation();
+  var valid = is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid
+              && is_email_valid && is_cellphone_valid && is_fiscal_number_valid && is_nip_valid;
   return valid;
 };
 
@@ -792,11 +796,23 @@ PaymentezForm.prototype.refreshFiscalNumberValidation = function() {
   }
 };
 
+PaymentezForm.prototype.refreshNipValidation = function() {
+  if (this.nipContainerAdded()){
+    if(this.isNipValid()){
+      this.nipInput.parent().removeClass("has-error");
+      return true;
+    }else{
+      this.nipInput.parent().addClass("has-error");
+      return false;
+    }
+  } else { return true }
+};
+
 PaymentezForm.prototype.refreshValidationOption = function() {
   if (this.getValidationOption() == "otp"){
-    this.removeCvcContainer();
-  } else {
-    this.addCvcContainer();
+    this.removeNipContainer();
+  } else if (this.getValidationOption() == "nip"){
+    this.addNipContainer();
   }
 };
 
@@ -892,6 +908,19 @@ PaymentezForm.prototype.isFiscalNumberValid = function() {
 }
 
 /**
+ * Is the given input a valid nip?
+ *
+ * @returns {boolean}
+ */
+PaymentezForm.prototype.isNipValid = function() {
+  if (this.getValidationOption() == "nip") {
+    return this.getNip() != null && this.getNip().trim().length == this.nipLenght;
+  } else {
+    return true;
+  }
+}
+
+/**
  * Validate if exists the expiry date in the form
  *
  * @returns {boolean}
@@ -921,6 +950,17 @@ PaymentezForm.prototype.cvcContainerAdded = function() {
   return cvcContainer.length >= 1;
 }
 
+
+/**
+ * Validate if the cvc is displayed
+ *
+ * @returns {boolean}
+ */
+PaymentezForm.prototype.nipContainerAdded = function() {
+  var nipContainer = this.elem.find(".nip-container");
+  return nipContainer.length >= 1;
+}
+
 /**
  * Get the card object.
  *
@@ -945,7 +985,8 @@ PaymentezForm.prototype.getCard = function() {
         "expiry_year": Number(year),
         "expiry_month": Number(this.getExpiryMonth()),
         "type": this.cardType,
-        "cvc": this.getCvc()
+        "cvc": this.getCvc(),
+        "nip": this.getNip()
       }
     };
   }
@@ -1047,6 +1088,19 @@ PaymentezForm.prototype.getCvc = function() {
   }
 };
 
+/**
+ * Get the NIP number inputted.
+ *
+ * @returns {number}
+ */
+PaymentezForm.prototype.getNip = function() {
+  if (this.getValidationOption() == "nip") {
+    return this.nipInput.val();
+  }else{
+    return "";
+  }
+};
+
 // --- --- --- --- --- --- --- --- --- --- ---
 
 /**
@@ -1094,6 +1148,15 @@ PaymentezForm.prototype.refreshCvc = function() {
   var numbersOnly = PaymentezForm.numbersOnlyString($(this.cvcInput).val());
   var formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
   $(this.cvcInput).val(formattedNumber);
+};
+
+/**
+ *
+ */
+PaymentezForm.prototype.refreshNip = function() {
+  var numbersOnly = PaymentezForm.numbersOnlyString($(this.nipInput).val());
+  var formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
+  $(this.nipInput).val(formattedNumber);
 };
 
 
@@ -1343,7 +1406,6 @@ PaymentezForm.prototype.setCardTypeAsExito = function() {
   this.cardType = 'ex';
   this.setCardTypeIconAsExito();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_EXITO_MASK);
-  this.setCvc4();
   this.addExitoChanges();
 };
 
@@ -1354,7 +1416,7 @@ PaymentezForm.prototype.setCardTypeAsExito = function() {
  */
 PaymentezForm.prototype.addValidationOptions = function() {
   if (!this.validationModeOption()) {
-    this.initValidationCvc();
+    this.initValidationNip();
     this.initValidationOtp();
     this.setupValidationOptionSet();
     this.setIconColour(this.iconColour);
@@ -1384,13 +1446,11 @@ PaymentezForm.prototype.removeValidationOptions = function() {
 PaymentezForm.prototype.removeExpiryContainer = function() {
   if (this.expiryContainerAdded()) {
     this.elem.find(".expiry-container").remove();
-    this.elem.find(".cvc-container").addClass("center-cvc");
   }
 };
 
 PaymentezForm.prototype.addExpiryContainer = function() {
   if (!this.expiryContainerAdded()) {
-    this.elem.find(".cvc-container").removeClass("center-cvc")
     this.initExpiryMonthInput();
     this.initExpiryYearInput();
     this.setupExpiryInput();
@@ -1409,22 +1469,33 @@ PaymentezForm.prototype.addCvcContainer = function() {
     this.initCvcInput();
     this.setupCvcInput();
     this.setIconColour(this.iconColour);
-    if (!this.expiryContainerAdded()) {
-      this.elem.find(".cvc-container").addClass("center-cvc")
-    }
-    if(this.getCardType() == "Exito") {
-      this.setCvc4();
-    }
   }
-}
+};
+
+PaymentezForm.prototype.removeNipContainer = function() {
+  if(this.nipContainerAdded()) {
+    this.elem.find(".nip-container").remove();
+  }
+};
+
+PaymentezForm.prototype.addNipContainer = function() {
+  if(!this.nipContainerAdded()) {
+    this.initNipInput();
+    this.setupNipInput();
+    this.setIconColour(this.iconColour);
+  }
+};
+
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 /**
- * The next methods are temporary because only exito use the methods of validation
+ * The next methods are temporary because only exito use the validation methods
  */
 PaymentezForm.prototype.addExitoChanges = function() {
   this.addFiscalNumber();
   this.addValidationOptions();
+  this.addNipContainer();
   this.removeExpiryContainer();
+  this.removeCvcContainer();
 }
 
 PaymentezForm.prototype.removeExitoChanges = function() {
@@ -1432,6 +1503,7 @@ PaymentezForm.prototype.removeExitoChanges = function() {
   this.addCvcContainer();
   this.removeFiscalNumber();
   this.removeValidationOptions();
+  this.removeNipContainer();
 }
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
@@ -1636,19 +1708,19 @@ PaymentezForm.prototype.initFiscalNumberInput = function() {
 /**
  * Initialise the validation option by Cvc
  */
-PaymentezForm.prototype.initValidationCvc = function() {
-  var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-cvc", "<div class='validation-wrapper-cvc'></div>");
-  var label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>CVC</label>");
+PaymentezForm.prototype.initValidationNip = function() {
+  var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-nip", "<div class='validation-wrapper-nip'></div>");
+  var label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>NIP</label>");
   label.attr("class", "validation-label");
-  var optionCvc = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input checked='checked' value='cvc'/>");
-  optionCvc.attr("type", "radio");
-  optionCvc.attr("name", "validate-option");
-  optionCvc.attr("class", "validate-option");
+  var optionNip = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input checked='checked' value='nip'/>");
+  optionNip.attr("type", "radio");
+  optionNip.attr("name", "validate-option");
+  optionNip.attr("class", "validate-option");
   var span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
-  label.append(optionCvc);
+  label.append(optionNip);
   label.append(span);
   wrapper.append(label);
-  this.validationOptionByCvc = wrapper;
+  this.validationOptionByNip = wrapper;
 };
 
 /**
@@ -1667,6 +1739,29 @@ PaymentezForm.prototype.initValidationOtp = function() {
   label.append(span);
   wrapper.append(label);
   this.validationOptionByOtp = wrapper;
+};
+
+/**
+ * Initialise the card NIP input
+ */
+PaymentezForm.prototype.initNipInput = function() {
+
+  // Find or create the CVC input element
+  this.nipInput = PaymentezForm.detachOrCreateElement(this.elem, ".nip", "<input class='nip' />");
+
+  // Ensure the CVC has a placeholder
+  if (!PaymentezForm.elementHasAttribute(this.nipInput, "placeholder")) {
+    this.nipInput.attr("placeholder", PaymentezForm.NIP_PLACEHOLDER);
+  }
+
+  this.nipInput.attr("type", "tel");
+  this.nipInput.attr("maxlength", this.nipLenght);
+  this.nipInput.attr("x-autocompletetype", "cc-csc");
+  this.nipInput.attr("autocompletetype", "cc-csc");
+  this.nipInput.attr("autocorrect", "off");
+  this.nipInput.attr("spellcheck", "off");
+  this.nipInput.attr("autocapitalize", "off");
+
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -1864,8 +1959,6 @@ PaymentezForm.prototype.setupCvcInput = function() {
   wrapper.append(this.cvcInput);
   wrapper.append("<div class='icon'></div>");
   wrapper.find(".icon").append(PaymentezForm.LOCK_SVG);
-  //wrapper.append("<div class='icon right popup'></div>");
-  //wrapper.find(".icon.right").append(PaymentezForm.INFORMATION_SVG);
 };
 
 PaymentezForm.prototype.setupValidationOptionSet = function() {
@@ -1876,7 +1969,7 @@ PaymentezForm.prototype.setupValidationOptionSet = function() {
   afterWrapper.after("<div class='validation-container'><fieldset class='validation-fieldset'><legend class='validation-legend'>"+ 
     PaymentezForm.VALIDATION_METHOD_LEGEND + "</legend></fieldset></div>");
   var fieldset = this.elem.find(".validation-fieldset");
-  fieldset.append(this.validationOptionByCvc);
+  fieldset.append(this.validationOptionByNip);
   fieldset.append(this.validationOptionByOtp);
   this.validationOptions = this.elem.find("input[name=validate-option]:radio");
 
@@ -1899,6 +1992,26 @@ PaymentezForm.prototype.setupFiscalNumberInput = function() {
   var $this = this;
   this.fiscalNumberInput.blur(function() {
     $this.refreshFiscalNumberValidation();
+  });
+};
+
+PaymentezForm.prototype.setupNipInput = function() {
+  this.elem.append("<div class='nip-container nip-center'><div class='nip-wrapper'></div></div>");
+  var wrapper = this.elem.find(".nip-wrapper");
+  wrapper.append(this.nipInput);
+  wrapper.append("<div class='icon'></div>");
+  wrapper.find(".icon").append(PaymentezForm.LOCK_SVG);
+
+  // Events for nipInput
+  var $this = this;
+  this.nipInput.keydown(PaymentezForm.filterNumberOnlyKey);
+  this.nipInput.on('paste', function() {
+    setTimeout(function() {
+      $this.refreshNip();
+    }, 1);
+  });
+  this.nipInput.blur(function() {
+    $this.refreshNipValidation();
   });
 };
 

@@ -3,6 +3,7 @@
 .paymentez-form .validation-container,
 .paymentez-form .email-container,
 .paymentez-form .installments-wrapper,
+.paymentez-form .nip-wrapper,
 .paymentez-form .cvc-wrapper,
 .paymentez-form .name-wrapper {
   margin-bottom: 10px;
@@ -15,6 +16,7 @@
 .paymentez-form .expiry-wrapper,
 .paymentez-form .cellphone-wrapper,
 .paymentez-form .email-wrapper,
+.paymentez-form .nip-wrapper,
 .paymentez-form .cvc-wrapper {
   -webkit-box-shadow:0 1px 0 rgba(255,255,255,0.7),inset 0 1px 0 rgba(255,255,255,0.7);
   -moz-box-shadow:0 1px 0 rgba(255,255,255,0.7),inset 0 1px 0 rgba(255,255,255,0.7);
@@ -29,6 +31,7 @@
 .paymentez-form .name-wrapper,
 .paymentez-form .fiscal-number-wrapper,
 .paymentez-form .validation-container,
+.paymentez-form .nip-container,
 .paymentez-form .cvc-container,
 .paymentez-form .cellphone-container,
 .paymentez-form .email-container,
@@ -122,6 +125,7 @@
 .paymentez-form input.name,
 .paymentez-form input.email,
 .paymentez-form input.cellphone,
+.paymentez-form input.nip,
 .paymentez-form input.cvc {
   padding-left: 38px;
   padding-right: 5px;

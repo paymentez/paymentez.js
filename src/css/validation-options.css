@@ -52,7 +52,7 @@
   border-radius: 4px;
 }
 
-.paymentez-form .validation-wrapper-cvc,
+.paymentez-form .validation-wrapper-nip,
 .paymentez-form .validation-wrapper-otp {
   box-sizing: border-box;
   display: inline-block;
@@ -60,7 +60,7 @@
   width: 50%;
 }
 
-.paymentez-form .validation-wrapper-cvc {
+.paymentez-form .validation-wrapper-nip {
   float: left;
 }
 
@@ -68,7 +68,7 @@
   float: right;
 }
 
-.paymentez-form .validation-container .cvc,
+.paymentez-form .validation-container .nip,
 .paymentez-form .validation-container .otp {
   display: block;
   width: 100%;
