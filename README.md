@@ -50,7 +50,7 @@ You should initialize the library.
 /**
   * Init library
   *
-  * @param env_mode `prod`, `stg`, `dev`, `local` to change environment. Default is `stg`
+  * @param env_mode `prod`, `stg`, `local` to change environment. Default is `stg`
   * @param paymentez_client_app_code provided by Paymentez.
   * @param paymentez_client_app_key provided by Paymentez.
   */
@@ -165,6 +165,7 @@ var name = myCard.PaymentezForm('name');
 var expiryMonth = myCard.PaymentezForm('expiryMonth');
 var expiryYear = myCard.PaymentezForm('expiryYear');
 var cvc = myCard.PaymentezForm('cvc');
+var fiscalNumber = myCard.PaymentezForm('fiscalNumber');
 ```
 
 

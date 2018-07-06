@@ -40,3 +40,6 @@
 .paymentez-form .card-number-wrapper .card-type-icon.jcb {
   background: url(ic_jcb.svg);
 }
+.paymentez-form .card-number-wrapper .card-type-icon.exito {
+  background: url(ic_exito.png);
+}

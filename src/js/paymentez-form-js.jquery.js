@@ -25,6 +25,12 @@
     },
     cvc: function() {
       return this.data("paymentezform").getCvc();
+    },
+    fiscalNumber: function() {
+      return this.data("paymentezform").getFiscalNumber();
+    },
+    validationOption: function() {
+      return this.data("paymentezform").getValidationOption();
     }
   };
 

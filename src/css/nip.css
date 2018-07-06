@@ -1,0 +1,15 @@
+.paymentez-form .nip-container {
+  width: 50%;
+  float: right;
+  margin-right: 25%;
+}
+
+.paymentez-form .nip-wrapper {
+  box-sizing: border-box;
+  margin-left: 5px;
+}
+
+.paymentez-form .nip-wrapper .nip {
+  display: block;
+  width: 100%;
+}
