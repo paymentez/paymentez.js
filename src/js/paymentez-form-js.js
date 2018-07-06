@@ -986,7 +986,8 @@ PaymentezForm.prototype.getCard = function() {
         "expiry_month": Number(this.getExpiryMonth()),
         "type": this.cardType,
         "cvc": this.getCvc(),
-        "nip": this.getNip()
+        "nip": this.getNip(),
+        "auth_method": this.getValidationOption(),
       }
     };
   }
