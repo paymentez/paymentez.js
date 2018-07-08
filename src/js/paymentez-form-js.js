@@ -1480,7 +1480,7 @@ PaymentezForm.prototype.removeNipContainer = function() {
 };
 
 PaymentezForm.prototype.addNipContainer = function() {
-  if(!this.nipContainerAdded()) {
+  if(!this.nipContainerAdded() && this.getValidationOption() == "nip") {
     this.initNipInput();
     this.setupNipInput();
     this.setIconColour(this.iconColour);
