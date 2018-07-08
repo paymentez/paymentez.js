@@ -96,6 +96,9 @@ PaymentezForm.CVC_MASK_4 = "XXXX";
 PaymentezForm.CVC_PLACEHOLDER =  "CVC";
 PaymentezForm.NIP_PLACEHOLDER = "NIP";
 PaymentezForm.VALIDATION_METHOD_LEGEND =  "Método de validacion";
+PaymentezForm.AUTH_CVC =  "AUTH_CVC";
+PaymentezForm.AUTH_NIP =  "AUTH_NIP";
+PaymentezForm.AUTH_OTP =  "AUTH_OTP";
 
 PaymentezForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" xmlns:xlink="http://www.w3.org/1999/xlink">'+
 '<g>'+
@@ -809,9 +812,9 @@ PaymentezForm.prototype.refreshNipValidation = function() {
 };
 
 PaymentezForm.prototype.refreshValidationOption = function() {
-  if (this.getValidationOption() == "otp"){
+  if (this.getValidationOption() == PaymentezForm.AUTH_OTP){
     this.removeNipContainer();
-  } else if (this.getValidationOption() == "nip"){
+  } else if (this.getValidationOption() == PaymentezForm.AUTH_NIP){
     this.addNipContainer();
   }
 };
@@ -822,7 +825,7 @@ PaymentezForm.prototype.refreshValidationOption = function() {
  * @returns {boolean}
  */
 PaymentezForm.prototype.isCvcValid = function() {
-  if (this.getValidationOption() == "cvc") {
+  if (this.getValidationOption() == PaymentezForm.AUTH_CVC) {
     return this.getCvc() != null && this.getCvc().trim().length == this.cvcLenght;
   } else {
     return true;
@@ -913,7 +916,7 @@ PaymentezForm.prototype.isFiscalNumberValid = function() {
  * @returns {boolean}
  */
 PaymentezForm.prototype.isNipValid = function() {
-  if (this.getValidationOption() == "nip") {
+  if (this.getValidationOption() == PaymentezForm.AUTH_NIP) {
     return this.getNip() != null && this.getNip().trim().length == this.nipLenght;
   } else {
     return true;
@@ -987,7 +990,7 @@ PaymentezForm.prototype.getCard = function() {
         "type": this.cardType,
         "cvc": this.getCvc(),
         "nip": this.getNip(),
-        "auth_method": this.getValidationOption(),
+        "card_auth": this.getValidationOption(),
       }
     };
   }
@@ -1072,7 +1075,7 @@ PaymentezForm.prototype.getValidationOption = function() {
   if (this.validationModeOption()) {
     return this.elem.find("input[type='radio']:checked").val();
   } else {
-    return "cvc"
+    return PaymentezForm.AUTH_CVC
   }
 };
 
@@ -1082,7 +1085,7 @@ PaymentezForm.prototype.getValidationOption = function() {
  * @returns {number}
  */
 PaymentezForm.prototype.getCvc = function() {
-  if (this.getValidationOption() == "cvc") {
+  if (this.getValidationOption() == PaymentezForm.AUTH_CVC) {
     return this.cvcInput.val();
   }else{
     return "";
@@ -1095,7 +1098,7 @@ PaymentezForm.prototype.getCvc = function() {
  * @returns {number}
  */
 PaymentezForm.prototype.getNip = function() {
-  if (this.getValidationOption() == "nip") {
+  if (this.getValidationOption() == PaymentezForm.AUTH_NIP) {
     return this.nipInput.val();
   }else{
     return "";
@@ -1480,7 +1483,7 @@ PaymentezForm.prototype.removeNipContainer = function() {
 };
 
 PaymentezForm.prototype.addNipContainer = function() {
-  if(!this.nipContainerAdded() && this.getValidationOption() == "nip") {
+  if(!this.nipContainerAdded() && this.getValidationOption() == PaymentezForm.AUTH_NIP) {
     this.initNipInput();
     this.setupNipInput();
     this.setIconColour(this.iconColour);
@@ -1713,7 +1716,7 @@ PaymentezForm.prototype.initValidationNip = function() {
   var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-nip", "<div class='validation-wrapper-nip'></div>");
   var label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>NIP</label>");
   label.attr("class", "validation-label");
-  var optionNip = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input checked='checked' value='nip'/>");
+  var optionNip = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input checked='checked' value='"+PaymentezForm.AUTH_NIP+"'/>");
   optionNip.attr("type", "radio");
   optionNip.attr("name", "validate-option");
   optionNip.attr("class", "validate-option");
@@ -1731,7 +1734,7 @@ PaymentezForm.prototype.initValidationOtp = function() {
   var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-otp", "<div class='validation-wrapper-otp'></div>");
   var label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>OTP</label>");
   label.attr("class", "validation-label");
-  var optionOtp = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input value='otp'/>");
+  var optionOtp = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input value='"+PaymentezForm.AUTH_OTP+"'/>");
   optionOtp.attr("type", "radio");
   optionOtp.attr("name", "validate-option");
   optionOtp.attr("class", "validate-option");
