@@ -866,6 +866,8 @@ PaymentezForm.prototype.isCellPhoneValid = function() {
  */
 PaymentezForm.prototype.isCardNumberValid = function() {
   var value = this.getCardNumber();
+  var type = this.getCardType();
+  if (type == 'Exito') return true;
   if(value == '') return false;
   if (/[^0-9-\s]+/.test(value)) return false;
   
