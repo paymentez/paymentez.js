@@ -97,6 +97,12 @@ var successHandler = function(cardResponse) {
                   "Card Token: " + cardResponse.card.token + "<br>" +
                   "transaction_reference: " + cardResponse.card.transaction_reference
                 ); 
+  }else if(cardResponse.card.status === 'pending'){
+    $('#messages').html('Card Pending To Approve<br>'+
+                  'status: ' + cardResponse.card.status + '<br>' +
+                  "Card Token: " + cardResponse.card.token + "<br>" +
+                  "transaction_reference: " + cardResponse.card.transaction_reference
+                ); 
   }else{
     $('#messages').html('Error<br>'+
                   'status: ' + cardResponse.card.status + '<br>' +
@@ -177,6 +183,7 @@ var expiryMonth = myCard.PaymentezForm('expiryMonth');
 var expiryYear = myCard.PaymentezForm('expiryYear');
 var cvc = myCard.PaymentezForm('cvc');
 var fiscalNumber = myCard.PaymentezForm('fiscalNumber');
+var validationOption = myCard.PaymentezForm('validationOption');
 ```
 
 
@@ -195,15 +202,17 @@ $('#my-card').PaymentezForm('function')
 
 The functions available are listed below:
 
-| Function    | Description                                    |
-| :---------- | :--------------------------------------------- |
-| card        | Get the card object                    |
-| cardNumber  | Get the card number entered                    |
-| cardType    | Get the type of the card number entered        |
-| name        | Get the name entered                           |
-| expiryMonth | Get the expiry month entered                   |
-| expiryYear  | Get the expiry year entered                    |
-| cvc         | Get the CVC entered                            |
+| Function        | Description                                    |
+| :-------------- | :--------------------------------------------- |
+| card            | Get the card object                            |
+| cardNumber      | Get the card number entered                    |
+| cardType        | Get the type of the card number entered        |
+| name            | Get the name entered                           |
+| expiryMonth     | Get the expiry month entered                   |
+| expiryYear      | Get the expiry year entered                    |
+| cvc             | Get the CVC entered                            |
+| fiscalNumber    | Get the fiscal number                          |
+| validationOption| Get the validation option                      |
 
 
 
@@ -222,6 +231,7 @@ If the card type cannot be determined an empty string will be given instead.
 | Mastercard             |
 | Visa                   |
 | Visa Electron          |
+| Exito                  |
 
 
 
@@ -251,8 +261,8 @@ var formattedCardNumber = PaymentezForm.applyFormatMask(cardNumberWithoutSpaces,
 
 ##### Masks
 
-| Variable Name                             | Mask
-| :---------------------------------------- | :------------------ |
+| Variable Name                                    | Mask
+| :----------------------------------------------- | :------------------ |
 | PaymentezForm.CREDIT_CARD_NUMBER_DEFAULT_MASK    | XXXX XXXX XXXX XXXX |
 | PaymentezForm.CREDIT_CARD_NUMBER_VISA_MASK       | XXXX XXXX XXXX XXXX |
 | PaymentezForm.CREDIT_CARD_NUMBER_MASTERCARD_MASK | XXXX XXXX XXXX XXXX |
@@ -260,11 +270,13 @@ var formattedCardNumber = PaymentezForm.applyFormatMask(cardNumberWithoutSpaces,
 | PaymentezForm.CREDIT_CARD_NUMBER_JCB_MASK        | XXXX XXXX XXXX XXXX |
 | PaymentezForm.CREDIT_CARD_NUMBER_AMEX_MASK       | XXXX XXXXXX XXXXX   |
 | PaymentezForm.CREDIT_CARD_NUMBER_DINERS_MASK     | XXXX XXXX XXXX XX   |
+| PaymentezForm.CREDIT_CARD_NUMBER_EXITO_MASK      | XXXX XXXX XXXX XXXX |
 
 
 
 ### Card Expiry Validation
 The expiry month can be in the range: 1 = January to 12 = December
+In the case of 'Exito' cards, they do not have an expiration date
 
 ```javascript
 var month = 3;
@@ -285,3 +297,12 @@ var month = "3";
 var year = "19";
 var valid = PaymentezForm.isExpiryValid(month, year);
 ```
+
+### Card Validations Options
+There are three card validation options
+
+| Validation Option      | Description
+| :--------------------- | :----------------------------------------------------- |
+| PaymentezForm.AUTH_CVC | Card validation by cvc, the most common option         |
+| PaymentezForm.AUTH_NIP | Card validation by nip (Available only by Exito cards) |
+| PaymentezForm.AUTH_OTP | Card validation by otp (Available only by Exito cards) |
