@@ -161,6 +161,26 @@ For example if you want to render the form in English and add a custom class to 
 </div>
 ```
 
+
+### Select Fields
+You can determinate the fields to show on your form.
+
+| Field                   | Description                                    |
+| :---------------------- | :---------------------------------------------- |
+| data-capture-name       | Card Holder Name                                |
+| data-capture-email      | User Email                                      |
+| data-capture-cellphone  | User Cellphone                                  |
+| data-icon-colour        | Icons color                                     |
+| data-use-dropdowns      | Use dropdowns to set the Card Expiration Date   |
+
+The 'data-use-dropdowns' can solve an issue with the expiration mask in not so recent mobiles.
+
+Integrate in the form is so simple like this
+```html
+<div class="paymentez-form" id="my-card" data-capture-name="true" data-capture-email="true" data-capture-cellphone="true" data-icon-colour="#569B29" data-use-dropdowns="true">
+```
+
+
 ### Reading Values
 
 PaymentezForm provides functionality allowing you to read the form field values directly with JavaScript. This can be useful if you wish to submit the values via Ajax.
@@ -202,17 +222,17 @@ $('#my-card').PaymentezForm('function')
 
 The functions available are listed below:
 
-| Function        | Description                                    |
-| :-------------- | :--------------------------------------------- |
-| card            | Get the card object                            |
-| cardNumber      | Get the card number entered                    |
-| cardType        | Get the type of the card number entered        |
-| name            | Get the name entered                           |
-| expiryMonth     | Get the expiry month entered                   |
-| expiryYear      | Get the expiry year entered                    |
-| cvc             | Get the CVC entered                            |
-| fiscalNumber    | Get the fiscal number                          |
-| validationOption| Get the validation option                      |
+| Function          | Description                                    |
+| :---------------- | :--------------------------------------------- |
+| card              | Get the card object                            |
+| cardNumber        | Get the card number entered                    |
+| cardType          | Get the type of the card number entered        |
+| name              | Get the name entered                           |
+| expiryMonth       | Get the expiry month entered                   |
+| expiryYear        | Get the expiry year entered                    |
+| cvc               | Get the CVC entered                            |
+| fiscalNumber      | Get the fiscal number                          |
+| validationOption  | Get the validation option                      |
 
 
 
