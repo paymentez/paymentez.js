@@ -13,24 +13,23 @@
   width: 100%;
 }
 
-.paymentez-form .expiry-wrapper .expiry-month {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  padding-left: 30px;
-}
-
-.paymentez-form .expiry-wrapper .expiry-year {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-left: 0;
+.paymentez-form .expiry-wrapper .expiry {
+  width: 100%;
+  padding-left: 38px;
 }
 
 .paymentez-form .expiry-wrapper .expiry-month,
 .paymentez-form .expiry-wrapper .expiry-year {
+  border-radius: 4px;
   display: inline-block;
+  width: 48%;
+  text-align-last: center;
 }
 
-.paymentez-form .expiry-wrapper .expiry {
-  width: 100%;
+.paymentez-form .expiry-wrapper .expiry-month {
   padding-left: 38px;
+}
+
+.paymentez-form .expiry-wrapper .expiry-year {
+  margin-left: 4%;
 }

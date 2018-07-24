@@ -18,6 +18,7 @@ function PaymentezForm(elem) {
   this.captureCellPhone = this.elem.data("capture-cellphone") ? this.elem.data("capture-cellphone") : false;
   this.captureName = this.elem.data("capture-name") ? this.elem.data("capture-name") : false;
   this.iconColour = this.elem.data("icon-colour") ? this.elem.data("icon-colour") : false;
+  this.EXPIRY_USE_DROPDOWNS = this.elem.data("use-dropdowns") ? this.elem.data("use-dropdowns") : false;
 
   // Initialise
   this.cvcLenght = 3;
@@ -88,7 +89,6 @@ PaymentezForm.CELLPHONE_PLACEHOLDER =  "Celular";
 PaymentezForm.FISCAL_NUMBER_PLACEHOLDER =  "Número fiscal";
 PaymentezForm.EXPIRY_MASK = "XX / XX";
 PaymentezForm.EXPIRY_PLACEHOLDER = "MM / YY";
-PaymentezForm.EXPIRY_USE_DROPDOWNS = false;
 PaymentezForm.EXPIRY_NUMBER_OF_YEARS = 10;
 PaymentezForm.CVC_MASK_3 = "XXX";
 PaymentezForm.CVC_MASK_4 = "XXXX";
@@ -1796,7 +1796,7 @@ PaymentezForm.prototype.setupExpiryInput = function() {
   var wrapper = this.elem.find(".expiry-wrapper");
   var expiryInput;
 
-  // Use dropdowns
+  // Use dropdowns, It doesn't really works, not yet lml
   if(this.EXPIRY_USE_DROPDOWNS) {
     expiryInput = $("<div></div>");
 
@@ -2003,6 +2003,7 @@ PaymentezForm.prototype.refreshExpiryMonthValidation = function() {
  */
 PaymentezForm.prototype.setExpiryMonthAsValid = function() {
   if(this.EXPIRY_USE_DROPDOWNS) {
+    this.expiryMonthInput.parent().removeClass("has-error");
   } else {
     this.expiryMonthYearInput.parent().removeClass("has-error");
   }
@@ -2014,6 +2015,7 @@ PaymentezForm.prototype.setExpiryMonthAsValid = function() {
  */
 PaymentezForm.prototype.setExpiryMonthAsInvalid = function() {
   if (this.EXPIRY_USE_DROPDOWNS) {
+    this.expiryMonthInput.parent().addClass("has-error");
   } else {
     this.expiryMonthYearInput.parent().addClass("has-error");
   }
