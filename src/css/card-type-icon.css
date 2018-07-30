@@ -43,3 +43,6 @@
 .paymentez-form .card-number-wrapper .card-type-icon.exito {
   background: url(ic_exito.png);
 }
+.paymentez-form .card-number-wrapper .card-type-icon.alkosto {
+  background: url(ic_alkosto.png);
+}
