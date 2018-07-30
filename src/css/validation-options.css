@@ -1,9 +1,16 @@
 /* The container */
 .paymentez-form .validation-label {
-  position: relative;
+/*  position: relative;
   padding-left: 15%;
-  margin-left: 25%;
+  margin-left: 25%;*/
+  background: #FDFDFD;
+  border: 1px solid #28a745;
+  border-radius: 4px;
+  color: #28a745;
   cursor: pointer;
+  display: inline-block;
+  min-width: 60%;
+  padding: 6px 0px;
   font-size: 16px;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -11,15 +18,21 @@
   user-select: none;
 }
 
+.paymentez-form .validation-container .checked {
+  background: #28a745;
+  color: white;
+}
+
 /* Hide the browser's default radio button */
 .paymentez-form .validation-label input {
-  position: absolute;
+  /*position: absolute;*/
   opacity: 0;
+  display: none;
   cursor: pointer;
 }
 
 /* Create a custom radio button */
-.paymentez-form .checkmark {
+/*.paymentez-form .checkmark {
   position: absolute;
   top: 0;
   left: 0;
@@ -28,16 +41,16 @@
   background-color: #eee;
   border-radius: 50%;
 }
-
+*/
 /* On mouse-over, add a grey background color */
-.paymentez-form .validation-label:hover input ~ .checkmark {
+/*.paymentez-form .validation-label:hover input ~ .checkmark {
   background-color: #ccc;
-}
+}*/
 
 /* When the radio button is checked, add a green background */
-.paymentez-form .validation-label input:checked ~ .checkmark {
+/*.paymentez-form .validation-label input:checked ~ .checkmark {
   background-color: #569B29;
-}
+}*/
 
 .paymentez-form .validation-legend {
   font-size: 14px;
@@ -54,22 +67,27 @@
 
 .paymentez-form .validation-wrapper-nip,
 .paymentez-form .validation-wrapper-otp {
+  text-align: center;
   box-sizing: border-box;
   display: inline-block;
-  position: relative;
   width: 50%;
+  /*position: relative;*/
 }
 
 .paymentez-form .validation-wrapper-nip {
-  float: left;
+  /*float: left;*/
 }
 
 .paymentez-form .validation-wrapper-otp {
-  float: right;
+  /* border: 2px solid #17a2b8; */
 }
 
 .paymentez-form .validation-container .nip,
 .paymentez-form .validation-container .otp {
   display: block;
   width: 100%;
+}
+
+.paymentez-form .validation-message {
+  text-align: center;
 }

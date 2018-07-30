@@ -80,24 +80,29 @@ PaymentezForm.CREDIT_CARD_NUMBER_JCB_MASK        = "XXXX XXXX XXXX XXXX";
 PaymentezForm.CREDIT_CARD_NUMBER_AMEX_MASK       = "XXXX XXXXXX XXXXX";
 PaymentezForm.CREDIT_CARD_NUMBER_DINERS_MASK     = "XXXX XXXX XXXX XX";
 PaymentezForm.CREDIT_CARD_NUMBER_EXITO_MASK      = "XXXX XXXX XXXX XXXX";
+PaymentezForm.CREDIT_CARD_NUMBER_ALKOSTO_MASK    = "XXXX XXXX XXXX XXXX";
 
 PaymentezForm.prototype.creditCardNumberMask = PaymentezForm.CREDIT_CARD_NUMBER_DEFAULT_MASK;
 PaymentezForm.CREDIT_CARD_NUMBER_PLACEHOLDER = "Número de tarjeta";
 PaymentezForm.NAME_PLACEHOLDER =  "Nombre del titular";
 PaymentezForm.EMAIL_PLACEHOLDER =  "E-mail";
 PaymentezForm.CELLPHONE_PLACEHOLDER =  "Celular";
-PaymentezForm.FISCAL_NUMBER_PLACEHOLDER =  "Número fiscal";
+PaymentezForm.FISCAL_NUMBER_PLACEHOLDER =  "Documento de Identificación";
 PaymentezForm.EXPIRY_MASK = "XX / XX";
 PaymentezForm.EXPIRY_PLACEHOLDER = "MM / YY";
 PaymentezForm.EXPIRY_NUMBER_OF_YEARS = 10;
 PaymentezForm.CVC_MASK_3 = "XXX";
 PaymentezForm.CVC_MASK_4 = "XXXX";
 PaymentezForm.CVC_PLACEHOLDER =  "CVC";
-PaymentezForm.NIP_PLACEHOLDER = "NIP";
-PaymentezForm.VALIDATION_METHOD_LEGEND =  "Método de validacion";
+PaymentezForm.NIP_PLACEHOLDER = "Clave";
+PaymentezForm.OTP_PLACEHOLDER = "Clave Temporal";
+PaymentezForm.VALIDATION_METHOD_LEGEND =  "Método de Autenticación";
 PaymentezForm.AUTH_CVC =  "AUTH_CVC";
 PaymentezForm.AUTH_NIP =  "AUTH_NIP";
 PaymentezForm.AUTH_OTP =  "AUTH_OTP";
+PaymentezForm.NIP_EXPLICATION = "Valida esta operación usando tu clave tuya.";
+PaymentezForm.OTP_EXPLICATION = "Valida esta operación usando una clave unica temporal que sera enviada a tu telefono o" +
+                                "correo electrónico registrado en tuya.";
 
 PaymentezForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
   'x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" ' +
@@ -443,9 +448,14 @@ PaymentezForm.cardTypeFromNumber = function(number) {
     return "Mastercard";
 
   // Exito
-  re = ["590309", "570423", "590312"];
+  re = ["590309", "570423"];
   if (re.indexOf(number.substring(0, 6)) != -1)
     return "Exito";
+
+  // Alkosto
+  re = "590312";
+  if (re == number.substring(0, 6))
+    return "Alkosto";
 
   // Discover
   re = new RegExp("^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)");
@@ -806,10 +816,27 @@ PaymentezForm.prototype.refreshNipValidation = function() {
 };
 
 PaymentezForm.prototype.refreshValidationOption = function() {
+  var label = $('input[type="radio"]:not(:checked)').parent();
+  if (label)
+    label.removeClass('checked');
+
+  var labelChecked = this.elem.find("input[type='radio']:checked").parent();
+  if (labelChecked)
+    labelChecked.addClass('checked');
+
   if (this.getValidationOption() == PaymentezForm.AUTH_OTP){
+    this.setValidationMessage(PaymentezForm.OTP_EXPLICATION);
     this.removeNipContainer();
   } else if (this.getValidationOption() == PaymentezForm.AUTH_NIP){
+    this.setValidationMessage(PaymentezForm.NIP_EXPLICATION);
     this.addNipContainer();
+  }
+};
+
+PaymentezForm.prototype.setValidationMessage = function(message) {
+  if (this.validationMessageAdded()) {
+    this.validationMessage.empty();
+    this.validationMessage.text(message);
   }
 };
 
@@ -861,8 +888,8 @@ PaymentezForm.prototype.isCellPhoneValid = function() {
 PaymentezForm.prototype.isCardNumberValid = function() {
   var value = this.getCardNumber();
   var type = this.getCardType();
-  // If the card type is Exito, don't validate with Luhn
-  if (type == 'Exito') return true;
+  // If the card type is Exito or Alkosto, don't validate with Luhn
+  if (type == 'Exito' || type == 'Alkosto') return true;
   if(value == '') return false;
   if (/[^0-9-\s]+/.test(value)) return false;
   
@@ -950,9 +977,8 @@ PaymentezForm.prototype.cvcContainerAdded = function() {
   return cvcContainer.length >= 1;
 }
 
-
 /**
- * Validate if the cvc is displayed
+ * Validate if the nip is displayed
  *
  * @returns {boolean}
  */
@@ -960,6 +986,17 @@ PaymentezForm.prototype.nipContainerAdded = function() {
   var nipContainer = this.elem.find(".nip-container");
   return nipContainer.length >= 1;
 }
+
+/**
+ * Validate if the message is displayed
+ *
+ * @returns {boolean}
+ */
+PaymentezForm.prototype.validationMessageAdded = function() {
+  var nipContainer = this.elem.find(".validation-message");
+  return nipContainer.length >= 1;
+}
+
 
 /**
  * Get the card object.
@@ -1197,6 +1234,9 @@ PaymentezForm.prototype.setCardTypeIconFromNumber = function(number) {
     case "Exito":
       this.setCardTypeAsExito();
       break;
+    case "Alkosto":
+      this.setCardTypeAsAlkosto();
+      break;
     default:
       this.clearCardType();
   }
@@ -1304,6 +1344,13 @@ PaymentezForm.prototype.setCardTypeIconAsExito = function() {
 };
 
 
+/**
+ * Set the card type icon as - Alkosto
+ */
+PaymentezForm.prototype.setCardTypeIconAsAlkosto = function() {
+  this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show alkosto");
+};
+
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 
@@ -1314,7 +1361,7 @@ PaymentezForm.prototype.clearCardType = function() {
   this.clearCardTypeIcon();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_DEFAULT_MASK);
   this.setCvc3();
-  this.removeExitoChanges();
+  this.removeTuyaChanges();
 };
 
 
@@ -1326,7 +1373,7 @@ PaymentezForm.prototype.setCardTypeAsVisa = function() {
   this.setCardTypeIconAsVisa();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_VISA_MASK);
   this.setCvc3();
-  this.removeExitoChanges();
+  this.removeTuyaChanges();
 };
 
 
@@ -1338,7 +1385,7 @@ PaymentezForm.prototype.setCardTypeAsMasterCard = function() {
   this.setCardTypeIconAsMasterCard();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_MASTERCARD_MASK);
   this.setCvc3();
-  this.removeExitoChanges();
+  this.removeTuyaChanges();
 };
 
 
@@ -1350,7 +1397,7 @@ PaymentezForm.prototype.setCardTypeAsAmericanExpress = function() {
   this.setCardTypeIconAsAmericanExpress();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_AMEX_MASK);
   this.setCvc4();
-  this.removeExitoChanges();
+  this.removeTuyaChanges();
 };
 
 /**
@@ -1361,7 +1408,7 @@ PaymentezForm.prototype.setCardTypeAsCredisensa = function() {
   this.setCardTypeIconAsCredisensa();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_MASTERCARD_MASK);
   this.setCvc3();
-  this.removeExitoChanges();
+  this.removeTuyaChanges();
 };
 
 /**
@@ -1372,7 +1419,7 @@ PaymentezForm.prototype.setCardTypeAsDiscover = function() {
   this.setCardTypeIconAsDiscover();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_DISCOVER_MASK);
   this.setCvc3();
-  this.removeExitoChanges();
+  this.removeTuyaChanges();
 };
 
 
@@ -1384,7 +1431,7 @@ PaymentezForm.prototype.setCardTypeAsDiners = function() {
   this.setCardTypeIconAsDiners();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_DINERS_MASK);
   this.setCvc3();
-  this.removeExitoChanges();
+  this.removeTuyaChanges();
 };
 
 
@@ -1396,7 +1443,7 @@ PaymentezForm.prototype.setCardTypeAsJcb = function() {
   this.setCardTypeIconAsJcb();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_JCB_MASK);
   this.setCvc3();
-  this.removeExitoChanges();
+  this.removeTuyaChanges();
 };
 
 
@@ -1407,7 +1454,18 @@ PaymentezForm.prototype.setCardTypeAsExito = function() {
   this.cardType = 'ex';
   this.setCardTypeIconAsExito();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_EXITO_MASK);
-  this.addExitoChanges();
+  this.addTuyaChanges();
+};
+
+
+/**
+ * Set the card type as - Exito
+ */
+PaymentezForm.prototype.setCardTypeAsAlkosto = function() {
+  this.cardType = 'ak';
+  this.setCardTypeIconAsAlkosto();
+  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_ALKOSTO_MASK);
+  this.addTuyaChanges();
 };
 
 
@@ -1420,7 +1478,14 @@ PaymentezForm.prototype.addValidationOptions = function() {
     this.initValidationNip();
     this.initValidationOtp();
     this.setupValidationOptionSet();
+    this.setupValidationMessage();
     this.setIconColour(this.iconColour);
+  }
+};
+
+PaymentezForm.prototype.removeValidationOptions = function() {
+  if (this.validationModeOption()) {
+    this.elem.find(".validation-container").remove();
   }
 };
 
@@ -1435,12 +1500,6 @@ PaymentezForm.prototype.addFiscalNumber = function() {
 PaymentezForm.prototype.removeFiscalNumber = function() {
   if (this.fiscalNumberAdded()) {
     this.elem.find(".fiscal-number-wrapper").remove();
-  }
-};
-
-PaymentezForm.prototype.removeValidationOptions = function() {
-  if (this.validationModeOption()) {
-    this.elem.find(".validation-container").remove();
   }
 };
 
@@ -1491,7 +1550,7 @@ PaymentezForm.prototype.addNipContainer = function() {
 /**
  * The next methods are temporary because only exito use the validation methods
  */
-PaymentezForm.prototype.addExitoChanges = function() {
+PaymentezForm.prototype.addTuyaChanges = function() {
   this.addFiscalNumber();
   this.addValidationOptions();
   this.addNipContainer();
@@ -1499,7 +1558,7 @@ PaymentezForm.prototype.addExitoChanges = function() {
   this.removeCvcContainer();
 }
 
-PaymentezForm.prototype.removeExitoChanges = function() {
+PaymentezForm.prototype.removeTuyaChanges = function() {
   this.addExpiryContainer();
   this.addCvcContainer();
   this.removeFiscalNumber();
@@ -1661,16 +1720,16 @@ PaymentezForm.prototype.initFiscalNumberInput = function() {
  */
 PaymentezForm.prototype.initValidationNip = function() {
   var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-nip", "<div class='validation-wrapper-nip'></div>");
-  var label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>NIP</label>");
-  label.attr("class", "validation-label");
+  var label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>" + PaymentezForm.NIP_PLACEHOLDER + "</label>");
+  label.attr("class", "validation-label checked");
   var optionNip = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option",
                                                       "<input checked='checked' value='" + PaymentezForm.AUTH_NIP + "'/>");
   optionNip.attr("type", "radio");
   optionNip.attr("name", "validate-option");
   optionNip.attr("class", "validate-option");
-  var span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
+  // var span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
   label.append(optionNip);
-  label.append(span);
+  // label.append(span);
   wrapper.append(label);
   this.validationOptionByNip = wrapper;
 };
@@ -1680,18 +1739,19 @@ PaymentezForm.prototype.initValidationNip = function() {
  */
 PaymentezForm.prototype.initValidationOtp = function() {
   var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-otp", "<div class='validation-wrapper-otp'></div>");
-  var label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>OTP</label>");
+  var label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>" + PaymentezForm.OTP_PLACEHOLDER + "</label>");
   label.attr("class", "validation-label");
   var optionOtp = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input value='" + PaymentezForm.AUTH_OTP + "'/>");
   optionOtp.attr("type", "radio");
   optionOtp.attr("name", "validate-option");
   optionOtp.attr("class", "validate-option");
-  var span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
+  // var span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
   label.append(optionOtp);
-  label.append(span);
+  // label.append(span);
   wrapper.append(label);
   this.validationOptionByOtp = wrapper;
 };
+
 
 /**
  * Initialise the card NIP input
@@ -1705,6 +1765,8 @@ PaymentezForm.prototype.initNipInput = function() {
     this.nipInput.attr("placeholder", PaymentezForm.NIP_PLACEHOLDER);
   }
   this.nipInput.attr("type", "tel");
+  this.nipInput.attr("pattern", "[0-9]*");
+  this.nipInput.attr("inputmode", "numeric");
   this.nipInput.attr("maxlength", this.nipLenght);
   this.nipInput.attr("x-autocompletetype", "cc-csc");
   this.nipInput.attr("autocompletetype", "cc-csc");
@@ -1953,7 +2015,8 @@ PaymentezForm.prototype.setupFiscalNumberInput = function() {
 };
 
 PaymentezForm.prototype.setupNipInput = function() {
-  this.elem.append("<div class='nip-container nip-center'><div class='nip-wrapper'></div></div>");
+  var fieldset = this.elem.find(".validation-fieldset");
+  fieldset.append("<div class='nip-container nip-center'><div class='nip-wrapper'></div></div>");
   var wrapper = this.elem.find(".nip-wrapper");
   wrapper.append(this.nipInput);
   wrapper.append("<div class='icon'></div>");
@@ -1970,6 +2033,16 @@ PaymentezForm.prototype.setupNipInput = function() {
   this.nipInput.blur(function() {
     $this.refreshNipValidation();
   });
+};
+
+PaymentezForm.prototype.setupValidationMessage = function() {
+  var fieldset = this.elem.find(".validation-fieldset");
+  var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-message", "<div class='validation-message'></div>");
+  wrapper.addClass('paymentez_dialog_success');
+  var message = PaymentezForm.NIP_EXPLICATION;
+  wrapper.text(message);
+  fieldset.append(wrapper);
+  this.validationMessage = wrapper;
 };
 
 PaymentezForm.prototype.expiryMonth = function() {
@@ -2089,7 +2162,6 @@ PaymentezForm.isExpiryValid = function(month, year) {
   month = parseInt(month);
   year = parseInt(year);
 
-  return PaymentezForm.isValidMonth(month)
-    && ((year > currentYear) || (year == currentYear && month >= currentMonth));
+  return PaymentezForm.isValidMonth(month) && ((year > currentYear) || (year == currentYear && month >= currentMonth));
 };
 

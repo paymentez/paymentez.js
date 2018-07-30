@@ -2,6 +2,7 @@
   width: 50%;
   float: right;
   margin-right: 25%;
+  margin-top: 12px;
 }
 
 .paymentez-form .nip-wrapper {
@@ -12,4 +13,5 @@
 .paymentez-form .nip-wrapper .nip {
   display: block;
   width: 100%;
+  -webkit-text-security: disc;
 }
