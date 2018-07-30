@@ -13,4 +13,5 @@
 .paymentez-form .nip-wrapper .nip {
   display: block;
   width: 100%;
+  -webkit-text-security: disc;
 }

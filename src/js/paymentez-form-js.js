@@ -1764,7 +1764,7 @@ PaymentezForm.prototype.initNipInput = function() {
   if (!PaymentezForm.elementHasAttribute(this.nipInput, "placeholder")) {
     this.nipInput.attr("placeholder", PaymentezForm.NIP_PLACEHOLDER);
   }
-  this.nipInput.attr("type", "password");
+  this.nipInput.attr("type", "tel");
   this.nipInput.attr("pattern", "[0-9]*");
   this.nipInput.attr("inputmode", "numeric");
   this.nipInput.attr("maxlength", this.nipLenght);
