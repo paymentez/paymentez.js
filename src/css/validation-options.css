@@ -1,8 +1,5 @@
 /* The container */
 .paymentez-form .validation-label {
-/*  position: relative;
-  padding-left: 15%;
-  margin-left: 25%;*/
   background: #FDFDFD;
   border: 1px solid #28a745;
   border-radius: 4px;
@@ -25,32 +22,10 @@
 
 /* Hide the browser's default radio button */
 .paymentez-form .validation-label input {
-  /*position: absolute;*/
   opacity: 0;
   display: none;
   cursor: pointer;
 }
-
-/* Create a custom radio button */
-/*.paymentez-form .checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 16px;
-  width: 16px;
-  background-color: #eee;
-  border-radius: 50%;
-}
-*/
-/* On mouse-over, add a grey background color */
-/*.paymentez-form .validation-label:hover input ~ .checkmark {
-  background-color: #ccc;
-}*/
-
-/* When the radio button is checked, add a green background */
-/*.paymentez-form .validation-label input:checked ~ .checkmark {
-  background-color: #569B29;
-}*/
 
 .paymentez-form .validation-legend {
   font-size: 14px;
@@ -63,6 +38,7 @@
 .paymentez-form .validation-fieldset {
   border:1px solid #888;
   border-radius: 4px;
+  text-align: center;
 }
 
 .paymentez-form .validation-wrapper-nip,
@@ -71,15 +47,6 @@
   box-sizing: border-box;
   display: inline-block;
   width: 50%;
-  /*position: relative;*/
-}
-
-.paymentez-form .validation-wrapper-nip {
-  /*float: left;*/
-}
-
-.paymentez-form .validation-wrapper-otp {
-  /* border: 2px solid #17a2b8; */
 }
 
 .paymentez-form .validation-container .nip,

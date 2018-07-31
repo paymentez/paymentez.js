@@ -13,6 +13,11 @@ function PaymentezForm(elem) {
   this.elem = jQuery(elem);
   const current_data = this.elem.children("div");
   this.cardType = '';
+  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    this.USE_TUYA_KEYBOARD = false;
+  } else {
+    this.USE_TUYA_KEYBOARD = true;
+  }
 
   this.captureEmail = this.elem.data("capture-email") ? this.elem.data("capture-email") : false;
   this.captureCellPhone = this.elem.data("capture-cellphone") ? this.elem.data("capture-cellphone") : false;
@@ -694,6 +699,22 @@ PaymentezForm.handleExpiryKey = function(e) {
 
 
 /**
+* Generate a random array to assign to tuya keyboard
+*/
+PaymentezForm.generateRandoms = function() {
+  var myArray = ['0','1','2','3','4','5','6','7','8','9'];
+  var i,j,k;
+  for (i = myArray.length; i; i--) {
+      j = Math.floor(Math.random() * i);
+      k = myArray[i - 1];
+      myArray[i - 1] = myArray[j];
+      myArray[j] = k;
+  }
+  return myArray;
+};
+
+
+/**
  * Dispatch beacon ~ for future feature.
  */
 //PaymentezForm.dispatchBeacon = function() {
@@ -839,6 +860,20 @@ PaymentezForm.prototype.setValidationMessage = function(message) {
     this.validationMessage.text(message);
   }
 };
+
+PaymentezForm.prototype.addValueToNip = function(value){
+  if (this.nipContainerAdded()) {
+    if (this.nipInput.val().length < this.nipLenght){
+      var newValue = this.nipInput.val() + value;
+      this.nipInput.val(newValue);
+    }
+  }
+}
+
+PaymentezForm.prototype.cleanNipInput = function() {
+  if (this.nipContainerAdded())
+    this.nipInput.val("");
+}
 
 /**
  * Is the given input a valid cvc?
@@ -1535,6 +1570,7 @@ PaymentezForm.prototype.addCvcContainer = function() {
 PaymentezForm.prototype.removeNipContainer = function() {
   if(this.nipContainerAdded()) {
     this.elem.find(".nip-container").remove();
+    this.elem.find(".keyboard-container").remove();
   }
 };
 
@@ -1773,6 +1809,8 @@ PaymentezForm.prototype.initNipInput = function() {
   this.nipInput.attr("autocorrect", "off");
   this.nipInput.attr("spellcheck", "off");
   this.nipInput.attr("autocapitalize", "off");
+  if (this.USE_TUYA_KEYBOARD)
+    this.nipInput.attr("disabled", "disabled");
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -2022,6 +2060,10 @@ PaymentezForm.prototype.setupNipInput = function() {
   wrapper.append("<div class='icon'></div>");
   wrapper.find(".icon").append(PaymentezForm.LOCK_SVG);
 
+  if (this.USE_TUYA_KEYBOARD){
+    this.setupKeyboard(fieldset);
+  }
+
   // Events for nipInput
   var $this = this;
   this.nipInput.keydown(PaymentezForm.filterNumberOnlyKey);
@@ -2034,6 +2076,43 @@ PaymentezForm.prototype.setupNipInput = function() {
     $this.refreshNipValidation();
   });
 };
+
+PaymentezForm.prototype.setupKeyboard = function(fieldset) {
+  var array = PaymentezForm.generateRandoms();
+  var container = document.createElement('div');
+  container.setAttribute('class', 'keyboard-container');
+  var $this = this;
+  for (var i = 0; i < array.length; i++) {
+    var keyContainer = document.createElement('div');
+    keyContainer.setAttribute('class', 'key-container');
+    var button = document.createElement('button');
+    button.setAttribute('class', 'key');
+    button.setAttribute('value', array[i]);
+    var span = document.createElement('span');
+    var key = document.createTextNode(array[i]);
+    span.append(key);
+    button.append(span);
+    button.addEventListener("click", function(e){
+      $this.addValueToNip(this.value);
+      e.preventDefault();
+    });
+    keyContainer.append(button);
+    container.append(keyContainer);
+  }
+  var cleanContainer = document.createElement('div');
+  cleanContainer.setAttribute('class', 'clean-container');
+  var cleanButton = document.createElement('button');
+  cleanButton.setAttribute('class', 'clean');
+  var cleanKey = document.createTextNode('Borrar');
+  cleanButton.append(cleanKey);
+  cleanButton.addEventListener("click", function(e){
+    $this.cleanNipInput();
+    e.preventDefault();
+  });
+  cleanContainer.append(cleanButton);
+  container.append(cleanContainer);
+  fieldset.append(container);
+}
 
 PaymentezForm.prototype.setupValidationMessage = function() {
   var fieldset = this.elem.find(".validation-fieldset");
