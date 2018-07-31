@@ -1,0 +1,45 @@
+.keyboard-container {
+  display: inline-block;
+  position: relative;
+  width: 80%;
+}
+
+.key-container {
+  display: inline-block;
+  position: relative;
+  width: 33.3%;
+}
+
+.key-container button,
+.clean-container button {
+  font-size: 15px;
+  padding: 4px 0px;
+}
+
+.clean-container {
+  display: inline-block;
+  position: relative;
+  width: 66.6%;
+}
+
+.key,
+.clean {
+  color: #fff;
+  background-color: #17a2b8;
+  border-color: #fff;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.key:hover,
+.clean:hover {
+  background-color: #138496;
+}
+
+.keyboard-container:hover .key span {
+  visibility: hidden;
+}
+
+.keyboard-container:hover .key:after {
+  content: "*";
+}
