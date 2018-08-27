@@ -837,19 +837,12 @@ PaymentezForm.prototype.refreshNipValidation = function() {
 
 PaymentezForm.prototype.refreshValidationOption = function() {
   if (this.getValidationOption() == PaymentezForm.AUTH_OTP){
-    this.setValidationMessage(PaymentezForm.OTP_EXPLICATION);
+    this.addValidationMessage();
     this.removeNip();
     this.removeVirtualKeyboard();
   } else if (this.getValidationOption() == PaymentezForm.AUTH_NIP){
-    this.setValidationMessage(PaymentezForm.NIP_EXPLICATION);
+    this.removeValidationMessage();
     this.addNip();
-  }
-};
-
-PaymentezForm.prototype.setValidationMessage = function(message) {
-  if (this.validationMessageAdded()) {
-    this.validationMessage.empty();
-    this.validationMessage.text(message);
   }
 };
 
@@ -1557,10 +1550,18 @@ PaymentezForm.prototype.removeCvcContainer = function() {
 };
 
 PaymentezForm.prototype.addNip = function() {
-  if(!this.nipWrapperAdded()) {
-    this.initNipInput();
-    this.setupNipInput();
-    this.setIconColour(this.iconColour);
+  if (!this.otpWrapperAdded()){
+    if (!this.nipWrapperAdded()){
+      this.initNipInput();
+      this.setupNipInput();
+      this.setIconColour(this.iconColour);
+    }
+  }else{
+    if (this.getValidationOption() == PaymentezForm.AUTH_NIP && !this.nipWrapperAdded()){
+      this.initNipInput();
+      this.setupNipInput();
+      this.setIconColour(this.iconColour);
+    }
   }
 };
 
@@ -1614,7 +1615,6 @@ PaymentezForm.prototype.addTuyaChanges = function() {
   this.addFiscalNumber();
   this.addNip();
   this.addOtpValidation();
-  this.addValidationMessage();
   this.removeExpiryContainer();
   this.removeCvcContainer();
 }
@@ -2128,7 +2128,7 @@ PaymentezForm.prototype.setupVirtualKeyboard = function() {
 PaymentezForm.prototype.setupValidationMessage = function() {
   var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-message", "<div class='validation-message'></div>");
   wrapper.addClass('paymentez_dialog_success');
-  var message = PaymentezForm.NIP_EXPLICATION;
+  var message = PaymentezForm.OTP_EXPLICATION;
   wrapper.text(message);
   this.validationMessage = wrapper;
   this.elem.append(wrapper);
