@@ -14,6 +14,7 @@ Paymentez.SERVER_LOCAL_URL = "http://localhost:8000";
 Paymentez.SERVER_DEV_URL = "https://ccapi-dev.paymentez.com";
 Paymentez.SERVER_STG_URL = "https://ccapi-stg.paymentez.com";
 Paymentez.SERVER_PROD_URL = "https://ccapi.paymentez.com";
+Paymentez.SERVER_PRODQA_URL = "https://ccapi.paymentez.com";
 
 function Paymentez() {
 
@@ -66,6 +67,8 @@ Paymentez.createToken = function(createTokenRequest, successCallback, erroCallba
             SERVER_URL = Paymentez.SERVER_STG_URL;
         }else if(Paymentez.ENV_MODE === 'prod'){
             SERVER_URL = Paymentez.SERVER_PROD_URL;
+        }else if(Paymentez.ENV_MODE === 'prodqa'){
+            SERVER_URL = Paymentez.SERVER_PRODQA_URL;
         }else{
             SERVER_URL = Paymentez.SERVER_LOCAL_URL;
         }

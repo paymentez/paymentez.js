@@ -1,6 +1,5 @@
 .paymentez-form .card-number-wrapper,
 .paymentez-form .fiscal-number-wrapper,
-.paymentez-form .validation-container,
 .paymentez-form .email-container,
 .paymentez-form .installments-wrapper,
 .paymentez-form .nip-wrapper,
@@ -30,8 +29,8 @@
 .paymentez-form .installments-wrapper,
 .paymentez-form .name-wrapper,
 .paymentez-form .fiscal-number-wrapper,
-.paymentez-form .validation-container,
-.paymentez-form .nip-container,
+.paymentez-form .nip-wrapper,
+.paymentez-form .otp-wrapper,
 .paymentez-form .cvc-container,
 .paymentez-form .cellphone-container,
 .paymentez-form .email-container,
@@ -111,7 +110,6 @@
   box-shadow: none;
 }
 
-.paymentez-form .validation-container,
 .paymentez-form .fiscal-number-wrapper,
 .paymentez-form .card-number-wrapper,
 .paymentez-form .installments-wrapper,

@@ -14,9 +14,9 @@ function PaymentezForm(elem) {
   const current_data = this.elem.children("div");
   this.cardType = '';
   if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    this.USE_TUYA_KEYBOARD = false;
+    this.USE_VIRTUAL_KEYBOARD = false;
   } else {
-    this.USE_TUYA_KEYBOARD = true;
+    this.USE_VIRTUAL_KEYBOARD = true;
   }
 
   this.captureEmail = this.elem.data("capture-email") ? this.elem.data("capture-email") : false;
@@ -99,15 +99,14 @@ PaymentezForm.EXPIRY_NUMBER_OF_YEARS = 10;
 PaymentezForm.CVC_MASK_3 = "XXX";
 PaymentezForm.CVC_MASK_4 = "XXXX";
 PaymentezForm.CVC_PLACEHOLDER =  "CVC";
-PaymentezForm.NIP_PLACEHOLDER = "Clave";
-PaymentezForm.OTP_PLACEHOLDER = "Clave Temporal";
-PaymentezForm.VALIDATION_METHOD_LEGEND =  "Método de Autenticación";
+PaymentezForm.NIP_PLACEHOLDER = "Clave Tuya";
+PaymentezForm.OTP_PLACEHOLDER = "Continuar sin clave";
 PaymentezForm.AUTH_CVC =  "AUTH_CVC";
 PaymentezForm.AUTH_NIP =  "AUTH_NIP";
 PaymentezForm.AUTH_OTP =  "AUTH_OTP";
 PaymentezForm.NIP_EXPLICATION = "Valida esta operación usando tu clave tuya.";
 PaymentezForm.OTP_EXPLICATION = "Valida esta operación usando una clave unica temporal que sera enviada a tu telefono o" +
-                                "correo electrónico registrado en tuya.";
+                                " correo electrónico registrado en tuya.";
 
 PaymentezForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
   'x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" ' +
@@ -825,7 +824,7 @@ PaymentezForm.prototype.refreshFiscalNumberValidation = function() {
 };
 
 PaymentezForm.prototype.refreshNipValidation = function() {
-  if (this.nipContainerAdded()){
+  if (this.nipWrapperAdded()){
     if(this.isNipValid()){
       this.nipInput.parent().removeClass("has-error");
       return true;
@@ -837,32 +836,18 @@ PaymentezForm.prototype.refreshNipValidation = function() {
 };
 
 PaymentezForm.prototype.refreshValidationOption = function() {
-  var label = $('input[type="radio"]:not(:checked)').parent();
-  if (label)
-    label.removeClass('checked');
-
-  var labelChecked = this.elem.find("input[type='radio']:checked").parent();
-  if (labelChecked)
-    labelChecked.addClass('checked');
-
   if (this.getValidationOption() == PaymentezForm.AUTH_OTP){
-    this.setValidationMessage(PaymentezForm.OTP_EXPLICATION);
-    this.removeNipContainer();
+    this.addValidationMessage();
+    this.removeNip();
+    this.removeVirtualKeyboard();
   } else if (this.getValidationOption() == PaymentezForm.AUTH_NIP){
-    this.setValidationMessage(PaymentezForm.NIP_EXPLICATION);
-    this.addNipContainer();
-  }
-};
-
-PaymentezForm.prototype.setValidationMessage = function(message) {
-  if (this.validationMessageAdded()) {
-    this.validationMessage.empty();
-    this.validationMessage.text(message);
+    this.removeValidationMessage();
+    this.addNip();
   }
 };
 
 PaymentezForm.prototype.addValueToNip = function(value){
-  if (this.nipContainerAdded()) {
+  if (this.nipWrapperAdded()) {
     if (this.nipInput.val().length < this.nipLenght){
       var newValue = this.nipInput.val() + value;
       this.nipInput.val(newValue);
@@ -871,7 +856,7 @@ PaymentezForm.prototype.addValueToNip = function(value){
 }
 
 PaymentezForm.prototype.cleanNipInput = function() {
-  if (this.nipContainerAdded())
+  if (this.nipWrapperAdded())
     this.nipInput.val("");
 }
 
@@ -948,13 +933,16 @@ PaymentezForm.prototype.isCardNumberValid = function() {
 }
 
 /**
- * Validate if exists the fiscal number in the form
+ * Is the given input a valid nip?
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.fiscalNumberAdded = function() {
-  var fNumber = this.elem.find(".fiscal-number-wrapper");
-  return fNumber.length >= 1;
+PaymentezForm.prototype.isNipValid = function() {
+  if (this.getValidationOption() == PaymentezForm.AUTH_NIP) {
+    return this.getNip() != null && this.getNip().trim().length == this.nipLenght;
+  } else {
+    return true;
+  }
 }
 
 /**
@@ -970,16 +958,13 @@ PaymentezForm.prototype.isFiscalNumberValid = function() {
 }
 
 /**
- * Is the given input a valid nip?
+ * Validate if exists the fiscal number in the form
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isNipValid = function() {
-  if (this.getValidationOption() == PaymentezForm.AUTH_NIP) {
-    return this.getNip() != null && this.getNip().trim().length == this.nipLenght;
-  } else {
-    return true;
-  }
+PaymentezForm.prototype.fiscalNumberAdded = function() {
+  var fNumber = this.elem.find(".fiscal-number-wrapper");
+  return fNumber.length >= 1;
 }
 
 /**
@@ -990,16 +975,6 @@ PaymentezForm.prototype.isNipValid = function() {
 PaymentezForm.prototype.expiryContainerAdded = function() {
   var exContainter = this.elem.find(".expiry-container");
   return exContainter.length >= 1;
-}
-
-/**
- * Validate if the validation mode is active
- *
- * @returns {boolean}
- */
-PaymentezForm.prototype.validationModeOption = function() {
-  var valOption = this.elem.find(".validation-container");
-  return valOption.length >= 1;
 }
 
 /**
@@ -1017,9 +992,19 @@ PaymentezForm.prototype.cvcContainerAdded = function() {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.nipContainerAdded = function() {
-  var nipContainer = this.elem.find(".nip-container");
-  return nipContainer.length >= 1;
+PaymentezForm.prototype.nipWrapperAdded = function() {
+  var nipWrapper = this.elem.find(".nip-wrapper");
+  return nipWrapper.length >= 1;
+}
+
+/**
+ * Validate if the nip is displayed
+ *
+ * @returns {boolean}
+ */
+PaymentezForm.prototype.otpWrapperAdded = function() {
+  var otpWrapper = this.elem.find(".otp-wrapper");
+  return otpWrapper.length >= 1;
 }
 
 /**
@@ -1028,8 +1013,18 @@ PaymentezForm.prototype.nipContainerAdded = function() {
  * @returns {boolean}
  */
 PaymentezForm.prototype.validationMessageAdded = function() {
-  var nipContainer = this.elem.find(".validation-message");
-  return nipContainer.length >= 1;
+  var nipWrapper = this.elem.find(".validation-message");
+  return nipWrapper.length >= 1;
+}
+
+/**
+ * Validate if the keyboard is displayed
+ *
+ * @returns {boolean}
+ */
+PaymentezForm.prototype.virtualKeyboardAdded = function() {
+  var nipWrapper = this.elem.find(".keyboard-wrapper");
+  return nipWrapper.length >= 1;
 }
 
 
@@ -1135,16 +1130,20 @@ PaymentezForm.prototype.getFiscalNumber = function() {
   }
 };
 
-/**
+/** TODO: GABO arregla esto
  * Get the type of validation
  *
  * @returns {number}
  */
 PaymentezForm.prototype.getValidationOption = function() {
-  if (this.validationModeOption()) {
-    return this.elem.find("input[type='radio']:checked").val();
+  if (this.cardType == 'ex' || this.cardType == 'ak') {
+    if (this.otpValidation.is(':checked')){
+      return PaymentezForm.AUTH_OTP;
+    } else {
+      return PaymentezForm.AUTH_NIP;
+    }
   } else {
-    return PaymentezForm.AUTH_CVC
+    return PaymentezForm.AUTH_CVC;
   }
 };
 
@@ -1393,6 +1392,7 @@ PaymentezForm.prototype.setCardTypeIconAsAlkosto = function() {
  * Reset the card type
  */
 PaymentezForm.prototype.clearCardType = function() {
+  this.cardType = '';
   this.clearCardTypeIcon();
   this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_DEFAULT_MASK);
   this.setCvc3();
@@ -1505,24 +1505,6 @@ PaymentezForm.prototype.setCardTypeAsAlkosto = function() {
 
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-/**
- * Change the method of validation
- */
-PaymentezForm.prototype.addValidationOptions = function() {
-  if (!this.validationModeOption()) {
-    this.initValidationNip();
-    this.initValidationOtp();
-    this.setupValidationOptionSet();
-    this.setupValidationMessage();
-    this.setIconColour(this.iconColour);
-  }
-};
-
-PaymentezForm.prototype.removeValidationOptions = function() {
-  if (this.validationModeOption()) {
-    this.elem.find(".validation-container").remove();
-  }
-};
 
 PaymentezForm.prototype.addFiscalNumber = function() {
   if (!this.fiscalNumberAdded()) {
@@ -1538,12 +1520,6 @@ PaymentezForm.prototype.removeFiscalNumber = function() {
   }
 };
 
-PaymentezForm.prototype.removeExpiryContainer = function() {
-  if (this.expiryContainerAdded()) {
-    this.elem.find(".expiry-container").remove();
-  }
-};
-
 PaymentezForm.prototype.addExpiryContainer = function() {
   if (!this.expiryContainerAdded()) {
     this.initExpiryMonthInput();
@@ -1553,11 +1529,11 @@ PaymentezForm.prototype.addExpiryContainer = function() {
   }
 };
 
-PaymentezForm.prototype.removeCvcContainer = function() {
-  if(this.cvcContainerAdded()) {
-    this.elem.find(".cvc-container").remove();
+PaymentezForm.prototype.removeExpiryContainer = function() {
+  if (this.expiryContainerAdded()) {
+    this.elem.find(".expiry-container").remove();
   }
-}
+};
 
 PaymentezForm.prototype.addCvcContainer = function() {
   if(!this.cvcContainerAdded()) {
@@ -1567,29 +1543,78 @@ PaymentezForm.prototype.addCvcContainer = function() {
   }
 };
 
-PaymentezForm.prototype.removeNipContainer = function() {
-  if(this.nipContainerAdded()) {
-    this.elem.find(".nip-container").remove();
-    this.elem.find(".keyboard-container").remove();
+PaymentezForm.prototype.removeCvcContainer = function() {
+  if(this.cvcContainerAdded()) {
+    this.elem.find(".cvc-container").remove();
   }
 };
 
-PaymentezForm.prototype.addNipContainer = function() {
-  if(!this.nipContainerAdded() && this.getValidationOption() == PaymentezForm.AUTH_NIP) {
-    this.initNipInput();
-    this.setupNipInput();
-    this.setIconColour(this.iconColour);
+PaymentezForm.prototype.addNip = function() {
+  if (!this.otpWrapperAdded()){
+    if (!this.nipWrapperAdded()){
+      this.initNipInput();
+      this.setupNipInput();
+      this.setIconColour(this.iconColour);
+    }
+  }else{
+    if (this.getValidationOption() == PaymentezForm.AUTH_NIP && !this.nipWrapperAdded()){
+      this.initNipInput();
+      this.setupNipInput();
+      this.setIconColour(this.iconColour);
+    }
   }
 };
 
+PaymentezForm.prototype.removeNip = function() {
+  if(this.nipWrapperAdded()) {
+    this.elem.find(".nip-wrapper").remove();
+  }
+};
+
+PaymentezForm.prototype.addOtpValidation = function() {
+  if(!this.otpWrapperAdded()) {
+    this.initOtpValidation();
+    this.setupOtpValidation();
+  }
+};
+
+PaymentezForm.prototype.removeOtpValidation = function() {
+  if(this.otpWrapperAdded()) {
+    this.elem.find(".otp-wrapper").remove();
+  }
+};
+
+PaymentezForm.prototype.addVirtualKeyboard = function() {
+  if(!this.virtualKeyboardAdded() && this.getValidationOption() == PaymentezForm.AUTH_NIP) {
+    this.setupVirtualKeyboard()
+  }
+};
+
+PaymentezForm.prototype.removeVirtualKeyboard = function() {
+  if(this.virtualKeyboardAdded()) {
+    this.elem.find(".keyboard-wrapper").remove();
+  }
+};
+
+PaymentezForm.prototype.addValidationMessage = function() {
+  if(!this.validationMessageAdded()) {
+    this.setupValidationMessage()
+  }
+};
+
+PaymentezForm.prototype.removeValidationMessage = function() {
+  if(this.validationMessageAdded()) {
+    this.elem.find(".validation-message").remove();
+  }
+};
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 /**
- * The next methods are temporary because only exito use the validation methods
+ * The next methods are temporary because only exito use otp and nip
  */
 PaymentezForm.prototype.addTuyaChanges = function() {
   this.addFiscalNumber();
-  this.addValidationOptions();
-  this.addNipContainer();
+  this.addNip();
+  this.addOtpValidation();
   this.removeExpiryContainer();
   this.removeCvcContainer();
 }
@@ -1598,8 +1623,10 @@ PaymentezForm.prototype.removeTuyaChanges = function() {
   this.addExpiryContainer();
   this.addCvcContainer();
   this.removeFiscalNumber();
-  this.removeValidationOptions();
-  this.removeNipContainer();
+  this.removeNip();
+  this.removeOtpValidation();
+  this.removeVirtualKeyboard();
+  this.removeValidationMessage();
 }
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
@@ -1749,51 +1776,20 @@ PaymentezForm.prototype.initFiscalNumberInput = function() {
   if (!PaymentezForm.elementHasAttribute(this.fiscalNumberInput, "placeholder")) {
     this.fiscalNumberInput.attr("placeholder", PaymentezForm.FISCAL_NUMBER_PLACEHOLDER);
   }
+  this.fiscalNumberInput.attr("type", "tel");
+  this.fiscalNumberInput.attr("pattern", "[0-9]*");
+  this.fiscalNumberInput.attr("inputmode", "numeric");
+  this.fiscalNumberInput.attr("x-autocompletetype", "cc-csc");
+  this.fiscalNumberInput.attr("autocompletetype", "cc-csc");
+  this.fiscalNumberInput.attr("autocorrect", "off");
+  this.fiscalNumberInput.attr("spellcheck", "off");
+  this.fiscalNumberInput.attr("autocapitalize", "off");
 };
-
-/**
- * Initialise the validation option by Cvc
- */
-PaymentezForm.prototype.initValidationNip = function() {
-  var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-nip", "<div class='validation-wrapper-nip'></div>");
-  var label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>" + PaymentezForm.NIP_PLACEHOLDER + "</label>");
-  label.attr("class", "validation-label checked");
-  var optionNip = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option",
-                                                      "<input checked='checked' value='" + PaymentezForm.AUTH_NIP + "'/>");
-  optionNip.attr("type", "radio");
-  optionNip.attr("name", "validate-option");
-  optionNip.attr("class", "validate-option");
-  // var span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
-  label.append(optionNip);
-  // label.append(span);
-  wrapper.append(label);
-  this.validationOptionByNip = wrapper;
-};
-
-/**
- * Initialise the validation option by Otp
- */
-PaymentezForm.prototype.initValidationOtp = function() {
-  var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-wrapper-otp", "<div class='validation-wrapper-otp'></div>");
-  var label = PaymentezForm.detachOrCreateElement(this.elem, ".validation-label", "<label>" + PaymentezForm.OTP_PLACEHOLDER + "</label>");
-  label.attr("class", "validation-label");
-  var optionOtp = PaymentezForm.detachOrCreateElement(this.elem, ".validation-option", "<input value='" + PaymentezForm.AUTH_OTP + "'/>");
-  optionOtp.attr("type", "radio");
-  optionOtp.attr("name", "validate-option");
-  optionOtp.attr("class", "validate-option");
-  // var span = PaymentezForm.detachOrCreateElement(this.elem, ".checkmark", "<span class='checkmark' />");
-  label.append(optionOtp);
-  // label.append(span);
-  wrapper.append(label);
-  this.validationOptionByOtp = wrapper;
-};
-
 
 /**
  * Initialise the card NIP input
  */
 PaymentezForm.prototype.initNipInput = function() {
-
   // Find or create the NIP input element
   this.nipInput = PaymentezForm.detachOrCreateElement(this.elem, ".nip", "<input class='nip' />");
   // Ensure the NIP has a placeholder
@@ -1809,8 +1805,17 @@ PaymentezForm.prototype.initNipInput = function() {
   this.nipInput.attr("autocorrect", "off");
   this.nipInput.attr("spellcheck", "off");
   this.nipInput.attr("autocapitalize", "off");
-  if (this.USE_TUYA_KEYBOARD)
+  if (this.USE_VIRTUAL_KEYBOARD)
     this.nipInput.attr("disabled", "disabled");
+};
+
+/**
+ * Initialise the checkbox to otp validation option
+ */
+PaymentezForm.prototype.initOtpValidation = function() {
+  this.otpValidation = PaymentezForm.detachOrCreateElement(this.elem, ".otp", "<input class='otp' />");
+  this.otpValidation.attr("type", "checkbox");
+  this.otpValidation.attr("id", "otp-option");
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -2018,25 +2023,6 @@ PaymentezForm.prototype.setupCvcInput = function() {
   });
 };
 
-PaymentezForm.prototype.setupValidationOptionSet = function() {
-  var afterWrapper = this.elem.find(".card-number-wrapper");
-  if (this.fiscalNumberAdded) {
-    afterWrapper = this.elem.find(".fiscal-number-wrapper");
-  }
-  afterWrapper.after("<div class='validation-container'><fieldset class='validation-fieldset'><legend class='validation-legend'>"+ 
-    PaymentezForm.VALIDATION_METHOD_LEGEND + "</legend></fieldset></div>");
-  var fieldset = this.elem.find(".validation-fieldset");
-  fieldset.append(this.validationOptionByNip);
-  fieldset.append(this.validationOptionByOtp);
-  this.validationOptions = this.elem.find("input[name=validate-option]:radio");
-
-  // Events for validationOptions
-  var $this = this;
-  this.validationOptions.change(function() {
-    $this.refreshValidationOption();
-  });
-};
-
 PaymentezForm.prototype.setupFiscalNumberInput = function() {
   var card = this.elem.find(".card-number-wrapper");
   card.after("<div class='fiscal-number-wrapper'></div>");
@@ -2047,25 +2033,29 @@ PaymentezForm.prototype.setupFiscalNumberInput = function() {
 
   // Events for fiscalNumberInput
   var $this = this;
+  this.fiscalNumberInput.keydown(PaymentezForm.filterNumberOnlyKey);
   this.fiscalNumberInput.blur(function() {
     $this.refreshFiscalNumberValidation();
   });
 };
 
 PaymentezForm.prototype.setupNipInput = function() {
-  var fieldset = this.elem.find(".validation-fieldset");
-  fieldset.append("<div class='nip-container nip-center'><div class='nip-wrapper'></div></div>");
+  var fiscal = this.elem.find(".fiscal-number-wrapper");
+  fiscal.after("<div class='nip-wrapper'></div>");
   var wrapper = this.elem.find(".nip-wrapper");
   wrapper.append(this.nipInput);
   wrapper.append("<div class='icon'></div>");
   wrapper.find(".icon").append(PaymentezForm.LOCK_SVG);
 
-  if (this.USE_TUYA_KEYBOARD){
-    this.setupKeyboard(fieldset);
-  }
-
   // Events for nipInput
   var $this = this;
+  wrapper.click(function() {
+    if ($this.virtualKeyboardAdded()) {
+      $this.removeVirtualKeyboard();
+    } else if (!$this.virtualKeyboardAdded() && $this.USE_VIRTUAL_KEYBOARD) {
+      $this.addVirtualKeyboard();
+    }
+  });
   this.nipInput.keydown(PaymentezForm.filterNumberOnlyKey);
   this.nipInput.on('paste', function() {
     setTimeout(function() {
@@ -2077,17 +2067,38 @@ PaymentezForm.prototype.setupNipInput = function() {
   });
 };
 
-PaymentezForm.prototype.setupKeyboard = function(fieldset) {
+PaymentezForm.prototype.setupOtpValidation = function() {
+  var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".otp-wrapper", "<div class='otp-wrapper'></div>");
+  var label = PaymentezForm.detachOrCreateElement(this.elem, ".otp-label", "<label class='otp-label'></label>");
+  label.attr("for", 'otp-option')
+  label.append(PaymentezForm.OTP_PLACEHOLDER);
+  wrapper.append(this.otpValidation);
+  wrapper.append(label);
+  this.elem.append(wrapper);
+
+  // Events
+  var $this = this;
+  this.otpValidation.click(function(e) {
+    $this.refreshValidationOption();
+  });
+};
+
+PaymentezForm.prototype.setupVirtualKeyboard = function() {
   var array = PaymentezForm.generateRandoms();
-  var container = document.createElement('div');
-  container.setAttribute('class', 'keyboard-container');
+  var otpWrapper = this.elem.find(".otp-wrapper");
+  var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".keyboard-wrapper", "<div class='keyboard-wrapper'></div>");
   var $this = this;
   for (var i = 0; i < array.length; i++) {
     var keyContainer = document.createElement('div');
     keyContainer.setAttribute('class', 'key-container');
     var button = document.createElement('button');
     button.setAttribute('class', 'key');
-    button.setAttribute('value', array[i]);
+    var value = i + 1;
+    if ((i + 1) <= 9){
+      button.setAttribute('value', value);
+    } else {
+      button.setAttribute('value', 0);
+    }
     var span = document.createElement('span');
     var key = document.createTextNode(array[i]);
     span.append(key);
@@ -2097,7 +2108,7 @@ PaymentezForm.prototype.setupKeyboard = function(fieldset) {
       e.preventDefault();
     });
     keyContainer.append(button);
-    container.append(keyContainer);
+    wrapper.append(keyContainer);
   }
   var cleanContainer = document.createElement('div');
   cleanContainer.setAttribute('class', 'clean-container');
@@ -2110,18 +2121,17 @@ PaymentezForm.prototype.setupKeyboard = function(fieldset) {
     e.preventDefault();
   });
   cleanContainer.append(cleanButton);
-  container.append(cleanContainer);
-  fieldset.append(container);
-}
+  wrapper.append(cleanContainer);
+  otpWrapper.after(wrapper);
+};
 
 PaymentezForm.prototype.setupValidationMessage = function() {
-  var fieldset = this.elem.find(".validation-fieldset");
   var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-message", "<div class='validation-message'></div>");
   wrapper.addClass('paymentez_dialog_success');
-  var message = PaymentezForm.NIP_EXPLICATION;
+  var message = PaymentezForm.OTP_EXPLICATION;
   wrapper.text(message);
-  fieldset.append(wrapper);
   this.validationMessage = wrapper;
+  this.elem.append(wrapper);
 };
 
 PaymentezForm.prototype.expiryMonth = function() {

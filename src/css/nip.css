@@ -1,14 +1,15 @@
-.paymentez-form .nip-container {
-  width: 50%;
-}
-
 .paymentez-form .nip-wrapper {
-  box-sizing: border-box;
-  margin-left: 5px;
+  width: 50%;
 }
 
 .paymentez-form .nip-wrapper .nip {
   display: block;
   width: 100%;
   -webkit-text-security: disc;
+}
+
+@media screen and (max-width: 600px) {
+  .paymentez-form .nip-wrapper {
+    width: 100%;
+  }
 }

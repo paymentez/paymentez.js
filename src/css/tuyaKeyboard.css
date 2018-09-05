@@ -1,4 +1,4 @@
-.keyboard-container {
+.keyboard-wrapper {
   display: inline-block;
   position: relative;
   width: 80%;
@@ -36,10 +36,10 @@
   background-color: #138496;
 }
 
-.keyboard-container:hover .key span {
+.keyboard-wrapper:hover .key span {
   visibility: hidden;
 }
 
-.keyboard-container:hover .key:after {
+.keyboard-wrapper:hover .key:after {
   content: "*";
 }
