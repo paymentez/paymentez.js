@@ -4,9 +4,8 @@
   position: absolute;
   display: block;
   right: 8px;
-  top: 7px;  
+  top: 7px;
   pointer-events: none;
-  opacity: 0;
 /*
   background: url("https://cdn.paymentez.com/img/cards.png") no-repeat 0px 23px;
   -webkit-transition: opacity .15s linear;
@@ -15,34 +14,4 @@
   -o-transition: opacity .15s linear;
   transition: opacity .15s linear;
   */
-}
-.paymentez-form .card-number-wrapper .show {
-  opacity: 1;
-}
-.paymentez-form .card-number-wrapper .card-type-icon.visa {
-  background: url(ic_visa.svg);
-}
-.paymentez-form .card-number-wrapper .card-type-icon.master-card {
-  background: url(ic_mastercard.svg);
-}
-.paymentez-form .card-number-wrapper .card-type-icon.american-express {
-  background: url(ic_amex.svg);
-}
-.paymentez-form .card-number-wrapper .card-type-icon.credisensa {
-  background: url(ic_credisensa.png);
-}
-.paymentez-form .card-number-wrapper .card-type-icon.discover {
-  background: url(ic_discover.svg);
-}
-.paymentez-form .card-number-wrapper .card-type-icon.diners {
-  background: url(ic_diners.svg);
-}
-.paymentez-form .card-number-wrapper .card-type-icon.jcb {
-  background: url(ic_jcb.svg);
-}
-.paymentez-form .card-number-wrapper .card-type-icon.exito {
-  background: url(ic_exito.png);
-}
-.paymentez-form .card-number-wrapper .card-type-icon.alkosto {
-  background: url(ic_alkosto.png);
 }

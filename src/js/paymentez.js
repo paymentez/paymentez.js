@@ -13,8 +13,8 @@ Paymentez.KOUN_PROD_ENVIRONMENT = 'https://ssl.kaptcha.com/';
 Paymentez.SERVER_LOCAL_URL = "http://localhost:8000";
 Paymentez.SERVER_DEV_URL = "https://ccapi-dev.paymentez.com";
 Paymentez.SERVER_STG_URL = "https://ccapi-stg.paymentez.com";
+Paymentez.SERVER_QA_URL = "https://ccapi-qa.paymentez.com";
 Paymentez.SERVER_PROD_URL = "https://ccapi.paymentez.com";
-Paymentez.SERVER_PRODQA_URL = "https://ccapi.paymentez.com";
 
 function Paymentez() {
 
@@ -52,8 +52,8 @@ Paymentez.getHash= function(message) {
     return sha256hex;
 }
 
-Paymentez.createToken = function(createTokenRequest, successCallback, erroCallback) {
-    var SERVER_URL = Paymentez.SERVER_STG_URL;    
+Paymentez.getServerURL = function(){
+    var SERVER_URL = Paymentez.SERVER_STG_URL;
     if(Paymentez.ENV_MODE === ''){
         if(Paymentez.TEST_MODE){
             SERVER_URL = Paymentez.SERVER_STG_URL;
@@ -67,32 +67,35 @@ Paymentez.createToken = function(createTokenRequest, successCallback, erroCallba
             SERVER_URL = Paymentez.SERVER_STG_URL;
         }else if(Paymentez.ENV_MODE === 'prod'){
             SERVER_URL = Paymentez.SERVER_PROD_URL;
-        }else if(Paymentez.ENV_MODE === 'prodqa'){
+        }else if(Paymentez.ENV_MODE === 'qa'){
             SERVER_URL = Paymentez.SERVER_PRODQA_URL;
         }else{
             SERVER_URL = Paymentez.SERVER_LOCAL_URL;
         }
     }
+    return SERVER_URL;
+}
 
-    
-    
+Paymentez.createToken = function(createTokenRequest, successCallback, erroCallback) {
+    var SERVER_URL = this.getServerURL();
+    console.warn("Gabo! a esta url le pego: " + SERVER_URL);
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", SERVER_URL + "/v2/card/add", true);
     xmlhttp.setRequestHeader("Content-Type", 'application/json');
-    xmlhttp.setRequestHeader("Auth-Token", Paymentez.getAuthToken(Paymentez.PAYMENTEZ_CLIENT_APP_CODE, Paymentez.PAYMENTEZ_CLIENT_APP_KEY));  
-  
-    
+    xmlhttp.setRequestHeader("Auth-Token", Paymentez.getAuthToken(Paymentez.PAYMENTEZ_CLIENT_APP_CODE, Paymentez.PAYMENTEZ_CLIENT_APP_KEY));
+
+
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4        
+        if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
             try{
                 var objResponse = JSON.parse(xmlhttp.responseText);
-                if (xmlhttp.status == 200) {                    
-                    successCallback(objResponse);            
+                if (xmlhttp.status == 200) {
+                    successCallback(objResponse);
                 }
-                else if (xmlhttp.status == 400) {                    
+                else if (xmlhttp.status == 400) {
                     erroCallback(objResponse);
                 }
-                else {                    
+                else {
                     erroCallback(objResponse);
                 }
             }catch(e){
@@ -102,9 +105,9 @@ Paymentez.createToken = function(createTokenRequest, successCallback, erroCallba
                       "help": "Server Error",
                       "description": "Server Error"
                     }
-                  }                      
+                  }
                 erroCallback(server_error);
-            }    
+            }
         }
     };
     xmlhttp.send(JSON.stringify(createTokenRequest));
@@ -114,24 +117,24 @@ Paymentez.dataCollector = function(session_id) {
     if(Paymentez.ENV_MODE === ''){
         if (Paymentez.TEST_MODE){
             Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_TEST_ENVIRONMENT;
-      
+
         }else{
-            Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_PROD_ENVIRONMENT;  
+            Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_PROD_ENVIRONMENT;
         }
     }else{
         if (Paymentez.ENV_MODE === 'prod'){
             Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_PROD_ENVIRONMENT;
-      
+
         }else{
-            Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_TEST_ENVIRONMENT;  
+            Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_TEST_ENVIRONMENT;
         }
     }
-    
+
     var body, e, iframe, image;
     if (typeof document !== 'undefined' && typeof document.body !== 'undefined' && document.body && (document.readyState === 'interactive' || document.readyState === 'complete')) {
-      
+
         body = document.getElementsByTagName('body')[0];
-        iframe = document.createElement('iframe');        
+        iframe = document.createElement('iframe');
         iframe.setAttribute("id","riskIframe")
         iframe.setAttribute("height", "1");
         iframe.setAttribute("scrolling", "no");
@@ -141,7 +144,7 @@ Paymentez.dataCollector = function(session_id) {
         image = document.createElement('img');
         image.setAttribute("height", "1");
         image.setAttribute("width", "1");
-        image.setAttribute("src", Paymentez.KOUNT_ENVIRONMENT + "logo.gif?m=" + Paymentez.MERCHANT_ID + "&s=" + session_id);        
+        image.setAttribute("src", Paymentez.KOUNT_ENVIRONMENT + "logo.gif?m=" + Paymentez.MERCHANT_ID + "&s=" + session_id);
         try {
             iframe.appendChild(image);
         } catch (_error) {
@@ -151,9 +154,9 @@ Paymentez.dataCollector = function(session_id) {
     } else {
       setTimeout(Paymentez.dataCollector, 150, session_id);
     }
-      
+
 };
-  
+
 /**
  * Setting your credentials and environment
  *
@@ -164,7 +167,7 @@ Paymentez.dataCollector = function(session_id) {
 Paymentez.setEnvironment = function(test_mode, paymentez_client_app_code, paymentez_client_app_key) {
     Paymentez.TEST_MODE = test_mode;
     Paymentez.PAYMENTEZ_CLIENT_APP_CODE = paymentez_client_app_code;
-    Paymentez.PAYMENTEZ_CLIENT_APP_KEY = paymentez_client_app_key;      
+    Paymentez.PAYMENTEZ_CLIENT_APP_KEY = paymentez_client_app_key;
 };
 
 /**
@@ -174,16 +177,16 @@ Paymentez.setEnvironment = function(test_mode, paymentez_client_app_code, paymen
  * @param paymentez_client_app_code provided by Paymentez.
  * @param paymentez_client_app_key provided by Paymentez.
  */
-Paymentez.init = function(env_mode, paymentez_client_app_code, paymentez_client_app_key) {    
+Paymentez.init = function(env_mode, paymentez_client_app_code, paymentez_client_app_key) {
     Paymentez.ENV_MODE = env_mode;
     Paymentez.PAYMENTEZ_CLIENT_APP_CODE = paymentez_client_app_code;
-    Paymentez.PAYMENTEZ_CLIENT_APP_KEY = paymentez_client_app_key;      
+    Paymentez.PAYMENTEZ_CLIENT_APP_KEY = paymentez_client_app_key;
 };
-  
+
 
 /**
  * The simplest way to create a token, using a Card
- * 
+ *
  * @param uid User identifier. This is the identifier you use inside your application; you will receive it in notifications.
  * @param email Email of the user initiating the purchase. Format: Valid e-mail format.
  * @param card the Card used to create this payment token
@@ -192,15 +195,57 @@ Paymentez.init = function(env_mode, paymentez_client_app_code, paymentez_client_
  */
 Paymentez.addCard = function(uid, email, card, success_callback, failure_callback) {
     var session_id = Paymentez.getSessionId();
-    Paymentez.dataCollector(session_id);    
+    Paymentez.dataCollector(session_id);
     var params = {
-      "session_id": session_id,  
+      "session_id": session_id,
       "user": {
           "id": uid,
           "email": email,
           "fiscal_number": $('.fiscal-number').val()
-      }      
+      }
     };
     params['card'] = card['card'];
     Paymentez.createToken(params, success_callback, failure_callback);
+};
+
+
+Paymentez.getBinInformation = function(number_bin, form, successCallback, erroCallback) {
+    var IS_CHECKOUT = this.ENV_MODE == "";
+    var xmlhttp = new XMLHttpRequest();
+    if (IS_CHECKOUT) {
+        var reference = $('#reference').val();
+        var url_bin = "/v2/card_bin/intra/" + number_bin + "/?reference=" + reference;
+        xmlhttp.open("GET", url_bin, true);
+    } else {
+        var SERVER_URL = this.getServerURL();
+        var url_bin = SERVER_URL + "/v2/card_bin/" + number_bin;
+        xmlhttp.open("GET", url_bin, true);
+        xmlhttp.setRequestHeader("Auth-Token", this.getAuthToken(this.PAYMENTEZ_CLIENT_APP_CODE, this.PAYMENTEZ_CLIENT_APP_KEY));
+    }
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+            try{
+                var objResponse = JSON.parse(xmlhttp.responseText);
+                if (xmlhttp.status == 200) {
+                    successCallback(objResponse, form);
+                }
+                else if (xmlhttp.status == 400) {
+                    erroCallback(objResponse);
+                }
+                else {
+                    erroCallback(objResponse);
+                }
+            }catch(e){
+                var server_error = {
+                    "error": {
+                      "type": "Server Error",
+                      "help": "Server Error",
+                      "description": "Server Error"
+                    }
+                  }
+                erroCallback(server_error);
+            }
+        }
+    };
+    xmlhttp.send();
 };
