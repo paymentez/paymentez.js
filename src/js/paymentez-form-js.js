@@ -380,6 +380,7 @@ PaymentezForm.applyFormatMask = function(string, mask) {
 
 PaymentezForm.prototype.cardTypeFromNumberBin = function(number) {
   var number_bin = number.replace(" ","").substring(0, 6);
+  console.warn("This is my bin " + number_bin);
   if (number >= 6 && this.numberBin != number_bin) {
     this.numberBin = number_bin;
     Paymentez.getBinInformation(number_bin, this, this.successCallback, this.erroCallback)
@@ -392,15 +393,20 @@ PaymentezForm.prototype.successCallback = function(objResponse, form) {
 
   // Set card type icon
   $(".card-type-icon").css("background", "url(" + objResponse.url_logo + ")");
-
+    console.log("aqui estoy ")
   // // Set card mask
   form.creditCardNumberMask = objResponse.card_mask;
   form.cardNumberInput.attr("maxlength", objResponse.card_mask.length);
 
   form.setInstallmentsOptions(objResponse.installments_options);
 
+  if (form.cardType == 'sx' || form.cardType == 'vr') {
+      form.removeTuyaChanges();
+      form.addFiscalNumber();
+  }
+
   // Tuya requirements
-  if (form.cardType == 'ex' || form.cardType == 'ak') {
+  else if (form.cardType == 'ex' || form.cardType == 'ak') {
     form.addTuyaChanges();
   } else {
     form.removeTuyaChanges();
@@ -409,9 +415,10 @@ PaymentezForm.prototype.successCallback = function(objResponse, form) {
     form.cvcInput.attr("maxlength", form.cvcLenght);
     form.cvcMask = "X".repeat(form.cvcLenght);
   }
-}
 
+}
 PaymentezForm.prototype.erroCallback = function(objResponse) {
+    console.error("toy roto")
 }
 
 
