@@ -90,15 +90,17 @@ PaymentezForm.CELLPHONE_PLACEHOLDER =  "Celular";
 PaymentezForm.FISCAL_NUMBER_PLACEHOLDER =  "Documento de Identificación";
 PaymentezForm.EXPIRY_PLACEHOLDER = "MM / YY";
 PaymentezForm.EXPIRY_NUMBER_OF_YEARS = 10;
-PaymentezForm.CVC_PLACEHOLDER =  "CVC";
-PaymentezForm.NIP_PLACEHOLDER = "Clave Tuya";
-PaymentezForm.OTP_PLACEHOLDER = "Continuar sin clave";
 PaymentezForm.AUTH_CVC =  "AUTH_CVC";
 PaymentezForm.AUTH_NIP =  "AUTH_NIP";
 PaymentezForm.AUTH_OTP =  "AUTH_OTP";
-PaymentezForm.NIP_EXPLICATION = "Valida esta operación usando tu clave tuya.";
-PaymentezForm.OTP_EXPLICATION = "Valida esta operación usando una clave unica temporal que sera enviada a tu telefono o" +
-                                " correo electrónico registrado en tuya.";
+PaymentezForm.CVC_PLACEHOLDER = "CVC";
+PaymentezForm.NIP_PLACEHOLDER = "Clave Tuya";
+PaymentezForm.OTP_PLACEHOLDER_ADD = "No tengo o no recuerdo mi clave";
+PaymentezForm.OTP_PLACEHOLDER_CHECKOUT = "Continuar compra sin clave";
+PaymentezForm.OTP_EXPLICATION_ADD = "Escogiendo esta opción se va a generar una Clave Temporal única, con la que " +
+"validarás tu tarjeta. Haz clic en “Guardar” para continuar con el proceso.";
+PaymentezForm.OTP_EXPLICATION_CHECKOUT = "Escogiendo esta opción se va a generar una Clave Temporal única, con la " +
+"que validarás tu compra.";
 
 PaymentezForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
   'x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" ' +
@@ -380,10 +382,9 @@ PaymentezForm.applyFormatMask = function(string, mask) {
 
 PaymentezForm.prototype.cardTypeFromNumberBin = function(number) {
   var number_bin = number.replace(" ","").substring(0, 6);
-  console.warn("This is my bin " + number_bin);
   if (number >= 6 && this.numberBin != number_bin) {
     this.numberBin = number_bin;
-    Paymentez.getBinInformation(number_bin, this, this.successCallback, this.erroCallback)
+    Paymentez.getBinInformation(number_bin, this, this.successCallback, this.erroCallback);
   }
 };
 
@@ -393,7 +394,7 @@ PaymentezForm.prototype.successCallback = function(objResponse, form) {
 
   // Set card type icon
   $(".card-type-icon").css("background", "url(" + objResponse.url_logo + ")");
-    console.log("aqui estoy ")
+
   // // Set card mask
   form.creditCardNumberMask = objResponse.card_mask;
   form.cardNumberInput.attr("maxlength", objResponse.card_mask.length);
@@ -418,7 +419,6 @@ PaymentezForm.prototype.successCallback = function(objResponse, form) {
 
 }
 PaymentezForm.prototype.erroCallback = function(objResponse) {
-    console.error("toy roto")
 }
 
 
@@ -1721,8 +1721,12 @@ PaymentezForm.prototype.setupNipInput = function() {
 PaymentezForm.prototype.setupOtpValidation = function() {
   var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".otp-wrapper", "<div class='otp-wrapper'></div>");
   var label = PaymentezForm.detachOrCreateElement(this.elem, ".otp-label", "<label class='otp-label'></label>");
-  label.attr("for", 'otp-option')
-  label.append(PaymentezForm.OTP_PLACEHOLDER);
+  label.attr("for", 'otp-option');
+  if (Paymentez.isCheckout()) {
+    label.append(PaymentezForm.OTP_PLACEHOLDER_CHECKOUT);
+  } else {
+    label.append(PaymentezForm.OTP_PLACEHOLDER_ADD);
+  }
   wrapper.append(this.otpValidation);
   wrapper.append(label);
   this.elem.append(wrapper);
@@ -1779,8 +1783,11 @@ PaymentezForm.prototype.setupVirtualKeyboard = function() {
 PaymentezForm.prototype.setupValidationMessage = function() {
   var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-message", "<div class='validation-message'></div>");
   wrapper.addClass('paymentez_dialog_success');
-  var message = PaymentezForm.OTP_EXPLICATION;
-  wrapper.text(message);
+  if (Paymentez.isCheckout()) {
+    wrapper.text(PaymentezForm.OTP_EXPLICATION_CHECKOUT);
+  } else {
+    wrapper.text(PaymentezForm.OTP_EXPLICATION_ADD);
+  }
   this.validationMessage = wrapper;
   this.elem.append(wrapper);
 };

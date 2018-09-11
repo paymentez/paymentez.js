@@ -78,7 +78,6 @@ Paymentez.getServerURL = function(){
 
 Paymentez.createToken = function(createTokenRequest, successCallback, erroCallback) {
     var SERVER_URL = this.getServerURL();
-    console.warn("Gabo! a esta url le pego: " + SERVER_URL);
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", SERVER_URL + "/v2/card/add", true);
     xmlhttp.setRequestHeader("Content-Type", 'application/json');
@@ -209,10 +208,15 @@ Paymentez.addCard = function(uid, email, card, success_callback, failure_callbac
 };
 
 
-Paymentez.getBinInformation = function(number_bin, form, successCallback, erroCallback) {
+Paymentez.isCheckout = function(){
     var IS_CHECKOUT = this.ENV_MODE == "";
+    return IS_CHECKOUT;
+}
+
+
+Paymentez.getBinInformation = function(number_bin, form, successCallback, erroCallback) {
     var xmlhttp = new XMLHttpRequest();
-    if (IS_CHECKOUT) {
+    if (this.isCheckout()) {
         var reference = $('#reference').val();
         var url_bin = "/v2/card_bin/intra/" + number_bin + "/?reference=" + reference;
         xmlhttp.open("GET", url_bin, true);
