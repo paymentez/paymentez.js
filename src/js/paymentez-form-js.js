@@ -14,6 +14,7 @@ function PaymentezForm(elem) {
   const current_data = this.elem.children("div");
   this.cardType = '';
   this.numberBin = '';
+  this.nip = '';
 
   // Validate if its displaying in a mobile device
   if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -779,11 +780,13 @@ PaymentezForm.prototype.refreshValidationOption = function() {
   }
 };
 
-PaymentezForm.prototype.addValueToNip = function(value){
+PaymentezForm.prototype.addValueToNip = function(value, key){
   if (this.nipWrapperAdded()) {
     if (this.nipInput.val().length < this.nipLenght){
       var newValue = this.nipInput.val() + value;
       this.nipInput.val(newValue);
+      var newNip = this.nip + key;
+      this.nip = newNip;
     }
   }
 }
@@ -791,6 +794,7 @@ PaymentezForm.prototype.addValueToNip = function(value){
 PaymentezForm.prototype.cleanNipInput = function() {
   if (this.nipWrapperAdded())
     this.nipInput.val("");
+    this.nip = "";
 }
 
 /**
@@ -1098,7 +1102,7 @@ PaymentezForm.prototype.getCvc = function() {
  */
 PaymentezForm.prototype.getNip = function() {
   if (this.getValidationOption() == PaymentezForm.AUTH_NIP) {
-    return this.nipInput.val();
+    return this.nip;
   }else{
     return "";
   }
@@ -1759,7 +1763,7 @@ PaymentezForm.prototype.setupVirtualKeyboard = function() {
     span.append(key);
     button.append(span);
     button.addEventListener("click", function(e){
-      $this.addValueToNip(this.value);
+      $this.addValueToNip(this.value, this.firstChild.innerHTML);
       e.preventDefault();
     });
     keyContainer.append(button);
