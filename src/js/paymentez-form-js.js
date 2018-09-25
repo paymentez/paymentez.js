@@ -15,6 +15,7 @@ function PaymentezForm(elem) {
   this.cardType = '';
   this.numberBin = '';
   this.nip = '';
+  this.USE_OTP = false;
 
   // Validate if its displaying in a mobile device
   if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -402,11 +403,14 @@ PaymentezForm.prototype.successCallback = function(objResponse, form) {
 
   form.setInstallmentsOptions(objResponse.installments_options);
 
+  // Set use of otp
+  form.USE_OTP = objResponse.otp;
+  // form.USE_OTP = false;
+
   if (form.cardType == 'sx' || form.cardType == 'vr') {
       form.removeTuyaChanges();
       form.addFiscalNumber();
   }
-
   // Tuya requirements
   else if (form.cardType == 'ex' || form.cardType == 'ak') {
     form.addTuyaChanges();
@@ -1071,15 +1075,22 @@ PaymentezForm.prototype.getFiscalNumber = function() {
  * @returns {number}
  */
 PaymentezForm.prototype.getValidationOption = function() {
+  var val= PaymentezForm.AUTH_CVC;
   if (this.cardType == 'ex' || this.cardType == 'ak') {
-    if (this.otpValidation.is(':checked')){
-      return PaymentezForm.AUTH_OTP;
-    } else {
-      return PaymentezForm.AUTH_NIP;
+    if(this.USE_OTP){
+      if (this.otpValidation.is(':checked')){
+        val = PaymentezForm.AUTH_OTP;
+      } else {
+        val = PaymentezForm.AUTH_NIP;
+      }
+    }
+    else {
+      val = PaymentezForm.AUTH_NIP;
     }
   } else {
-    return PaymentezForm.AUTH_CVC;
+    val = PaymentezForm.AUTH_CVC;
   }
+  return val;
 };
 
 /**
@@ -1102,6 +1113,9 @@ PaymentezForm.prototype.getCvc = function() {
  */
 PaymentezForm.prototype.getNip = function() {
   if (this.getValidationOption() == PaymentezForm.AUTH_NIP) {
+    if (this.nipWrapperAdded() && !this.USE_VIRTUAL_KEYBOARD){
+      this.nip = (this.nipInput.val());
+    }
     return this.nip;
   }else{
     return "";
@@ -1232,7 +1246,7 @@ PaymentezForm.prototype.removeNip = function() {
 };
 
 PaymentezForm.prototype.addOtpValidation = function() {
-  if(!this.otpWrapperAdded()) {
+  if(!this.otpWrapperAdded() && this.USE_OTP) {
     this.initOtpValidation();
     this.setupOtpValidation();
   }
@@ -1744,7 +1758,12 @@ PaymentezForm.prototype.setupOtpValidation = function() {
 
 PaymentezForm.prototype.setupVirtualKeyboard = function() {
   var array = PaymentezForm.generateRandoms();
-  var otpWrapper = this.elem.find(".otp-wrapper");
+  if(this.USE_OTP){
+    var beforeWrapper = this.elem.find(".otp-wrapper");
+  } else{
+    var beforeWrapper = this.elem.find(".nip-wrapper");
+  }
+  
   var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".keyboard-wrapper", "<div class='keyboard-wrapper'></div>");
   var $this = this;
   for (var i = 0; i < array.length; i++) {
@@ -1781,7 +1800,7 @@ PaymentezForm.prototype.setupVirtualKeyboard = function() {
   });
   cleanContainer.append(cleanButton);
   wrapper.append(cleanContainer);
-  otpWrapper.after(wrapper);
+  beforeWrapper.after(wrapper);
 };
 
 PaymentezForm.prototype.setupValidationMessage = function() {
