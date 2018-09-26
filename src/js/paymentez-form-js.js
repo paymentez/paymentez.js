@@ -13,6 +13,11 @@ function PaymentezForm(elem) {
   this.elem = jQuery(elem);
   const current_data = this.elem.children("div");
   this.cardType = '';
+  this.numberBin = '';
+  this.nip = '';
+  this.USE_OTP = false;
+
+  // Validate if its displaying in a mobile device
   if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     this.USE_VIRTUAL_KEYBOARD = false;
   } else {
@@ -29,9 +34,9 @@ function PaymentezForm(elem) {
   this.cvcLenght = 3;
   this.nipLenght = 4;
   this.initEmailInput();
-  this.initCellPhoneInput();  
+  this.initCellPhoneInput();
   this.initNameInput();
-  this.initCardNumberInput();  
+  this.initCardNumberInput();
   this.initExpiryMonthInput();
   this.initExpiryYearInput();
   this.initCvcInput();
@@ -41,11 +46,11 @@ function PaymentezForm(elem) {
   // Setup display
   this.setupEmailInput();
   this.setupCellPhoneInput();
-  this.setupNameInput();    
-  this.setupCardNumberInput();  
+  this.setupNameInput();
+  this.setupCardNumberInput();
   this.setupExpiryInput();
   this.setupCvcInput();
-  
+
   this.elem.append(current_data);
 
   // Set icon colour
@@ -54,7 +59,7 @@ function PaymentezForm(elem) {
   }
   // --- --- --- --- --- --- --- --- --- ---
 
-  this.refreshCreditCardTypeIcon();
+  this.refreshCreditCardType();
 }
 
 PaymentezForm.KEYS = {
@@ -77,36 +82,27 @@ PaymentezForm.KEYS = {
   "V" : 86
 };
 
-PaymentezForm.CREDIT_CARD_NUMBER_DEFAULT_MASK    = "XXXX XXXX XXXX XXXX";
-PaymentezForm.CREDIT_CARD_NUMBER_VISA_MASK       = "XXXX XXXX XXXX XXXX";
-PaymentezForm.CREDIT_CARD_NUMBER_MASTERCARD_MASK = "XXXX XXXX XXXX XXXX";
-PaymentezForm.CREDIT_CARD_NUMBER_DISCOVER_MASK   = "XXXX XXXX XXXX XXXX";
-PaymentezForm.CREDIT_CARD_NUMBER_JCB_MASK        = "XXXX XXXX XXXX XXXX";
-PaymentezForm.CREDIT_CARD_NUMBER_AMEX_MASK       = "XXXX XXXXXX XXXXX";
-PaymentezForm.CREDIT_CARD_NUMBER_DINERS_MASK     = "XXXX XXXX XXXX XX";
-PaymentezForm.CREDIT_CARD_NUMBER_EXITO_MASK      = "XXXX XXXX XXXX XXXX";
-PaymentezForm.CREDIT_CARD_NUMBER_ALKOSTO_MASK    = "XXXX XXXX XXXX XXXX";
-
-PaymentezForm.prototype.creditCardNumberMask = PaymentezForm.CREDIT_CARD_NUMBER_DEFAULT_MASK;
+PaymentezForm.prototype.creditCardNumberMask = "XXXX XXXX XXXX XXXX";
+PaymentezForm.prototype.cvcMask = "XXX";
+PaymentezForm.EXPIRY_MASK = "XX / XX";
 PaymentezForm.CREDIT_CARD_NUMBER_PLACEHOLDER = "Número de tarjeta";
 PaymentezForm.NAME_PLACEHOLDER =  "Nombre del titular";
 PaymentezForm.EMAIL_PLACEHOLDER =  "E-mail";
 PaymentezForm.CELLPHONE_PLACEHOLDER =  "Celular";
 PaymentezForm.FISCAL_NUMBER_PLACEHOLDER =  "Documento de Identificación";
-PaymentezForm.EXPIRY_MASK = "XX / XX";
 PaymentezForm.EXPIRY_PLACEHOLDER = "MM / YY";
 PaymentezForm.EXPIRY_NUMBER_OF_YEARS = 10;
-PaymentezForm.CVC_MASK_3 = "XXX";
-PaymentezForm.CVC_MASK_4 = "XXXX";
-PaymentezForm.CVC_PLACEHOLDER =  "CVC";
-PaymentezForm.NIP_PLACEHOLDER = "Clave Tuya";
-PaymentezForm.OTP_PLACEHOLDER = "Continuar sin clave";
 PaymentezForm.AUTH_CVC =  "AUTH_CVC";
 PaymentezForm.AUTH_NIP =  "AUTH_NIP";
 PaymentezForm.AUTH_OTP =  "AUTH_OTP";
-PaymentezForm.NIP_EXPLICATION = "Valida esta operación usando tu clave tuya.";
-PaymentezForm.OTP_EXPLICATION = "Valida esta operación usando una clave unica temporal que sera enviada a tu telefono o" +
-                                " correo electrónico registrado en tuya.";
+PaymentezForm.CVC_PLACEHOLDER = "CVC";
+PaymentezForm.NIP_PLACEHOLDER = "Clave Tuya";
+PaymentezForm.OTP_PLACEHOLDER_ADD = "No tengo o no recuerdo mi clave";
+PaymentezForm.OTP_PLACEHOLDER_CHECKOUT = "Continuar compra sin clave";
+PaymentezForm.OTP_EXPLICATION_ADD = "Escogiendo esta opción se va a generar una Clave Temporal única, con la que " +
+"validarás tu tarjeta. Haz clic en “Guardar” para continuar con el proceso.";
+PaymentezForm.OTP_EXPLICATION_CHECKOUT = "Escogiendo esta opción se va a generar una Clave Temporal única, con la " +
+"que validarás tu compra.";
 
 PaymentezForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
   'x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" ' +
@@ -201,7 +197,6 @@ PaymentezForm.INFORMATION_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://ww
   '.666v10.429c0,1.412,0.516,2.635,1.548,3.668c1.032,1.03,2.254,1.547,3.666,1.547h41.714c1.412,0,2.634-0.517,3.666-1.' +
   '547c1.031-1.033,1.547-2.256,1.547-3.668v-10.429C134.07,113.302,133.557,112.08,132.523,111.048z"/> </g> </svg>';
 
-
 /**
  * Get the key code from the given event.
  *
@@ -211,7 +206,6 @@ PaymentezForm.INFORMATION_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://ww
 PaymentezForm.keyCodeFromEvent = function(e) {
   return e.which || e.keyCode;
 };
-
 
 /**
  * Get whether a command key (ctrl of mac cmd) is held down.
@@ -223,7 +217,6 @@ PaymentezForm.keyIsCommandFromEvent = function(e) {
   return e.ctrlKey || e.metaKey;
 };
 
-
 /**
  * Is the event a number key.
  *
@@ -233,7 +226,6 @@ PaymentezForm.keyIsCommandFromEvent = function(e) {
 PaymentezForm.keyIsNumber = function(e) {
   return PaymentezForm.keyIsTopNumber(e) || PaymentezForm.keyIsKeypadNumber(e);
 };
-
 
 /**
  * Is the event a top keyboard number key.
@@ -246,7 +238,6 @@ PaymentezForm.keyIsTopNumber = function(e) {
   return keyCode >= PaymentezForm.KEYS["0"] && keyCode <= PaymentezForm.KEYS["9"];
 };
 
-
 /**
  * Is the event a keypad number key.
  *
@@ -258,7 +249,6 @@ PaymentezForm.keyIsKeypadNumber = function(e) {
   return keyCode >= PaymentezForm.KEYS["NUMPAD_0"] && keyCode <= PaymentezForm.KEYS["NUMPAD_9"];
 };
 
-
 /**
  * Is the event a delete key.
  *
@@ -268,7 +258,6 @@ PaymentezForm.keyIsKeypadNumber = function(e) {
 PaymentezForm.keyIsDelete = function(e) {
   return PaymentezForm.keyCodeFromEvent(e) == PaymentezForm.KEYS["DELETE"];
 };
-
 
 /**
  * Is the event a backspace key.
@@ -280,7 +269,6 @@ PaymentezForm.keyIsBackspace = function(e) {
   return PaymentezForm.keyCodeFromEvent(e) == PaymentezForm.KEYS["BACKSPACE"];
 };
 
-
 /**
  * Is the event a deletion key (delete or backspace)
  *
@@ -290,7 +278,6 @@ PaymentezForm.keyIsBackspace = function(e) {
 PaymentezForm.keyIsDeletion = function(e) {
   return PaymentezForm.keyIsDelete(e) || PaymentezForm.keyIsBackspace(e);
 };
-
 
 /**
  * Is the event an arrow key.
@@ -303,7 +290,6 @@ PaymentezForm.keyIsArrow = function(e) {
   return keyCode >= PaymentezForm.KEYS["ARROW_LEFT"] && keyCode <= PaymentezForm.KEYS["ARROW_DOWN"];
 };
 
-
 /**
  * Is the event a navigation key.
  *
@@ -314,7 +300,6 @@ PaymentezForm.keyIsNavigation = function(e) {
   var keyCode = PaymentezForm.keyCodeFromEvent(e);
   return keyCode == PaymentezForm.KEYS["HOME"] || keyCode == PaymentezForm.KEYS["END"];
 };
-
 
 /**
  * Is the event a keyboard command (copy, paste, cut, highlight all)
@@ -333,7 +318,6 @@ PaymentezForm.keyIsKeyboardCommand = function(e) {
     );
 };
 
-
 /**
  * Is the event the tab key?
  *
@@ -343,7 +327,6 @@ PaymentezForm.keyIsKeyboardCommand = function(e) {
 PaymentezForm.keyIsTab = function(e) {
   return PaymentezForm.keyCodeFromEvent(e) == PaymentezForm.KEYS["TAB"];
 };
-
 
 /**
  * Copy all attributes of the source element to the destination element.
@@ -356,7 +339,6 @@ PaymentezForm.copyAllElementAttributes = function(source, destination) {
     destination.attr(attr.nodeName, attr.nodeValue);
   });
 };
-
 
 /**
  * Strip all characters that are not in the range 0-9
@@ -373,7 +355,6 @@ PaymentezForm.numbersOnlyString = function(string) {
   }
   return numbersOnlyString;
 };
-
 
 /**
  * Apply a format mask to the given string
@@ -401,74 +382,63 @@ PaymentezForm.applyFormatMask = function(string, mask) {
   return formattedString;
 };
 
-
-/**
- * Establish the type of a card from the number.
- *
- * @param number
- * @returns {string}
- */
-PaymentezForm.cardTypeFromNumber = function(number) {
-  var number = number.replace(" ","");
-
-  // Credisensa
-  var re = new RegExp("^(000029|960018)");
-  if (number.match(re) != null)
-    return "Credisensa";
-
-  // Diners - Carte Blanche
-  re = new RegExp("^30[0-5]");
-  if (number.match(re) != null)
-    return "Diners - Carte Blanche";
-
-  // Diners
-  re = new RegExp("^(30[6-9]|36|38)");
-  if (number.match(re) != null)
-    return "Diners";
-
-  // JCB
-  re = new RegExp("^35(2[89]|[3-8][0-9])");
-  if (number.match(re) != null)
-    return "JCB";
-
-  // AMEX
-  re = new RegExp("^3[47]");
-  if (number.match(re) != null)
-    return "AMEX";
-
-  // Visa Electron
-  re = new RegExp("^(4026|417500|4508|4844|491(3|7))");
-  if (number.match(re) != null)
-    return "Visa Electron";
-
-  // Visa
-  re = new RegExp("^4");
-  if (number.match(re) != null)
-    return "Visa";
-
-  // Mastercard
-  re = new RegExp("^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[01]|2720)");
-  if (number.match(re) != null)
-    return "Mastercard";
-
-  // Exito
-  re = ["590309", "570423"];
-  if (re.indexOf(number.substring(0, 6)) != -1)
-    return "Exito";
-
-  // Alkosto
-  re = "590312";
-  if (re == number.substring(0, 6))
-    return "Alkosto";
-
-  // Discover
-  re = new RegExp("^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)");
-  if (number.match(re) != null)
-    return "Discover";
-
-  return "";
+PaymentezForm.prototype.cardTypeFromNumberBin = function(number) {
+  var number_bin = number.replace(" ","").substring(0, 6);
+  if (number >= 6 && this.numberBin != number_bin) {
+    this.numberBin = number_bin;
+    Paymentez.getBinInformation(number_bin, this, this.successCallback, this.erroCallback);
+  }
 };
 
+PaymentezForm.prototype.successCallback = function(objResponse, form) {
+  // Set card type
+  form.cardType = objResponse.card_type;
+
+  // Set card type icon
+  $(".card-type-icon").css("background", "url(" + objResponse.url_logo + ")");
+
+  // // Set card mask
+  form.creditCardNumberMask = objResponse.card_mask;
+  form.cardNumberInput.attr("maxlength", objResponse.card_mask.length);
+
+  form.setInstallmentsOptions(objResponse.installments_options);
+
+  // Set use of otp
+  form.USE_OTP = objResponse.otp;
+  // form.USE_OTP = false;
+
+  if (form.cardType == 'sx' || form.cardType == 'vr') {
+      form.removeTuyaChanges();
+      form.addFiscalNumber();
+  }
+  // Tuya requirements
+  else if (form.cardType == 'ex' || form.cardType == 'ak') {
+    form.addTuyaChanges();
+  } else {
+    form.removeTuyaChanges();
+    // Set cvc lenght and cvc mask
+    form.cvcLenght = objResponse.cvv_length;
+    form.cvcInput.attr("maxlength", form.cvcLenght);
+    form.cvcMask = "X".repeat(form.cvcLenght);
+  }
+
+}
+PaymentezForm.prototype.erroCallback = function(objResponse) {
+}
+
+
+/**
+ * Set the installments if this exists
+ *
+ * @param array - installments
+ */
+PaymentezForm.prototype.setInstallmentsOptions = function(installments) {
+  var selectInstallments = $(".installments");
+  selectInstallments.empty();
+  $.each(installments, function(option, value) {
+    selectInstallments.append($("<option></option>").attr("value", value).text(value));
+  });
+};
 
 /**
  * Get the caret start position of the given element.
@@ -483,7 +453,6 @@ PaymentezForm.caretStartPosition = function(element) {
   return false;
 };
 
-
 /**
  * Gte the caret end position of the given element.
  *
@@ -496,7 +465,6 @@ PaymentezForm.caretEndPosition = function(element) {
   }
   return false;
 };
-
 
 /**
  * Set the caret position of the given element.
@@ -521,7 +489,6 @@ PaymentezForm.setCaretPosition = function(element, caretPos) {
   }
 };
 
-
 /**
  * Normalise the caret position for the given mask.
  *
@@ -539,7 +506,6 @@ PaymentezForm.normaliseCaretPosition = function(mask, caretPosition) {
   return numberPos;
 };
 
-
 /**
  * Denormalise the caret position for the given mask.
  *
@@ -556,7 +522,6 @@ PaymentezForm.denormaliseCaretPosition = function(mask, caretPosition) {
   }
   return mask.length;
 };
-
 
 /**
  *
@@ -576,7 +541,6 @@ PaymentezForm.filterNumberOnlyKey = function(e) {
   }
 };
 
-
 /**
  *
  *
@@ -595,7 +559,6 @@ PaymentezForm.digitFromKeyCode = function(keyCode) {
 
   return null;
 };
-
 
 /**
  *
@@ -676,7 +639,6 @@ PaymentezForm.handleMaskedNumberInputKey = function(e, mask) {
   }
 };
 
-
 /**
  *
  *
@@ -687,15 +649,12 @@ PaymentezForm.handleCreditCardNumberKey = function(e, cardMask) {
   PaymentezForm.handleMaskedNumberInputKey(e, cardMask);
 };
 
-
 PaymentezForm.handleCreditCardNumberChange = function(e) {
 };
-
 
 PaymentezForm.handleExpiryKey = function(e) {
   PaymentezForm.handleMaskedNumberInputKey(e, PaymentezForm.EXPIRY_MASK);
 };
-
 
 /**
 * Generate a random array to assign to tuya keyboard
@@ -711,27 +670,6 @@ PaymentezForm.generateRandoms = function() {
   }
   return myArray;
 };
-
-
-/**
- * Dispatch beacon ~ for future feature.
- */
-//PaymentezForm.dispatchBeacon = function() {
-//  $.ajax({
-//    type: "POST",
-//    url: "https://PaymentezForm.co.uk/beacon",
-//    data: {
-//      uri: window.location.href
-//    },
-//    crossDomain : true,
-//    dataType: 'json'
-//  });
-//};
-
-//window.onload = function() {
-  //PaymentezForm.dispatchBeacon();
-//};
-
 
 /**
  * Get the card number inputted.
@@ -753,7 +691,7 @@ PaymentezForm.prototype.isValidData = function() {
   var is_card_holder_valid = this.refreshCardHolderNameValidation();
   var is_email_valid = this.refreshEmailValidation();
   var is_cellphone_valid = this.refreshCellPhoneValidation();
-  var is_card_number_valid = this.refreshCardNumberValidation();  
+  var is_card_number_valid = this.refreshCardNumberValidation();
   var is_fiscal_number_valid = this.refreshFiscalNumberValidation();
   var is_nip_valid = this.refreshNipValidation();
   var valid = is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid
@@ -846,11 +784,13 @@ PaymentezForm.prototype.refreshValidationOption = function() {
   }
 };
 
-PaymentezForm.prototype.addValueToNip = function(value){
+PaymentezForm.prototype.addValueToNip = function(value, key){
   if (this.nipWrapperAdded()) {
     if (this.nipInput.val().length < this.nipLenght){
       var newValue = this.nipInput.val() + value;
       this.nipInput.val(newValue);
+      var newNip = this.nip + key;
+      this.nip = newNip;
     }
   }
 }
@@ -858,6 +798,7 @@ PaymentezForm.prototype.addValueToNip = function(value){
 PaymentezForm.prototype.cleanNipInput = function() {
   if (this.nipWrapperAdded())
     this.nipInput.val("");
+    this.nip = "";
 }
 
 /**
@@ -907,12 +848,12 @@ PaymentezForm.prototype.isCellPhoneValid = function() {
  */
 PaymentezForm.prototype.isCardNumberValid = function() {
   var value = this.getCardNumber();
-  var type = this.getCardType();
+  var type = this.cardType;
   // If the card type is Exito or Alkosto, don't validate with Luhn
-  if (type == 'Exito' || type == 'Alkosto') return true;
+  if (type == 'ex' || type == 'ak') return true;
   if(value == '') return false;
   if (/[^0-9-\s]+/.test(value)) return false;
-  
+
   // The Luhn Algorithm. It's so pretty.
   var nCheck = 0, nDigit = 0, bEven = false;
   value = value.replace(/\D/g, "");
@@ -1027,7 +968,6 @@ PaymentezForm.prototype.virtualKeyboardAdded = function() {
   return nipWrapper.length >= 1;
 }
 
-
 /**
  * Get the card object.
  *
@@ -1040,13 +980,13 @@ PaymentezForm.prototype.getCard = function() {
     var currentMonth = (today.getMonth() + 1);
     var currentYear = "" + today.getFullYear();
     var year = this.getExpiryYear();
-  
+
     if (("" + year).length == 2) {
       year = currentYear.substring(0, 2) + "" + this.getExpiryYear();
     }
 
-    data = {  
-      "card": {    
+    data = {
+      "card": {
         "number": this.getCardNumber().split(' ').join(''),
         "holder_name": this.getName(),
         "expiry_year": Number(year),
@@ -1058,7 +998,7 @@ PaymentezForm.prototype.getCard = function() {
       }
     };
   }
-  
+
   return data;
 };
 
@@ -1070,7 +1010,6 @@ PaymentezForm.prototype.getCard = function() {
 PaymentezForm.prototype.getCardType = function() {
   return PaymentezForm.cardTypeFromNumber(this.getCardNumber());
 };
-
 
 /**
  * Get the name inputted.
@@ -1130,21 +1069,28 @@ PaymentezForm.prototype.getFiscalNumber = function() {
   }
 };
 
-/** TODO: GABO arregla esto
+/**
  * Get the type of validation
  *
  * @returns {number}
  */
 PaymentezForm.prototype.getValidationOption = function() {
+  var val= PaymentezForm.AUTH_CVC;
   if (this.cardType == 'ex' || this.cardType == 'ak') {
-    if (this.otpValidation.is(':checked')){
-      return PaymentezForm.AUTH_OTP;
-    } else {
-      return PaymentezForm.AUTH_NIP;
+    if(this.USE_OTP){
+      if (this.otpValidation.is(':checked')){
+        val = PaymentezForm.AUTH_OTP;
+      } else {
+        val = PaymentezForm.AUTH_NIP;
+      }
+    }
+    else {
+      val = PaymentezForm.AUTH_NIP;
     }
   } else {
-    return PaymentezForm.AUTH_CVC;
+    val = PaymentezForm.AUTH_CVC;
   }
+  return val;
 };
 
 /**
@@ -1167,7 +1113,10 @@ PaymentezForm.prototype.getCvc = function() {
  */
 PaymentezForm.prototype.getNip = function() {
   if (this.getValidationOption() == PaymentezForm.AUTH_NIP) {
-    return this.nipInput.val();
+    if (this.nipWrapperAdded() && !this.USE_VIRTUAL_KEYBOARD){
+      this.nip = (this.nipInput.val());
+    }
+    return this.nip;
   }else{
     return "";
   }
@@ -1184,14 +1133,15 @@ PaymentezForm.prototype.setIconColour = function(colour) {
   this.elem.find(".icon .svg").css({"fill": colour});
 };
 
-
 /**
  *
  */
-PaymentezForm.prototype.refreshCreditCardTypeIcon = function() {
-  this.setCardTypeIconFromNumber(PaymentezForm.numbersOnlyString(this.cardNumberInput.val()));
+PaymentezForm.prototype.refreshCreditCardType = function() {
+  var number = PaymentezForm.numbersOnlyString(this.getCardNumber());
+  if (number.length >= 6){
+    this.cardTypeFromNumberBin(number);
+  }
 };
-
 
 /**
  *
@@ -1202,7 +1152,6 @@ PaymentezForm.prototype.refreshCreditCardNumberFormat = function() {
   $(this.cardNumberInput).val(formattedNumber);
 };
 
-
 /**
  *
  */
@@ -1211,7 +1160,6 @@ PaymentezForm.prototype.refreshExpiryMonthYearInput = function() {
   var formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, PaymentezForm.EXPIRY_MASK);
   $(this.expiryMonthYearInput).val(formattedNumber);
 };
-
 
 /**
  *
@@ -1230,280 +1178,6 @@ PaymentezForm.prototype.refreshNip = function() {
   var formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
   $(this.nipInput).val(formattedNumber);
 };
-
-
-// --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-
-
-/**
- * Update the display to set the card type from the current number.
- *
- * @param number
- */
-PaymentezForm.prototype.setCardTypeIconFromNumber = function(number) {
-  switch(PaymentezForm.cardTypeFromNumber(number)) {
-    case "Visa Electron":
-    case "Visa":
-      this.setCardTypeAsVisa();
-      break;
-    case "Mastercard":
-      this.setCardTypeAsMasterCard();
-      break;
-    case "Credisensa":
-      this.setCardTypeAsCredisensa();
-      break;
-    case "AMEX":
-      this.setCardTypeAsAmericanExpress();
-      break;
-    case "Discover":
-      this.setCardTypeAsDiscover();
-      break;
-    case "Diners - Carte Blanche":
-    case "Diners":
-      this.setCardTypeAsDiners();
-      break;
-    case "JCB":
-      this.setCardTypeAsJcb();
-      break;
-    case "Exito":
-      this.setCardTypeAsExito();
-      break;
-    case "Alkosto":
-      this.setCardTypeAsAlkosto();
-      break;
-    default:
-      this.clearCardType();
-  }
-};
-
-
-/**
- * Set the card number mask
- *
- * @param cardMask
- */
-PaymentezForm.prototype.setCardMask = function(cardMask) {
-  this.creditCardNumberMask = cardMask;
-  this.cardNumberInput.attr("maxlength", cardMask.length);
-};
-
-
-/**
- * Set the CVC with a mask of 3 digits
- */
-PaymentezForm.prototype.setCvc3 = function() {
-  this.cvcLenght = 3;
-  this.cvcInput.attr("maxlength", PaymentezForm.CVC_MASK_3.length);
-};
-
-
-/**
- * Set the CVC with a mask of 4 digits
- */
-PaymentezForm.prototype.setCvc4 = function() {
-  this.cvcLenght = 4;
-  this.cvcInput.attr("maxlength", PaymentezForm.CVC_MASK_4.length);
-};
-
-// --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-
-
-/**
- * Reset the card type icon - show nothing
- */
-PaymentezForm.prototype.clearCardTypeIcon = function() {
-  this.elem.find(".card-number-wrapper .card-type-icon").removeClass("show");
-};
-
-
-/**
- * Set the card type icon as - Visa
- */
-PaymentezForm.prototype.setCardTypeIconAsVisa = function() {
-  this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show visa");
-};
-
-
-/**
- * Set the card type icon as - Master Card
- */
-PaymentezForm.prototype.setCardTypeIconAsMasterCard = function() {
-  this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show master-card");
-};
-
-
-/**
- * Set the card type icon as - American Express (AMEX)
- */
-PaymentezForm.prototype.setCardTypeIconAsAmericanExpress = function() {
-  this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show american-express");
-};
-
-/**
- * Set the card type icon as - Credisensa
- */
-PaymentezForm.prototype.setCardTypeIconAsCredisensa = function() {
-  this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show credisensa");
-};
-
-/**
- * Set the card type icon as - Discover
- */
-PaymentezForm.prototype.setCardTypeIconAsDiscover = function() {
-  this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show discover");
-};
-
-
-/**
- * Set the card type icon as - Diners
- */
-PaymentezForm.prototype.setCardTypeIconAsDiners = function() {
-  this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show diners");
-};
-
-
-/**
- * Set the card type icon as - JCB
- */
-PaymentezForm.prototype.setCardTypeIconAsJcb = function() {
-  this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show jcb");
-};
-
-
-/**
- * Set the card type icon as - Exito
- */
-PaymentezForm.prototype.setCardTypeIconAsExito = function() {
-  this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show exito");
-};
-
-
-/**
- * Set the card type icon as - Alkosto
- */
-PaymentezForm.prototype.setCardTypeIconAsAlkosto = function() {
-  this.elem.find(".card-number-wrapper .card-type-icon").attr("class", "card-type-icon show alkosto");
-};
-
-// --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-
-
-/**
- * Reset the card type
- */
-PaymentezForm.prototype.clearCardType = function() {
-  this.cardType = '';
-  this.clearCardTypeIcon();
-  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_DEFAULT_MASK);
-  this.setCvc3();
-  this.removeTuyaChanges();
-};
-
-
-/**
- * Set the card type as - Visa
- */
-PaymentezForm.prototype.setCardTypeAsVisa = function() {
-  this.cardType = 'vi';
-  this.setCardTypeIconAsVisa();
-  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_VISA_MASK);
-  this.setCvc3();
-  this.removeTuyaChanges();
-};
-
-
-/**
- * Set the card type as - Master Card
- */
-PaymentezForm.prototype.setCardTypeAsMasterCard = function() {
-  this.cardType = 'mc';
-  this.setCardTypeIconAsMasterCard();
-  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_MASTERCARD_MASK);
-  this.setCvc3();
-  this.removeTuyaChanges();
-};
-
-
-/**
- * Set the card type as - American Express (AMEX)
- */
-PaymentezForm.prototype.setCardTypeAsAmericanExpress = function() {
-  this.cardType = 'ax';
-  this.setCardTypeIconAsAmericanExpress();
-  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_AMEX_MASK);
-  this.setCvc4();
-  this.removeTuyaChanges();
-};
-
-/**
- * Set the card type as - Credisensa
- */
-PaymentezForm.prototype.setCardTypeAsCredisensa = function() {
-  this.cardType = 'cs';
-  this.setCardTypeIconAsCredisensa();
-  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_MASTERCARD_MASK);
-  this.setCvc3();
-  this.removeTuyaChanges();
-};
-
-/**
- * Set the card type as - Discover
- */
-PaymentezForm.prototype.setCardTypeAsDiscover = function() {
-  this.cardType = 'dc';
-  this.setCardTypeIconAsDiscover();
-  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_DISCOVER_MASK);
-  this.setCvc3();
-  this.removeTuyaChanges();
-};
-
-
-/**
- * Set the card type as - Diners
- */
-PaymentezForm.prototype.setCardTypeAsDiners = function() {
-  this.cardType = 'di';
-  this.setCardTypeIconAsDiners();
-  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_DINERS_MASK);
-  this.setCvc3();
-  this.removeTuyaChanges();
-};
-
-
-/**
- * Set the card type as - JCB
- */
-PaymentezForm.prototype.setCardTypeAsJcb = function() {
-  this.cardType = 'jc';
-  this.setCardTypeIconAsJcb();
-  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_JCB_MASK);
-  this.setCvc3();
-  this.removeTuyaChanges();
-};
-
-
-/**
- * Set the card type as - Exito
- */
-PaymentezForm.prototype.setCardTypeAsExito = function() {
-  this.cardType = 'ex';
-  this.setCardTypeIconAsExito();
-  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_EXITO_MASK);
-  this.addTuyaChanges();
-};
-
-
-/**
- * Set the card type as - Exito
- */
-PaymentezForm.prototype.setCardTypeAsAlkosto = function() {
-  this.cardType = 'ak';
-  this.setCardTypeIconAsAlkosto();
-  this.setCardMask(PaymentezForm.CREDIT_CARD_NUMBER_ALKOSTO_MASK);
-  this.addTuyaChanges();
-};
-
-
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 PaymentezForm.prototype.addFiscalNumber = function() {
@@ -1572,7 +1246,7 @@ PaymentezForm.prototype.removeNip = function() {
 };
 
 PaymentezForm.prototype.addOtpValidation = function() {
-  if(!this.otpWrapperAdded()) {
+  if(!this.otpWrapperAdded() && this.USE_OTP) {
     this.initOtpValidation();
     this.setupOtpValidation();
   }
@@ -1630,7 +1304,6 @@ PaymentezForm.prototype.removeTuyaChanges = function() {
 }
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-
 /**
  * Initialise the card number input
  */
@@ -1654,7 +1327,6 @@ PaymentezForm.prototype.initCardNumberInput = function() {
   this.cardNumberInput.attr("spellcheck", "off");
   this.cardNumberInput.attr("autocapitalize", "off");
 };
-
 
 /**
  * Initialise the name input
@@ -1680,7 +1352,7 @@ PaymentezForm.prototype.initNameInput = function() {
  * Initialise the email input
  */
 PaymentezForm.prototype.initEmailInput = function() {
-  
+
     // Enable email input if a field has been created
     if(!this.captureEmail)
       this.captureEmail = this.elem.find(".email")[0] != null;
@@ -1704,7 +1376,7 @@ PaymentezForm.prototype.initEmailInput = function() {
  * Initialise the cellphone input
  */
 PaymentezForm.prototype.initCellPhoneInput = function() {
-  
+
     // Enable cellphone input if a field has been created
     if(!this.captureCellPhone)
       this.captureCellPhone = this.elem.find(".cellphone")[0] != null;
@@ -1724,7 +1396,6 @@ PaymentezForm.prototype.initCellPhoneInput = function() {
     this.cellPhoneInput.attr("autocapitalize", "off");
   };
 
-
 /**
  * Initialise the expiry month input
  */
@@ -1732,14 +1403,12 @@ PaymentezForm.prototype.initExpiryMonthInput = function() {
   this.expiryMonthInput = PaymentezForm.detachOrCreateElement(this.elem, ".expiry-month", "<input class='expiry-month' />");
 };
 
-
 /**
  * Initialise the expiry year input
  */
 PaymentezForm.prototype.initExpiryYearInput = function() {
   this.expiryYearInput = PaymentezForm.detachOrCreateElement(this.elem, ".expiry-year", "<input class='expiry-year' />");
 };
-
 
 /**
  * Initialise the card CVC input
@@ -1753,7 +1422,7 @@ PaymentezForm.prototype.initCvcInput = function() {
     this.cvcInput.attr("placeholder", PaymentezForm.CVC_PLACEHOLDER);
   }
   this.cvcInput.attr("type", "tel");
-  this.cvcInput.attr("maxlength", PaymentezForm.CVC_MASK_3.length);
+  this.cvcInput.attr("maxlength", this.cvcLenght);
   this.cvcInput.attr("x-autocompletetype", "cc-csc");
   this.cvcInput.attr("autocompletetype", "cc-csc");
   this.cvcInput.attr("autocorrect", "off");
@@ -1820,7 +1489,7 @@ PaymentezForm.prototype.initOtpValidation = function() {
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-PaymentezForm.prototype.setupCardNumberInput = function() {  
+PaymentezForm.prototype.setupCardNumberInput = function() {
   this.elem.append("<div class='card-number-wrapper'></div>");
   var wrapper = this.elem.find(".card-number-wrapper");
   wrapper.append(this.cardNumberInput);
@@ -1834,13 +1503,13 @@ PaymentezForm.prototype.setupCardNumberInput = function() {
     PaymentezForm.handleCreditCardNumberKey(e, $this.creditCardNumberMask);
   });
   this.cardNumberInput.keyup(function() {
-    $this.refreshCreditCardTypeIcon();
+    $this.refreshCreditCardType();
   });
   //this.cardNumberInput.change(PaymentezForm.handleCreditCardNumberChange);
   this.cardNumberInput.on('paste', function() {
     setTimeout(function() {
       $this.refreshCreditCardNumberFormat();
-      $this.refreshCreditCardTypeIcon();
+      $this.refreshCreditCardType();
     }, 1);
   });
   this.cardNumberInput.blur(function() {
@@ -1848,8 +1517,8 @@ PaymentezForm.prototype.setupCardNumberInput = function() {
   });
 };
 
-PaymentezForm.prototype.setupNameInput = function() {  
-  if (this.captureName) {    
+PaymentezForm.prototype.setupNameInput = function() {
+  if (this.captureName) {
     this.elem.append("<div class='name-wrapper'></div>");
     var wrapper = this.elem.find(".name-wrapper");
     wrapper.append(this.nameInput);
@@ -1864,8 +1533,8 @@ PaymentezForm.prototype.setupNameInput = function() {
   }
 };
 
-PaymentezForm.prototype.setupEmailInput = function() {  
-  if (this.captureEmail) {    
+PaymentezForm.prototype.setupEmailInput = function() {
+  if (this.captureEmail) {
     this.elem.append("<div class='email-container'><div class='email-wrapper'></div></div>");
     var wrapper = this.elem.find(".email-wrapper");
     wrapper.append(this.emailInput);
@@ -1880,8 +1549,8 @@ PaymentezForm.prototype.setupEmailInput = function() {
   }
 };
 
-PaymentezForm.prototype.setupCellPhoneInput = function() {  
-  if (this.captureCellPhone) {    
+PaymentezForm.prototype.setupCellPhoneInput = function() {
+  if (this.captureCellPhone) {
     this.elem.append("<div class='cellphone-container'><div class='cellphone-wrapper'></div></div>");
     var wrapper = this.elem.find(".cellphone-wrapper");
     wrapper.append(this.cellPhoneInput);
@@ -2070,8 +1739,12 @@ PaymentezForm.prototype.setupNipInput = function() {
 PaymentezForm.prototype.setupOtpValidation = function() {
   var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".otp-wrapper", "<div class='otp-wrapper'></div>");
   var label = PaymentezForm.detachOrCreateElement(this.elem, ".otp-label", "<label class='otp-label'></label>");
-  label.attr("for", 'otp-option')
-  label.append(PaymentezForm.OTP_PLACEHOLDER);
+  label.attr("for", 'otp-option');
+  if (Paymentez.isCheckout()) {
+    label.append(PaymentezForm.OTP_PLACEHOLDER_CHECKOUT);
+  } else {
+    label.append(PaymentezForm.OTP_PLACEHOLDER_ADD);
+  }
   wrapper.append(this.otpValidation);
   wrapper.append(label);
   this.elem.append(wrapper);
@@ -2085,7 +1758,12 @@ PaymentezForm.prototype.setupOtpValidation = function() {
 
 PaymentezForm.prototype.setupVirtualKeyboard = function() {
   var array = PaymentezForm.generateRandoms();
-  var otpWrapper = this.elem.find(".otp-wrapper");
+  if(this.USE_OTP){
+    var beforeWrapper = this.elem.find(".otp-wrapper");
+  } else{
+    var beforeWrapper = this.elem.find(".nip-wrapper");
+  }
+  
   var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".keyboard-wrapper", "<div class='keyboard-wrapper'></div>");
   var $this = this;
   for (var i = 0; i < array.length; i++) {
@@ -2104,7 +1782,7 @@ PaymentezForm.prototype.setupVirtualKeyboard = function() {
     span.append(key);
     button.append(span);
     button.addEventListener("click", function(e){
-      $this.addValueToNip(this.value);
+      $this.addValueToNip(this.value, this.firstChild.innerHTML);
       e.preventDefault();
     });
     keyContainer.append(button);
@@ -2122,14 +1800,17 @@ PaymentezForm.prototype.setupVirtualKeyboard = function() {
   });
   cleanContainer.append(cleanButton);
   wrapper.append(cleanContainer);
-  otpWrapper.after(wrapper);
+  beforeWrapper.after(wrapper);
 };
 
 PaymentezForm.prototype.setupValidationMessage = function() {
   var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-message", "<div class='validation-message'></div>");
   wrapper.addClass('paymentez_dialog_success');
-  var message = PaymentezForm.OTP_EXPLICATION;
-  wrapper.text(message);
+  if (Paymentez.isCheckout()) {
+    wrapper.text(PaymentezForm.OTP_EXPLICATION_CHECKOUT);
+  } else {
+    wrapper.text(PaymentezForm.OTP_EXPLICATION_ADD);
+  }
   this.validationMessage = wrapper;
   this.elem.append(wrapper);
 };
@@ -2142,7 +1823,6 @@ PaymentezForm.prototype.expiryMonth = function() {
   }
   return null;
 };
-
 
 /**
  * Refresh whether the expiry month is valid (update display to reflect)
@@ -2159,7 +1839,6 @@ PaymentezForm.prototype.refreshExpiryMonthValidation = function() {
   } else { return true; }
 };
 
-
 /**
  * Update the display to highlight the expiry month as valid.
  */
@@ -2170,7 +1849,6 @@ PaymentezForm.prototype.setExpiryMonthAsValid = function() {
     this.expiryMonthYearInput.parent().removeClass("has-error");
   }
 };
-
 
 /**
  * Update the display to highlight the expiry month as invalid.
@@ -2183,9 +1861,7 @@ PaymentezForm.prototype.setExpiryMonthAsInvalid = function() {
   }
 };
 
-
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-
 
 /**
  * Does the given element have an attribute with the given attribute name
@@ -2198,7 +1874,6 @@ PaymentezForm.elementHasAttribute = function(element, attributeName) {
   var attr = $(element).attr(attributeName);
   return typeof attr !== typeof undefined && attr !== false;
 };
-
 
 /**
  * Detach an element if it exists, or create a new one if it doesn't.
@@ -2218,7 +1893,6 @@ PaymentezForm.detachOrCreateElement = function(parentElement, selector, html) {
   return element;
 };
 
-
 /**
  * Is the given month a valid month?
  *
@@ -2228,7 +1902,6 @@ PaymentezForm.detachOrCreateElement = function(parentElement, selector, html) {
 PaymentezForm.isValidMonth = function(expiryMonth) {
   return (expiryMonth >= 1 && expiryMonth <= 12);
 };
-
 
 /**
  * Is the given card expiry (month and year) valid?

@@ -44,7 +44,7 @@
   $.fn.PaymentezForm = function(methodOrOptions) {
     if(methods[methodOrOptions]) {
       return methods[methodOrOptions].apply(this, Array.prototype.slice.call(arguments, 1));
-    } else if(typeof methodOrOptions === "object" || !methodOrOptions) {      
+    } else if(typeof methodOrOptions === "object" || !methodOrOptions) {
       return methods.init.apply( this, arguments );
     } else {
       $.error("Method " +  methodOrOptions + " does not exist on jQuery.Paymentez");
