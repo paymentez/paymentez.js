@@ -67,8 +67,8 @@ Paymentez.getServerURL = function(){
             SERVER_URL = Paymentez.SERVER_STG_URL;
         }else if(Paymentez.ENV_MODE === 'prod'){
             SERVER_URL = Paymentez.SERVER_PROD_URL;
-        }else if(Paymentez.ENV_MODE === 'qa'){
-            SERVER_URL = Paymentez.SERVER_PRODQA_URL;
+        }else if(Paymentez.ENV_MODE === 'prod-qa'){
+            SERVER_URL = Paymentez.SERVER_QA_URL;
         }else{
             SERVER_URL = Paymentez.SERVER_LOCAL_URL;
         }
