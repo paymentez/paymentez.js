@@ -16,6 +16,7 @@ function PaymentezForm(elem) {
   this.numberBin = '';
   this.nip = '';
   this.USE_OTP = false;
+  this.brand_name = '';
 
   // Validate if its displaying in a mobile device
   if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -393,6 +394,7 @@ PaymentezForm.prototype.cardTypeFromNumberBin = function(number) {
 PaymentezForm.prototype.successCallback = function(objResponse, form) {
   // Set card type
   form.cardType = objResponse.card_type;
+  form.brand_name = objResponse.brand_name;
 
   // Set card type icon
   $(".card-type-icon").css("background", "url(" + objResponse.url_logo + ")");
@@ -1008,7 +1010,7 @@ PaymentezForm.prototype.getCard = function() {
  * @returns {string}
  */
 PaymentezForm.prototype.getCardType = function() {
-  return PaymentezForm.cardTypeFromNumber(this.getCardNumber());
+  return this.brand_name;
 };
 
 /**
