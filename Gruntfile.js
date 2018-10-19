@@ -50,7 +50,7 @@ module.exports = function(grunt) {
         files: [
           './src/js/**/*.js'
         ],
-        tasks: ["uglify:js"],
+        tasks: ["uglify-es:js"],
         options: {
           livereload: true
         }
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-uglify-es');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
 
 

@@ -29,15 +29,21 @@
     "test",
     "tests"
   ],
-  "dependences": {},
+  "dependences": {
+    "minimatch": ">=3.0.2",
+    "sshpk": ">=1.13.2",
+    "lodash": ">=4.17.5",
+    "cryptiles": ">=4.1.2",
+    "hoek": ">=4.2.1"
+  },
   "devDependencies": {
-    "grunt": "^0.4.5",
+    "grunt": "^1.0.3",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-cssmin": "0.11.0",
-    "grunt-contrib-jshint": "~0.10.0",
-    "grunt-contrib-less": "^1.0.0",
-    "grunt-contrib-nodeunit": "~0.4.1",
-    "grunt-contrib-uglify": "~0.5.0",
-    "grunt-contrib-watch": "^0.6.1"
+    "grunt-contrib-jshint": "^2.0.0",
+    "grunt-contrib-less": "^2.0.0",
+    "grunt-contrib-nodeunit": "^2.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-contrib-uglify-es": "^3.3.0"
   }
 }
