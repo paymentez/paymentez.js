@@ -1,4 +1,4 @@
-PaymentezForm.prototype.constructor = PaymentezForm ;
+PaymentezForm.prototype.constructor = PaymentezForm;
 
 /**
  * @class PaymentezForm
@@ -19,11 +19,8 @@ function PaymentezForm(elem) {
   this.brand_name = '';
 
   // Validate if its displaying in a mobile device
-  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    this.USE_VIRTUAL_KEYBOARD = false;
-  } else {
-    this.USE_VIRTUAL_KEYBOARD = true;
-  }
+  this.IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  this.USE_VIRTUAL_KEYBOARD = !this.IS_MOBILE;
 
   this.captureEmail = this.elem.data("capture-email") ? this.elem.data("capture-email") : false;
   this.captureCellPhone = this.elem.data("capture-cellphone") ? this.elem.data("capture-cellphone") : false;
@@ -55,7 +52,7 @@ function PaymentezForm(elem) {
   this.elem.append(current_data);
 
   // Set icon colour
-  if(this.iconColour) {
+  if (this.iconColour) {
     this.setIconColour(this.iconColour);
   }
   // --- --- --- --- --- --- --- --- --- ---
@@ -64,46 +61,46 @@ function PaymentezForm(elem) {
 }
 
 PaymentezForm.KEYS = {
-  "0" : 48,
-  "9" : 57,
-  "NUMPAD_0" : 96,
-  "NUMPAD_9" : 105,
-  "DELETE" : 46,
-  "BACKSPACE" : 8,
-  "ARROW_LEFT" : 37,
-  "ARROW_RIGHT" : 39,
-  "ARROW_UP" : 38,
-  "ARROW_DOWN" : 40,
-  "HOME" : 36,
-  "END" : 35,
-  "TAB" : 9,
-  "A" : 65,
-  "X" : 88,
-  "C" : 67,
-  "V" : 86
+  "0": 48,
+  "9": 57,
+  "NUMPAD_0": 96,
+  "NUMPAD_9": 105,
+  "DELETE": 46,
+  "BACKSPACE": 8,
+  "ARROW_LEFT": 37,
+  "ARROW_RIGHT": 39,
+  "ARROW_UP": 38,
+  "ARROW_DOWN": 40,
+  "HOME": 36,
+  "END": 35,
+  "TAB": 9,
+  "A": 65,
+  "X": 88,
+  "C": 67,
+  "V": 86
 };
 
 PaymentezForm.prototype.creditCardNumberMask = "XXXX XXXX XXXX XXXX";
 PaymentezForm.prototype.cvcMask = "XXX";
 PaymentezForm.EXPIRY_MASK = "XX / XX";
 PaymentezForm.CREDIT_CARD_NUMBER_PLACEHOLDER = "Número de tarjeta";
-PaymentezForm.NAME_PLACEHOLDER =  "Nombre del titular";
-PaymentezForm.EMAIL_PLACEHOLDER =  "E-mail";
-PaymentezForm.CELLPHONE_PLACEHOLDER =  "Celular";
-PaymentezForm.FISCAL_NUMBER_PLACEHOLDER =  "Documento de Identificación";
+PaymentezForm.NAME_PLACEHOLDER = "Nombre del titular";
+PaymentezForm.EMAIL_PLACEHOLDER = "E-mail";
+PaymentezForm.CELLPHONE_PLACEHOLDER = "Celular";
+PaymentezForm.FISCAL_NUMBER_PLACEHOLDER = "Documento de Identificación";
 PaymentezForm.EXPIRY_PLACEHOLDER = "MM / YY";
 PaymentezForm.EXPIRY_NUMBER_OF_YEARS = 10;
-PaymentezForm.AUTH_CVC =  "AUTH_CVC";
-PaymentezForm.AUTH_NIP =  "AUTH_NIP";
-PaymentezForm.AUTH_OTP =  "AUTH_OTP";
+PaymentezForm.AUTH_CVC = "AUTH_CVC";
+PaymentezForm.AUTH_NIP = "AUTH_NIP";
+PaymentezForm.AUTH_OTP = "AUTH_OTP";
 PaymentezForm.CVC_PLACEHOLDER = "CVC";
 PaymentezForm.NIP_PLACEHOLDER = "Clave Tuya";
 PaymentezForm.OTP_PLACEHOLDER_ADD = "No tengo o no recuerdo mi clave";
 PaymentezForm.OTP_PLACEHOLDER_CHECKOUT = "Continuar compra sin clave";
 PaymentezForm.OTP_EXPLICATION_ADD = "Escogiendo esta opción se va a generar una Clave Temporal única, con la que " +
-"validarás tu tarjeta. Haz clic en “Guardar” para continuar con el proceso.";
+  "validarás tu tarjeta. Haz clic en “Guardar” para continuar con el proceso.";
 PaymentezForm.OTP_EXPLICATION_CHECKOUT = "Escogiendo esta opción se va a generar una Clave Temporal única, con la " +
-"que validarás tu compra.";
+  "que validarás tu compra.";
 
 PaymentezForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
   'x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" ' +
@@ -204,7 +201,7 @@ PaymentezForm.INFORMATION_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://ww
  * @param e
  * @returns {which|*|Object|which|which|string}
  */
-PaymentezForm.keyCodeFromEvent = function(e) {
+PaymentezForm.keyCodeFromEvent = function (e) {
   return e.which || e.keyCode;
 };
 
@@ -214,7 +211,7 @@ PaymentezForm.keyCodeFromEvent = function(e) {
  * @param e
  * @returns {boolean|metaKey|*|metaKey}
  */
-PaymentezForm.keyIsCommandFromEvent = function(e) {
+PaymentezForm.keyIsCommandFromEvent = function (e) {
   return e.ctrlKey || e.metaKey;
 };
 
@@ -224,7 +221,7 @@ PaymentezForm.keyIsCommandFromEvent = function(e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsNumber = function(e) {
+PaymentezForm.keyIsNumber = function (e) {
   return PaymentezForm.keyIsTopNumber(e) || PaymentezForm.keyIsKeypadNumber(e);
 };
 
@@ -234,8 +231,8 @@ PaymentezForm.keyIsNumber = function(e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsTopNumber = function(e) {
-  var keyCode = PaymentezForm.keyCodeFromEvent(e);
+PaymentezForm.keyIsTopNumber = function (e) {
+  let keyCode = PaymentezForm.keyCodeFromEvent(e);
   return keyCode >= PaymentezForm.KEYS["0"] && keyCode <= PaymentezForm.KEYS["9"];
 };
 
@@ -245,8 +242,8 @@ PaymentezForm.keyIsTopNumber = function(e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsKeypadNumber = function(e) {
-  var keyCode = PaymentezForm.keyCodeFromEvent(e);
+PaymentezForm.keyIsKeypadNumber = function (e) {
+  let keyCode = PaymentezForm.keyCodeFromEvent(e);
   return keyCode >= PaymentezForm.KEYS["NUMPAD_0"] && keyCode <= PaymentezForm.KEYS["NUMPAD_9"];
 };
 
@@ -256,8 +253,8 @@ PaymentezForm.keyIsKeypadNumber = function(e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsDelete = function(e) {
-  return PaymentezForm.keyCodeFromEvent(e) == PaymentezForm.KEYS["DELETE"];
+PaymentezForm.keyIsDelete = function (e) {
+  return PaymentezForm.keyCodeFromEvent(e) === PaymentezForm.KEYS["DELETE"];
 };
 
 /**
@@ -266,8 +263,8 @@ PaymentezForm.keyIsDelete = function(e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsBackspace = function(e) {
-  return PaymentezForm.keyCodeFromEvent(e) == PaymentezForm.KEYS["BACKSPACE"];
+PaymentezForm.keyIsBackspace = function (e) {
+  return PaymentezForm.keyCodeFromEvent(e) === PaymentezForm.KEYS["BACKSPACE"];
 };
 
 /**
@@ -276,7 +273,7 @@ PaymentezForm.keyIsBackspace = function(e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsDeletion = function(e) {
+PaymentezForm.keyIsDeletion = function (e) {
   return PaymentezForm.keyIsDelete(e) || PaymentezForm.keyIsBackspace(e);
 };
 
@@ -286,8 +283,8 @@ PaymentezForm.keyIsDeletion = function(e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsArrow = function(e) {
-  var keyCode = PaymentezForm.keyCodeFromEvent(e);
+PaymentezForm.keyIsArrow = function (e) {
+  let keyCode = PaymentezForm.keyCodeFromEvent(e);
   return keyCode >= PaymentezForm.KEYS["ARROW_LEFT"] && keyCode <= PaymentezForm.KEYS["ARROW_DOWN"];
 };
 
@@ -297,9 +294,9 @@ PaymentezForm.keyIsArrow = function(e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsNavigation = function(e) {
-  var keyCode = PaymentezForm.keyCodeFromEvent(e);
-  return keyCode == PaymentezForm.KEYS["HOME"] || keyCode == PaymentezForm.KEYS["END"];
+PaymentezForm.keyIsNavigation = function (e) {
+  let keyCode = PaymentezForm.keyCodeFromEvent(e);
+  return keyCode === PaymentezForm.KEYS["HOME"] || keyCode === PaymentezForm.KEYS["END"];
 };
 
 /**
@@ -308,14 +305,14 @@ PaymentezForm.keyIsNavigation = function(e) {
  * @param e
  * @returns {boolean|metaKey|*|metaKey|boolean}
  */
-PaymentezForm.keyIsKeyboardCommand = function(e) {
-  var keyCode = PaymentezForm.keyCodeFromEvent(e);
+PaymentezForm.keyIsKeyboardCommand = function (e) {
+  let keyCode = PaymentezForm.keyCodeFromEvent(e);
   return PaymentezForm.keyIsCommandFromEvent(e) &&
     (
-      keyCode == PaymentezForm.KEYS["A"] ||
-      keyCode == PaymentezForm.KEYS["X"] ||
-      keyCode == PaymentezForm.KEYS["C"] ||
-      keyCode == PaymentezForm.KEYS["V"]
+      keyCode === PaymentezForm.KEYS["A"] ||
+      keyCode === PaymentezForm.KEYS["X"] ||
+      keyCode === PaymentezForm.KEYS["C"] ||
+      keyCode === PaymentezForm.KEYS["V"]
     );
 };
 
@@ -325,8 +322,8 @@ PaymentezForm.keyIsKeyboardCommand = function(e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsTab = function(e) {
-  return PaymentezForm.keyCodeFromEvent(e) == PaymentezForm.KEYS["TAB"];
+PaymentezForm.keyIsTab = function (e) {
+  return PaymentezForm.keyCodeFromEvent(e) === PaymentezForm.KEYS["TAB"];
 };
 
 /**
@@ -335,8 +332,8 @@ PaymentezForm.keyIsTab = function(e) {
  * @param source
  * @param destination
  */
-PaymentezForm.copyAllElementAttributes = function(source, destination) {
-  $.each(source[0].attributes, function(idx, attr) {
+PaymentezForm.copyAllElementAttributes = function (source, destination) {
+  $.each(source[0].attributes, function (idx, attr) {
     destination.attr(attr.nodeName, attr.nodeValue);
   });
 };
@@ -347,12 +344,14 @@ PaymentezForm.copyAllElementAttributes = function(source, destination) {
  * @param string
  * @returns {string}
  */
-PaymentezForm.numbersOnlyString = function(string) {
-  var numbersOnlyString = "";
-  for(var i = 0; i < string.length; i++) {
-    var currentChar = string.charAt(i);
-    var isValid = !isNaN(parseInt(currentChar));
-    if(isValid) { numbersOnlyString += currentChar; }
+PaymentezForm.numbersOnlyString = function (string) {
+  let numbersOnlyString = "";
+  for (let i = 0; i < string.length; i++) {
+    let currentChar = string.charAt(i);
+    let isValid = !isNaN(parseInt(currentChar));
+    if (isValid) {
+      numbersOnlyString += currentChar;
+    }
   }
   return numbersOnlyString;
 };
@@ -364,14 +363,14 @@ PaymentezForm.numbersOnlyString = function(string) {
  * @param mask
  * @returns {string}
  */
-PaymentezForm.applyFormatMask = function(string, mask) {
-  var formattedString = "";
-  var numberPos = 0;
-  for(var j = 0; j < mask.length; j++) {
-    var currentMaskChar = mask[j];
-    if(currentMaskChar == "X") {
-      var digit = string.charAt(numberPos);
-      if(!digit) {
+PaymentezForm.applyFormatMask = function (string, mask) {
+  let formattedString = "";
+  let numberPos = 0;
+  for (let j = 0; j < mask.length; j++) {
+    let currentMaskChar = mask[j];
+    if (currentMaskChar === "X") {
+      let digit = string.charAt(numberPos);
+      if (!digit) {
         break;
       }
       formattedString += string.charAt(numberPos);
@@ -383,15 +382,16 @@ PaymentezForm.applyFormatMask = function(string, mask) {
   return formattedString;
 };
 
-PaymentezForm.prototype.cardTypeFromNumberBin = function(number) {
-  var number_bin = number.replace(" ","").substring(0, 6);
-  if (number >= 6 && this.numberBin != number_bin) {
+PaymentezForm.prototype.cardTypeFromNumberBin = function (number) {
+  let number_bin = number.replace(" ", "").substring(0, 6);
+  if (number >= 6 && this.numberBin !== number_bin) {
     this.numberBin = number_bin;
-    Paymentez.getBinInformation(number_bin, this, this.successCallback, this.erroCallback);
+    Paymentez.getBinInformation(number_bin, this, this.successCallback, () => {
+    });
   }
 };
 
-PaymentezForm.prototype.successCallback = function(objResponse, form) {
+PaymentezForm.prototype.successCallback = function (objResponse, form) {
   // Set card type
   form.cardType = objResponse.card_type;
   form.brand_name = objResponse.brand_name;
@@ -409,12 +409,12 @@ PaymentezForm.prototype.successCallback = function(objResponse, form) {
   form.USE_OTP = objResponse.otp;
   // form.USE_OTP = false;
 
-  if (form.cardType == 'sx' || form.cardType == 'vr') {
-      form.removeTuyaChanges();
-      form.addFiscalNumber();
+  if (form.cardType === 'sx' || form.cardType === 'vr') {
+    form.removeTuyaChanges();
+    form.addFiscalNumber();
   }
   // Tuya requirements
-  else if (form.cardType == 'ex' || form.cardType == 'ak') {
+  else if (form.cardType === 'ex' || form.cardType === 'ak') {
     form.addTuyaChanges();
   } else {
     form.removeTuyaChanges();
@@ -424,20 +424,17 @@ PaymentezForm.prototype.successCallback = function(objResponse, form) {
     form.cvcMask = "X".repeat(form.cvcLenght);
   }
 
-}
-PaymentezForm.prototype.erroCallback = function(objResponse) {
-}
-
+};
 
 /**
  * Set the installments if this exists
  *
- * @param array - installments
+ * @param installments - array
  */
-PaymentezForm.prototype.setInstallmentsOptions = function(installments) {
-  var selectInstallments = $(".installments");
+PaymentezForm.prototype.setInstallmentsOptions = function (installments) {
+  let selectInstallments = $(".installments");
   selectInstallments.empty();
-  $.each(installments, function(option, value) {
+  $.each(installments, function (option, value) {
     selectInstallments.append($("<option></option>").attr("value", value).text(value));
   });
 };
@@ -448,8 +445,8 @@ PaymentezForm.prototype.setInstallmentsOptions = function(installments) {
  * @param element
  * @returns {*}
  */
-PaymentezForm.caretStartPosition = function(element) {
-  if(typeof element.selectionStart == "number") {
+PaymentezForm.caretStartPosition = function (element) {
+  if (typeof element.selectionStart == "number") {
     return element.selectionStart;
   }
   return false;
@@ -461,8 +458,8 @@ PaymentezForm.caretStartPosition = function(element) {
  * @param element
  * @returns {*}
  */
-PaymentezForm.caretEndPosition = function(element) {
-  if(typeof element.selectionEnd == "number") {
+PaymentezForm.caretEndPosition = function (element) {
+  if (typeof element.selectionEnd == "number") {
     return element.selectionEnd;
   }
   return false;
@@ -474,14 +471,14 @@ PaymentezForm.caretEndPosition = function(element) {
  * @param element
  * @param caretPos
  */
-PaymentezForm.setCaretPosition = function(element, caretPos) {
-  if(element != null) {
-    if(element.createTextRange) {
-      var range = element.createTextRange();
+PaymentezForm.setCaretPosition = function (element, caretPos) {
+  if (element != null) {
+    if (element.createTextRange) {
+      let range = element.createTextRange();
       range.move('character', caretPos);
       range.select();
     } else {
-      if(element.selectionStart) {
+      if (element.selectionStart) {
         element.focus();
         element.setSelectionRange(caretPos, caretPos);
       } else {
@@ -498,12 +495,18 @@ PaymentezForm.setCaretPosition = function(element, caretPos) {
  * @param caretPosition
  * @returns {number}
  */
-PaymentezForm.normaliseCaretPosition = function(mask, caretPosition) {
-  var numberPos = 0;
-  if(caretPosition < 0 || caretPosition > mask.length) { return 0; }
-  for(var i = 0; i < mask.length; i++) {
-    if(i == caretPosition) { return numberPos; }
-    if(mask[i] == "X") { numberPos++; }
+PaymentezForm.normaliseCaretPosition = function (mask, caretPosition) {
+  let numberPos = 0;
+  if (caretPosition < 0 || caretPosition > mask.length) {
+    return 0;
+  }
+  for (let i = 0; i < mask.length; i++) {
+    if (i === caretPosition) {
+      return numberPos;
+    }
+    if (mask[i] === "X") {
+      numberPos++;
+    }
   }
   return numberPos;
 };
@@ -515,12 +518,18 @@ PaymentezForm.normaliseCaretPosition = function(mask, caretPosition) {
  * @param caretPosition
  * @returns {*}
  */
-PaymentezForm.denormaliseCaretPosition = function(mask, caretPosition) {
-  var numberPos = 0;
-  if(caretPosition < 0 || caretPosition > mask.length) { return 0; }
-  for(var i = 0; i < mask.length; i++) {
-    if(numberPos == caretPosition) { return i; }
-    if(mask[i] == "X") { numberPos++; }
+PaymentezForm.denormaliseCaretPosition = function (mask, caretPosition) {
+  let numberPos = 0;
+  if (caretPosition < 0 || caretPosition > mask.length) {
+    return 0;
+  }
+  for (let i = 0; i < mask.length; i++) {
+    if (numberPos === caretPosition) {
+      return i;
+    }
+    if (mask[i] === "X") {
+      numberPos++;
+    }
   }
   return mask.length;
 };
@@ -530,15 +539,15 @@ PaymentezForm.denormaliseCaretPosition = function(mask, caretPosition) {
  *
  * @param e
  */
-PaymentezForm.filterNumberOnlyKey = function(e) {
-  var isNumber = PaymentezForm.keyIsNumber(e);
-  var isDeletion = PaymentezForm.keyIsDeletion(e);
-  var isArrow = PaymentezForm.keyIsArrow(e);
-  var isNavigation = PaymentezForm.keyIsNavigation(e);
-  var isKeyboardCommand = PaymentezForm.keyIsKeyboardCommand(e);
-  var isTab = PaymentezForm.keyIsTab(e);
+PaymentezForm.filterNumberOnlyKey = function (e) {
+  let isNumber = PaymentezForm.keyIsNumber(e);
+  let isDeletion = PaymentezForm.keyIsDeletion(e);
+  let isArrow = PaymentezForm.keyIsArrow(e);
+  let isNavigation = PaymentezForm.keyIsNavigation(e);
+  let isKeyboardCommand = PaymentezForm.keyIsKeyboardCommand(e);
+  let isTab = PaymentezForm.keyIsTab(e);
 
-  if(!isNumber && !isDeletion && !isArrow && !isNavigation && !isKeyboardCommand && !isTab) {
+  if (!isNumber && !isDeletion && !isArrow && !isNavigation && !isKeyboardCommand && !isTab) {
     e.preventDefault();
   }
 };
@@ -549,13 +558,13 @@ PaymentezForm.filterNumberOnlyKey = function(e) {
  * @param keyCode
  * @returns {*}
  */
-PaymentezForm.digitFromKeyCode = function(keyCode) {
+PaymentezForm.digitFromKeyCode = function (keyCode) {
 
-  if(keyCode >= PaymentezForm.KEYS["0"] && keyCode <= PaymentezForm.KEYS["9"]) {
+  if (keyCode >= PaymentezForm.KEYS["0"] && keyCode <= PaymentezForm.KEYS["9"]) {
     return keyCode - PaymentezForm.KEYS["0"];
   }
 
-  if(keyCode >= PaymentezForm.KEYS["NUMPAD_0"] && keyCode <= PaymentezForm.KEYS["NUMPAD_9"]) {
+  if (keyCode >= PaymentezForm.KEYS["NUMPAD_0"] && keyCode <= PaymentezForm.KEYS["NUMPAD_9"]) {
     return keyCode - PaymentezForm.KEYS["NUMPAD_0"];
   }
 
@@ -568,48 +577,48 @@ PaymentezForm.digitFromKeyCode = function(keyCode) {
  * @param e
  * @param mask
  */
-PaymentezForm.handleMaskedNumberInputKey = function(e, mask) {
+PaymentezForm.handleMaskedNumberInputKey = function (e, mask) {
   PaymentezForm.filterNumberOnlyKey(e);
 
-  var keyCode = e.which || e.keyCode;
+  let keyCode = e.which || e.keyCode;
 
-  var element = e.target;
+  let element = e.target;
 
-  var caretStart = PaymentezForm.caretStartPosition(element);
-  var caretEnd = PaymentezForm.caretEndPosition(element);
+  let caretStart = PaymentezForm.caretStartPosition(element);
+  let caretEnd = PaymentezForm.caretEndPosition(element);
 
   // Calculate normalised caret position
-  var normalisedStartCaretPosition = PaymentezForm.normaliseCaretPosition(mask, caretStart);
-  var normalisedEndCaretPosition = PaymentezForm.normaliseCaretPosition(mask, caretEnd);
+  let normalisedStartCaretPosition = PaymentezForm.normaliseCaretPosition(mask, caretStart);
+  let normalisedEndCaretPosition = PaymentezForm.normaliseCaretPosition(mask, caretEnd);
 
-  var newCaretPosition = caretStart;
+  let newCaretPosition = caretStart;
 
-  var isNumber = PaymentezForm.keyIsNumber(e);
-  var isDelete = PaymentezForm.keyIsDelete(e);
-  var isBackspace = PaymentezForm.keyIsBackspace(e);
+  let isNumber = PaymentezForm.keyIsNumber(e);
+  let isDelete = PaymentezForm.keyIsDelete(e);
+  let isBackspace = PaymentezForm.keyIsBackspace(e);
 
   if (isNumber || isDelete || isBackspace) {
     e.preventDefault();
-    var rawText = $(element).val();
-    var numbersOnly = PaymentezForm.numbersOnlyString(rawText);
+    let rawText = $(element).val();
+    let numbersOnly = PaymentezForm.numbersOnlyString(rawText);
 
-    var digit = PaymentezForm.digitFromKeyCode(keyCode);
+    let digit = PaymentezForm.digitFromKeyCode(keyCode);
 
-    var rangeHighlighted = normalisedEndCaretPosition > normalisedStartCaretPosition;
+    let rangeHighlighted = normalisedEndCaretPosition > normalisedStartCaretPosition;
 
     // Remove values highlighted (if highlighted)
     if (rangeHighlighted) {
       numbersOnly = (numbersOnly.slice(0, normalisedStartCaretPosition) +
-                     numbersOnly.slice(normalisedEndCaretPosition));
+        numbersOnly.slice(normalisedEndCaretPosition));
     }
 
     // Forward Action
-    if (caretStart != mask.length) {
+    if (caretStart !== mask.length) {
 
       // Insert number digit
       if (isNumber && rawText.length <= mask.length) {
         numbersOnly = (numbersOnly.slice(0, normalisedStartCaretPosition) + digit +
-                       numbersOnly.slice(normalisedStartCaretPosition));
+          numbersOnly.slice(normalisedStartCaretPosition));
         newCaretPosition = Math.max(
           PaymentezForm.denormaliseCaretPosition(mask, normalisedStartCaretPosition + 1),
           PaymentezForm.denormaliseCaretPosition(mask, normalisedStartCaretPosition + 2) - 1
@@ -619,18 +628,18 @@ PaymentezForm.handleMaskedNumberInputKey = function(e, mask) {
       // Delete
       if (isDelete) {
         numbersOnly = (numbersOnly.slice(0, normalisedStartCaretPosition) +
-                       numbersOnly.slice(normalisedStartCaretPosition + 1));
+          numbersOnly.slice(normalisedStartCaretPosition + 1));
       }
 
     }
 
     // Backward Action
-    if (caretStart != 0) {
+    if (caretStart !== 0) {
 
       // Backspace
-      if(isBackspace && !rangeHighlighted) {
+      if (isBackspace && !rangeHighlighted) {
         numbersOnly = (numbersOnly.slice(0, normalisedStartCaretPosition - 1) +
-                       numbersOnly.slice(normalisedStartCaretPosition));
+          numbersOnly.slice(normalisedStartCaretPosition));
         newCaretPosition = PaymentezForm.denormaliseCaretPosition(mask, normalisedStartCaretPosition - 1);
       }
     }
@@ -647,28 +656,28 @@ PaymentezForm.handleMaskedNumberInputKey = function(e, mask) {
  * @param e
  * @param cardMask
  */
-PaymentezForm.handleCreditCardNumberKey = function(e, cardMask) {
+PaymentezForm.handleCreditCardNumberKey = function (e, cardMask) {
   PaymentezForm.handleMaskedNumberInputKey(e, cardMask);
 };
 
-PaymentezForm.handleCreditCardNumberChange = function(e) {
+PaymentezForm.handleCreditCardNumberChange = function (e) {
 };
 
-PaymentezForm.handleExpiryKey = function(e) {
+PaymentezForm.handleExpiryKey = function (e) {
   PaymentezForm.handleMaskedNumberInputKey(e, PaymentezForm.EXPIRY_MASK);
 };
 
 /**
-* Generate a random array to assign to tuya keyboard
-*/
-PaymentezForm.generateRandoms = function() {
-  var myArray = ['0','1','2','3','4','5','6','7','8','9'];
-  var i,j,k;
+ * Generate a random array to assign to tuya keyboard
+ */
+PaymentezForm.generateRandoms = function () {
+  let myArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  let i, j, k;
   for (i = myArray.length; i; i--) {
-      j = Math.floor(Math.random() * i);
-      k = myArray[i - 1];
-      myArray[i - 1] = myArray[j];
-      myArray[j] = k;
+    j = Math.floor(Math.random() * i);
+    k = myArray[i - 1];
+    myArray[i - 1] = myArray[j];
+    myArray[j] = k;
   }
   return myArray;
 };
@@ -678,7 +687,7 @@ PaymentezForm.generateRandoms = function() {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getCardNumber = function() {
+PaymentezForm.prototype.getCardNumber = function () {
   return this.cardNumberInput.val();
 };
 
@@ -687,71 +696,70 @@ PaymentezForm.prototype.getCardNumber = function() {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isValidData = function() {
-  var is_date_valid = this.refreshExpiryMonthValidation();
-  var is_cvc_valid = this.refreshCvcValidation();
-  var is_card_holder_valid = this.refreshCardHolderNameValidation();
-  var is_email_valid = this.refreshEmailValidation();
-  var is_cellphone_valid = this.refreshCellPhoneValidation();
-  var is_card_number_valid = this.refreshCardNumberValidation();
-  var is_fiscal_number_valid = this.refreshFiscalNumberValidation();
-  var is_nip_valid = this.refreshNipValidation();
-  var valid = is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid
-              && is_email_valid && is_cellphone_valid && is_fiscal_number_valid && is_nip_valid;
-  return valid;
+PaymentezForm.prototype.isValidData = function () {
+  let is_date_valid = this.refreshExpiryMonthValidation();
+  let is_cvc_valid = this.refreshCvcValidation();
+  let is_card_holder_valid = this.refreshCardHolderNameValidation();
+  let is_email_valid = this.refreshEmailValidation();
+  let is_cellphone_valid = this.refreshCellPhoneValidation();
+  let is_card_number_valid = this.refreshCardNumberValidation();
+  let is_fiscal_number_valid = this.refreshFiscalNumberValidation();
+  let is_nip_valid = this.refreshNipValidation();
+  return is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid
+    && is_email_valid && is_cellphone_valid && is_fiscal_number_valid && is_nip_valid;
 };
 
-PaymentezForm.prototype.refreshCvcValidation = function() {
-  if(this.isCvcValid()){
+PaymentezForm.prototype.refreshCvcValidation = function () {
+  if (this.isCvcValid()) {
     this.cvcInput.parent().removeClass("has-error");
     return true;
-  }else{
+  } else {
     this.cvcInput.parent().addClass("has-error");
     return false;
   }
 };
 
-PaymentezForm.prototype.refreshCardHolderNameValidation = function() {
-  if(this.isCardHolderNameValid()){
+PaymentezForm.prototype.refreshCardHolderNameValidation = function () {
+  if (this.isCardHolderNameValid()) {
     this.nameInput.parent().removeClass("has-error");
     return true;
-  }else{
+  } else {
     this.nameInput.parent().addClass("has-error");
     return false;
   }
 };
 
-PaymentezForm.prototype.refreshEmailValidation = function() {
-  if(this.isEmailValid()){
+PaymentezForm.prototype.refreshEmailValidation = function () {
+  if (this.isEmailValid()) {
     this.emailInput.parent().removeClass("has-error");
     return true;
-  }else{
+  } else {
     this.emailInput.parent().addClass("has-error");
     return false;
   }
 };
 
-PaymentezForm.prototype.refreshCellPhoneValidation = function() {
-  if(this.isCellPhoneValid()){
+PaymentezForm.prototype.refreshCellPhoneValidation = function () {
+  if (this.isCellPhoneValid()) {
     this.cellPhoneInput.parent().removeClass("has-error");
     return true;
-  }else{
+  } else {
     this.cellPhoneInput.parent().addClass("has-error");
     return false;
   }
 };
 
-PaymentezForm.prototype.refreshCardNumberValidation = function() {
-  if(this.isCardNumberValid()){
+PaymentezForm.prototype.refreshCardNumberValidation = function () {
+  if (this.isCardNumberValid()) {
     this.cardNumberInput.parent().removeClass("has-error");
     return true;
-  }else{
+  } else {
     this.cardNumberInput.parent().addClass("has-error");
     return false;
   }
 };
 
-PaymentezForm.prototype.refreshFiscalNumberValidation = function() {
+PaymentezForm.prototype.refreshFiscalNumberValidation = function () {
   if (this.fiscalNumberAdded() && this.isFiscalNumberValid()) {
     this.fiscalNumberInput.parent().removeClass("has-error");
     return true;
@@ -763,106 +771,107 @@ PaymentezForm.prototype.refreshFiscalNumberValidation = function() {
   }
 };
 
-PaymentezForm.prototype.refreshNipValidation = function() {
-  if (this.nipWrapperAdded()){
-    if(this.isNipValid()){
+PaymentezForm.prototype.refreshNipValidation = function () {
+  if (this.nipWrapperAdded()) {
+    if (this.isNipValid()) {
       this.nipInput.parent().removeClass("has-error");
       return true;
-    }else{
+    } else {
       this.nipInput.parent().addClass("has-error");
       return false;
     }
-  } else { return true }
+  } else {
+    return true
+  }
 };
 
-PaymentezForm.prototype.refreshValidationOption = function() {
-  if (this.getValidationOption() == PaymentezForm.AUTH_OTP){
+PaymentezForm.prototype.refreshValidationOption = function () {
+  if (this.getValidationOption() === PaymentezForm.AUTH_OTP) {
     this.addValidationMessage();
     this.removeNip();
     this.removeVirtualKeyboard();
-  } else if (this.getValidationOption() == PaymentezForm.AUTH_NIP){
+  } else if (this.getValidationOption() === PaymentezForm.AUTH_NIP) {
     this.removeValidationMessage();
     this.addNip();
   }
 };
 
-PaymentezForm.prototype.addValueToNip = function(value, key){
+PaymentezForm.prototype.addValueToNip = function (value, key) {
   if (this.nipWrapperAdded()) {
-    if (this.nipInput.val().length < this.nipLenght){
-      var newValue = this.nipInput.val() + value;
+    if (this.nipInput.val().length < this.nipLenght) {
+      let newValue = this.nipInput.val() + value;
       this.nipInput.val(newValue);
-      var newNip = this.nip + key;
-      this.nip = newNip;
+      this.nip = this.nip + key;
     }
   }
-}
+};
 
-PaymentezForm.prototype.cleanNipInput = function() {
+PaymentezForm.prototype.cleanNipInput = function () {
   if (this.nipWrapperAdded())
     this.nipInput.val("");
-    this.nip = "";
-}
+  this.nip = "";
+};
 
 /**
  * Is the given input a valid cvc?
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isCvcValid = function() {
-  if (this.getValidationOption() == PaymentezForm.AUTH_CVC) {
-    return this.getCvc() != null && this.getCvc().trim().length == this.cvcLenght;
+PaymentezForm.prototype.isCvcValid = function () {
+  if (this.getValidationOption() === PaymentezForm.AUTH_CVC) {
+    return this.getCvc() != null && this.getCvc().trim().length === this.cvcLenght;
   } else {
     return true;
   }
-}
+};
 
 /**
  * Is the given input a valid CardHolderName?
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isCardHolderNameValid = function() {
-  if(this.captureName)
+PaymentezForm.prototype.isCardHolderNameValid = function () {
+  if (this.captureName)
     return this.getName() != null && this.getName().length >= 5;
   else
     return true;
-}
+};
 
-PaymentezForm.prototype.isEmailValid = function() {
-  if(this.captureEmail){
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+PaymentezForm.prototype.isEmailValid = function () {
+  if (this.captureEmail) {
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return this.getEmail() != null && this.getEmail().length >= 5 && re.test(this.getEmail());
-  }else
+  } else
     return true;
-}
+};
 
-PaymentezForm.prototype.isCellPhoneValid = function() {
-  if(this.captureCellPhone)
+PaymentezForm.prototype.isCellPhoneValid = function () {
+  if (this.captureCellPhone)
     return this.getCellPhone() != null && this.getCellPhone().length >= 5;
   else
     return true;
-}
+};
 
 /**
  * Is the given input a valid Card Number?
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isCardNumberValid = function() {
-  var value = this.getCardNumber();
-  var type = this.cardType;
+PaymentezForm.prototype.isCardNumberValid = function () {
+  let value = this.getCardNumber();
+  let type = this.cardType;
   // If the card type is Exito or Alkosto, don't validate with Luhn
-  if (type == 'ex' || type == 'ak') return true;
-  if(value == '') return false;
+  if (type === 'ex' || type === 'ak') return true;
+  if (value === '') return false;
   if (/[^0-9-\s]+/.test(value)) return false;
 
   // The Luhn Algorithm. It's so pretty.
-  var nCheck = 0, nDigit = 0, bEven = false;
+  let nCheck = 0, nDigit = 0, bEven = false;
   value = value.replace(/\D/g, "");
 
-  for (var n = value.length - 1; n >= 0; n--) {
-    var cDigit = value.charAt(n),
-        nDigit = parseInt(cDigit, 10);
+  for (let n = value.length - 1; n >= 0; n--) {
+    let cDigit = value.charAt(n),
+      nDigit = parseInt(cDigit, 10);
 
     if (bEven) {
       if ((nDigit *= 2) > 9) nDigit -= 9;
@@ -872,118 +881,117 @@ PaymentezForm.prototype.isCardNumberValid = function() {
     bEven = !bEven;
   }
 
-  return (nCheck % 10) == 0;
-}
+  return (nCheck % 10) === 0;
+};
 
 /**
  * Is the given input a valid nip?
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isNipValid = function() {
-  if (this.getValidationOption() == PaymentezForm.AUTH_NIP) {
-    return this.getNip() != null && this.getNip().trim().length == this.nipLenght;
+PaymentezForm.prototype.isNipValid = function () {
+  if (this.getValidationOption() === PaymentezForm.AUTH_NIP) {
+    return this.getNip() != null && this.getNip().trim().length === this.nipLenght;
   } else {
     return true;
   }
-}
+};
 
 /**
  * Is the given input a valid FiscalNumber?
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isFiscalNumberValid = function() {
-  if(this.fiscalNumberAdded())
+PaymentezForm.prototype.isFiscalNumberValid = function () {
+  if (this.fiscalNumberAdded())
     return this.getFiscalNumber() != null && this.getFiscalNumber().length >= 6;
   else
     return true
-}
+};
 
 /**
  * Validate if exists the fiscal number in the form
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.fiscalNumberAdded = function() {
-  var fNumber = this.elem.find(".fiscal-number-wrapper");
+PaymentezForm.prototype.fiscalNumberAdded = function () {
+  let fNumber = this.elem.find(".fiscal-number-wrapper");
   return fNumber.length >= 1;
-}
+};
 
 /**
  * Validate if exists the expiry date in the form
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.expiryContainerAdded = function() {
-  var exContainter = this.elem.find(".expiry-container");
+PaymentezForm.prototype.expiryContainerAdded = function () {
+  let exContainter = this.elem.find(".expiry-container");
   return exContainter.length >= 1;
-}
+};
 
 /**
  * Validate if the cvc is displayed
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.cvcContainerAdded = function() {
-  var cvcContainer = this.elem.find(".cvc-container");
+PaymentezForm.prototype.cvcContainerAdded = function () {
+  let cvcContainer = this.elem.find(".cvc-container");
   return cvcContainer.length >= 1;
-}
+};
 
 /**
  * Validate if the nip is displayed
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.nipWrapperAdded = function() {
-  var nipWrapper = this.elem.find(".nip-wrapper");
+PaymentezForm.prototype.nipWrapperAdded = function () {
+  let nipWrapper = this.elem.find(".nip-wrapper");
   return nipWrapper.length >= 1;
-}
+};
 
 /**
  * Validate if the nip is displayed
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.otpWrapperAdded = function() {
-  var otpWrapper = this.elem.find(".otp-wrapper");
+PaymentezForm.prototype.otpWrapperAdded = function () {
+  let otpWrapper = this.elem.find(".otp-wrapper");
   return otpWrapper.length >= 1;
-}
+};
 
 /**
  * Validate if the message is displayed
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.validationMessageAdded = function() {
-  var nipWrapper = this.elem.find(".validation-message");
+PaymentezForm.prototype.validationMessageAdded = function () {
+  let nipWrapper = this.elem.find(".validation-message");
   return nipWrapper.length >= 1;
-}
+};
 
 /**
  * Validate if the keyboard is displayed
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.virtualKeyboardAdded = function() {
-  var nipWrapper = this.elem.find(".keyboard-wrapper");
+PaymentezForm.prototype.virtualKeyboardAdded = function () {
+  let nipWrapper = this.elem.find(".keyboard-wrapper");
   return nipWrapper.length >= 1;
-}
+};
 
 /**
  * Get the card object.
  *
  * @returns {object}
  */
-PaymentezForm.prototype.getCard = function() {
-  var data = null;
-  if(this.isValidData()){
-    var today = new Date();
-    var currentMonth = (today.getMonth() + 1);
-    var currentYear = "" + today.getFullYear();
-    var year = this.getExpiryYear();
+PaymentezForm.prototype.getCard = function () {
+  let data = null;
+  if (this.isValidData()) {
+    let today = new Date();
+    let currentYear = "" + today.getFullYear();
+    let year = this.getExpiryYear();
 
-    if (("" + year).length == 2) {
+    if (("" + year).length === 2) {
       year = currentYear.substring(0, 2) + "" + this.getExpiryYear();
     }
 
@@ -1009,7 +1017,7 @@ PaymentezForm.prototype.getCard = function() {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getCardType = function() {
+PaymentezForm.prototype.getCardType = function () {
   return this.brand_name;
 };
 
@@ -1018,7 +1026,7 @@ PaymentezForm.prototype.getCardType = function() {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getName = function() {
+PaymentezForm.prototype.getName = function () {
   return this.nameInput.val();
 };
 
@@ -1027,7 +1035,7 @@ PaymentezForm.prototype.getName = function() {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getEmail = function() {
+PaymentezForm.prototype.getEmail = function () {
   return this.emailInput.val();
 };
 
@@ -1036,7 +1044,7 @@ PaymentezForm.prototype.getEmail = function() {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getCellPhone = function() {
+PaymentezForm.prototype.getCellPhone = function () {
   return this.cellPhoneInput.val();
 };
 
@@ -1045,8 +1053,8 @@ PaymentezForm.prototype.getCellPhone = function() {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getExpiryMonth = function() {
-  return this.expiryMonthInput.val();
+PaymentezForm.prototype.getExpiryMonth = function () {
+  return parseInt(this.expiryMonthInput.val()) ? this.expiryMonthInput.val() : 0;
 };
 
 /**
@@ -1054,17 +1062,17 @@ PaymentezForm.prototype.getExpiryMonth = function() {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getExpiryYear = function() {
-  return this.expiryYearInput.val();
+PaymentezForm.prototype.getExpiryYear = function () {
+  return parseInt(this.expiryYearInput.val()) ? this.expiryYearInput.val() : 0;
 };
 
 /**
  * Get the fiscal number inputted.
  *
- * @returns {number}
+ * @returns {string}
  */
-PaymentezForm.prototype.getFiscalNumber = function() {
-  if (this.fiscalNumberAdded()){
+PaymentezForm.prototype.getFiscalNumber = function () {
+  if (this.fiscalNumberAdded()) {
     return this.fiscalNumberInput.val();
   } else {
     return '';
@@ -1076,17 +1084,16 @@ PaymentezForm.prototype.getFiscalNumber = function() {
  *
  * @returns {number}
  */
-PaymentezForm.prototype.getValidationOption = function() {
-  var val= PaymentezForm.AUTH_CVC;
-  if (this.cardType == 'ex' || this.cardType == 'ak') {
-    if(this.USE_OTP){
-      if (this.otpValidation.is(':checked')){
+PaymentezForm.prototype.getValidationOption = function () {
+  let val = PaymentezForm.AUTH_CVC;
+  if (this.cardType === 'ex' || this.cardType === 'ak') {
+    if (this.USE_OTP) {
+      if (this.otpValidation.is(':checked')) {
         val = PaymentezForm.AUTH_OTP;
       } else {
         val = PaymentezForm.AUTH_NIP;
       }
-    }
-    else {
+    } else {
       val = PaymentezForm.AUTH_NIP;
     }
   } else {
@@ -1100,10 +1107,10 @@ PaymentezForm.prototype.getValidationOption = function() {
  *
  * @returns {number}
  */
-PaymentezForm.prototype.getCvc = function() {
-  if (this.getValidationOption() == PaymentezForm.AUTH_CVC) {
+PaymentezForm.prototype.getCvc = function () {
+  if (this.getValidationOption() === PaymentezForm.AUTH_CVC) {
     return this.cvcInput.val();
-  }else{
+  } else {
     return "";
   }
 };
@@ -1111,15 +1118,15 @@ PaymentezForm.prototype.getCvc = function() {
 /**
  * Get the NIP number inputted.
  *
- * @returns {number}
+ * @returns {string}
  */
-PaymentezForm.prototype.getNip = function() {
-  if (this.getValidationOption() == PaymentezForm.AUTH_NIP) {
-    if (this.nipWrapperAdded() && !this.USE_VIRTUAL_KEYBOARD){
+PaymentezForm.prototype.getNip = function () {
+  if (this.getValidationOption() === PaymentezForm.AUTH_NIP) {
+    if (this.nipWrapperAdded() && !this.USE_VIRTUAL_KEYBOARD) {
       this.nip = (this.nipInput.val());
     }
     return this.nip;
-  }else{
+  } else {
     return "";
   }
 };
@@ -1131,16 +1138,16 @@ PaymentezForm.prototype.getNip = function() {
  *
  * @param colour
  */
-PaymentezForm.prototype.setIconColour = function(colour) {
+PaymentezForm.prototype.setIconColour = function (colour) {
   this.elem.find(".icon .svg").css({"fill": colour});
 };
 
 /**
  *
  */
-PaymentezForm.prototype.refreshCreditCardType = function() {
-  var number = PaymentezForm.numbersOnlyString(this.getCardNumber());
-  if (number.length >= 6){
+PaymentezForm.prototype.refreshCreditCardType = function () {
+  let number = PaymentezForm.numbersOnlyString(this.getCardNumber());
+  if (number.length >= 6) {
     this.cardTypeFromNumberBin(number);
   }
 };
@@ -1148,41 +1155,41 @@ PaymentezForm.prototype.refreshCreditCardType = function() {
 /**
  *
  */
-PaymentezForm.prototype.refreshCreditCardNumberFormat = function() {
-  var numbersOnly = PaymentezForm.numbersOnlyString($(this.cardNumberInput).val());
-  var formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
+PaymentezForm.prototype.refreshCreditCardNumberFormat = function () {
+  let numbersOnly = PaymentezForm.numbersOnlyString($(this.cardNumberInput).val());
+  let formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
   $(this.cardNumberInput).val(formattedNumber);
 };
 
 /**
  *
  */
-PaymentezForm.prototype.refreshExpiryMonthYearInput = function() {
-  var numbersOnly = PaymentezForm.numbersOnlyString($(this.expiryMonthYearInput).val());
-  var formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, PaymentezForm.EXPIRY_MASK);
+PaymentezForm.prototype.refreshExpiryMonthYearInput = function () {
+  let numbersOnly = PaymentezForm.numbersOnlyString($(this.expiryMonthYearInput).val());
+  let formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, PaymentezForm.EXPIRY_MASK);
   $(this.expiryMonthYearInput).val(formattedNumber);
 };
 
 /**
  *
  */
-PaymentezForm.prototype.refreshCvc = function() {
-  var numbersOnly = PaymentezForm.numbersOnlyString($(this.cvcInput).val());
-  var formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
+PaymentezForm.prototype.refreshCvc = function () {
+  let numbersOnly = PaymentezForm.numbersOnlyString($(this.cvcInput).val());
+  let formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
   $(this.cvcInput).val(formattedNumber);
 };
 
 /**
  *
  */
-PaymentezForm.prototype.refreshNip = function() {
-  var numbersOnly = PaymentezForm.numbersOnlyString($(this.nipInput).val());
-  var formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
+PaymentezForm.prototype.refreshNip = function () {
+  let numbersOnly = PaymentezForm.numbersOnlyString($(this.nipInput).val());
+  let formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
   $(this.nipInput).val(formattedNumber);
 };
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-PaymentezForm.prototype.addFiscalNumber = function() {
+PaymentezForm.prototype.addFiscalNumber = function () {
   if (!this.fiscalNumberAdded()) {
     this.initFiscalNumberInput();
     this.setupFiscalNumberInput();
@@ -1190,13 +1197,13 @@ PaymentezForm.prototype.addFiscalNumber = function() {
   }
 };
 
-PaymentezForm.prototype.removeFiscalNumber = function() {
+PaymentezForm.prototype.removeFiscalNumber = function () {
   if (this.fiscalNumberAdded()) {
     this.elem.find(".fiscal-number-wrapper").remove();
   }
 };
 
-PaymentezForm.prototype.addExpiryContainer = function() {
+PaymentezForm.prototype.addExpiryContainer = function () {
   if (!this.expiryContainerAdded()) {
     this.initExpiryMonthInput();
     this.initExpiryYearInput();
@@ -1205,35 +1212,35 @@ PaymentezForm.prototype.addExpiryContainer = function() {
   }
 };
 
-PaymentezForm.prototype.removeExpiryContainer = function() {
+PaymentezForm.prototype.removeExpiryContainer = function () {
   if (this.expiryContainerAdded()) {
     this.elem.find(".expiry-container").remove();
   }
 };
 
-PaymentezForm.prototype.addCvcContainer = function() {
-  if(!this.cvcContainerAdded()) {
+PaymentezForm.prototype.addCvcContainer = function () {
+  if (!this.cvcContainerAdded()) {
     this.initCvcInput();
     this.setupCvcInput();
     this.setIconColour(this.iconColour);
   }
 };
 
-PaymentezForm.prototype.removeCvcContainer = function() {
-  if(this.cvcContainerAdded()) {
+PaymentezForm.prototype.removeCvcContainer = function () {
+  if (this.cvcContainerAdded()) {
     this.elem.find(".cvc-container").remove();
   }
 };
 
-PaymentezForm.prototype.addNip = function() {
-  if (!this.otpWrapperAdded()){
-    if (!this.nipWrapperAdded()){
+PaymentezForm.prototype.addNip = function () {
+  if (!this.otpWrapperAdded()) {
+    if (!this.nipWrapperAdded()) {
       this.initNipInput();
       this.setupNipInput();
       this.setIconColour(this.iconColour);
     }
-  }else{
-    if (this.getValidationOption() == PaymentezForm.AUTH_NIP && !this.nipWrapperAdded()){
+  } else {
+    if (this.getValidationOption() === PaymentezForm.AUTH_NIP && !this.nipWrapperAdded()) {
       this.initNipInput();
       this.setupNipInput();
       this.setIconColour(this.iconColour);
@@ -1241,45 +1248,45 @@ PaymentezForm.prototype.addNip = function() {
   }
 };
 
-PaymentezForm.prototype.removeNip = function() {
-  if(this.nipWrapperAdded()) {
+PaymentezForm.prototype.removeNip = function () {
+  if (this.nipWrapperAdded()) {
     this.elem.find(".nip-wrapper").remove();
   }
 };
 
-PaymentezForm.prototype.addOtpValidation = function() {
-  if(!this.otpWrapperAdded() && this.USE_OTP) {
+PaymentezForm.prototype.addOtpValidation = function () {
+  if (!this.otpWrapperAdded() && this.USE_OTP) {
     this.initOtpValidation();
     this.setupOtpValidation();
   }
 };
 
-PaymentezForm.prototype.removeOtpValidation = function() {
-  if(this.otpWrapperAdded()) {
+PaymentezForm.prototype.removeOtpValidation = function () {
+  if (this.otpWrapperAdded()) {
     this.elem.find(".otp-wrapper").remove();
   }
 };
 
-PaymentezForm.prototype.addVirtualKeyboard = function() {
-  if(!this.virtualKeyboardAdded() && this.getValidationOption() == PaymentezForm.AUTH_NIP) {
+PaymentezForm.prototype.addVirtualKeyboard = function () {
+  if (!this.virtualKeyboardAdded() && this.getValidationOption() === PaymentezForm.AUTH_NIP) {
     this.setupVirtualKeyboard()
   }
 };
 
-PaymentezForm.prototype.removeVirtualKeyboard = function() {
-  if(this.virtualKeyboardAdded()) {
+PaymentezForm.prototype.removeVirtualKeyboard = function () {
+  if (this.virtualKeyboardAdded()) {
     this.elem.find(".keyboard-wrapper").remove();
   }
 };
 
-PaymentezForm.prototype.addValidationMessage = function() {
-  if(!this.validationMessageAdded()) {
+PaymentezForm.prototype.addValidationMessage = function () {
+  if (!this.validationMessageAdded()) {
     this.setupValidationMessage()
   }
 };
 
-PaymentezForm.prototype.removeValidationMessage = function() {
-  if(this.validationMessageAdded()) {
+PaymentezForm.prototype.removeValidationMessage = function () {
+  if (this.validationMessageAdded()) {
     this.elem.find(".validation-message").remove();
   }
 };
@@ -1287,15 +1294,15 @@ PaymentezForm.prototype.removeValidationMessage = function() {
 /**
  * The next methods are temporary because only exito use otp and nip
  */
-PaymentezForm.prototype.addTuyaChanges = function() {
+PaymentezForm.prototype.addTuyaChanges = function () {
   this.addFiscalNumber();
   this.addNip();
   this.addOtpValidation();
   this.removeExpiryContainer();
   this.removeCvcContainer();
-}
+};
 
-PaymentezForm.prototype.removeTuyaChanges = function() {
+PaymentezForm.prototype.removeTuyaChanges = function () {
   this.addExpiryContainer();
   this.addCvcContainer();
   this.removeFiscalNumber();
@@ -1303,13 +1310,13 @@ PaymentezForm.prototype.removeTuyaChanges = function() {
   this.removeOtpValidation();
   this.removeVirtualKeyboard();
   this.removeValidationMessage();
-}
+};
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 /**
  * Initialise the card number input
  */
-PaymentezForm.prototype.initCardNumberInput = function() {
+PaymentezForm.prototype.initCardNumberInput = function () {
 
   // Find or create the card number input element
   this.cardNumberInput = PaymentezForm.detachOrCreateElement(this.elem, ".card-number", "<input class='card-number' />");
@@ -1333,10 +1340,10 @@ PaymentezForm.prototype.initCardNumberInput = function() {
 /**
  * Initialise the name input
  */
-PaymentezForm.prototype.initNameInput = function() {
+PaymentezForm.prototype.initNameInput = function () {
 
   // Enable name input if a field has been created
-  if(!this.captureName)
+  if (!this.captureName)
     this.captureName = this.elem.find(".name")[0] != null;
   // Find or create the name input element
   this.nameInput = PaymentezForm.detachOrCreateElement(this.elem, ".name", "<input class='name' />");
@@ -1353,69 +1360,69 @@ PaymentezForm.prototype.initNameInput = function() {
 /**
  * Initialise the email input
  */
-PaymentezForm.prototype.initEmailInput = function() {
+PaymentezForm.prototype.initEmailInput = function () {
 
-    // Enable email input if a field has been created
-    if(!this.captureEmail)
-      this.captureEmail = this.elem.find(".email")[0] != null;
-    // Find or create the email input element
-    this.emailInput = PaymentezForm.detachOrCreateElement(this.elem, ".email", "<input class='email' />");
-    // Ensure the email element has a field email
-    if (!PaymentezForm.elementHasAttribute(this.emailInput, "name")) {
-      this.emailInput.attr("name", "email");
-    }
-    // Ensure the email element has a placeholder
-    if (!PaymentezForm.elementHasAttribute(this.emailInput, "placeholder")) {
-      this.emailInput.attr("placeholder", PaymentezForm.EMAIL_PLACEHOLDER);
-    }
-    this.emailInput.attr("type", "email");
-    this.emailInput.attr("autocorrect", "off");
-    this.emailInput.attr("spellcheck", "off");
-    this.emailInput.attr("autocapitalize", "off");
-  };
+  // Enable email input if a field has been created
+  if (!this.captureEmail)
+    this.captureEmail = this.elem.find(".email")[0] != null;
+  // Find or create the email input element
+  this.emailInput = PaymentezForm.detachOrCreateElement(this.elem, ".email", "<input class='email' />");
+  // Ensure the email element has a field email
+  if (!PaymentezForm.elementHasAttribute(this.emailInput, "name")) {
+    this.emailInput.attr("name", "email");
+  }
+  // Ensure the email element has a placeholder
+  if (!PaymentezForm.elementHasAttribute(this.emailInput, "placeholder")) {
+    this.emailInput.attr("placeholder", PaymentezForm.EMAIL_PLACEHOLDER);
+  }
+  this.emailInput.attr("type", "email");
+  this.emailInput.attr("autocorrect", "off");
+  this.emailInput.attr("spellcheck", "off");
+  this.emailInput.attr("autocapitalize", "off");
+};
 
-  /**
+/**
  * Initialise the cellphone input
  */
-PaymentezForm.prototype.initCellPhoneInput = function() {
+PaymentezForm.prototype.initCellPhoneInput = function () {
 
-    // Enable cellphone input if a field has been created
-    if(!this.captureCellPhone)
-      this.captureCellPhone = this.elem.find(".cellphone")[0] != null;
-    // Find or create the cellphone input element
-    this.cellPhoneInput = PaymentezForm.detachOrCreateElement(this.elem, ".cellphone", "<input class='cellphone' />");
-    // Ensure the cellphone element has a field cellphone
-    if (!PaymentezForm.elementHasAttribute(this.cellPhoneInput, "name")) {
-      this.cellPhoneInput.attr("name", "cellphone");
-    }
-    // Ensure the cellphone element has a placeholder
-    if (!PaymentezForm.elementHasAttribute(this.cellPhoneInput, "placeholder")) {
-      this.cellPhoneInput.attr("placeholder", PaymentezForm.CELLPHONE_PLACEHOLDER);
-    }
-    this.cellPhoneInput.attr("type", "tel");
-    this.cellPhoneInput.attr("autocorrect", "off");
-    this.cellPhoneInput.attr("spellcheck", "off");
-    this.cellPhoneInput.attr("autocapitalize", "off");
-  };
+  // Enable cellphone input if a field has been created
+  if (!this.captureCellPhone)
+    this.captureCellPhone = this.elem.find(".cellphone")[0] != null;
+  // Find or create the cellphone input element
+  this.cellPhoneInput = PaymentezForm.detachOrCreateElement(this.elem, ".cellphone", "<input class='cellphone' />");
+  // Ensure the cellphone element has a field cellphone
+  if (!PaymentezForm.elementHasAttribute(this.cellPhoneInput, "name")) {
+    this.cellPhoneInput.attr("name", "cellphone");
+  }
+  // Ensure the cellphone element has a placeholder
+  if (!PaymentezForm.elementHasAttribute(this.cellPhoneInput, "placeholder")) {
+    this.cellPhoneInput.attr("placeholder", PaymentezForm.CELLPHONE_PLACEHOLDER);
+  }
+  this.cellPhoneInput.attr("type", "tel");
+  this.cellPhoneInput.attr("autocorrect", "off");
+  this.cellPhoneInput.attr("spellcheck", "off");
+  this.cellPhoneInput.attr("autocapitalize", "off");
+};
 
 /**
  * Initialise the expiry month input
  */
-PaymentezForm.prototype.initExpiryMonthInput = function() {
+PaymentezForm.prototype.initExpiryMonthInput = function () {
   this.expiryMonthInput = PaymentezForm.detachOrCreateElement(this.elem, ".expiry-month", "<input class='expiry-month' />");
 };
 
 /**
  * Initialise the expiry year input
  */
-PaymentezForm.prototype.initExpiryYearInput = function() {
+PaymentezForm.prototype.initExpiryYearInput = function () {
   this.expiryYearInput = PaymentezForm.detachOrCreateElement(this.elem, ".expiry-year", "<input class='expiry-year' />");
 };
 
 /**
  * Initialise the card CVC input
  */
-PaymentezForm.prototype.initCvcInput = function() {
+PaymentezForm.prototype.initCvcInput = function () {
 
   // Find or create the CVC input element
   this.cvcInput = PaymentezForm.detachOrCreateElement(this.elem, ".cvc", "<input class='cvc' />");
@@ -1430,12 +1437,15 @@ PaymentezForm.prototype.initCvcInput = function() {
   this.cvcInput.attr("autocorrect", "off");
   this.cvcInput.attr("spellcheck", "off");
   this.cvcInput.attr("autocapitalize", "off");
+  if (!this.IS_MOBILE) {
+    this.cvcInput.attr("type", "password");
+  }
 };
 
 /**
  * Initialise the fiscal number input
  */
-PaymentezForm.prototype.initFiscalNumberInput = function() {
+PaymentezForm.prototype.initFiscalNumberInput = function () {
 
   // Find or create the fiscal number input element
   this.fiscalNumberInput = PaymentezForm.detachOrCreateElement(this.elem, ".fiscal-number", "<input class='fiscal-number' />");
@@ -1460,7 +1470,7 @@ PaymentezForm.prototype.initFiscalNumberInput = function() {
 /**
  * Initialise the card NIP input
  */
-PaymentezForm.prototype.initNipInput = function() {
+PaymentezForm.prototype.initNipInput = function () {
   // Find or create the NIP input element
   this.nipInput = PaymentezForm.detachOrCreateElement(this.elem, ".nip", "<input class='nip' />");
   // Ensure the NIP has a placeholder
@@ -1476,14 +1486,16 @@ PaymentezForm.prototype.initNipInput = function() {
   this.nipInput.attr("autocorrect", "off");
   this.nipInput.attr("spellcheck", "off");
   this.nipInput.attr("autocapitalize", "off");
-  if (this.USE_VIRTUAL_KEYBOARD)
-    this.nipInput.attr("disabled", "disabled");
+  if (this.USE_VIRTUAL_KEYBOARD) {
+    this.nipInput.attr("readonly", "true");
+    this.nipInput.attr("type", "password");
+  }
 };
 
 /**
  * Initialise the checkbox to otp validation option
  */
-PaymentezForm.prototype.initOtpValidation = function() {
+PaymentezForm.prototype.initOtpValidation = function () {
   this.otpValidation = PaymentezForm.detachOrCreateElement(this.elem, ".otp", "<input class='otp' />");
   this.otpValidation.attr("type", "checkbox");
   this.otpValidation.attr("id", "otp-option");
@@ -1491,120 +1503,120 @@ PaymentezForm.prototype.initOtpValidation = function() {
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-PaymentezForm.prototype.setupCardNumberInput = function() {
+PaymentezForm.prototype.setupCardNumberInput = function () {
   this.elem.append("<div class='card-number-wrapper'></div>");
-  var wrapper = this.elem.find(".card-number-wrapper");
+  let wrapper = this.elem.find(".card-number-wrapper");
   wrapper.append(this.cardNumberInput);
   wrapper.append("<div class='card-type-icon'></div>");
   wrapper.append("<div class='icon'></div>");
   wrapper.find(".icon").append(PaymentezForm.CREDIT_CARD_SVG);
 
   // Events
-  var $this = this;
-  this.cardNumberInput.keydown(function(e) {
+  let $this = this;
+  this.cardNumberInput.keydown(function (e) {
     PaymentezForm.handleCreditCardNumberKey(e, $this.creditCardNumberMask);
   });
-  this.cardNumberInput.keyup(function() {
+  this.cardNumberInput.keyup(function () {
     $this.refreshCreditCardType();
   });
   //this.cardNumberInput.change(PaymentezForm.handleCreditCardNumberChange);
-  this.cardNumberInput.on('paste', function() {
-    setTimeout(function() {
+  this.cardNumberInput.on('paste', function () {
+    setTimeout(function () {
       $this.refreshCreditCardNumberFormat();
       $this.refreshCreditCardType();
     }, 1);
   });
-  this.cardNumberInput.blur(function() {
+  this.cardNumberInput.blur(function () {
     $this.refreshCardNumberValidation();
   });
 };
 
-PaymentezForm.prototype.setupNameInput = function() {
+PaymentezForm.prototype.setupNameInput = function () {
   if (this.captureName) {
     this.elem.append("<div class='name-wrapper'></div>");
-    var wrapper = this.elem.find(".name-wrapper");
+    let wrapper = this.elem.find(".name-wrapper");
     wrapper.append(this.nameInput);
     wrapper.append("<div class='icon'></div>");
     wrapper.find(".icon").append(PaymentezForm.USER_SVG);
 
     // Events
-    var $this = this;
-    this.nameInput.blur(function() {
+    let $this = this;
+    this.nameInput.blur(function () {
       $this.refreshCardHolderNameValidation();
     });
   }
 };
 
-PaymentezForm.prototype.setupEmailInput = function() {
+PaymentezForm.prototype.setupEmailInput = function () {
   if (this.captureEmail) {
     this.elem.append("<div class='email-container'><div class='email-wrapper'></div></div>");
-    var wrapper = this.elem.find(".email-wrapper");
+    let wrapper = this.elem.find(".email-wrapper");
     wrapper.append(this.emailInput);
     wrapper.append("<div class='icon'></div>");
     wrapper.find(".icon").append(PaymentezForm.MAIL_SVG);
 
     // Events
-    var $this = this;
-    this.emailInput.blur(function() {
+    let $this = this;
+    this.emailInput.blur(function () {
       $this.refreshEmailValidation();
     });
   }
 };
 
-PaymentezForm.prototype.setupCellPhoneInput = function() {
+PaymentezForm.prototype.setupCellPhoneInput = function () {
   if (this.captureCellPhone) {
     this.elem.append("<div class='cellphone-container'><div class='cellphone-wrapper'></div></div>");
-    var wrapper = this.elem.find(".cellphone-wrapper");
+    let wrapper = this.elem.find(".cellphone-wrapper");
     wrapper.append(this.cellPhoneInput);
     wrapper.append("<div class='icon'></div>");
     wrapper.find(".icon").append(PaymentezForm.CELLPHONE_SVG);
 
     // Events
-    var $this = this;
-    this.cellPhoneInput.blur(function() {
+    let $this = this;
+    this.cellPhoneInput.blur(function () {
       $this.refreshCellPhoneValidation();
     });
   }
 };
 
-PaymentezForm.prototype.setupExpiryInput = function() {
+PaymentezForm.prototype.setupExpiryInput = function () {
   this.elem.append("<div class='expiry-container'><div class='expiry-wrapper'></div></div>");
-  var wrapper = this.elem.find(".expiry-wrapper");
-  var expiryInput;
+  let wrapper = this.elem.find(".expiry-wrapper");
+  let expiryInput;
 
   // Use dropdowns, It doesn't really works, not yet lml
-  if(this.EXPIRY_USE_DROPDOWNS) {
+  if (this.EXPIRY_USE_DROPDOWNS) {
     expiryInput = $("<div></div>");
 
-    var expiryMonthNew = $(
+    let expiryMonthNew = $(
       "<select>" +
-        "<option value='any' selected='' hidden=''>MM</option>" +
-        "<option value='1'>01</option>" +
-        "<option value='2'>02</option>" +
-        "<option value='3'>03</option>" +
-        "<option value='4'>04</option>" +
-        "<option value='5'>05</option>" +
-        "<option value='6'>06</option>" +
-        "<option value='7'>07</option>" +
-        "<option value='8'>08</option>" +
-        "<option value='9'>09</option>" +
-        "<option value='10'>10</option>" +
-        "<option value='11'>11</option>" +
-        "<option value='12'>12</option>" +
-        "</select>"
+      "<option value='any' selected='' hidden=''>MM</option>" +
+      "<option value='1'>01</option>" +
+      "<option value='2'>02</option>" +
+      "<option value='3'>03</option>" +
+      "<option value='4'>04</option>" +
+      "<option value='5'>05</option>" +
+      "<option value='6'>06</option>" +
+      "<option value='7'>07</option>" +
+      "<option value='8'>08</option>" +
+      "<option value='9'>09</option>" +
+      "<option value='10'>10</option>" +
+      "<option value='11'>11</option>" +
+      "<option value='12'>12</option>" +
+      "</select>"
     );
-    var expiryMonthOld = this.expiryMonthInput;
+    let expiryMonthOld = this.expiryMonthInput;
     PaymentezForm.copyAllElementAttributes(expiryMonthOld, expiryMonthNew);
     this.expiryMonthInput.remove();
     this.expiryMonthInput = expiryMonthNew;
 
-    var expiryYearNew = $("<select><option value='any' selected='' hidden=''>YY</option></select>");
-    var currentYear = parseInt(((new Date().getFullYear()).toString()).substring(2, 4));
-    for(var i = 0; i < PaymentezForm.EXPIRY_NUMBER_OF_YEARS; i++) {
+    let expiryYearNew = $("<select><option value='any' selected='' hidden=''>YY</option></select>");
+    let currentYear = parseInt(((new Date().getFullYear()).toString()).substring(2, 4));
+    for (let i = 0; i < PaymentezForm.EXPIRY_NUMBER_OF_YEARS; i++) {
       expiryYearNew.append("<option value='" + currentYear + "'>" + currentYear + "</option>");
       currentYear = (currentYear + 1) % 100;
     }
-    var expiryYearOld = this.expiryYearInput;
+    let expiryYearOld = this.expiryYearInput;
     PaymentezForm.copyAllElementAttributes(expiryYearOld, expiryYearNew);
     this.expiryYearInput.remove();
     this.expiryYearInput = expiryYearNew;
@@ -1618,11 +1630,11 @@ PaymentezForm.prototype.setupExpiryInput = function() {
   else {
     expiryInput = $("<div></div>");
     // Ensure the expiry month is hidden
-    if (this.expiryMonthInput.attr("type") != "hidden") {
+    if (this.expiryMonthInput.attr("type") !== "hidden") {
       this.expiryMonthInput.attr("type", "hidden");
     }
     // Ensure the expiry year is hidden
-    if (this.expiryYearInput.attr("type") != "hidden") {
+    if (this.expiryYearInput.attr("type") !== "hidden") {
       this.expiryYearInput.attr("type", "hidden");
     }
 
@@ -1641,25 +1653,25 @@ PaymentezForm.prototype.setupExpiryInput = function() {
     this.expiryMonthYearInput.attr("autocapitalize", "off");
 
     // Events
-    var $this = this;
-    this.expiryMonthYearInput.keydown(function(e) {
+    let $this = this;
+    this.expiryMonthYearInput.keydown(function (e) {
       PaymentezForm.handleExpiryKey(e);
-      var val = $this.expiryMonthYearInput.val();
+      let val = $this.expiryMonthYearInput.val();
 
-      if(val.length == 1 && parseInt(val) > 1 && PaymentezForm.keyIsNumber(e)) {
+      if (val.length === 1 && parseInt(val) > 1 && PaymentezForm.keyIsNumber(e)) {
         $this.expiryMonthYearInput.val(PaymentezForm.applyFormatMask("0" + val, PaymentezForm.EXPIRY_MASK));
       }
 
-      if(!$this.EXPIRY_USE_DROPDOWNS && $this.expiryMonthYearInput != null) {
+      if (!$this.EXPIRY_USE_DROPDOWNS && $this.expiryMonthYearInput != null) {
         $this.expiryMonthInput.val($this.expiryMonth());
-        $this.expiryYearInput.val(val.length == 7 ? val.substr(5,2) : null);
+        $this.expiryYearInput.val(val.length === 7 ? val.substr(5, 2) : null);
       }
     });
-    this.expiryMonthYearInput.blur(function() {
+    this.expiryMonthYearInput.blur(function () {
       $this.refreshExpiryMonthValidation();
     });
-    this.expiryMonthYearInput.on('paste', function() {
-      setTimeout(function() {
+    this.expiryMonthYearInput.on('paste', function () {
+      setTimeout(function () {
         $this.refreshExpiryMonthYearInput();
       }, 1);
     });
@@ -1674,53 +1686,62 @@ PaymentezForm.prototype.setupExpiryInput = function() {
   wrapper.find(".icon").append(PaymentezForm.CALENDAR_SVG);
 };
 
-PaymentezForm.prototype.setupCvcInput = function() {
+PaymentezForm.prototype.setupCvcInput = function () {
   this.elem.append("<div class='cvc-container'><div class='cvc-wrapper'></div></div>");
-  var wrapper = this.elem.find(".cvc-wrapper");
+  let wrapper = this.elem.find(".cvc-wrapper");
   wrapper.append(this.cvcInput);
   wrapper.append("<div class='icon'></div>");
   wrapper.find(".icon").append(PaymentezForm.LOCK_SVG);
 
   // Events
-  var $this = this;
+  let $this = this;
   this.cvcInput.keydown(PaymentezForm.filterNumberOnlyKey);
-  this.cvcInput.blur(function() {
+  this.cvcInput.blur(function () {
     $this.refreshCvcValidation();
   });
-  this.cvcInput.on('paste', function() {
-    setTimeout(function() {
+  this.cvcInput.on('paste', function () {
+    setTimeout(function () {
       $this.refreshCvc();
     }, 1);
   });
 };
 
-PaymentezForm.prototype.setupFiscalNumberInput = function() {
-  var card = this.elem.find(".card-number-wrapper");
+PaymentezForm.prototype.setupFiscalNumberInput = function () {
+  let card = this.elem.find(".card-number-wrapper");
   card.after("<div class='fiscal-number-wrapper'></div>");
-  var wrapper = this.elem.find(".fiscal-number-wrapper");
+  let wrapper = this.elem.find(".fiscal-number-wrapper");
   wrapper.append(this.fiscalNumberInput);
   wrapper.append("<div class='icon'></div>");
   wrapper.find(".icon").append(PaymentezForm.USER_SVG);
 
   // Events for fiscalNumberInput
-  var $this = this;
+  let $this = this;
   this.fiscalNumberInput.keydown(PaymentezForm.filterNumberOnlyKey);
-  this.fiscalNumberInput.blur(function() {
+  this.fiscalNumberInput.blur(function () {
     $this.refreshFiscalNumberValidation();
   });
 };
 
-PaymentezForm.prototype.setupNipInput = function() {
-  var fiscal = this.elem.find(".fiscal-number-wrapper");
+PaymentezForm.prototype.manageKeyboard = () => {
+  alert("Click in wrapperNip");
+  if (this.virtualKeyboardAdded()) {
+    this.removeVirtualKeyboard();
+  } else if (!this.virtualKeyboardAdded() && this.USE_VIRTUAL_KEYBOARD) {
+    this.addVirtualKeyboard();
+  }
+};
+
+PaymentezForm.prototype.setupNipInput = function () {
+  let fiscal = this.elem.find(".fiscal-number-wrapper");
   fiscal.after("<div class='nip-wrapper'></div>");
-  var wrapper = this.elem.find(".nip-wrapper");
+  let wrapper = this.elem.find(".nip-wrapper");
   wrapper.append(this.nipInput);
   wrapper.append("<div class='icon'></div>");
   wrapper.find(".icon").append(PaymentezForm.LOCK_SVG);
 
   // Events for nipInput
-  var $this = this;
-  wrapper.click(function() {
+  let $this = this;
+  wrapper.click(function () {
     if ($this.virtualKeyboardAdded()) {
       $this.removeVirtualKeyboard();
     } else if (!$this.virtualKeyboardAdded() && $this.USE_VIRTUAL_KEYBOARD) {
@@ -1728,19 +1749,20 @@ PaymentezForm.prototype.setupNipInput = function() {
     }
   });
   this.nipInput.keydown(PaymentezForm.filterNumberOnlyKey);
-  this.nipInput.on('paste', function() {
-    setTimeout(function() {
+  this.nipInput.on('paste', function () {
+    setTimeout(function () {
       $this.refreshNip();
     }, 1);
   });
-  this.nipInput.blur(function() {
+  this.nipInput.blur(function () {
     $this.refreshNipValidation();
   });
+
 };
 
-PaymentezForm.prototype.setupOtpValidation = function() {
-  var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".otp-wrapper", "<div class='otp-wrapper'></div>");
-  var label = PaymentezForm.detachOrCreateElement(this.elem, ".otp-label", "<label class='otp-label'></label>");
+PaymentezForm.prototype.setupOtpValidation = function () {
+  let wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".otp-wrapper", "<div class='otp-wrapper'></div>");
+  let label = PaymentezForm.detachOrCreateElement(this.elem, ".otp-label", "<label class='otp-label'></label>");
   label.attr("for", 'otp-option');
   if (Paymentez.isCheckout()) {
     label.append(PaymentezForm.OTP_PLACEHOLDER_CHECKOUT);
@@ -1752,51 +1774,51 @@ PaymentezForm.prototype.setupOtpValidation = function() {
   this.elem.append(wrapper);
 
   // Events
-  var $this = this;
-  this.otpValidation.click(function(e) {
+  let $this = this;
+  this.otpValidation.click(function (e) {
     $this.refreshValidationOption();
   });
 };
 
-PaymentezForm.prototype.setupVirtualKeyboard = function() {
-  var array = PaymentezForm.generateRandoms();
-  if(this.USE_OTP){
-    var beforeWrapper = this.elem.find(".otp-wrapper");
-  } else{
-    var beforeWrapper = this.elem.find(".nip-wrapper");
+PaymentezForm.prototype.setupVirtualKeyboard = function () {
+  let array = PaymentezForm.generateRandoms();
+  let beforeWrapper = this.elem.find(".nip-wrapper");
+
+  if (this.USE_OTP) {
+    beforeWrapper = this.elem.find(".otp-wrapper");
   }
-  
-  var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".keyboard-wrapper", "<div class='keyboard-wrapper'></div>");
-  var $this = this;
-  for (var i = 0; i < array.length; i++) {
-    var keyContainer = document.createElement('div');
+
+  let wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".keyboard-wrapper", "<div class='keyboard-wrapper'></div>");
+  let $this = this;
+  for (let i = 0; i < array.length; i++) {
+    let keyContainer = document.createElement('div');
     keyContainer.setAttribute('class', 'key-container');
-    var button = document.createElement('button');
+    let button = document.createElement('button');
     button.setAttribute('class', 'key');
-    var value = i + 1;
-    if ((i + 1) <= 9){
+    let value = i + 1;
+    if ((i + 1) <= 9) {
       button.setAttribute('value', value);
     } else {
       button.setAttribute('value', 0);
     }
-    var span = document.createElement('span');
-    var key = document.createTextNode(array[i]);
+    let span = document.createElement('span');
+    let key = document.createTextNode(array[i]);
     span.append(key);
     button.append(span);
-    button.addEventListener("click", function(e){
+    button.addEventListener("click", function (e) {
       $this.addValueToNip(this.value, this.firstChild.innerHTML);
       e.preventDefault();
     });
     keyContainer.append(button);
     wrapper.append(keyContainer);
   }
-  var cleanContainer = document.createElement('div');
+  let cleanContainer = document.createElement('div');
   cleanContainer.setAttribute('class', 'clean-container');
-  var cleanButton = document.createElement('button');
+  let cleanButton = document.createElement('button');
   cleanButton.setAttribute('class', 'clean');
-  var cleanKey = document.createTextNode('Borrar');
+  let cleanKey = document.createTextNode('Borrar');
   cleanButton.append(cleanKey);
-  cleanButton.addEventListener("click", function(e){
+  cleanButton.addEventListener("click", function (e) {
     $this.cleanNipInput();
     e.preventDefault();
   });
@@ -1805,8 +1827,8 @@ PaymentezForm.prototype.setupVirtualKeyboard = function() {
   beforeWrapper.after(wrapper);
 };
 
-PaymentezForm.prototype.setupValidationMessage = function() {
-  var wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-message", "<div class='validation-message'></div>");
+PaymentezForm.prototype.setupValidationMessage = function () {
+  let wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-message", "<div class='validation-message'></div>");
   wrapper.addClass('paymentez_dialog_success');
   if (Paymentez.isCheckout()) {
     wrapper.text(PaymentezForm.OTP_EXPLICATION_CHECKOUT);
@@ -1817,11 +1839,10 @@ PaymentezForm.prototype.setupValidationMessage = function() {
   this.elem.append(wrapper);
 };
 
-PaymentezForm.prototype.expiryMonth = function() {
-  if(!this.EXPIRY_USE_DROPDOWNS && this.expiryMonthYearInput != null) {
-    var val = this.expiryMonthYearInput.val();
-    return val.length >= 2 ? parseInt(val.substr(0,2)) : null;
-    //return (monthValue >= 1 && monthValue <= 12) ? monthValue : null;
+PaymentezForm.prototype.expiryMonth = function () {
+  if (!this.EXPIRY_USE_DROPDOWNS && this.expiryMonthYearInput != null) {
+    let val = this.expiryMonthYearInput.val();
+    return val.length >= 2 ? parseInt(val.substr(0, 2)) : null;
   }
   return null;
 };
@@ -1829,23 +1850,25 @@ PaymentezForm.prototype.expiryMonth = function() {
 /**
  * Refresh whether the expiry month is valid (update display to reflect)
  */
-PaymentezForm.prototype.refreshExpiryMonthValidation = function() {
+PaymentezForm.prototype.refreshExpiryMonthValidation = function () {
   if (this.expiryContainerAdded()) {
-    if(PaymentezForm.isExpiryValid(this.getExpiryMonth(), this.getExpiryYear())){
+    if (PaymentezForm.isExpiryValid(this.getExpiryMonth(), this.getExpiryYear())) {
       this.setExpiryMonthAsValid();
       return true;
-    }else{
+    } else {
       this.setExpiryMonthAsInvalid();
       return false;
     }
-  } else { return true; }
+  } else {
+    return true;
+  }
 };
 
 /**
  * Update the display to highlight the expiry month as valid.
  */
-PaymentezForm.prototype.setExpiryMonthAsValid = function() {
-  if(this.EXPIRY_USE_DROPDOWNS) {
+PaymentezForm.prototype.setExpiryMonthAsValid = function () {
+  if (this.EXPIRY_USE_DROPDOWNS) {
     this.expiryMonthInput.parent().removeClass("has-error");
   } else {
     this.expiryMonthYearInput.parent().removeClass("has-error");
@@ -1855,7 +1878,7 @@ PaymentezForm.prototype.setExpiryMonthAsValid = function() {
 /**
  * Update the display to highlight the expiry month as invalid.
  */
-PaymentezForm.prototype.setExpiryMonthAsInvalid = function() {
+PaymentezForm.prototype.setExpiryMonthAsInvalid = function () {
   if (this.EXPIRY_USE_DROPDOWNS) {
     this.expiryMonthInput.parent().addClass("has-error");
   } else {
@@ -1872,8 +1895,8 @@ PaymentezForm.prototype.setExpiryMonthAsInvalid = function() {
  * @param attributeName
  * @returns {boolean}
  */
-PaymentezForm.elementHasAttribute = function(element, attributeName) {
-  var attr = $(element).attr(attributeName);
+PaymentezForm.elementHasAttribute = function (element, attributeName) {
+  let attr = $(element).attr(attributeName);
   return typeof attr !== typeof undefined && attr !== false;
 };
 
@@ -1885,8 +1908,8 @@ PaymentezForm.elementHasAttribute = function(element, attributeName) {
  * @param html
  * @returns {*}
  */
-PaymentezForm.detachOrCreateElement = function(parentElement, selector, html) {
-  var element = parentElement.find(selector);
+PaymentezForm.detachOrCreateElement = function (parentElement, selector, html) {
+  let element = parentElement.find(selector);
   if (element[0]) {
     element.detach();
   } else {
@@ -1901,7 +1924,7 @@ PaymentezForm.detachOrCreateElement = function(parentElement, selector, html) {
  * @param expiryMonth
  * @returns {boolean}
  */
-PaymentezForm.isValidMonth = function(expiryMonth) {
+PaymentezForm.isValidMonth = function (expiryMonth) {
   return (expiryMonth >= 1 && expiryMonth <= 12);
 };
 
@@ -1912,12 +1935,12 @@ PaymentezForm.isValidMonth = function(expiryMonth) {
  * @param year
  * @returns {boolean}
  */
-PaymentezForm.isExpiryValid = function(month, year) {
-  var today = new Date();
-  var currentMonth = (today.getMonth() + 1);
-  var currentYear = "" + today.getFullYear();
+PaymentezForm.isExpiryValid = function (month, year) {
+  let today = new Date();
+  let currentMonth = (today.getMonth() + 1);
+  let currentYear = "" + today.getFullYear();
 
-  if (("" + year).length == 2) {
+  if (("" + year).length === 2) {
     year = currentYear.substring(0, 2) + "" + year;
   }
 
@@ -1926,6 +1949,6 @@ PaymentezForm.isExpiryValid = function(month, year) {
   month = parseInt(month);
   year = parseInt(year);
 
-  return PaymentezForm.isValidMonth(month) && ((year > currentYear) || (year == currentYear && month >= currentMonth));
+  return PaymentezForm.isValidMonth(month) && ((year > currentYear) || (year === currentYear && month >= currentMonth));
 };
 
