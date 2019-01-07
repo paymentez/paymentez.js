@@ -165,20 +165,44 @@ For example if you want to render the form in English and add a custom class to 
 ### Select Fields
 You can determinate the fields to show on your form.
 
-| Field                   | Description                                    |
-| :---------------------- | :---------------------------------------------- |
-| data-capture-name       | Card Holder Name                                |
-| data-capture-email      | User Email                                      |
-| data-capture-cellphone  | User Cellphone                                  |
-| data-icon-colour        | Icons color                                     |
-| data-use-dropdowns      | Use dropdowns to set the Card Expiration Date   |
+| Field                             | Description                                                |
+| :-------------------------------- | :--------------------------------------------------------- |
+| data-capture-name                 | Card Holder Name                                           |
+| data-capture-email                | User Email                                                 |
+| data-capture-cellphone            | User Cellphone                                             |
+| data-icon-colour                  | Icons color                                                |
+| data-use-dropdowns                | Use dropdowns to set the Card Expiration Date              |
+| data-exclusive-types              | Define allowed card types                                  |
+| data-invalid-card-type-message    | Define a custom message to show for invalid card types     |
 
 The 'data-use-dropdowns' can solve an issue with the expiration mask in not so recent mobiles.
 
 Integrate in the form is so simple like this
 ```html
-<div class="paymentez-form" id="my-card" data-capture-name="true" data-capture-email="true" data-capture-cellphone="true" data-icon-colour="#569B29" data-use-dropdowns="true">
+<div class="paymentez-form"
+id="my-card"
+data-capture-name="true"
+data-capture-email="true"
+data-capture-cellphone="true"
+data-icon-colour="#569B29"
+data-use-dropdowns="true">
 ```
+
+### Specific the card types
+If you want specify the card types allowed in the form, like Exito or Alkosto. You can do something like next example.
+when a card type not allowed is seted, the form is reset, block the inputs and show a message, the default message is
+*Tipo de tarjeta invalida para está operación.*
+
+```html
+<div class="paymentez-form"
+id="my-card"
+data-capture-name="true"
+data-exclusive-types="ex,ak"
+data-invalid-card-type-message="Tarjeta invalida. Por favor ingresa una tarjeta Exito / Alkosto."
+>
+```
+
+Follow this link to see all [card types](https://paymentez.github.io/api-doc/#card-brands) allowed by Paymentez.
 
 
 ### Reading Values
@@ -201,14 +225,9 @@ var cardType = myCard.PaymentezForm('cardType');
 var name = myCard.PaymentezForm('name');
 var expiryMonth = myCard.PaymentezForm('expiryMonth');
 var expiryYear = myCard.PaymentezForm('expiryYear');
-var cvc = myCard.PaymentezForm('cvc');
 var fiscalNumber = myCard.PaymentezForm('fiscalNumber');
 var validationOption = myCard.PaymentezForm('validationOption');
 ```
-
-
-
-
 
 
 ### Functions
@@ -230,7 +249,6 @@ The functions available are listed below:
 | name              | Get the name entered                           |
 | expiryMonth       | Get the expiry month entered                   |
 | expiryYear        | Get the expiry year entered                    |
-| cvc               | Get the CVC entered                            |
 | fiscalNumber      | Get the fiscal number                          |
 | validationOption  | Get the validation option                      |
 
@@ -252,8 +270,6 @@ If the card type cannot be determined an empty string will be given instead.
 | Visa                   |
 | Visa Electron          |
 | Exito                  |
-
-
 
 
 

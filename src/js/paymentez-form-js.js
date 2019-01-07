@@ -11,12 +11,12 @@ PaymentezForm.prototype.constructor = PaymentezForm;
 
 function PaymentezForm(elem) {
   this.elem = jQuery(elem);
-  const current_data = this.elem.children("div");
   this.cardType = '';
   this.numberBin = '';
   this.nip = '';
   this.USE_OTP = false;
   this.brand_name = '';
+  this.isBloqued = false;
 
   // Validate if its displaying in a mobile device
   this.IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -27,37 +27,11 @@ function PaymentezForm(elem) {
   this.captureName = this.elem.data("capture-name") ? this.elem.data("capture-name") : false;
   this.iconColour = this.elem.data("icon-colour") ? this.elem.data("icon-colour") : false;
   this.EXPIRY_USE_DROPDOWNS = this.elem.data("use-dropdowns") ? this.elem.data("use-dropdowns") : false;
+  this.exclusiveTypes = this.elem.data("exclusive-types") ? this.elem.data("exclusive-types").split(",") : false;
+  this.invalidCardTypeMessage = this.elem.data("invalid-card-type-message") ? this.elem.data("invalid-card-type-message") : false;
 
-  // Initialise
-  this.cvcLenght = 3;
-  this.nipLenght = 4;
-  this.initEmailInput();
-  this.initCellPhoneInput();
-  this.initNameInput();
-  this.initCardNumberInput();
-  this.initExpiryMonthInput();
-  this.initExpiryYearInput();
-  this.initCvcInput();
+  this.initForm();
 
-  this.elem.empty();
-
-  // Setup display
-  this.setupEmailInput();
-  this.setupCellPhoneInput();
-  this.setupNameInput();
-  this.setupCardNumberInput();
-  this.setupExpiryInput();
-  this.setupCvcInput();
-
-  this.elem.append(current_data);
-
-  // Set icon colour
-  if (this.iconColour) {
-    this.setIconColour(this.iconColour);
-  }
-  // --- --- --- --- --- --- --- --- --- ---
-
-  this.refreshCreditCardType();
 }
 
 PaymentezForm.KEYS = {
@@ -101,6 +75,7 @@ PaymentezForm.OTP_EXPLICATION_ADD = "Escogiendo esta opción se va a generar una
   "validarás tu tarjeta. Haz clic en “Guardar” para continuar con el proceso.";
 PaymentezForm.OTP_EXPLICATION_CHECKOUT = "Escogiendo esta opción se va a generar una Clave Temporal única, con la " +
   "que validarás tu compra.";
+PaymentezForm.INVALID_CARD_TYPE_MESSAGE = "Tipo de tarjeta invalida para está operación.";
 
 PaymentezForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
   'x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" ' +
@@ -395,9 +370,25 @@ PaymentezForm.prototype.successCallback = function (objResponse, form) {
   // Set card type
   form.cardType = objResponse.card_type;
   form.brand_name = objResponse.brand_name;
-
   // Set card type icon
   $(".card-type-icon").css("background", "url(" + objResponse.url_logo + ")");
+
+  // Validate if card type is valid.
+  if (form.exclusiveTypes) {
+    let is_valid_type = false;
+    form.exclusiveTypes.forEach(function (type) {
+      if (form.cardType === type) {
+        is_valid_type = true;
+      }
+    });
+
+    if (!is_valid_type && !form.isBloqued) {
+      form.blockForm(form.getCardNumber());
+      return
+    } else if (is_valid_type && form.isBloqued) {
+      form.unBlockForm(form.getCardNumber());
+    }
+  }
 
   // // Set card mask
   form.creditCardNumberMask = objResponse.card_mask;
@@ -965,8 +956,8 @@ PaymentezForm.prototype.otpWrapperAdded = function () {
  * @returns {boolean}
  */
 PaymentezForm.prototype.validationMessageAdded = function () {
-  let nipWrapper = this.elem.find(".validation-message");
-  return nipWrapper.length >= 1;
+  let validactionMessage = this.elem.find(".validation-message");
+  return validactionMessage.length >= 1;
 };
 
 /**
@@ -975,8 +966,18 @@ PaymentezForm.prototype.validationMessageAdded = function () {
  * @returns {boolean}
  */
 PaymentezForm.prototype.virtualKeyboardAdded = function () {
-  let nipWrapper = this.elem.find(".keyboard-wrapper");
-  return nipWrapper.length >= 1;
+  let keyboardWrapper = this.elem.find(".keyboard-wrapper");
+  return keyboardWrapper.length >= 1;
+};
+
+/**
+ * Validate if the message is displayed
+ *
+ * @returns {boolean}
+ */
+PaymentezForm.prototype.warningMessageAdded = function () {
+  let warningMessage = this.elem.find(".warning-message");
+  return warningMessage.length >= 1;
 };
 
 /**
@@ -1105,7 +1106,7 @@ PaymentezForm.prototype.getValidationOption = function () {
 /**
  * Get the CVC number inputted.
  *
- * @returns {number}
+ * @returns {string}
  */
 PaymentezForm.prototype.getCvc = function () {
   if (this.getValidationOption() === PaymentezForm.AUTH_CVC) {
@@ -1129,6 +1130,86 @@ PaymentezForm.prototype.getNip = function () {
   } else {
     return "";
   }
+};
+
+// --- --- --- --- --- --- --- --- --- --- ---
+
+/**
+ * Init form
+ *
+ * @returns {string}
+ */
+PaymentezForm.prototype.initForm = function () {
+  this.elem.empty();
+  const current_data = this.elem.children("div");
+
+  // initialize
+  this.cvcLenght = 3;
+  this.nipLenght = 4;
+  this.initEmailInput();
+  this.initCellPhoneInput();
+  this.initNameInput();
+  this.initCardNumberInput();
+  this.initExpiryMonthInput();
+  this.initExpiryYearInput();
+  this.initCvcInput();
+
+  // Setup display
+  this.setupEmailInput();
+  this.setupCellPhoneInput();
+  this.setupNameInput();
+  this.setupCardNumberInput();
+  this.setupExpiryInput();
+  this.setupCvcInput();
+
+  this.elem.append(current_data);
+
+  this.refreshCreditCardType();
+};
+
+/**
+ * Reset the form and disable the initial inputs
+ *
+ * @returns {string}
+ */
+PaymentezForm.prototype.blockForm = function (numberBin) {
+  this.isBloqued = true;
+  // Reset the form
+  this.initForm();
+
+  // Setup display
+  this.emailInput.attr("disabled", "disabled");
+  this.cellPhoneInput.attr("disabled", "disabled");
+  this.nameInput.attr("disabled", "disabled");
+  if (this.EXPIRY_USE_DROPDOWNS) {
+    this.expiryMonthInput.attr("disabled", "disabled");
+    this.expiryYearInput.attr("disabled", "disabled");
+  } else {
+    this.expiryMonthYearInput.attr("disabled", "disabled");
+  }
+  this.cvcInput.attr("disabled", "disabled");
+
+  this.cardNumberInput.val(numberBin);
+  this.refreshCreditCardNumberFormat();
+  this.refreshCreditCardType();
+  this.addWarningMessage();
+};
+
+
+/**
+ * Reset the form to enable the initial inputs
+ *
+ * @returns {string}
+ */
+PaymentezForm.prototype.unBlockForm = function (numberBin) {
+  this.isBloqued = false;
+
+  // Setup display
+  this.initForm();
+  this.numberBin = '';
+  this.cardNumberInput.val(numberBin);
+  this.refreshCreditCardNumberFormat();
+  this.refreshCreditCardType();
 };
 
 // --- --- --- --- --- --- --- --- --- --- ---
@@ -1288,6 +1369,18 @@ PaymentezForm.prototype.addValidationMessage = function () {
 PaymentezForm.prototype.removeValidationMessage = function () {
   if (this.validationMessageAdded()) {
     this.elem.find(".validation-message").remove();
+  }
+};
+
+PaymentezForm.prototype.addWarningMessage = function () {
+  if (!this.warningMessageAdded()) {
+    this.setupWarningMessage();
+  }
+};
+
+PaymentezForm.prototype.removeWarningMessage = function () {
+  if (this.warningMessageAdded()) {
+    this.elem.find(".warning-message").remove();
   }
 };
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -1499,6 +1592,13 @@ PaymentezForm.prototype.initOtpValidation = function () {
   this.otpValidation = PaymentezForm.detachOrCreateElement(this.elem, ".otp", "<input class='otp' />");
   this.otpValidation.attr("type", "checkbox");
   this.otpValidation.attr("id", "otp-option");
+};
+
+/**
+ * Initialize the div to messages
+ */
+PaymentezForm.prototype.initOtpValidation = function () {
+  this.otpValidation = PaymentezForm.detachOrCreateElement(this.elem, ".messages", "<div class='.messages' />");
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -1722,15 +1822,6 @@ PaymentezForm.prototype.setupFiscalNumberInput = function () {
   });
 };
 
-PaymentezForm.prototype.manageKeyboard = () => {
-  alert("Click in wrapperNip");
-  if (this.virtualKeyboardAdded()) {
-    this.removeVirtualKeyboard();
-  } else if (!this.virtualKeyboardAdded() && this.USE_VIRTUAL_KEYBOARD) {
-    this.addVirtualKeyboard();
-  }
-};
-
 PaymentezForm.prototype.setupNipInput = function () {
   let fiscal = this.elem.find(".fiscal-number-wrapper");
   fiscal.after("<div class='nip-wrapper'></div>");
@@ -1836,6 +1927,18 @@ PaymentezForm.prototype.setupValidationMessage = function () {
     wrapper.text(PaymentezForm.OTP_EXPLICATION_ADD);
   }
   this.validationMessage = wrapper;
+  this.elem.append(wrapper);
+};
+
+PaymentezForm.prototype.setupWarningMessage = function () {
+  let wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".warning-message", "<div class='warning-message'></div>");
+  wrapper.addClass('paymentez_dialog_warning');
+  if (this.invalidCardTypeMessage) {
+    wrapper.text(this.invalidCardTypeMessage);
+  } else {
+    wrapper.text(PaymentezForm.INVALID_CARD_TYPE_MESSAGE);
+  }
+  this.warningMessage = wrapper;
   this.elem.append(wrapper);
 };
 
