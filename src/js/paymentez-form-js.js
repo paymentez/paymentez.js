@@ -11,6 +11,7 @@ PaymentezForm.prototype.constructor = PaymentezForm;
 
 function PaymentezForm(elem) {
   this.elem = jQuery(elem);
+  this.current_data = this.elem.children("div");
   this.cardType = '';
   this.numberBin = '';
   this.nip = '';
@@ -30,8 +31,35 @@ function PaymentezForm(elem) {
   this.exclusiveTypes = this.elem.data("exclusive-types") ? this.elem.data("exclusive-types").split(",") : false;
   this.invalidCardTypeMessage = this.elem.data("invalid-card-type-message") ? this.elem.data("invalid-card-type-message") : false;
 
-  this.initForm();
+  // initialize
+  this.cvcLenght = 3;
+  this.nipLenght = 4;
+  this.initEmailInput();
+  this.initCellPhoneInput();
+  this.initNameInput();
+  this.initCardNumberInput();
+  this.initExpiryMonthInput();
+  this.initExpiryYearInput();
+  this.initCvcInput();
 
+  this.elem.empty();
+
+  // Setup display
+  this.setupEmailInput();
+  this.setupCellPhoneInput();
+  this.setupNameInput();
+  this.setupCardNumberInput();
+  this.setupExpiryInput();
+  this.setupCvcInput();
+
+  this.elem.append(this.current_data);
+
+  // Set icon colour
+  if (this.iconColour) {
+    this.setIconColour(this.iconColour);
+  }
+
+  this.refreshCreditCardType();
 }
 
 PaymentezForm.KEYS = {
@@ -361,38 +389,21 @@ PaymentezForm.prototype.cardTypeFromNumberBin = function (number) {
   let number_bin = number.replace(" ", "").substring(0, 6);
   if (number >= 6 && this.numberBin !== number_bin) {
     this.numberBin = number_bin;
-    Paymentez.getBinInformation(number_bin, this, this.successCallback, () => {
+    Paymentez.getBinInformation(number_bin, this, this.successCallback, (error) => {
     });
   }
 };
 
 PaymentezForm.prototype.successCallback = function (objResponse, form) {
   // Set card type
-  form.cardType = objResponse.card_type;
-  form.brand_name = objResponse.brand_name;
+  form.cardType = objResponse.card_type.length > 0 ? objResponse.card_type : '';
+  form.brand_name = objResponse.brand_name.length > 0 ? objResponse.brand_name : '';
   // Set card type icon
   $(".card-type-icon").css("background", "url(" + objResponse.url_logo + ")");
 
-  // Validate if card type is valid.
-  if (form.exclusiveTypes) {
-    let is_valid_type = false;
-    form.exclusiveTypes.forEach(function (type) {
-      if (form.cardType === type) {
-        is_valid_type = true;
-      }
-    });
-
-    if (!is_valid_type && !form.isBloqued) {
-      form.blockForm(form.getCardNumber());
-      return
-    } else if (is_valid_type && form.isBloqued) {
-      form.unBlockForm(form.getCardNumber());
-    }
-  }
-
   // // Set card mask
-  form.creditCardNumberMask = objResponse.card_mask;
-  form.cardNumberInput.attr("maxlength", objResponse.card_mask.length);
+  form.creditCardNumberMask = objResponse.card_mask ? objResponse.card_mask : "XXXX XXXX XXXX XXXX";
+  form.cardNumberInput.attr("maxlength", form.creditCardNumberMask.length);
 
   form.setInstallmentsOptions(objResponse.installments_options);
 
@@ -415,6 +426,21 @@ PaymentezForm.prototype.successCallback = function (objResponse, form) {
     form.cvcMask = "X".repeat(form.cvcLenght);
   }
 
+  // Validate if card type is valid.
+  if (form.exclusiveTypes) {
+    let is_valid_type = false;
+    form.exclusiveTypes.forEach(function (type) {
+      if (form.cardType === type) {
+        is_valid_type = true;
+      }
+    });
+
+    if (!is_valid_type) {
+      form.blockForm();
+    } else if (is_valid_type && form.isBloqued) {
+      form.unBlockForm();
+    }
+  }
 };
 
 /**
@@ -1135,63 +1161,49 @@ PaymentezForm.prototype.getNip = function () {
 // --- --- --- --- --- --- --- --- --- --- ---
 
 /**
- * Init form
- *
- * @returns {string}
- */
-PaymentezForm.prototype.initForm = function () {
-  this.elem.empty();
-  const current_data = this.elem.children("div");
-
-  // initialize
-  this.cvcLenght = 3;
-  this.nipLenght = 4;
-  this.initEmailInput();
-  this.initCellPhoneInput();
-  this.initNameInput();
-  this.initCardNumberInput();
-  this.initExpiryMonthInput();
-  this.initExpiryYearInput();
-  this.initCvcInput();
-
-  // Setup display
-  this.setupEmailInput();
-  this.setupCellPhoneInput();
-  this.setupNameInput();
-  this.setupCardNumberInput();
-  this.setupExpiryInput();
-  this.setupCvcInput();
-
-  this.elem.append(current_data);
-
-  this.refreshCreditCardType();
-};
-
-/**
  * Reset the form and disable the initial inputs
  *
  * @returns {string}
  */
-PaymentezForm.prototype.blockForm = function (numberBin) {
+PaymentezForm.prototype.blockForm = function () {
   this.isBloqued = true;
-  // Reset the form
-  this.initForm();
 
   // Setup display
+  this.emailInput.val("");
   this.emailInput.attr("disabled", "disabled");
+
+  this.cellPhoneInput.val("");
   this.cellPhoneInput.attr("disabled", "disabled");
+
+  this.nameInput.val("");
   this.nameInput.attr("disabled", "disabled");
+
   if (this.EXPIRY_USE_DROPDOWNS) {
+    this.expiryMonthInput.val("");
     this.expiryMonthInput.attr("disabled", "disabled");
+
+    this.expiryYearInput.val("");
     this.expiryYearInput.attr("disabled", "disabled");
   } else {
+    this.expiryMonthYearInput.val("");
     this.expiryMonthYearInput.attr("disabled", "disabled");
   }
+
+  this.cvcInput.val("");
   this.cvcInput.attr("disabled", "disabled");
 
-  this.cardNumberInput.val(numberBin);
-  this.refreshCreditCardNumberFormat();
-  this.refreshCreditCardType();
+  if (this.fiscalNumberAdded()) {
+    this.fiscalNumberInput.val("");
+    this.fiscalNumberInput.attr("disabled", "disabled");
+  }
+
+  if (this.nipWrapperAdded()) {
+    this.cleanNipInput();
+    this.nipInput.attr("disabled", "disabled");
+  }
+
+  this.cardNumberInput.parent().addClass("has-error");
+
   this.addWarningMessage();
 };
 
@@ -1201,15 +1213,29 @@ PaymentezForm.prototype.blockForm = function (numberBin) {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.unBlockForm = function (numberBin) {
+PaymentezForm.prototype.unBlockForm = function () {
   this.isBloqued = false;
 
   // Setup display
-  this.initForm();
-  this.numberBin = '';
-  this.cardNumberInput.val(numberBin);
-  this.refreshCreditCardNumberFormat();
-  this.refreshCreditCardType();
+  this.emailInput.removeAttr("disabled");
+  this.cellPhoneInput.removeAttr("disabled");
+  this.nameInput.removeAttr("disabled");
+  if (this.EXPIRY_USE_DROPDOWNS) {
+    this.expiryMonthInput.removeAttr("disabled");
+    this.expiryYearInput.removeAttr("disabled");
+  } else {
+    this.expiryMonthYearInput.removeAttr("disabled");
+  }
+  this.cvcInput.removeAttr("disabled");
+  if (this.fiscalNumberAdded()) {
+    this.fiscalNumberInput.removeAttr("disabled");
+  }
+  if (this.nipWrapperAdded()) {
+    this.cleanNipInput();
+    this.nipInput.removeAttr("disabled");
+  }
+  this.cardNumberInput.parent().removeClass("has-error");
+  this.removeWarningMessage();
 };
 
 // --- --- --- --- --- --- --- --- --- --- ---

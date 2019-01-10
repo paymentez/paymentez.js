@@ -7,24 +7,24 @@ PaymentezJS is a library that allows developers to easily connect to the Payment
 
 ## Installation
 
-You will need to include jQuery and both `paymentez.min.js` and `paymentez.min.css` into your web page.
+You will need to include jQuery and both `paymentez.min.js` and `paymentez.min.css` into your webpage specifying "UTF-8" like charset.
 
 For staging enviroment:
 
 ```html
-<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js" charset="UTF-8"></script>
 
 <link href="https://cdn.paymentez.com/js/ccapi/stg/paymentez.min.css" rel="stylesheet" type="text/css" />
-<script src="https://cdn.paymentez.com/js/ccapi/stg/paymentez.min.js"></script>
+<script src="https://cdn.paymentez.com/js/ccapi/stg/paymentez.min.js" charset="UTF-8"></script>
 ```
 
 For production environment:
 
 ```html
-<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js" charset="UTF-8"></script>
 
 <link href="https://cdn.paymentez.com/js/1.0.1/paymentez.min.css" rel="stylesheet" type="text/css" />
-<script src="https://cdn.paymentez.com/js/1.0.1/paymentez.min.js"></script>
+<script src="https://cdn.paymentez.com/js/1.0.1/paymentez.min.js" charset="UTF-8"></script>
 ```
 
 
