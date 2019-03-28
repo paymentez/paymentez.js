@@ -18,6 +18,7 @@ function PaymentezForm(elem) {
   this.USE_OTP = false;
   this.brand_name = '';
   this.isBloqued = false;
+  this.useLunh = true;
 
   // Validate if its displaying in a mobile device
   this.IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -389,17 +390,20 @@ PaymentezForm.prototype.cardTypeFromNumberBin = function (number) {
   let number_bin = number.replace(" ", "").substring(0, 6);
   if (number >= 6 && this.numberBin !== number_bin) {
     this.numberBin = number_bin;
-    Paymentez.getBinInformation(number_bin, this, this.successCallback, (error) => {
+    Paymentez.getBinInformation(number_bin, this, this.successCallback, function (error) {
     });
   }
 };
 
 PaymentezForm.prototype.successCallback = function (objResponse, form) {
+  // Set luhn flag
+  form.useLunh = objResponse.use_luhn;
+
   // Set card type
   form.cardType = objResponse.card_type.length > 0 ? objResponse.card_type : '';
   form.brand_name = objResponse.brand_name.length > 0 ? objResponse.brand_name : '';
   // Set card type icon
-  $(".card-type-icon").css("background", "url(" + objResponse.url_logo + ")");
+  $(".card-type-icon").css("background-image", "url(" + objResponse.url_logo + ")");
 
   // // Set card mask
   form.creditCardNumberMask = objResponse.card_mask ? objResponse.card_mask : "XXXX XXXX XXXX XXXX";
@@ -876,9 +880,7 @@ PaymentezForm.prototype.isCellPhoneValid = function () {
  */
 PaymentezForm.prototype.isCardNumberValid = function () {
   let value = this.getCardNumber();
-  let type = this.cardType;
-  // If the card type is Exito or Alkosto, don't validate with Luhn
-  if (type === 'ex' || type === 'ak') return true;
+  if (!this.useLunh) return true;
   if (value === '') return false;
   if (/[^0-9-\s]+/.test(value)) return false;
 
