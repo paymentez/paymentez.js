@@ -8,6 +8,14 @@
   -webkit-text-security: disc;
 }
 
+.paymentez-form .nip-wrapper .nip:read-only {
+  background-color: #eeeeee !important;
+}
+
+.paymentez-form .nip-wrapper .nip:-moz-read-only {
+  background-color: #eeeeee !important;
+}
+
 @media screen and (max-width: 600px) {
   .paymentez-form .nip-wrapper {
     width: 100%;

@@ -23,9 +23,6 @@
     expiryYear: function() {
       return this.data("paymentezform").getExpiryYear();
     },
-    cvc: function() {
-      return this.data("paymentezform").getCvc();
-    },
     fiscalNumber: function() {
       return this.data("paymentezform").getFiscalNumber();
     },
