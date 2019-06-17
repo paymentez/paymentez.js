@@ -1,7 +1,13 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   grunt.initConfig({
 
-
+    connect: {
+      server: {
+        options: {
+          port: 9001
+        }
+      }
+    },
     //
     // CSS Minify
     //
@@ -27,7 +33,7 @@ module.exports = function(grunt) {
       },
       js: {
         files: {
-          "paymentez.min.js": [ "src/js/**/*.js" ]
+          "paymentez.min.js": ["src/js/**/*.js"]
         }
       }
     },
@@ -68,12 +74,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-uglify-es');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
 
   //
   // Task definition
   //
-  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('default', ['connect', 'watch']);
   grunt.registerTask('build', ['cssmin:css', 'uglify:js']);
 
 };
