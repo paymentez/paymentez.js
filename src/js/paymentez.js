@@ -25,7 +25,6 @@ xhr.onload = function() {
   if (xhr.status >= 200 && xhr.status < 300) {
     var response = JSON.parse(xhr.responseText);
     Paymentez.auth_timestamp = String(response.unixtime);
-    console.log("success!", Paymentez.auth_timestamp);
   }
 };
 
