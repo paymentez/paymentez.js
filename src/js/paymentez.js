@@ -59,7 +59,7 @@ Paymentez.getAuthToken = function(paymentez_client_app_code, app_client_key) {
     ";" +
     AUTH_TIMESTAMP_SERVER +
     ";" +
-    Paymentez.getUniqToken(auth_timestamp, app_client_key);
+    Paymentez.getUniqToken(AUTH_TIMESTAMP_SERVER, app_client_key);
   return btoa(string_auth_token);
 };
 
@@ -137,7 +137,7 @@ Paymentez.createToken = function(
     };
     xmlhttp.send(JSON.stringify(createTokenRequest));
   };
-
+  initFunction = initFunction.bind(this);
   _getTime(initFunction);
 };
 
@@ -319,8 +319,6 @@ Paymentez.getBinInformation = function(
     };
     xmlhttp.send();
   };
-
   initFunction = initFunction.bind(this);
-
   _getTime(initFunction);
 };

@@ -106,7 +106,7 @@
 .paymentez-form .has-error select:focus,
 .paymentez-form .has-error input,
 .paymentez-form .has-error input:focus {
-  border-color: #F64B2F;
+  border-color: #F64B2F !important;
   box-shadow: none;
 }
 
