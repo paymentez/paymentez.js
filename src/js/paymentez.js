@@ -16,20 +16,23 @@ Paymentez.SERVER_STG_URL = "https://ccapi-stg.paymentez.com";
 Paymentez.SERVER_QA_URL = "https://ccapi-qa.paymentez.com";
 Paymentez.SERVER_PROD_URL = "https://ccapi.paymentez.com";
 
-Paymentez.TIME_STAMP_SERVER =
+var TIME_STAMP_SERVER =
   "https://cors-anywhere.herokuapp.com/" + "http://worldtimeapi.org/api/ip";
-Paymentez.auth_timestamp = "" + String(new Date().getTime());
+var AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
 
-var xhr = new XMLHttpRequest();
-xhr.onload = function() {
-  if (xhr.status >= 200 && xhr.status < 300) {
-    var response = JSON.parse(xhr.responseText);
-    Paymentez.auth_timestamp = String(response.unixtime);
-  }
-};
+function _getTime(callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.onload = function() {
+    if (xhr.status >= 200 && xhr.status < 300) {
+      var response = JSON.parse(xhr.responseText);
+      AUTH_TIMESTAMP_SERVER = String(response.unixtime);
+    }
+    callback();
+  };
 
-xhr.open('GET', Paymentez.TIME_STAMP_SERVER);
-xhr.send();
+  xhr.open("GET", TIME_STAMP_SERVER);
+  xhr.send();
+}
 
 function Paymentez() {}
 
@@ -54,7 +57,7 @@ Paymentez.getAuthToken = function(paymentez_client_app_code, app_client_key) {
   let string_auth_token =
     paymentez_client_app_code +
     ";" +
-    Paymentez.auth_timestamp +
+    AUTH_TIMESTAMP_SERVER +
     ";" +
     Paymentez.getUniqToken(auth_timestamp, app_client_key);
   return btoa(string_auth_token);
@@ -95,43 +98,47 @@ Paymentez.createToken = function(
   successCallback,
   erroCallback
 ) {
-  let SERVER_URL = this.getServerURL();
-  let xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("POST", SERVER_URL + "/v2/card/add", true);
-  xmlhttp.setRequestHeader("Content-Type", "application/json");
-  xmlhttp.setRequestHeader(
-    "Auth-Token",
-    Paymentez.getAuthToken(
-      Paymentez.PAYMENTEZ_CLIENT_APP_CODE,
-      Paymentez.PAYMENTEZ_CLIENT_APP_KEY
-    )
-  );
+  var initFunction = function() {
+    let SERVER_URL = this.getServerURL();
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", SERVER_URL + "/v2/card/add", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.setRequestHeader(
+      "Auth-Token",
+      Paymentez.getAuthToken(
+        Paymentez.PAYMENTEZ_CLIENT_APP_CODE,
+        Paymentez.PAYMENTEZ_CLIENT_APP_KEY
+      )
+    );
 
-  xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState === XMLHttpRequest.DONE) {
-      // XMLHttpRequest.DONE == 4
-      try {
-        let objResponse = JSON.parse(xmlhttp.responseText);
-        if (xmlhttp.status === 200) {
-          successCallback(objResponse);
-        } else if (xmlhttp.status === 400) {
-          erroCallback(objResponse);
-        } else {
-          erroCallback(objResponse);
-        }
-      } catch (e) {
-        let server_error = {
-          error: {
-            type: "Server Error",
-            help: "Server Error",
-            description: "Server Error"
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+        // XMLHttpRequest.DONE == 4
+        try {
+          let objResponse = JSON.parse(xmlhttp.responseText);
+          if (xmlhttp.status === 200) {
+            successCallback(objResponse);
+          } else if (xmlhttp.status === 400) {
+            erroCallback(objResponse);
+          } else {
+            erroCallback(objResponse);
           }
-        };
-        erroCallback(server_error);
+        } catch (e) {
+          let server_error = {
+            error: {
+              type: "Server Error",
+              help: "Server Error",
+              description: "Server Error"
+            }
+          };
+          erroCallback(server_error);
+        }
       }
-    }
+    };
+    xmlhttp.send(JSON.stringify(createTokenRequest));
   };
-  xmlhttp.send(JSON.stringify(createTokenRequest));
+
+  _getTime(initFunction);
 };
 
 Paymentez.dataCollector = function(session_id) {
@@ -268,46 +275,52 @@ Paymentez.getBinInformation = function(
   successCallback,
   erroCallback
 ) {
-  let xmlhttp = new XMLHttpRequest();
-  if (this.isCheckout()) {
-    let reference = $("#reference").val();
-    let url_bin =
-      "/v2/card_bin/intra/" + number_bin + "/?reference=" + reference;
-    xmlhttp.open("GET", url_bin, true);
-  } else {
-    let SERVER_URL = this.getServerURL();
-    let url_bin = SERVER_URL + "/v2/card_bin/" + number_bin;
-    xmlhttp.open("GET", url_bin, true);
-    xmlhttp.setRequestHeader(
-      "Auth-Token",
-      this.getAuthToken(
-        this.PAYMENTEZ_CLIENT_APP_CODE,
-        this.PAYMENTEZ_CLIENT_APP_KEY
-      )
-    );
-  }
-  xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState === XMLHttpRequest.DONE) {
-      try {
-        let objResponse = JSON.parse(xmlhttp.responseText);
-        if (xmlhttp.status === 200) {
-          successCallback(objResponse, form);
-        } else if (xmlhttp.status === 400) {
-          erroCallback(objResponse);
-        } else {
-          erroCallback(objResponse);
-        }
-      } catch (e) {
-        let server_error = {
-          error: {
-            type: "Server Error",
-            help: "Server Error",
-            description: "Server Error"
-          }
-        };
-        erroCallback(server_error);
-      }
+  var initFunction = function() {
+    let xmlhttp = new XMLHttpRequest();
+    if (this.isCheckout()) {
+      let reference = $("#reference").val();
+      let url_bin =
+        "/v2/card_bin/intra/" + number_bin + "/?reference=" + reference;
+      xmlhttp.open("GET", url_bin, true);
+    } else {
+      let SERVER_URL = this.getServerURL();
+      let url_bin = SERVER_URL + "/v2/card_bin/" + number_bin;
+      xmlhttp.open("GET", url_bin, true);
+      xmlhttp.setRequestHeader(
+        "Auth-Token",
+        this.getAuthToken(
+          this.PAYMENTEZ_CLIENT_APP_CODE,
+          this.PAYMENTEZ_CLIENT_APP_KEY
+        )
+      );
     }
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+        try {
+          let objResponse = JSON.parse(xmlhttp.responseText);
+          if (xmlhttp.status === 200) {
+            successCallback(objResponse, form);
+          } else if (xmlhttp.status === 400) {
+            erroCallback(objResponse);
+          } else {
+            erroCallback(objResponse);
+          }
+        } catch (e) {
+          let server_error = {
+            error: {
+              type: "Server Error",
+              help: "Server Error",
+              description: "Server Error"
+            }
+          };
+          erroCallback(server_error);
+        }
+      }
+    };
+    xmlhttp.send();
   };
-  xmlhttp.send();
+
+  initFunction = initFunction.bind(this);
+
+  _getTime(initFunction);
 };
