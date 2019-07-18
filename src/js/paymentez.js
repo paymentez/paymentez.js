@@ -17,15 +17,17 @@ Paymentez.SERVER_QA_URL = "https://ccapi-qa.paymentez.com";
 Paymentez.SERVER_PROD_URL = "https://ccapi.paymentez.com";
 
 var TIME_STAMP_SERVER =
-  "https://cors-anywhere.herokuapp.com/" + "http://worldtimeapi.org/api/ip";
+  "ahttps://cors-anywhere.herokuapp.com/" + "http://worldtimeapi.org/api/ip";
 var AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
 
 function _getTime(callback) {
   var xhr = new XMLHttpRequest();
   xhr.onload = function() {
-    if (xhr.status >= 200 && xhr.status < 300) {
+    if (xhr.status >= 200 && xhr.status < 300 && !!response.unixtime) {
       var response = JSON.parse(xhr.responseText);
       AUTH_TIMESTAMP_SERVER = String(response.unixtime);
+    } else {
+      AUTH_TIMESTAMP_SERVER = String(new Date().getTime());
     }
     callback();
   };
