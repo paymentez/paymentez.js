@@ -23,11 +23,12 @@ var AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
 function _getTime(callback) {
   var xhr = new XMLHttpRequest();
   xhr.onload = function() {
-    if (xhr.status >= 200 && xhr.status < 300 && !!response.unixtime) {
+    AUTH_TIMESTAMP_SERVER = String(new Date().getTime());
+    if (xhr.status >= 200 && xhr.status < 300) {
       var response = JSON.parse(xhr.responseText);
-      AUTH_TIMESTAMP_SERVER = String(response.unixtime);
-    } else {
-      AUTH_TIMESTAMP_SERVER = String(new Date().getTime());
+      if (!!response.unixtime) {
+        AUTH_TIMESTAMP_SERVER = String(response.unixtime);
+      }
     }
     callback();
   };
