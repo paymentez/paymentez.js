@@ -17,7 +17,7 @@ Paymentez.SERVER_QA_URL = "https://ccapi-qa.paymentez.com";
 Paymentez.SERVER_PROD_URL = "https://ccapi.paymentez.com";
 
 var TIME_STAMP_SERVER =
-  "ahttps://cors-anywhere.herokuapp.com/" + "http://worldtimeapi.org/api/ip";
+  "https://cors-anywhere.herokuapp.com/" + "http://worldtimeapi.org/api/ip";
 var AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
 
 function _getTime(callback) {
