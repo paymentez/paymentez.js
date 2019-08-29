@@ -16,8 +16,9 @@ Paymentez.SERVER_STG_URL = "https://ccapi-stg.paymentez.com";
 Paymentez.SERVER_QA_URL = "https://ccapi-qa.paymentez.com";
 Paymentez.SERVER_PROD_URL = "https://ccapi.paymentez.com";
 
-var TIME_STAMP_SERVER =
-  "https://cors-anywhere.herokuapp.com/" + "http://worldtimeapi.org/api/ip";
+Paymentez.PG_MICROS_STAGING = "https://pg-micros-stg.paymentez.com/v1/unixtime/";
+Paymentez.PG_MICROS_PRODUCTION = "https://pg-micros.paymentez.com/v1/unixtime/";
+
 var AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
 
 function _getTime(callback) {
@@ -33,7 +34,12 @@ function _getTime(callback) {
     callback();
   };
 
-  xhr.open("GET", TIME_STAMP_SERVER);
+  if (["dev", "stg"].indexOf(Paymentez.ENV_MODE) >= 0) {
+    xhr.open("GET", Paymentez.PG_MICROS_STAGING);
+  } else if (["prod", "prod-qa"].indexOf(Paymentez.ENV_MODE) >= 0) {
+    xhr.open("GET", Paymentez.PG_MICROS_PRODUCTION);
+  }
+
   xhr.send();
 }
 
