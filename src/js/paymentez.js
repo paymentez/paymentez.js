@@ -4,6 +4,7 @@ Paymentez.ENV_MODE = "";
 Paymentez.TEST_MODE = true;
 Paymentez.PAYMENTEZ_CLIENT_APP_CODE = "";
 Paymentez.PAYMENTEZ_CLIENT_APP_KEY = "";
+Paymentez.IS_CHECKOUT = false;
 
 Paymentez.MERCHANT_ID = 500005;
 Paymentez.KOUNT_ENVIRONMENT = "";
@@ -24,17 +25,18 @@ var AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
 function _getTime(callback) {
   var xhr = new XMLHttpRequest();
   xhr.onload = function() {
-    AUTH_TIMESTAMP_SERVER = String(new Date().getTime());
     if (xhr.status >= 200 && xhr.status < 300) {
       var response = JSON.parse(xhr.responseText);
       if (!!response.unixtime) {
         AUTH_TIMESTAMP_SERVER = String(response.unixtime);
       }
+    } else {
+      AUTH_TIMESTAMP_SERVER = String(new Date().getTime());
     }
     callback();
   };
 
-  if (["dev", "stg"].indexOf(Paymentez.ENV_MODE) >= 0) {
+  if (["local", "dev", "stg"].indexOf(Paymentez.ENV_MODE) >= 0) {
     xhr.open("GET", Paymentez.PG_MICROS_STAGING);
   } else if (["prod", "prod-qa"].indexOf(Paymentez.ENV_MODE) >= 0) {
     xhr.open("GET", Paymentez.PG_MICROS_PRODUCTION);
@@ -274,10 +276,6 @@ Paymentez.addCard = function(
   Paymentez.createToken(params, success_callback, failure_callback);
 };
 
-Paymentez.isCheckout = function() {
-  return this.ENV_MODE === "";
-};
-
 Paymentez.getBinInformation = function(
   number_bin,
   form,
@@ -286,7 +284,7 @@ Paymentez.getBinInformation = function(
 ) {
   var initFunction = function() {
     let xmlhttp = new XMLHttpRequest();
-    if (this.isCheckout()) {
+    if (this.IS_CHECKOUT) {
       let reference = $("#reference").val();
       let url_bin =
         "/v2/card_bin/intra/" + number_bin + "/?reference=" + reference;
@@ -329,5 +327,9 @@ Paymentez.getBinInformation = function(
     xmlhttp.send();
   };
   initFunction = initFunction.bind(this);
-  _getTime(initFunction);
+  if (!this.IS_CHECKOUT) {
+    _getTime(initFunction);
+  } else {
+    initFunction();
+  }
 };
