@@ -1,32 +1,33 @@
-Paymentez.prototype.constructor = Paymentez;
+Payment.prototype.constructor = Payment;
 
-Paymentez.ENV_MODE = "";
-Paymentez.TEST_MODE = true;
-Paymentez.PAYMENTEZ_CLIENT_APP_CODE = "";
-Paymentez.PAYMENTEZ_CLIENT_APP_KEY = "";
-Paymentez.IS_CHECKOUT = false;
+Payment.ENV_MODE = "";
+Payment.TEST_MODE = true;
+Payment.PAYMENT_CLIENT_APP_CODE = "";
+Payment.PAYMENT_CLIENT_APP_KEY = "";
+Payment.IS_CHECKOUT = false;
 
-Paymentez.MERCHANT_ID = 500005;
-Paymentez.KOUNT_ENVIRONMENT = "";
-Paymentez.KOUN_TEST_ENVIRONMENT = "https://tst.kaptcha.com/";
-Paymentez.KOUN_PROD_ENVIRONMENT = "https://ssl.kaptcha.com/";
+Payment.MERCHANT_ID = 500005;
+Payment.KOUNT_ENVIRONMENT = "";
+Payment.KOUN_TEST_ENVIRONMENT = "https://tst.kaptcha.com/";
+Payment.KOUN_PROD_ENVIRONMENT = "https://ssl.kaptcha.com/";
 
-Paymentez.SERVER_LOCAL_URL = "http://localhost:8000";
-Paymentez.SERVER_DEV_URL = "https://ccapi-dev.paymentez.com";
-Paymentez.SERVER_STG_URL = "https://ccapi-stg.paymentez.com";
-Paymentez.SERVER_QA_URL = "https://ccapi-qa.paymentez.com";
-Paymentez.SERVER_PROD_URL = "https://ccapi.paymentez.com";
+Payment.DOMAIN = "paymentez.com";
+Payment.SERVER_LOCAL_URL = "http://localhost:8000";
+Payment.SERVER_DEV_URL = `https://ccapi-dev.${Payment.DOMAIN}`;
+Payment.SERVER_STG_URL = `https://ccapi-stg.${Payment.DOMAIN}`;
+Payment.SERVER_QA_URL = `https://ccapi-qa.${Payment.DOMAIN}`;
+Payment.SERVER_PROD_URL = `https://ccapi.${Payment.DOMAIN}`;
 
-Paymentez.PG_MICROS_STAGING = "https://pg-micros-stg.paymentez.com/v1/unixtime/";
-Paymentez.PG_MICROS_PRODUCTION = "https://pg-micros.paymentez.com/v1/unixtime/";
+Payment.PG_MICROS_STAGING = `https://pg-micros-stg.${Payment.DOMAIN}/v1/unixtime/`;
+Payment.PG_MICROS_PRODUCTION = `https://pg-micros.${Payment.DOMAIN}/v1/unixtime/`;
 
-var AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
+let AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
 
 function _getTime(callback) {
-  var xhr = new XMLHttpRequest();
-  xhr.onload = function() {
+  let xhr = new XMLHttpRequest();
+  xhr.onload = function () {
     if (xhr.status >= 200 && xhr.status < 300) {
-      var response = JSON.parse(xhr.responseText);
+      let response = JSON.parse(xhr.responseText);
       if (!!response.unixtime) {
         AUTH_TIMESTAMP_SERVER = String(response.unixtime);
       }
@@ -36,93 +37,94 @@ function _getTime(callback) {
     callback();
   };
 
-  if (["local", "dev", "stg"].indexOf(Paymentez.ENV_MODE) >= 0) {
-    xhr.open("GET", Paymentez.PG_MICROS_STAGING);
-  } else if (["prod", "prod-qa"].indexOf(Paymentez.ENV_MODE) >= 0) {
-    xhr.open("GET", Paymentez.PG_MICROS_PRODUCTION);
+  if (["local", "dev", "stg"].indexOf(Payment.ENV_MODE) >= 0) {
+    xhr.open("GET", Payment.PG_MICROS_STAGING);
+  } else if (["prod", "prod-qa"].indexOf(Payment.ENV_MODE) >= 0) {
+    xhr.open("GET", Payment.PG_MICROS_PRODUCTION);
   }
 
   xhr.send();
 }
 
-function Paymentez() {}
+function Payment() {
+}
 
-Paymentez.uuidv4 = function() {
-  return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+Payment.uuidv4 = function () {
+  return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(/[xy]/g, function (c) {
     let r = (Math.random() * 16) | 0,
       v = c === "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 };
 
-Paymentez.getSessionId = function() {
-  return Paymentez.uuidv4();
+Payment.getSessionId = function () {
+  return Payment.uuidv4();
 };
 
-Paymentez.getUniqToken = function(auth_timestamp, paymentez_client_app_key) {
-  let uniq_token_string = paymentez_client_app_key + auth_timestamp;
-  return Paymentez.getHash(uniq_token_string);
+Payment.getUniqToken = function (auth_timestamp, payment_client_app_key) {
+  let uniq_token_string = payment_client_app_key + auth_timestamp;
+  return Payment.getHash(uniq_token_string);
 };
 
-Paymentez.getAuthToken = function(paymentez_client_app_code, app_client_key) {
+Payment.getAuthToken = function (payment_client_app_code, app_client_key) {
   let string_auth_token =
-    paymentez_client_app_code +
+    payment_client_app_code +
     ";" +
     AUTH_TIMESTAMP_SERVER +
     ";" +
-    Paymentez.getUniqToken(AUTH_TIMESTAMP_SERVER, app_client_key);
+    Payment.getUniqToken(AUTH_TIMESTAMP_SERVER, app_client_key);
   return btoa(string_auth_token);
 };
 
-Paymentez.getHash = function(message) {
+Payment.getHash = function (message) {
   let sha256 = new jsSHA("SHA-256", "TEXT");
   sha256.update(message);
   return sha256.getHash("HEX");
 };
 
-Paymentez.getServerURL = function() {
-  let SERVER_URL = Paymentez.SERVER_STG_URL;
-  if (Paymentez.ENV_MODE === "") {
-    if (Paymentez.TEST_MODE) {
-      SERVER_URL = Paymentez.SERVER_STG_URL;
+Payment.getServerURL = function () {
+  let SERVER_URL = Payment.SERVER_STG_URL;
+  if (Payment.ENV_MODE === "") {
+    if (Payment.TEST_MODE) {
+      SERVER_URL = Payment.SERVER_STG_URL;
     } else {
-      SERVER_URL = Paymentez.SERVER_PROD_URL;
+      SERVER_URL = Payment.SERVER_PROD_URL;
     }
   } else {
-    if (Paymentez.ENV_MODE === "dev") {
-      SERVER_URL = Paymentez.SERVER_DEV_URL;
-    } else if (Paymentez.ENV_MODE === "stg") {
-      SERVER_URL = Paymentez.SERVER_STG_URL;
-    } else if (Paymentez.ENV_MODE === "prod") {
-      SERVER_URL = Paymentez.SERVER_PROD_URL;
-    } else if (Paymentez.ENV_MODE === "prod-qa") {
-      SERVER_URL = Paymentez.SERVER_QA_URL;
+    if (Payment.ENV_MODE === "dev") {
+      SERVER_URL = Payment.SERVER_DEV_URL;
+    } else if (Payment.ENV_MODE === "stg") {
+      SERVER_URL = Payment.SERVER_STG_URL;
+    } else if (Payment.ENV_MODE === "prod") {
+      SERVER_URL = Payment.SERVER_PROD_URL;
+    } else if (Payment.ENV_MODE === "prod-qa") {
+      SERVER_URL = Payment.SERVER_QA_URL;
     } else {
-      SERVER_URL = Paymentez.SERVER_LOCAL_URL;
+      SERVER_URL = Payment.SERVER_LOCAL_URL;
     }
   }
   return SERVER_URL;
 };
 
-Paymentez.createToken = function(
+Payment.createToken = function (
   createTokenRequest,
   successCallback,
   erroCallback
 ) {
-  var initFunction = function() {
+  let initFunction = function () {
     let SERVER_URL = this.getServerURL();
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", SERVER_URL + "/v2/card/add", true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.setRequestHeader(
       "Auth-Token",
-      Paymentez.getAuthToken(
-        Paymentez.PAYMENTEZ_CLIENT_APP_CODE,
-        Paymentez.PAYMENTEZ_CLIENT_APP_KEY
+      Payment.getAuthToken(
+        Payment.PAYMENT_CLIENT_APP_CODE,
+        Payment.PAYMENT_CLIENT_APP_KEY
       )
     );
 
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState === XMLHttpRequest.DONE) {
         // XMLHttpRequest.DONE == 4
         try {
@@ -152,18 +154,18 @@ Paymentez.createToken = function(
   _getTime(initFunction);
 };
 
-Paymentez.dataCollector = function(session_id) {
-  if (Paymentez.ENV_MODE === "") {
-    if (Paymentez.TEST_MODE) {
-      Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_TEST_ENVIRONMENT;
+Payment.dataCollector = function (session_id) {
+  if (Payment.ENV_MODE === "") {
+    if (Payment.TEST_MODE) {
+      Payment.KOUNT_ENVIRONMENT = Payment.KOUN_TEST_ENVIRONMENT;
     } else {
-      Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_PROD_ENVIRONMENT;
+      Payment.KOUNT_ENVIRONMENT = Payment.KOUN_PROD_ENVIRONMENT;
     }
   } else {
-    if (Paymentez.ENV_MODE === "prod") {
-      Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_PROD_ENVIRONMENT;
+    if (Payment.ENV_MODE === "prod") {
+      Payment.KOUNT_ENVIRONMENT = Payment.KOUN_PROD_ENVIRONMENT;
     } else {
-      Paymentez.KOUNT_ENVIRONMENT = Paymentez.KOUN_TEST_ENVIRONMENT;
+      Payment.KOUNT_ENVIRONMENT = Payment.KOUN_TEST_ENVIRONMENT;
     }
   }
 
@@ -184,22 +186,22 @@ Paymentez.dataCollector = function(session_id) {
     iframe.setAttribute("width", "1");
     iframe.setAttribute(
       "src",
-      Paymentez.KOUNT_ENVIRONMENT +
-        "logo.htm?m=" +
-        Paymentez.MERCHANT_ID +
-        "&s=" +
-        session_id
+      Payment.KOUNT_ENVIRONMENT +
+      "logo.htm?m=" +
+      Payment.MERCHANT_ID +
+      "&s=" +
+      session_id
     );
     image = document.createElement("img");
     image.setAttribute("height", "1");
     image.setAttribute("width", "1");
     image.setAttribute(
       "src",
-      Paymentez.KOUNT_ENVIRONMENT +
-        "logo.gif?m=" +
-        Paymentez.MERCHANT_ID +
-        "&s=" +
-        session_id
+      Payment.KOUNT_ENVIRONMENT +
+      "logo.gif?m=" +
+      Payment.MERCHANT_ID +
+      "&s=" +
+      session_id
     );
     try {
       iframe.appendChild(image);
@@ -208,7 +210,7 @@ Paymentez.dataCollector = function(session_id) {
     }
     body.appendChild(iframe);
   } else {
-    setTimeout(Paymentez.dataCollector, 150, session_id);
+    setTimeout(Payment.dataCollector, 150, session_id);
   }
 };
 
@@ -216,34 +218,34 @@ Paymentez.dataCollector = function(session_id) {
  * Setting your credentials and environment
  *
  * @param test_mode false to use production environment
- * @param paymentez_client_app_code provided by Paymentez.
- * @param paymentez_client_app_key provided by Paymentez.
+ * @param payment_client_app_code provided by Payment.
+ * @param payment_client_app_key provided by Payment.
  */
-Paymentez.setEnvironment = function(
+Payment.setEnvironment = function (
   test_mode,
-  paymentez_client_app_code,
-  paymentez_client_app_key
+  payment_client_app_code,
+  payment_client_app_key
 ) {
-  Paymentez.TEST_MODE = test_mode;
-  Paymentez.PAYMENTEZ_CLIENT_APP_CODE = paymentez_client_app_code;
-  Paymentez.PAYMENTEZ_CLIENT_APP_KEY = paymentez_client_app_key;
+  Payment.TEST_MODE = test_mode;
+  Payment.PAYMENT_CLIENT_APP_CODE = payment_client_app_code;
+  Payment.PAYMENT_CLIENT_APP_KEY = payment_client_app_key;
 };
 
 /**
  * Setting your credentials and environment
  *
  * @param env_mode `prod`, `stg`, `dev`, `local` to change environment. Default is `stg`
- * @param paymentez_client_app_code provided by Paymentez.
- * @param paymentez_client_app_key provided by Paymentez.
+ * @param payment_client_app_code provided by Payment.
+ * @param payment_client_app_key provided by Payment.
  */
-Paymentez.init = function(
+Payment.init = function (
   env_mode,
-  paymentez_client_app_code,
-  paymentez_client_app_key
+  payment_client_app_code,
+  payment_client_app_key
 ) {
-  Paymentez.ENV_MODE = env_mode;
-  Paymentez.PAYMENTEZ_CLIENT_APP_CODE = paymentez_client_app_code;
-  Paymentez.PAYMENTEZ_CLIENT_APP_KEY = paymentez_client_app_key;
+  Payment.ENV_MODE = env_mode;
+  Payment.PAYMENT_CLIENT_APP_CODE = payment_client_app_code;
+  Payment.PAYMENT_CLIENT_APP_KEY = payment_client_app_key;
 };
 
 /**
@@ -255,15 +257,15 @@ Paymentez.init = function(
  * @param success_callback a callback to receive the token
  * @param failure_callback a callback to receive an error
  */
-Paymentez.addCard = function(
+Payment.addCard = function (
   uid,
   email,
   card,
   success_callback,
   failure_callback
 ) {
-  let session_id = Paymentez.getSessionId();
-  Paymentez.dataCollector(session_id);
+  let session_id = Payment.getSessionId();
+  Payment.dataCollector(session_id);
   let params = {
     session_id: session_id,
     user: {
@@ -273,16 +275,16 @@ Paymentez.addCard = function(
     }
   };
   params["card"] = card["card"];
-  Paymentez.createToken(params, success_callback, failure_callback);
+  Payment.createToken(params, success_callback, failure_callback);
 };
 
-Paymentez.getBinInformation = function(
+Payment.getBinInformation = function (
   number_bin,
   form,
   successCallback,
   erroCallback
 ) {
-  var initFunction = function() {
+  let initFunction = function () {
     let xmlhttp = new XMLHttpRequest();
     if (this.IS_CHECKOUT) {
       let reference = $("#reference").val();
@@ -296,12 +298,12 @@ Paymentez.getBinInformation = function(
       xmlhttp.setRequestHeader(
         "Auth-Token",
         this.getAuthToken(
-          this.PAYMENTEZ_CLIENT_APP_CODE,
-          this.PAYMENTEZ_CLIENT_APP_KEY
+          this.PAYMENT_CLIENT_APP_CODE,
+          this.PAYMENT_CLIENT_APP_KEY
         )
       );
     }
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState === XMLHttpRequest.DONE) {
         try {
           let objResponse = JSON.parse(xmlhttp.responseText);

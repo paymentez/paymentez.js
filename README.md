@@ -7,24 +7,13 @@ PaymentezJS is a library that allows developers to easily connect to the Payment
 
 ## Installation
 
-You will need to include jQuery and both `paymentez.min.js` and `paymentez.min.css` into your webpage specifying "UTF-8" like charset.
-
-For staging enviroment:
+You will need to include jQuery and both `payment_[version].min.js` and `payment_[version].min.css` into your webpage specifying "UTF-8" like charset.
 
 ```html
 <script src="https://code.jquery.com/jquery-1.11.3.min.js" charset="UTF-8"></script>
 
-<link href="https://cdn.paymentez.com/js/ccapi/stg/paymentez.min.css" rel="stylesheet" type="text/css" />
-<script src="https://cdn.paymentez.com/js/ccapi/stg/paymentez.min.js" charset="UTF-8"></script>
-```
-
-For production environment:
-
-```html
-<script src="https://code.jquery.com/jquery-1.11.3.min.js" charset="UTF-8"></script>
-
-<link href="https://cdn.paymentez.com/js/1.0.1/paymentez.min.css" rel="stylesheet" type="text/css" />
-<script src="https://cdn.paymentez.com/js/1.0.1/paymentez.min.js" charset="UTF-8"></script>
+<link href="https://cdn.globalpay.com.co/ccapi/sdk/payment_2.0.0.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.globalpay.com.co/ccapi/sdk/payment_2.0.0.min.js" charset="UTF-8"></script>
 ```
 
 
@@ -33,18 +22,18 @@ For production environment:
 For working examples of using PaymentezJS, see the [examples](https://github.com/paymentez/paymentez.js/tree/master/examples) folder of this project.
 
 ### Using the Paymentez Form
-Any elements with the class `paymentez-form` will be automatically converted into a basic credit card input with the expiry date and CVC check.
+Any elements with the class `payment-form` will be automatically converted into a basic credit card input with the expiry date and CVC check.
 
-The easiest way to get started with PaymentezForm is to insert the snippet of code:
+The easiest way to get started with PaymentForm is to insert the snippet of code:
 ```html
-<div class="paymentez-form" id="my-card" data-capture-name="true"></div>
+<div class="payment-form" id="my-card" data-capture-name="true"></div>
 ```
 
-To get a `Card` object from the `PaymentezForm`, you ask the form for its card.
+To get a `Card` object from the `PaymentForm`, you ask the form for its card.
 
 ```javascript
 var myCard = $('#my-card');
-var cardToSave = myCard.PaymentezForm('card');
+var cardToSave = myCard.PaymentForm('card');
 if(cardToSave == null){
   alert("Invalid Card Data");
 }
@@ -65,7 +54,7 @@ You should initialize the library.
   * @param paymentez_client_app_code provided by Paymentez.
   * @param paymentez_client_app_key provided by Paymentez.
   */
-Paymentez.init('stg', 'PAYMENTEZ_CLIENT_APP_CODE', 'PAYMENTEZ_CLIENT_APP_KEY');
+Payment.init('stg', 'PAYMENTEZ_CLIENT_APP_CODE', 'PAYMENTEZ_CLIENT_APP_KEY');
 ```
 
 ### addCard
@@ -81,7 +70,7 @@ addCard converts sensitive card data to a single-use token which you can safely 
  * @param success_callback a callback to receive the token
  * @param failure_callback a callback to receive an error
  */
-Paymentez.addCard(uid, email, cardToSave, successHandler, errorHandler);
+Payment.addCard(uid, email, cardToSave, successHandler, errorHandler);
 
 var successHandler = function(cardResponse) {
   console.log(cardResponse.card);
@@ -136,23 +125,23 @@ The Session ID is a parameter Paymentez use for fraud purposes.
 Call this method if you want to Collect your user's Device Information.
 
 ```javascript
-var session_id = Paymentez.getSessionId();
+var session_id = Payment.getSessionId();
 ```
 
 Once you have the Session ID, you can pass it to your server to charge the user.
 
 
-## PaymentezForm Complete Reference
+## PaymentForm Complete Reference
 
 ### Manual Insertion
 
-If you wish to manually alter the fields used by PaymentezForm to add additional classes or set the input field placeholder, name or id. you can pre-populate the form fields as show below.
+If you wish to manually alter the fields used by PaymentForm to add additional classes or set the input field placeholder, name or id. you can pre-populate the form fields as show below.
 
 This could be helpful in case you want to Render the Form in another Language (by default the Form is Rendered in Spanish), or to reference some input by name or id.
 
 For example if you want to render the form in English and add a custom class to the card-number
 ```html
-<div class="paymentez-form">
+<div class="payment-form">
   <input class="card-number my-custom-class" name="card-number" placeholder="Card number">
   <input class="name" id="the-card-name-id" placeholder="Card Holders Name">
   <input class="expiry-month" name="expiry-month">
@@ -179,7 +168,7 @@ The 'data-use-dropdowns' can solve an issue with the expiration mask in not so r
 
 Integrate in the form is so simple like this
 ```html
-<div class="paymentez-form"
+<div class="payment-form"
 id="my-card"
 data-capture-name="true"
 data-capture-email="true"
@@ -194,7 +183,7 @@ when a card type not allowed is seted, the form is reset, block the inputs and s
 *Tipo de tarjeta invalida para está operación.*
 
 ```html
-<div class="paymentez-form"
+<div class="payment-form"
 id="my-card"
 data-capture-name="true"
 data-exclusive-types="ex,ak"
@@ -207,12 +196,12 @@ Follow this link to see all [card types](https://paymentez.github.io/api-doc/#ca
 
 ### Reading Values
 
-PaymentezForm provides functionality allowing you to read the form field values directly with JavaScript. This can be useful if you wish to submit the values via Ajax.
+PaymentForm provides functionality allowing you to read the form field values directly with JavaScript. This can be useful if you wish to submit the values via Ajax.
 
-Create a PaymentezForm element and give it a unique id (in this example `my-card`)
+Create a PaymentForm element and give it a unique id (in this example `my-card`)
 
 ```html
-<div class="paymentez-form" id="my-card" data-capture-name="true"></div>
+<div class="payment-form" id="my-card" data-capture-name="true"></div>
 ```
 
 The javascript below demonstrates how to read each value of the form into local variables.
@@ -220,23 +209,23 @@ The javascript below demonstrates how to read each value of the form into local 
 ```javascript
 var myCard = $('#my-card');
 
-var cardNumber = myCard.PaymentezForm('cardNumber');
-var cardType = myCard.PaymentezForm('cardType');
-var name = myCard.PaymentezForm('name');
-var expiryMonth = myCard.PaymentezForm('expiryMonth');
-var expiryYear = myCard.PaymentezForm('expiryYear');
-var fiscalNumber = myCard.PaymentezForm('fiscalNumber');
-var validationOption = myCard.PaymentezForm('validationOption');
+var cardNumber = myCard.PaymentForm('cardNumber');
+var cardType = myCard.PaymentForm('cardType');
+var name = myCard.PaymentForm('name');
+var expiryMonth = myCard.PaymentForm('expiryMonth');
+var expiryYear = myCard.PaymentForm('expiryYear');
+var fiscalNumber = myCard.PaymentForm('fiscalNumber');
+var validationOption = myCard.PaymentForm('validationOption');
 ```
 
 
 ### Functions
 
-To call a function on a PaymentezForm element, follow the pattern below.
+To call a function on a PaymentForm element, follow the pattern below.
 Replace the text 'function' with the name of the function you wish to call.
 
 ```javascript
-$('#my-card').PaymentezForm('function')
+$('#my-card').PaymentForm('function')
 ```
 
 The functions available are listed below:
@@ -275,38 +264,38 @@ If the card type cannot be determined an empty string will be given instead.
 
 ### Static functions
 
-If you just want to perform simple operations without the PaymentezForm form, there are a number of static functions provided
-by the PaymentezForm library that are made available.
+If you just want to perform simple operations without the PaymentForm form, there are a number of static functions provided
+by the PaymentForm library that are made available.
 
 
 #### Card Type from Card Number
 ```javascript
 var cardNumber = '4242 4242 4242 4242'; // Spacing is not important
-var cardType = PaymentezForm.cardTypeFromNumber(cardNumber);
+var cardType = PaymentForm.cardTypeFromNumber(cardNumber);
 ```
 
 #### Cleaning and Masking
 ```javascript
 // var formatMask = 'XXXX XXXX XXXX XXXX'; // You can manually define an input mask
 // var formatMask = 'XX+X X XXXX XXXX XXXX'; // You can add characters other than spaces to the mask
-var formatMask = PaymentezForm.CREDIT_CARD_NUMBER_VISA_MASK; // Or use a standard mask.
+var formatMask = PaymentForm.CREDIT_CARD_NUMBER_VISA_MASK; // Or use a standard mask.
 var cardNumber = '424 2424242 42   42 42';
-var cardNumberWithoutSpaces = PaymentezForm.numbersOnlyString(cardNumber);
-var formattedCardNumber = PaymentezForm.applyFormatMask(cardNumberWithoutSpaces, formatMask);
+var cardNumberWithoutSpaces = PaymentForm.numbersOnlyString(cardNumber);
+var formattedCardNumber = PaymentForm.applyFormatMask(cardNumberWithoutSpaces, formatMask);
 ```
 
 ##### Masks
 
 | Variable Name                                    | Mask
 | :----------------------------------------------- | :------------------ |
-| PaymentezForm.CREDIT_CARD_NUMBER_DEFAULT_MASK    | XXXX XXXX XXXX XXXX |
-| PaymentezForm.CREDIT_CARD_NUMBER_VISA_MASK       | XXXX XXXX XXXX XXXX |
-| PaymentezForm.CREDIT_CARD_NUMBER_MASTERCARD_MASK | XXXX XXXX XXXX XXXX |
-| PaymentezForm.CREDIT_CARD_NUMBER_DISCOVER_MASK   | XXXX XXXX XXXX XXXX |
-| PaymentezForm.CREDIT_CARD_NUMBER_JCB_MASK        | XXXX XXXX XXXX XXXX |
-| PaymentezForm.CREDIT_CARD_NUMBER_AMEX_MASK       | XXXX XXXXXX XXXXX   |
-| PaymentezForm.CREDIT_CARD_NUMBER_DINERS_MASK     | XXXX XXXX XXXX XX   |
-| PaymentezForm.CREDIT_CARD_NUMBER_EXITO_MASK      | XXXX XXXX XXXX XXXX |
+| PaymentForm.CREDIT_CARD_NUMBER_DEFAULT_MASK    | XXXX XXXX XXXX XXXX |
+| PaymentForm.CREDIT_CARD_NUMBER_VISA_MASK       | XXXX XXXX XXXX XXXX |
+| PaymentForm.CREDIT_CARD_NUMBER_MASTERCARD_MASK | XXXX XXXX XXXX XXXX |
+| PaymentForm.CREDIT_CARD_NUMBER_DISCOVER_MASK   | XXXX XXXX XXXX XXXX |
+| PaymentForm.CREDIT_CARD_NUMBER_JCB_MASK        | XXXX XXXX XXXX XXXX |
+| PaymentForm.CREDIT_CARD_NUMBER_AMEX_MASK       | XXXX XXXXXX XXXXX   |
+| PaymentForm.CREDIT_CARD_NUMBER_DINERS_MASK     | XXXX XXXX XXXX XX   |
+| PaymentForm.CREDIT_CARD_NUMBER_EXITO_MASK      | XXXX XXXX XXXX XXXX |
 
 
 
@@ -317,21 +306,21 @@ In the case of 'Exito' cards, they do not have an expiration date
 ```javascript
 var month = 3;
 var year = 2019;
-var valid = PaymentezForm.isExpiryValid(month, year);
+var valid = PaymentForm.isExpiryValid(month, year);
 ```
 
 The expiry month and year can be either and integer or a string.
 ```javascript
 var month = "3";
 var year = "2019";
-var valid = PaymentezForm.isExpiryValid(month, year);
+var valid = PaymentForm.isExpiryValid(month, year);
 ```
 
 The expiry year can be either 4 digits or 2 digits long.
 ```javascript
 var month = "3";
 var year = "19";
-var valid = PaymentezForm.isExpiryValid(month, year);
+var valid = PaymentForm.isExpiryValid(month, year);
 ```
 
 ### Card Validations Options
@@ -339,6 +328,6 @@ There are three card validation options
 
 | Validation Option      | Description
 | :--------------------- | :----------------------------------------------------- |
-| PaymentezForm.AUTH_CVC | Card validation by cvc, the most common option         |
-| PaymentezForm.AUTH_NIP | Card validation by nip (Available only by Exito cards) |
-| PaymentezForm.AUTH_OTP | Card validation by otp (Available only by Exito cards) |
+| PaymentForm.AUTH_CVC | Card validation by cvc, the most common option         |
+| PaymentForm.AUTH_NIP | Card validation by nip (Available only by Exito cards) |
+| PaymentForm.AUTH_OTP | Card validation by otp (Available only by Exito cards) |

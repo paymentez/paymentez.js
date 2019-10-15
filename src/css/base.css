@@ -1,4 +1,4 @@
-.paymentez-button-popup {
+.payment-button-popup {
   background-color: #71767b;
   border-radius: 4px;
   height: 38px;
@@ -9,19 +9,19 @@
   cursor: pointer;
 }
 
-.paymentez-button-popup:first-child {
+.payment-button-popup:first-child {
   margin-left: 0;
 }
 
-.paymentez-button-popup:last-child {
+.payment-button-popup:last-child {
   margin-right: 0;
 }
 
-.paymentez-button-popup.sucess {
+.payment-button-popup.sucess {
   background-color: #00bf84;
 }
 
-.paymentez-button-popup.hidden {
+.payment-button-popup.hidden {
   display: none;
 }
 
@@ -91,8 +91,8 @@ hr {
   cursor: not-allowed;
 }
 
-[enabled_installments_paymentez] .paymentez-form .expiry-container,
-[enabled_installments_paymentez] .paymentez-form .cvc-container,
-[enabled_installments_paymentez] .paymentez-form .installments-wrapper {
+[enabled_installments_payment] .payment-form .expiry-container,
+[enabled_installments_payment] .payment-form .cvc-container,
+[enabled_installments_payment] .payment-form .installments-wrapper {
   width: 33%;
 }
