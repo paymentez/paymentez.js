@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>Customise Fields</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+  <link href="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.css" rel="stylesheet" type="text/css"/>
+  <script src="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.js"></script>
+
+  <style type="text/css">
+    .my-custom-class {
+      border: 1px dashed #f00 !important;
+    }
+  </style>
+
+</head>
+<body>
+
+<div class="payment-form">
+  <input class="card-number my-custom-class">
+  <input class="name">
+  <input class="expiry-month">
+  <input class="expiry-year">
+
+  <div class="installments-wrapper">
+
+    <select class="installments" dir="rtl">
+      <option value='any' selected='' hidden=''>Cuotas</option>
+      <option value='1'>01</option>
+      <option value='2'>02</option>
+    </select>
+    <div class="icon">
+      <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="4px" width="24px" height="16px" viewBox="0 0 16 16"
+           style="enable-background:new 0 0 16 16;" xml:space="preserve">
+            <g>
+               
+
+               <path class="svg" d="M16,9c0,0.553-0.447,1-1,1H1c-0.553,0-1-0.447-1-1V7c0-0.552,0.447-1,1-1h14c0.553,0,1,0.448,1,1V9z
+               "/>
+              <path class="svg" d="M7,4C6.447,4,6,3.553,6,3V1c0-0.553,0.447-1,1-1h2c0.553,0,1,0.447,1,1v2c0,0.553-0.447,1-1,1H7z"/>
+              <path class="svg" d="M7,16c-0.553,0-1-0.447-1-1v-2c0-0.553,0.447-1,1-1h2c0.553,0,1,0.447,1,1v2c0,0.553-0.447,1-1,1H7z
+               "/>
+            </g>
+         </svg>
+    </div>
+  </div>
+
+
+</div>
+
+</body>
+</html>

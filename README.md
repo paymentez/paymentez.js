@@ -7,13 +7,13 @@ PaymentezJS is a library that allows developers to easily connect to the Payment
 
 ## Installation
 
-You will need to include jQuery and both `payment_[version].min.js` and `payment_[version].min.css` into your webpage specifying "UTF-8" like charset.
+You will need to include jQuery and both `payment_stable.min.js` and `payment_stable.min.css` into your webpage specifying "UTF-8" like charset.
 
 ```html
 <script src="https://code.jquery.com/jquery-1.11.3.min.js" charset="UTF-8"></script>
 
-<link href="https://cdn.globalpay.com.co/ccapi/sdk/payment_2.0.0.min.css" rel="stylesheet" type="text/css" />
-<script src="https://cdn.globalpay.com.co/ccapi/sdk/payment_2.0.0.min.js" charset="UTF-8"></script>
+<link href="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.js" charset="UTF-8"></script>
 ```
 
 

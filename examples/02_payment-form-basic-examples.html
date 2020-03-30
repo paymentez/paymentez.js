@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>Basic Examples</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+  <link href="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.css" rel="stylesheet" type="text/css"/>
+  <script src="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.js"></script>
+
+</head>
+<body>
+
+<!-- Basic -->
+<div class="payment-form"></div>
+
+
+<!-- Add Name -->
+<div style="margin-top: 50px">
+  <div class="payment-form" data-capture-name="true"></div>
+</div>
+
+<!-- Add Name, Email, CellPhone -->
+<div style="margin-top: 50px">
+  <div class="payment-form" data-capture-name="true" data-capture-email="true" data-capture-cellphone="true"></div>
+</div>
+
+<!-- Change Icon Color -->
+<div style="margin-top: 50px">
+  <div class="payment-form" data-capture-name="true" data-capture-email="true" data-capture-cellphone="true"
+       data-icon-colour="#569B29"></div>
+</div>
+
+</body>
+</html>

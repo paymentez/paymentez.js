@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Example Paymentez Add Card | PaymentezJs</title>
+  <title>Example Add Card</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
-  <link href="https://cdn.globalpay.com.co/ccapi/sdk/payment_2.0.0.min.css" rel="stylesheet" type="text/css"/>
-  <script src="https://cdn.globalpay.com.co/ccapi/sdk/payment_2.0.0.min.js" charset="UTF-8"></script>
+  <link href="https://cdn.paymentez.com/ccapi/sdk/payment_2.0.0.min.css" rel="stylesheet" type="text/css"/>
+  <script src="https://cdn.paymentez.com/ccapi/sdk/payment_2.0.0.min.js" charset="UTF-8"></script>
 
   <style>
     .panel {
@@ -65,18 +65,18 @@
   $(function () {
 
     //
-    // EXAMPLE CODE FOR PAYMENTEZ INTEGRATION
+    // EXAMPLE CODE FOR INTEGRATION
     // ---------------------------------------------------------------------------
     //
-    //  1.) You need to import the Paymentez JS -> https://cdn.globalpay.com.co/ccapi/sdk/payment_2.0.0.min.js
+    //  1.) You need to import the JS file -> https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.js
     //
-    //  2.) You need to import the Paymentez CSS -> https://cdn.globalpay.com.co/ccapi/sdk/payment_2.0.0.min.css
+    //  2.) You need to import the CSS file -> https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.css
     //
-    //  3.) Add The Paymentez Form
+    //  3.) Add the Payment Form
     //  <div class="payment-form" id="my-card" data-capture-name="true"></div>
     //
     //  3.) Init library
-    //  Replace "PAYMENTEZ_CLIENT_APP_CODE" and "PAYMENTEZ_CLIENT_APP_KEY" with your own Paymentez Client Credentials.
+    //  Replace "PAYMENT_CLIENT_APP_CODE" and "PAYMENT_CLIENT_APP_KEY" with your own Client Credentials.
     //
     // 4.) Add Card: converts sensitive card data to a single-use token which you can safely pass to your server to charge the user.
 
@@ -84,10 +84,10 @@
      * Init library
      *
      * @param env_mode `prod`, `stg`, `local` to change environment. Default is `stg`
-     * @param paymentez_client_app_code provided by Paymentez.
-     * @param paymentez_client_app_key provided by Paymentez.
+     * @param payment_client_app_code provided by Paymentez.
+     * @param payment_client_app_key provided by Paymentez.
      */
-    Payment.init('stg', 'PAYMENTEZ_CLIENT_APP_CODE', 'PAYMENTEZ_CLIENT_APP_KEY');
+    Payment.init('stg', 'PAYMENT_CLIENT_APP_CODE', 'PAYMENT_CLIENT_APP_KEY');
 
     let form = $("#add-card-form");
     let submitButton = form.find("button");
@@ -120,7 +120,7 @@
 
 
         let uid = "uid1234";
-        let email = "dev@paymentez.com";
+        let email = "jhon@doe.com";
 
         /* Add Card converts sensitive card data to a single-use token which you can safely pass to your server to charge the user.
          *

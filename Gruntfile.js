@@ -1,5 +1,8 @@
 module.exports = function (grunt) {
-  const version_sdk = grunt.option('version_sdk') || '2.0.0';
+  // How to consume
+  // grunt build --version_sdk=2.0.0
+  // grunt build --version_sdk=stable
+  const version_sdk = grunt.option('version_sdk') || 'stable';
   grunt.initConfig({
 
     connect: {
