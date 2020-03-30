@@ -51,10 +51,10 @@ You should initialize the library.
   * Init library
   *
   * @param env_mode `prod`, `stg`, `local` to change environment. Default is `stg`
-  * @param paymentez_client_app_code provided by Paymentez.
-  * @param paymentez_client_app_key provided by Paymentez.
+  * @param payment_client_app_code provided by Paymentez.
+  * @param payment_client_app_key provided by Paymentez.
   */
-Payment.init('stg', 'PAYMENTEZ_CLIENT_APP_CODE', 'PAYMENTEZ_CLIENT_APP_KEY');
+Payment.init('stg', 'PAYMENT_CLIENT_APP_CODE', 'PAYMENT_CLIENT_APP_KEY');
 ```
 
 ### addCard
@@ -191,7 +191,7 @@ data-invalid-card-type-message="Tarjeta invalida. Por favor ingresa una tarjeta 
 >
 ```
 
-Follow this link to see all [card types](https://paymentez.github.io/api-doc/#card-brands) allowed by Paymentez.
+Follow this link to see all [card types](https://paymentez.github.io/api-doc/#payment-methods-cards-card-brands) allowed by Paymentez.
 
 
 ### Reading Values
