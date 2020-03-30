@@ -1,15 +1,15 @@
-PaymentezForm.prototype.constructor = PaymentezForm;
+PaymentForm.prototype.constructor = PaymentForm;
 
 /**
- * @class PaymentezForm
+ * @class PaymentForm
  *
- * @author Martín Mucito
+ * @author Developer Team
  *
  * @param elem
  * @constructor
  */
 
-function PaymentezForm(elem) {
+function PaymentForm(elem) {
   this.elem = jQuery(elem);
   this.current_data = this.elem.children("div");
   this.cardType = '';
@@ -63,7 +63,7 @@ function PaymentezForm(elem) {
   this.refreshCreditCardType();
 }
 
-PaymentezForm.KEYS = {
+PaymentForm.KEYS = {
   "0": 48,
   "9": 57,
   "NUMPAD_0": 96,
@@ -83,30 +83,30 @@ PaymentezForm.KEYS = {
   "V": 86
 };
 
-PaymentezForm.prototype.creditCardNumberMask = "XXXX XXXX XXXX XXXX";
-PaymentezForm.prototype.cvcMask = "XXX";
-PaymentezForm.EXPIRY_MASK = "XX / XX";
-PaymentezForm.CREDIT_CARD_NUMBER_PLACEHOLDER = "Número de tarjeta";
-PaymentezForm.NAME_PLACEHOLDER = "Nombre del titular";
-PaymentezForm.EMAIL_PLACEHOLDER = "E-mail";
-PaymentezForm.CELLPHONE_PLACEHOLDER = "Celular";
-PaymentezForm.FISCAL_NUMBER_PLACEHOLDER = "Documento de Identificación";
-PaymentezForm.EXPIRY_PLACEHOLDER = "MM / YY";
-PaymentezForm.EXPIRY_NUMBER_OF_YEARS = 10;
-PaymentezForm.AUTH_CVC = "AUTH_CVC";
-PaymentezForm.AUTH_NIP = "AUTH_NIP";
-PaymentezForm.AUTH_OTP = "AUTH_OTP";
-PaymentezForm.CVC_PLACEHOLDER = "CVC";
-PaymentezForm.NIP_PLACEHOLDER = "Clave Tuya";
-PaymentezForm.OTP_PLACEHOLDER_ADD = "No tengo o no recuerdo mi clave";
-PaymentezForm.OTP_PLACEHOLDER_CHECKOUT = "Continuar compra sin clave";
-PaymentezForm.OTP_EXPLICATION_ADD = "Escogiendo esta opción se va a generar una Clave Temporal única, con la que " +
+PaymentForm.prototype.creditCardNumberMask = "XXXX XXXX XXXX XXXX";
+PaymentForm.prototype.cvcMask = "XXX";
+PaymentForm.EXPIRY_MASK = "XX / XX";
+PaymentForm.CREDIT_CARD_NUMBER_PLACEHOLDER = "Número de tarjeta";
+PaymentForm.NAME_PLACEHOLDER = "Nombre del titular";
+PaymentForm.EMAIL_PLACEHOLDER = "E-mail";
+PaymentForm.CELLPHONE_PLACEHOLDER = "Celular";
+PaymentForm.FISCAL_NUMBER_PLACEHOLDER = "Documento de Identificación";
+PaymentForm.EXPIRY_PLACEHOLDER = "MM / YY";
+PaymentForm.EXPIRY_NUMBER_OF_YEARS = 10;
+PaymentForm.AUTH_CVC = "AUTH_CVC";
+PaymentForm.AUTH_NIP = "AUTH_NIP";
+PaymentForm.AUTH_OTP = "AUTH_OTP";
+PaymentForm.CVC_PLACEHOLDER = "CVC";
+PaymentForm.NIP_PLACEHOLDER = "Clave Tuya";
+PaymentForm.OTP_PLACEHOLDER_ADD = "No tengo o no recuerdo mi clave";
+PaymentForm.OTP_PLACEHOLDER_CHECKOUT = "Continuar compra sin clave";
+PaymentForm.OTP_EXPLICATION_ADD = "Escogiendo esta opción se va a generar una Clave Temporal única, con la que " +
   "validarás tu tarjeta. Haz clic en “Guardar” para continuar con el proceso.";
-PaymentezForm.OTP_EXPLICATION_CHECKOUT = "Escogiendo esta opción se va a generar una Clave Temporal única, con la " +
+PaymentForm.OTP_EXPLICATION_CHECKOUT = "Escogiendo esta opción se va a generar una Clave Temporal única, con la " +
   "que validarás tu compra.";
-PaymentezForm.INVALID_CARD_TYPE_MESSAGE = "Tipo de tarjeta invalida para está operación.";
+PaymentForm.INVALID_CARD_TYPE_MESSAGE = "Tipo de tarjeta invalida para está operación.";
 
-PaymentezForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
+PaymentForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
   'x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink"> <g> ' +
   '<path class="svg" d="M19.494,0H7.948C6.843,0,5.951,0.896,5.951,1.999v23.446c0,1.102,0.892,1.997,1.997,1.997h11.546' +
@@ -115,7 +115,7 @@ PaymentezForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/
   '2,25.469c-0.703,0-1.275-0.572-1.275-1.276s0.572-1.274,1.275-1.274c0.701,0,1.273,0.57,1.273,1.274S14.423,25.469,13.' +
   '722,25.469z M19.995,21.1H7.448V3.373h12.547V21.1z"/> </g> </svg>';
 
-PaymentezForm.CREDIT_CARD_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
+PaymentForm.CREDIT_CARD_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="3px" width="24px" height="17px" viewBox="0 0 216 146" ' +
   'enable-background="new 0 0 216 146" xml:space="preserve"> <g> <path class="svg" d="M182.385,14.258c-2.553-2.553-5.' +
   '621-3.829-9.205-3.829H42.821c-3.585,0-6.653,1.276-9.207,3.829c-2.553,2.553-3.829,5.621-3.829,9.206v99.071c0,3.585,' +
@@ -127,7 +127,7 @@ PaymentezForm.CREDIT_CARD_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://ww
   '<rect class="svg" x="50.643" y="104.285" width="20.857" height="10.429"/> ' +
   '<rect class="svg" x="81.929" y="104.285" width="31.286" height="10.429"/> </g> </svg>';
 
-PaymentezForm.LOCK_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
+PaymentForm.LOCK_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="3px" width="24px" height="17px" viewBox="0 0 216 146" ' +
   'enable-background="new 0 0 216 146" xml:space="preserve"> <path class="svg" d="M152.646,70.067c-1.521-1.521-3.367-' +
   '2.281-5.541-2.281H144.5V52.142c0-9.994-3.585-18.575-10.754-25.745c-7.17-7.17-15.751-10.755-25.746-10.755s-18.577,3' +
@@ -137,7 +137,7 @@ PaymentezForm.LOCK_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.or
   '7.786H87.143V52.142c0-5.757,2.037-10.673,6.111-14.746c4.074-4.074,8.989-6.11,14.747-6.11s10.673,2.036,14.746,6.11c' +
   '4.073,4.073,6.11,8.989,6.11,14.746V67.786z"/></svg>';
 
-PaymentezForm.CALENDAR_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
+PaymentForm.CALENDAR_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="4px" width="24px" height="16px" viewBox="0 0 216 146" ' +
   'enable-background="new 0 0 216 146" xml:space="preserve"> <path class="svg" d="M172.691,23.953c-2.062-2.064-4.508-' +
   '3.096-7.332-3.096h-10.428v-7.822c0-3.584-1.277-6.653-3.83-9.206c-2.554-2.553-5.621-3.83-9.207-3.83h-5.213c-3.586,0' +
@@ -153,7 +153,7 @@ PaymentezForm.CALENDAR_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w
   '33h-5.214c-0.761,0-1.386-0.244-1.874-0.733c-0.488-0.489-0.733-1.113-0.733-1.874V13.036z M165.357,135.572H50.643V52' +
   '.143h114.714V135.572z"/> </svg>';
 
-PaymentezForm.USER_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
+PaymentForm.USER_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="4px" width="24px" height="16px" viewBox="0 0 216 146" ' +
   'enable-background="new 0 0 216 146" xml:space="preserve"> <g> <path class="svg" d="M107.999,73c8.638,0,16.011-3.05' +
   '6,22.12-9.166c6.111-6.11,9.166-13.483,9.166-22.12c0-8.636-3.055-16.009-9.166-22.12c-6.11-6.11-13.484-9.165-22.12-9' +
@@ -168,7 +168,7 @@ PaymentezForm.USER_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.or
   '5.439c3.965,3.774,9.234,5.661,15.806,5.661h71.208c6.572,0,11.84-1.887,15.806-5.661c3.966-3.775,5.948-8.921,5.948-1' +
   '5.439C165.357,111.591,165.262,108.78,165.07,106.037z"/> </g> </svg>';
 
-PaymentezForm.MAIL_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
+PaymentForm.MAIL_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="4px" width="24px" height="16px" viewBox="0 0 216 146" ' +
   'enable-background="new 0 0 216 146" xml:space="preserve"> <path class="svg" d="M177.171,19.472c-2.553-2.553-5.622-' +
   '3.829-9.206-3.829H48.036c-3.585,0-6.654,1.276-9.207,3.829C36.276,22.025,35,25.094,35,28.679v88.644c0,3.585,1.276,6' +
@@ -187,7 +187,7 @@ PaymentezForm.MAIL_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.or
   '1,0.57,0.094,0.732,0.61c0.163,0.516,0.312,0.76,0.448,0.733c0.136-0.027,0.218,0.312,0.245,1.019c0.025,0.706,0.039,1' +
   '.061,0.039,1.061V30.797z"/> </svg>';
 
-PaymentezForm.INFORMATION_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
+PaymentForm.INFORMATION_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="4px" width="24px" height="16px" viewBox="0 0 216 146" ' +
   'enable-background="new 0 0 216 146" xml:space="preserve"> <g> <path class="svg" d="M97.571,41.714h20.859c1.411,0,2' +
   '.633-0.516,3.666-1.548c1.031-1.031,1.547-2.254,1.547-3.666V20.857c0-1.412-0.516-2.634-1.549-3.667c-1.031-1.031-2.2' +
@@ -205,7 +205,7 @@ PaymentezForm.INFORMATION_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://ww
  * @param e
  * @returns {which|*|Object|which|which|string}
  */
-PaymentezForm.keyCodeFromEvent = function (e) {
+PaymentForm.keyCodeFromEvent = function (e) {
   return e.which || e.keyCode;
 };
 
@@ -215,7 +215,7 @@ PaymentezForm.keyCodeFromEvent = function (e) {
  * @param e
  * @returns {boolean|metaKey|*|metaKey}
  */
-PaymentezForm.keyIsCommandFromEvent = function (e) {
+PaymentForm.keyIsCommandFromEvent = function (e) {
   return e.ctrlKey || e.metaKey;
 };
 
@@ -225,8 +225,8 @@ PaymentezForm.keyIsCommandFromEvent = function (e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsNumber = function (e) {
-  return PaymentezForm.keyIsTopNumber(e) || PaymentezForm.keyIsKeypadNumber(e);
+PaymentForm.keyIsNumber = function (e) {
+  return PaymentForm.keyIsTopNumber(e) || PaymentForm.keyIsKeypadNumber(e);
 };
 
 /**
@@ -235,9 +235,9 @@ PaymentezForm.keyIsNumber = function (e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsTopNumber = function (e) {
-  let keyCode = PaymentezForm.keyCodeFromEvent(e);
-  return keyCode >= PaymentezForm.KEYS["0"] && keyCode <= PaymentezForm.KEYS["9"];
+PaymentForm.keyIsTopNumber = function (e) {
+  let keyCode = PaymentForm.keyCodeFromEvent(e);
+  return keyCode >= PaymentForm.KEYS["0"] && keyCode <= PaymentForm.KEYS["9"];
 };
 
 /**
@@ -246,9 +246,9 @@ PaymentezForm.keyIsTopNumber = function (e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsKeypadNumber = function (e) {
-  let keyCode = PaymentezForm.keyCodeFromEvent(e);
-  return keyCode >= PaymentezForm.KEYS["NUMPAD_0"] && keyCode <= PaymentezForm.KEYS["NUMPAD_9"];
+PaymentForm.keyIsKeypadNumber = function (e) {
+  let keyCode = PaymentForm.keyCodeFromEvent(e);
+  return keyCode >= PaymentForm.KEYS["NUMPAD_0"] && keyCode <= PaymentForm.KEYS["NUMPAD_9"];
 };
 
 /**
@@ -257,8 +257,8 @@ PaymentezForm.keyIsKeypadNumber = function (e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsDelete = function (e) {
-  return PaymentezForm.keyCodeFromEvent(e) === PaymentezForm.KEYS["DELETE"];
+PaymentForm.keyIsDelete = function (e) {
+  return PaymentForm.keyCodeFromEvent(e) === PaymentForm.KEYS["DELETE"];
 };
 
 /**
@@ -267,8 +267,8 @@ PaymentezForm.keyIsDelete = function (e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsBackspace = function (e) {
-  return PaymentezForm.keyCodeFromEvent(e) === PaymentezForm.KEYS["BACKSPACE"];
+PaymentForm.keyIsBackspace = function (e) {
+  return PaymentForm.keyCodeFromEvent(e) === PaymentForm.KEYS["BACKSPACE"];
 };
 
 /**
@@ -277,8 +277,8 @@ PaymentezForm.keyIsBackspace = function (e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsDeletion = function (e) {
-  return PaymentezForm.keyIsDelete(e) || PaymentezForm.keyIsBackspace(e);
+PaymentForm.keyIsDeletion = function (e) {
+  return PaymentForm.keyIsDelete(e) || PaymentForm.keyIsBackspace(e);
 };
 
 /**
@@ -287,9 +287,9 @@ PaymentezForm.keyIsDeletion = function (e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsArrow = function (e) {
-  let keyCode = PaymentezForm.keyCodeFromEvent(e);
-  return keyCode >= PaymentezForm.KEYS["ARROW_LEFT"] && keyCode <= PaymentezForm.KEYS["ARROW_DOWN"];
+PaymentForm.keyIsArrow = function (e) {
+  let keyCode = PaymentForm.keyCodeFromEvent(e);
+  return keyCode >= PaymentForm.KEYS["ARROW_LEFT"] && keyCode <= PaymentForm.KEYS["ARROW_DOWN"];
 };
 
 /**
@@ -298,9 +298,9 @@ PaymentezForm.keyIsArrow = function (e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsNavigation = function (e) {
-  let keyCode = PaymentezForm.keyCodeFromEvent(e);
-  return keyCode === PaymentezForm.KEYS["HOME"] || keyCode === PaymentezForm.KEYS["END"];
+PaymentForm.keyIsNavigation = function (e) {
+  let keyCode = PaymentForm.keyCodeFromEvent(e);
+  return keyCode === PaymentForm.KEYS["HOME"] || keyCode === PaymentForm.KEYS["END"];
 };
 
 /**
@@ -309,14 +309,14 @@ PaymentezForm.keyIsNavigation = function (e) {
  * @param e
  * @returns {boolean|metaKey|*|metaKey|boolean}
  */
-PaymentezForm.keyIsKeyboardCommand = function (e) {
-  let keyCode = PaymentezForm.keyCodeFromEvent(e);
-  return PaymentezForm.keyIsCommandFromEvent(e) &&
+PaymentForm.keyIsKeyboardCommand = function (e) {
+  let keyCode = PaymentForm.keyCodeFromEvent(e);
+  return PaymentForm.keyIsCommandFromEvent(e) &&
     (
-      keyCode === PaymentezForm.KEYS["A"] ||
-      keyCode === PaymentezForm.KEYS["X"] ||
-      keyCode === PaymentezForm.KEYS["C"] ||
-      keyCode === PaymentezForm.KEYS["V"]
+      keyCode === PaymentForm.KEYS["A"] ||
+      keyCode === PaymentForm.KEYS["X"] ||
+      keyCode === PaymentForm.KEYS["C"] ||
+      keyCode === PaymentForm.KEYS["V"]
     );
 };
 
@@ -326,8 +326,8 @@ PaymentezForm.keyIsKeyboardCommand = function (e) {
  * @param e
  * @returns {boolean}
  */
-PaymentezForm.keyIsTab = function (e) {
-  return PaymentezForm.keyCodeFromEvent(e) === PaymentezForm.KEYS["TAB"];
+PaymentForm.keyIsTab = function (e) {
+  return PaymentForm.keyCodeFromEvent(e) === PaymentForm.KEYS["TAB"];
 };
 
 /**
@@ -336,7 +336,7 @@ PaymentezForm.keyIsTab = function (e) {
  * @param source
  * @param destination
  */
-PaymentezForm.copyAllElementAttributes = function (source, destination) {
+PaymentForm.copyAllElementAttributes = function (source, destination) {
   $.each(source[0].attributes, function (idx, attr) {
     destination.attr(attr.nodeName, attr.nodeValue);
   });
@@ -348,7 +348,7 @@ PaymentezForm.copyAllElementAttributes = function (source, destination) {
  * @param string
  * @returns {string}
  */
-PaymentezForm.numbersOnlyString = function (string) {
+PaymentForm.numbersOnlyString = function (string) {
   let numbersOnlyString = "";
   for (let i = 0; i < string.length; i++) {
     let currentChar = string.charAt(i);
@@ -367,7 +367,7 @@ PaymentezForm.numbersOnlyString = function (string) {
  * @param mask
  * @returns {string}
  */
-PaymentezForm.applyFormatMask = function (string, mask) {
+PaymentForm.applyFormatMask = function (string, mask) {
   let formattedString = "";
   let numberPos = 0;
   for (let j = 0; j < mask.length; j++) {
@@ -386,16 +386,16 @@ PaymentezForm.applyFormatMask = function (string, mask) {
   return formattedString;
 };
 
-PaymentezForm.prototype.cardTypeFromNumberBin = function (number) {
+PaymentForm.prototype.cardTypeFromNumberBin = function (number) {
   let number_bin = number.replace(" ", "").substring(0, 6);
   if (number >= 6 && this.numberBin !== number_bin) {
     this.numberBin = number_bin;
-    Paymentez.getBinInformation(number_bin, this, this.successCallback, function (error) {
+    Payment.getBinInformation(number_bin, this, this.successCallback, function (error) {
     });
   }
 };
 
-PaymentezForm.prototype.successCallback = function (objResponse, form) {
+PaymentForm.prototype.successCallback = function (objResponse, form) {
   // Set luhn flag
   form.useLunh = objResponse.use_luhn;
 
@@ -452,7 +452,7 @@ PaymentezForm.prototype.successCallback = function (objResponse, form) {
  *
  * @param installments - array
  */
-PaymentezForm.prototype.setInstallmentsOptions = function (installments) {
+PaymentForm.prototype.setInstallmentsOptions = function (installments) {
   let selectInstallments = $(".installments");
   selectInstallments.empty();
   $.each(installments, function (option, value) {
@@ -466,7 +466,7 @@ PaymentezForm.prototype.setInstallmentsOptions = function (installments) {
  * @param element
  * @returns {*}
  */
-PaymentezForm.caretStartPosition = function (element) {
+PaymentForm.caretStartPosition = function (element) {
   if (typeof element.selectionStart == "number") {
     return element.selectionStart;
   }
@@ -479,7 +479,7 @@ PaymentezForm.caretStartPosition = function (element) {
  * @param element
  * @returns {*}
  */
-PaymentezForm.caretEndPosition = function (element) {
+PaymentForm.caretEndPosition = function (element) {
   if (typeof element.selectionEnd == "number") {
     return element.selectionEnd;
   }
@@ -492,7 +492,7 @@ PaymentezForm.caretEndPosition = function (element) {
  * @param element
  * @param caretPos
  */
-PaymentezForm.setCaretPosition = function (element, caretPos) {
+PaymentForm.setCaretPosition = function (element, caretPos) {
   if (element != null) {
     if (element.createTextRange) {
       let range = element.createTextRange();
@@ -516,7 +516,7 @@ PaymentezForm.setCaretPosition = function (element, caretPos) {
  * @param caretPosition
  * @returns {number}
  */
-PaymentezForm.normaliseCaretPosition = function (mask, caretPosition) {
+PaymentForm.normaliseCaretPosition = function (mask, caretPosition) {
   let numberPos = 0;
   if (caretPosition < 0 || caretPosition > mask.length) {
     return 0;
@@ -539,7 +539,7 @@ PaymentezForm.normaliseCaretPosition = function (mask, caretPosition) {
  * @param caretPosition
  * @returns {*}
  */
-PaymentezForm.denormaliseCaretPosition = function (mask, caretPosition) {
+PaymentForm.denormaliseCaretPosition = function (mask, caretPosition) {
   let numberPos = 0;
   if (caretPosition < 0 || caretPosition > mask.length) {
     return 0;
@@ -560,13 +560,13 @@ PaymentezForm.denormaliseCaretPosition = function (mask, caretPosition) {
  *
  * @param e
  */
-PaymentezForm.filterNumberOnlyKey = function (e) {
-  let isNumber = PaymentezForm.keyIsNumber(e);
-  let isDeletion = PaymentezForm.keyIsDeletion(e);
-  let isArrow = PaymentezForm.keyIsArrow(e);
-  let isNavigation = PaymentezForm.keyIsNavigation(e);
-  let isKeyboardCommand = PaymentezForm.keyIsKeyboardCommand(e);
-  let isTab = PaymentezForm.keyIsTab(e);
+PaymentForm.filterNumberOnlyKey = function (e) {
+  let isNumber = PaymentForm.keyIsNumber(e);
+  let isDeletion = PaymentForm.keyIsDeletion(e);
+  let isArrow = PaymentForm.keyIsArrow(e);
+  let isNavigation = PaymentForm.keyIsNavigation(e);
+  let isKeyboardCommand = PaymentForm.keyIsKeyboardCommand(e);
+  let isTab = PaymentForm.keyIsTab(e);
 
   if (!isNumber && !isDeletion && !isArrow && !isNavigation && !isKeyboardCommand && !isTab) {
     e.preventDefault();
@@ -579,14 +579,14 @@ PaymentezForm.filterNumberOnlyKey = function (e) {
  * @param keyCode
  * @returns {*}
  */
-PaymentezForm.digitFromKeyCode = function (keyCode) {
+PaymentForm.digitFromKeyCode = function (keyCode) {
 
-  if (keyCode >= PaymentezForm.KEYS["0"] && keyCode <= PaymentezForm.KEYS["9"]) {
-    return keyCode - PaymentezForm.KEYS["0"];
+  if (keyCode >= PaymentForm.KEYS["0"] && keyCode <= PaymentForm.KEYS["9"]) {
+    return keyCode - PaymentForm.KEYS["0"];
   }
 
-  if (keyCode >= PaymentezForm.KEYS["NUMPAD_0"] && keyCode <= PaymentezForm.KEYS["NUMPAD_9"]) {
-    return keyCode - PaymentezForm.KEYS["NUMPAD_0"];
+  if (keyCode >= PaymentForm.KEYS["NUMPAD_0"] && keyCode <= PaymentForm.KEYS["NUMPAD_9"]) {
+    return keyCode - PaymentForm.KEYS["NUMPAD_0"];
   }
 
   return null;
@@ -598,32 +598,32 @@ PaymentezForm.digitFromKeyCode = function (keyCode) {
  * @param e
  * @param mask
  */
-PaymentezForm.handleMaskedNumberInputKey = function (e, mask) {
-  PaymentezForm.filterNumberOnlyKey(e);
+PaymentForm.handleMaskedNumberInputKey = function (e, mask) {
+  PaymentForm.filterNumberOnlyKey(e);
 
   let keyCode = e.which || e.keyCode;
 
   let element = e.target;
 
-  let caretStart = PaymentezForm.caretStartPosition(element);
-  let caretEnd = PaymentezForm.caretEndPosition(element);
+  let caretStart = PaymentForm.caretStartPosition(element);
+  let caretEnd = PaymentForm.caretEndPosition(element);
 
   // Calculate normalised caret position
-  let normalisedStartCaretPosition = PaymentezForm.normaliseCaretPosition(mask, caretStart);
-  let normalisedEndCaretPosition = PaymentezForm.normaliseCaretPosition(mask, caretEnd);
+  let normalisedStartCaretPosition = PaymentForm.normaliseCaretPosition(mask, caretStart);
+  let normalisedEndCaretPosition = PaymentForm.normaliseCaretPosition(mask, caretEnd);
 
   let newCaretPosition = caretStart;
 
-  let isNumber = PaymentezForm.keyIsNumber(e);
-  let isDelete = PaymentezForm.keyIsDelete(e);
-  let isBackspace = PaymentezForm.keyIsBackspace(e);
+  let isNumber = PaymentForm.keyIsNumber(e);
+  let isDelete = PaymentForm.keyIsDelete(e);
+  let isBackspace = PaymentForm.keyIsBackspace(e);
 
   if (isNumber || isDelete || isBackspace) {
     e.preventDefault();
     let rawText = $(element).val();
-    let numbersOnly = PaymentezForm.numbersOnlyString(rawText);
+    let numbersOnly = PaymentForm.numbersOnlyString(rawText);
 
-    let digit = PaymentezForm.digitFromKeyCode(keyCode);
+    let digit = PaymentForm.digitFromKeyCode(keyCode);
 
     let rangeHighlighted = normalisedEndCaretPosition > normalisedStartCaretPosition;
 
@@ -641,8 +641,8 @@ PaymentezForm.handleMaskedNumberInputKey = function (e, mask) {
         numbersOnly = (numbersOnly.slice(0, normalisedStartCaretPosition) + digit +
           numbersOnly.slice(normalisedStartCaretPosition));
         newCaretPosition = Math.max(
-          PaymentezForm.denormaliseCaretPosition(mask, normalisedStartCaretPosition + 1),
-          PaymentezForm.denormaliseCaretPosition(mask, normalisedStartCaretPosition + 2) - 1
+          PaymentForm.denormaliseCaretPosition(mask, normalisedStartCaretPosition + 1),
+          PaymentForm.denormaliseCaretPosition(mask, normalisedStartCaretPosition + 2) - 1
         );
       }
 
@@ -661,13 +661,13 @@ PaymentezForm.handleMaskedNumberInputKey = function (e, mask) {
       if (isBackspace && !rangeHighlighted) {
         numbersOnly = (numbersOnly.slice(0, normalisedStartCaretPosition - 1) +
           numbersOnly.slice(normalisedStartCaretPosition));
-        newCaretPosition = PaymentezForm.denormaliseCaretPosition(mask, normalisedStartCaretPosition - 1);
+        newCaretPosition = PaymentForm.denormaliseCaretPosition(mask, normalisedStartCaretPosition - 1);
       }
     }
 
-    $(element).val(PaymentezForm.applyFormatMask(numbersOnly, mask));
+    $(element).val(PaymentForm.applyFormatMask(numbersOnly, mask));
 
-    PaymentezForm.setCaretPosition(element, newCaretPosition);
+    PaymentForm.setCaretPosition(element, newCaretPosition);
   }
 };
 
@@ -677,21 +677,21 @@ PaymentezForm.handleMaskedNumberInputKey = function (e, mask) {
  * @param e
  * @param cardMask
  */
-PaymentezForm.handleCreditCardNumberKey = function (e, cardMask) {
-  PaymentezForm.handleMaskedNumberInputKey(e, cardMask);
+PaymentForm.handleCreditCardNumberKey = function (e, cardMask) {
+  PaymentForm.handleMaskedNumberInputKey(e, cardMask);
 };
 
-PaymentezForm.handleCreditCardNumberChange = function (e) {
+PaymentForm.handleCreditCardNumberChange = function (e) {
 };
 
-PaymentezForm.handleExpiryKey = function (e) {
-  PaymentezForm.handleMaskedNumberInputKey(e, PaymentezForm.EXPIRY_MASK);
+PaymentForm.handleExpiryKey = function (e) {
+  PaymentForm.handleMaskedNumberInputKey(e, PaymentForm.EXPIRY_MASK);
 };
 
 /**
  * Generate a random array to assign to tuya keyboard
  */
-PaymentezForm.generateRandoms = function () {
+PaymentForm.generateRandoms = function () {
   let myArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
   let i, j, k;
   for (i = myArray.length; i; i--) {
@@ -708,7 +708,7 @@ PaymentezForm.generateRandoms = function () {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getCardNumber = function () {
+PaymentForm.prototype.getCardNumber = function () {
   return this.cardNumberInput.val();
 };
 
@@ -717,7 +717,7 @@ PaymentezForm.prototype.getCardNumber = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isValidData = function () {
+PaymentForm.prototype.isValidData = function () {
   let is_date_valid = this.refreshExpiryMonthValidation();
   let is_cvc_valid = this.refreshCvcValidation();
   let is_card_holder_valid = this.refreshCardHolderNameValidation();
@@ -730,7 +730,7 @@ PaymentezForm.prototype.isValidData = function () {
     && is_email_valid && is_cellphone_valid && is_fiscal_number_valid && is_nip_valid;
 };
 
-PaymentezForm.prototype.refreshCvcValidation = function () {
+PaymentForm.prototype.refreshCvcValidation = function () {
   if (this.isCvcValid()) {
     this.cvcInput.parent().removeClass("has-error");
     return true;
@@ -740,7 +740,7 @@ PaymentezForm.prototype.refreshCvcValidation = function () {
   }
 };
 
-PaymentezForm.prototype.refreshCardHolderNameValidation = function () {
+PaymentForm.prototype.refreshCardHolderNameValidation = function () {
   if (this.isCardHolderNameValid()) {
     this.nameInput.parent().removeClass("has-error");
     return true;
@@ -750,7 +750,7 @@ PaymentezForm.prototype.refreshCardHolderNameValidation = function () {
   }
 };
 
-PaymentezForm.prototype.refreshEmailValidation = function () {
+PaymentForm.prototype.refreshEmailValidation = function () {
   if (this.isEmailValid()) {
     this.emailInput.parent().removeClass("has-error");
     return true;
@@ -760,7 +760,7 @@ PaymentezForm.prototype.refreshEmailValidation = function () {
   }
 };
 
-PaymentezForm.prototype.refreshCellPhoneValidation = function () {
+PaymentForm.prototype.refreshCellPhoneValidation = function () {
   if (this.isCellPhoneValid()) {
     this.cellPhoneInput.parent().removeClass("has-error");
     return true;
@@ -770,7 +770,7 @@ PaymentezForm.prototype.refreshCellPhoneValidation = function () {
   }
 };
 
-PaymentezForm.prototype.refreshCardNumberValidation = function () {
+PaymentForm.prototype.refreshCardNumberValidation = function () {
   if (this.isCardNumberValid()) {
     this.cardNumberInput.parent().removeClass("has-error");
     return true;
@@ -780,7 +780,7 @@ PaymentezForm.prototype.refreshCardNumberValidation = function () {
   }
 };
 
-PaymentezForm.prototype.refreshFiscalNumberValidation = function () {
+PaymentForm.prototype.refreshFiscalNumberValidation = function () {
   if (this.fiscalNumberAdded() && this.isFiscalNumberValid()) {
     this.fiscalNumberInput.parent().removeClass("has-error");
     return true;
@@ -792,7 +792,7 @@ PaymentezForm.prototype.refreshFiscalNumberValidation = function () {
   }
 };
 
-PaymentezForm.prototype.refreshNipValidation = function () {
+PaymentForm.prototype.refreshNipValidation = function () {
   if (this.nipWrapperAdded()) {
     if (this.isNipValid()) {
       this.nipInput.parent().removeClass("has-error");
@@ -806,18 +806,18 @@ PaymentezForm.prototype.refreshNipValidation = function () {
   }
 };
 
-PaymentezForm.prototype.refreshValidationOption = function () {
-  if (this.getValidationOption() === PaymentezForm.AUTH_OTP) {
+PaymentForm.prototype.refreshValidationOption = function () {
+  if (this.getValidationOption() === PaymentForm.AUTH_OTP) {
     this.addValidationMessage();
     this.removeNip();
     this.removeVirtualKeyboard();
-  } else if (this.getValidationOption() === PaymentezForm.AUTH_NIP) {
+  } else if (this.getValidationOption() === PaymentForm.AUTH_NIP) {
     this.removeValidationMessage();
     this.addNip();
   }
 };
 
-PaymentezForm.prototype.addValueToNip = function (value, key) {
+PaymentForm.prototype.addValueToNip = function (value, key) {
   if (this.nipWrapperAdded()) {
     if (this.nipInput.val().length < this.nipLenght) {
       let newValue = this.nipInput.val() + value;
@@ -827,7 +827,7 @@ PaymentezForm.prototype.addValueToNip = function (value, key) {
   }
 };
 
-PaymentezForm.prototype.cleanNipInput = function () {
+PaymentForm.prototype.cleanNipInput = function () {
   if (this.nipWrapperAdded())
     this.nipInput.val("");
   this.nip = "";
@@ -838,8 +838,8 @@ PaymentezForm.prototype.cleanNipInput = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isCvcValid = function () {
-  if (this.getValidationOption() === PaymentezForm.AUTH_CVC) {
+PaymentForm.prototype.isCvcValid = function () {
+  if (this.getValidationOption() === PaymentForm.AUTH_CVC) {
     return this.getCvc() != null && this.getCvc().trim().length === this.cvcLenght;
   } else {
     return true;
@@ -851,14 +851,14 @@ PaymentezForm.prototype.isCvcValid = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isCardHolderNameValid = function () {
+PaymentForm.prototype.isCardHolderNameValid = function () {
   if (this.captureName)
     return this.getName() != null && this.getName().length >= 5;
   else
     return true;
 };
 
-PaymentezForm.prototype.isEmailValid = function () {
+PaymentForm.prototype.isEmailValid = function () {
   if (this.captureEmail) {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return this.getEmail() != null && this.getEmail().length >= 5 && re.test(this.getEmail());
@@ -866,7 +866,7 @@ PaymentezForm.prototype.isEmailValid = function () {
     return true;
 };
 
-PaymentezForm.prototype.isCellPhoneValid = function () {
+PaymentForm.prototype.isCellPhoneValid = function () {
   if (this.captureCellPhone)
     return this.getCellPhone() != null && this.getCellPhone().length >= 5;
   else
@@ -878,7 +878,7 @@ PaymentezForm.prototype.isCellPhoneValid = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isCardNumberValid = function () {
+PaymentForm.prototype.isCardNumberValid = function () {
   let value = this.getCardNumber();
   if (!this.useLunh) return true;
   if (value === '') return false;
@@ -908,8 +908,8 @@ PaymentezForm.prototype.isCardNumberValid = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isNipValid = function () {
-  if (this.getValidationOption() === PaymentezForm.AUTH_NIP) {
+PaymentForm.prototype.isNipValid = function () {
+  if (this.getValidationOption() === PaymentForm.AUTH_NIP) {
     return this.getNip() != null && this.getNip().trim().length === this.nipLenght;
   } else {
     return true;
@@ -921,7 +921,7 @@ PaymentezForm.prototype.isNipValid = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.isFiscalNumberValid = function () {
+PaymentForm.prototype.isFiscalNumberValid = function () {
   if (this.fiscalNumberAdded())
     return this.getFiscalNumber() != null && this.getFiscalNumber().length >= 6;
   else
@@ -933,7 +933,7 @@ PaymentezForm.prototype.isFiscalNumberValid = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.fiscalNumberAdded = function () {
+PaymentForm.prototype.fiscalNumberAdded = function () {
   let fNumber = this.elem.find(".fiscal-number-wrapper");
   return fNumber.length >= 1;
 };
@@ -943,7 +943,7 @@ PaymentezForm.prototype.fiscalNumberAdded = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.expiryContainerAdded = function () {
+PaymentForm.prototype.expiryContainerAdded = function () {
   let exContainter = this.elem.find(".expiry-container");
   return exContainter.length >= 1;
 };
@@ -953,7 +953,7 @@ PaymentezForm.prototype.expiryContainerAdded = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.cvcContainerAdded = function () {
+PaymentForm.prototype.cvcContainerAdded = function () {
   let cvcContainer = this.elem.find(".cvc-container");
   return cvcContainer.length >= 1;
 };
@@ -963,7 +963,7 @@ PaymentezForm.prototype.cvcContainerAdded = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.nipWrapperAdded = function () {
+PaymentForm.prototype.nipWrapperAdded = function () {
   let nipWrapper = this.elem.find(".nip-wrapper");
   return nipWrapper.length >= 1;
 };
@@ -973,7 +973,7 @@ PaymentezForm.prototype.nipWrapperAdded = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.otpWrapperAdded = function () {
+PaymentForm.prototype.otpWrapperAdded = function () {
   let otpWrapper = this.elem.find(".otp-wrapper");
   return otpWrapper.length >= 1;
 };
@@ -983,7 +983,7 @@ PaymentezForm.prototype.otpWrapperAdded = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.validationMessageAdded = function () {
+PaymentForm.prototype.validationMessageAdded = function () {
   let validactionMessage = this.elem.find(".validation-message");
   return validactionMessage.length >= 1;
 };
@@ -993,7 +993,7 @@ PaymentezForm.prototype.validationMessageAdded = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.virtualKeyboardAdded = function () {
+PaymentForm.prototype.virtualKeyboardAdded = function () {
   let keyboardWrapper = this.elem.find(".keyboard-wrapper");
   return keyboardWrapper.length >= 1;
 };
@@ -1003,7 +1003,7 @@ PaymentezForm.prototype.virtualKeyboardAdded = function () {
  *
  * @returns {boolean}
  */
-PaymentezForm.prototype.warningMessageAdded = function () {
+PaymentForm.prototype.warningMessageAdded = function () {
   let warningMessage = this.elem.find(".warning-message");
   return warningMessage.length >= 1;
 };
@@ -1013,7 +1013,7 @@ PaymentezForm.prototype.warningMessageAdded = function () {
  *
  * @returns {object}
  */
-PaymentezForm.prototype.getCard = function () {
+PaymentForm.prototype.getCard = function () {
   let data = null;
   if (this.isValidData()) {
     let today = new Date();
@@ -1046,7 +1046,7 @@ PaymentezForm.prototype.getCard = function () {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getCardType = function () {
+PaymentForm.prototype.getCardType = function () {
   return this.brand_name;
 };
 
@@ -1055,7 +1055,7 @@ PaymentezForm.prototype.getCardType = function () {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getName = function () {
+PaymentForm.prototype.getName = function () {
   return this.nameInput.val();
 };
 
@@ -1064,7 +1064,7 @@ PaymentezForm.prototype.getName = function () {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getEmail = function () {
+PaymentForm.prototype.getEmail = function () {
   return this.emailInput.val();
 };
 
@@ -1073,7 +1073,7 @@ PaymentezForm.prototype.getEmail = function () {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getCellPhone = function () {
+PaymentForm.prototype.getCellPhone = function () {
   return this.cellPhoneInput.val();
 };
 
@@ -1082,7 +1082,7 @@ PaymentezForm.prototype.getCellPhone = function () {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getExpiryMonth = function () {
+PaymentForm.prototype.getExpiryMonth = function () {
   return parseInt(this.expiryMonthInput.val()) ? this.expiryMonthInput.val() : 0;
 };
 
@@ -1091,7 +1091,7 @@ PaymentezForm.prototype.getExpiryMonth = function () {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getExpiryYear = function () {
+PaymentForm.prototype.getExpiryYear = function () {
   return parseInt(this.expiryYearInput.val()) ? this.expiryYearInput.val() : 0;
 };
 
@@ -1100,7 +1100,7 @@ PaymentezForm.prototype.getExpiryYear = function () {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getFiscalNumber = function () {
+PaymentForm.prototype.getFiscalNumber = function () {
   if (this.fiscalNumberAdded()) {
     return this.fiscalNumberInput.val();
   } else {
@@ -1113,20 +1113,20 @@ PaymentezForm.prototype.getFiscalNumber = function () {
  *
  * @returns {number}
  */
-PaymentezForm.prototype.getValidationOption = function () {
-  let val = PaymentezForm.AUTH_CVC;
+PaymentForm.prototype.getValidationOption = function () {
+  let val = PaymentForm.AUTH_CVC;
   if (this.cardType === 'ex' || this.cardType === 'ak') {
     if (this.USE_OTP) {
       if (this.otpValidation.is(':checked')) {
-        val = PaymentezForm.AUTH_OTP;
+        val = PaymentForm.AUTH_OTP;
       } else {
-        val = PaymentezForm.AUTH_NIP;
+        val = PaymentForm.AUTH_NIP;
       }
     } else {
-      val = PaymentezForm.AUTH_NIP;
+      val = PaymentForm.AUTH_NIP;
     }
   } else {
-    val = PaymentezForm.AUTH_CVC;
+    val = PaymentForm.AUTH_CVC;
   }
   return val;
 };
@@ -1136,8 +1136,8 @@ PaymentezForm.prototype.getValidationOption = function () {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getCvc = function () {
-  if (this.getValidationOption() === PaymentezForm.AUTH_CVC) {
+PaymentForm.prototype.getCvc = function () {
+  if (this.getValidationOption() === PaymentForm.AUTH_CVC) {
     return this.cvcInput.val();
   } else {
     return "";
@@ -1149,8 +1149,8 @@ PaymentezForm.prototype.getCvc = function () {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.getNip = function () {
-  if (this.getValidationOption() === PaymentezForm.AUTH_NIP) {
+PaymentForm.prototype.getNip = function () {
+  if (this.getValidationOption() === PaymentForm.AUTH_NIP) {
     if (this.nipWrapperAdded() && !this.USE_VIRTUAL_KEYBOARD) {
       this.nip = (this.nipInput.val());
     }
@@ -1167,7 +1167,7 @@ PaymentezForm.prototype.getNip = function () {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.blockForm = function () {
+PaymentForm.prototype.blockForm = function () {
   this.isBloqued = true;
 
   // Setup display
@@ -1215,7 +1215,7 @@ PaymentezForm.prototype.blockForm = function () {
  *
  * @returns {string}
  */
-PaymentezForm.prototype.unBlockForm = function () {
+PaymentForm.prototype.unBlockForm = function () {
   this.isBloqued = false;
 
   // Setup display
@@ -1247,15 +1247,15 @@ PaymentezForm.prototype.unBlockForm = function () {
  *
  * @param colour
  */
-PaymentezForm.prototype.setIconColour = function (colour) {
+PaymentForm.prototype.setIconColour = function (colour) {
   this.elem.find(".icon .svg").css({"fill": colour});
 };
 
 /**
  *
  */
-PaymentezForm.prototype.refreshCreditCardType = function () {
-  let number = PaymentezForm.numbersOnlyString(this.getCardNumber());
+PaymentForm.prototype.refreshCreditCardType = function () {
+  let number = PaymentForm.numbersOnlyString(this.getCardNumber());
   if (number.length >= 6) {
     this.cardTypeFromNumberBin(number);
   }
@@ -1264,41 +1264,41 @@ PaymentezForm.prototype.refreshCreditCardType = function () {
 /**
  *
  */
-PaymentezForm.prototype.refreshCreditCardNumberFormat = function () {
-  let numbersOnly = PaymentezForm.numbersOnlyString($(this.cardNumberInput).val());
-  let formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
+PaymentForm.prototype.refreshCreditCardNumberFormat = function () {
+  let numbersOnly = PaymentForm.numbersOnlyString($(this.cardNumberInput).val());
+  let formattedNumber = PaymentForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
   $(this.cardNumberInput).val(formattedNumber);
 };
 
 /**
  *
  */
-PaymentezForm.prototype.refreshExpiryMonthYearInput = function () {
-  let numbersOnly = PaymentezForm.numbersOnlyString($(this.expiryMonthYearInput).val());
-  let formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, PaymentezForm.EXPIRY_MASK);
+PaymentForm.prototype.refreshExpiryMonthYearInput = function () {
+  let numbersOnly = PaymentForm.numbersOnlyString($(this.expiryMonthYearInput).val());
+  let formattedNumber = PaymentForm.applyFormatMask(numbersOnly, PaymentForm.EXPIRY_MASK);
   $(this.expiryMonthYearInput).val(formattedNumber);
 };
 
 /**
  *
  */
-PaymentezForm.prototype.refreshCvc = function () {
-  let numbersOnly = PaymentezForm.numbersOnlyString($(this.cvcInput).val());
-  let formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
+PaymentForm.prototype.refreshCvc = function () {
+  let numbersOnly = PaymentForm.numbersOnlyString($(this.cvcInput).val());
+  let formattedNumber = PaymentForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
   $(this.cvcInput).val(formattedNumber);
 };
 
 /**
  *
  */
-PaymentezForm.prototype.refreshNip = function () {
-  let numbersOnly = PaymentezForm.numbersOnlyString($(this.nipInput).val());
-  let formattedNumber = PaymentezForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
+PaymentForm.prototype.refreshNip = function () {
+  let numbersOnly = PaymentForm.numbersOnlyString($(this.nipInput).val());
+  let formattedNumber = PaymentForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
   $(this.nipInput).val(formattedNumber);
 };
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-PaymentezForm.prototype.addFiscalNumber = function () {
+PaymentForm.prototype.addFiscalNumber = function () {
   if (!this.fiscalNumberAdded()) {
     this.initFiscalNumberInput();
     this.setupFiscalNumberInput();
@@ -1306,13 +1306,13 @@ PaymentezForm.prototype.addFiscalNumber = function () {
   }
 };
 
-PaymentezForm.prototype.removeFiscalNumber = function () {
+PaymentForm.prototype.removeFiscalNumber = function () {
   if (this.fiscalNumberAdded()) {
     this.elem.find(".fiscal-number-wrapper").remove();
   }
 };
 
-PaymentezForm.prototype.addExpiryContainer = function () {
+PaymentForm.prototype.addExpiryContainer = function () {
   if (!this.expiryContainerAdded()) {
     this.initExpiryMonthInput();
     this.initExpiryYearInput();
@@ -1321,13 +1321,13 @@ PaymentezForm.prototype.addExpiryContainer = function () {
   }
 };
 
-PaymentezForm.prototype.removeExpiryContainer = function () {
+PaymentForm.prototype.removeExpiryContainer = function () {
   if (this.expiryContainerAdded()) {
     this.elem.find(".expiry-container").remove();
   }
 };
 
-PaymentezForm.prototype.addCvcContainer = function () {
+PaymentForm.prototype.addCvcContainer = function () {
   if (!this.cvcContainerAdded()) {
     this.initCvcInput();
     this.setupCvcInput();
@@ -1335,13 +1335,13 @@ PaymentezForm.prototype.addCvcContainer = function () {
   }
 };
 
-PaymentezForm.prototype.removeCvcContainer = function () {
+PaymentForm.prototype.removeCvcContainer = function () {
   if (this.cvcContainerAdded()) {
     this.elem.find(".cvc-container").remove();
   }
 };
 
-PaymentezForm.prototype.addNip = function () {
+PaymentForm.prototype.addNip = function () {
   if (!this.otpWrapperAdded()) {
     if (!this.nipWrapperAdded()) {
       this.initNipInput();
@@ -1349,7 +1349,7 @@ PaymentezForm.prototype.addNip = function () {
       this.setIconColour(this.iconColour);
     }
   } else {
-    if (this.getValidationOption() === PaymentezForm.AUTH_NIP && !this.nipWrapperAdded()) {
+    if (this.getValidationOption() === PaymentForm.AUTH_NIP && !this.nipWrapperAdded()) {
       this.initNipInput();
       this.setupNipInput();
       this.setIconColour(this.iconColour);
@@ -1357,56 +1357,56 @@ PaymentezForm.prototype.addNip = function () {
   }
 };
 
-PaymentezForm.prototype.removeNip = function () {
+PaymentForm.prototype.removeNip = function () {
   if (this.nipWrapperAdded()) {
     this.elem.find(".nip-wrapper").remove();
   }
 };
 
-PaymentezForm.prototype.addOtpValidation = function () {
+PaymentForm.prototype.addOtpValidation = function () {
   if (!this.otpWrapperAdded() && this.USE_OTP) {
     this.initOtpValidation();
     this.setupOtpValidation();
   }
 };
 
-PaymentezForm.prototype.removeOtpValidation = function () {
+PaymentForm.prototype.removeOtpValidation = function () {
   if (this.otpWrapperAdded()) {
     this.elem.find(".otp-wrapper").remove();
   }
 };
 
-PaymentezForm.prototype.addVirtualKeyboard = function () {
-  if (!this.virtualKeyboardAdded() && this.getValidationOption() === PaymentezForm.AUTH_NIP) {
+PaymentForm.prototype.addVirtualKeyboard = function () {
+  if (!this.virtualKeyboardAdded() && this.getValidationOption() === PaymentForm.AUTH_NIP) {
     this.setupVirtualKeyboard()
   }
 };
 
-PaymentezForm.prototype.removeVirtualKeyboard = function () {
+PaymentForm.prototype.removeVirtualKeyboard = function () {
   if (this.virtualKeyboardAdded()) {
     this.elem.find(".keyboard-wrapper").remove();
   }
 };
 
-PaymentezForm.prototype.addValidationMessage = function () {
+PaymentForm.prototype.addValidationMessage = function () {
   if (!this.validationMessageAdded()) {
     this.setupValidationMessage()
   }
 };
 
-PaymentezForm.prototype.removeValidationMessage = function () {
+PaymentForm.prototype.removeValidationMessage = function () {
   if (this.validationMessageAdded()) {
     this.elem.find(".validation-message").remove();
   }
 };
 
-PaymentezForm.prototype.addWarningMessage = function () {
+PaymentForm.prototype.addWarningMessage = function () {
   if (!this.warningMessageAdded()) {
     this.setupWarningMessage();
   }
 };
 
-PaymentezForm.prototype.removeWarningMessage = function () {
+PaymentForm.prototype.removeWarningMessage = function () {
   if (this.warningMessageAdded()) {
     this.elem.find(".warning-message").remove();
   }
@@ -1415,7 +1415,7 @@ PaymentezForm.prototype.removeWarningMessage = function () {
 /**
  * The next methods are temporary because only exito use otp and nip
  */
-PaymentezForm.prototype.addTuyaChanges = function () {
+PaymentForm.prototype.addTuyaChanges = function () {
   this.addFiscalNumber();
   this.addNip();
   this.addOtpValidation();
@@ -1423,7 +1423,7 @@ PaymentezForm.prototype.addTuyaChanges = function () {
   this.removeCvcContainer();
 };
 
-PaymentezForm.prototype.removeTuyaChanges = function () {
+PaymentForm.prototype.removeTuyaChanges = function () {
   this.addExpiryContainer();
   this.addCvcContainer();
   this.removeFiscalNumber();
@@ -1437,17 +1437,17 @@ PaymentezForm.prototype.removeTuyaChanges = function () {
 /**
  * Initialise the card number input
  */
-PaymentezForm.prototype.initCardNumberInput = function () {
+PaymentForm.prototype.initCardNumberInput = function () {
 
   // Find or create the card number input element
-  this.cardNumberInput = PaymentezForm.detachOrCreateElement(this.elem, ".card-number", "<input class='card-number' />");
+  this.cardNumberInput = PaymentForm.detachOrCreateElement(this.elem, ".card-number", "<input class='card-number' />");
   // Ensure the card number element has a name
-  if (!PaymentezForm.elementHasAttribute(this.cardNumberInput, "name")) {
+  if (!PaymentForm.elementHasAttribute(this.cardNumberInput, "name")) {
     this.cardNumberInput.attr("name", "card-number");
   }
   // Ensure the card number has a placeholder
-  if (!PaymentezForm.elementHasAttribute(this.cardNumberInput, "placeholder")) {
-    this.cardNumberInput.attr("placeholder", PaymentezForm.CREDIT_CARD_NUMBER_PLACEHOLDER);
+  if (!PaymentForm.elementHasAttribute(this.cardNumberInput, "placeholder")) {
+    this.cardNumberInput.attr("placeholder", PaymentForm.CREDIT_CARD_NUMBER_PLACEHOLDER);
   }
   this.cardNumberInput.attr("type", "tel");
   this.cardNumberInput.attr("maxlength", this.creditCardNumberMask.length);
@@ -1461,40 +1461,40 @@ PaymentezForm.prototype.initCardNumberInput = function () {
 /**
  * Initialise the name input
  */
-PaymentezForm.prototype.initNameInput = function () {
+PaymentForm.prototype.initNameInput = function () {
 
   // Enable name input if a field has been created
   if (!this.captureName)
     this.captureName = this.elem.find(".name")[0] != null;
   // Find or create the name input element
-  this.nameInput = PaymentezForm.detachOrCreateElement(this.elem, ".name", "<input class='name' />");
+  this.nameInput = PaymentForm.detachOrCreateElement(this.elem, ".name", "<input class='name' />");
   // Ensure the name element has a field name
-  if (!PaymentezForm.elementHasAttribute(this.nameInput, "name")) {
+  if (!PaymentForm.elementHasAttribute(this.nameInput, "name")) {
     this.nameInput.attr("name", "card-holder");
   }
   // Ensure the name element has a placeholder
-  if (!PaymentezForm.elementHasAttribute(this.nameInput, "placeholder")) {
-    this.nameInput.attr("placeholder", PaymentezForm.NAME_PLACEHOLDER);
+  if (!PaymentForm.elementHasAttribute(this.nameInput, "placeholder")) {
+    this.nameInput.attr("placeholder", PaymentForm.NAME_PLACEHOLDER);
   }
 };
 
 /**
  * Initialise the email input
  */
-PaymentezForm.prototype.initEmailInput = function () {
+PaymentForm.prototype.initEmailInput = function () {
 
   // Enable email input if a field has been created
   if (!this.captureEmail)
     this.captureEmail = this.elem.find(".email")[0] != null;
   // Find or create the email input element
-  this.emailInput = PaymentezForm.detachOrCreateElement(this.elem, ".email", "<input class='email' />");
+  this.emailInput = PaymentForm.detachOrCreateElement(this.elem, ".email", "<input class='email' />");
   // Ensure the email element has a field email
-  if (!PaymentezForm.elementHasAttribute(this.emailInput, "name")) {
+  if (!PaymentForm.elementHasAttribute(this.emailInput, "name")) {
     this.emailInput.attr("name", "email");
   }
   // Ensure the email element has a placeholder
-  if (!PaymentezForm.elementHasAttribute(this.emailInput, "placeholder")) {
-    this.emailInput.attr("placeholder", PaymentezForm.EMAIL_PLACEHOLDER);
+  if (!PaymentForm.elementHasAttribute(this.emailInput, "placeholder")) {
+    this.emailInput.attr("placeholder", PaymentForm.EMAIL_PLACEHOLDER);
   }
   this.emailInput.attr("type", "email");
   this.emailInput.attr("autocorrect", "off");
@@ -1505,20 +1505,20 @@ PaymentezForm.prototype.initEmailInput = function () {
 /**
  * Initialise the cellphone input
  */
-PaymentezForm.prototype.initCellPhoneInput = function () {
+PaymentForm.prototype.initCellPhoneInput = function () {
 
   // Enable cellphone input if a field has been created
   if (!this.captureCellPhone)
     this.captureCellPhone = this.elem.find(".cellphone")[0] != null;
   // Find or create the cellphone input element
-  this.cellPhoneInput = PaymentezForm.detachOrCreateElement(this.elem, ".cellphone", "<input class='cellphone' />");
+  this.cellPhoneInput = PaymentForm.detachOrCreateElement(this.elem, ".cellphone", "<input class='cellphone' />");
   // Ensure the cellphone element has a field cellphone
-  if (!PaymentezForm.elementHasAttribute(this.cellPhoneInput, "name")) {
+  if (!PaymentForm.elementHasAttribute(this.cellPhoneInput, "name")) {
     this.cellPhoneInput.attr("name", "cellphone");
   }
   // Ensure the cellphone element has a placeholder
-  if (!PaymentezForm.elementHasAttribute(this.cellPhoneInput, "placeholder")) {
-    this.cellPhoneInput.attr("placeholder", PaymentezForm.CELLPHONE_PLACEHOLDER);
+  if (!PaymentForm.elementHasAttribute(this.cellPhoneInput, "placeholder")) {
+    this.cellPhoneInput.attr("placeholder", PaymentForm.CELLPHONE_PLACEHOLDER);
   }
   this.cellPhoneInput.attr("type", "tel");
   this.cellPhoneInput.attr("autocorrect", "off");
@@ -1529,27 +1529,27 @@ PaymentezForm.prototype.initCellPhoneInput = function () {
 /**
  * Initialise the expiry month input
  */
-PaymentezForm.prototype.initExpiryMonthInput = function () {
-  this.expiryMonthInput = PaymentezForm.detachOrCreateElement(this.elem, ".expiry-month", "<input class='expiry-month' />");
+PaymentForm.prototype.initExpiryMonthInput = function () {
+  this.expiryMonthInput = PaymentForm.detachOrCreateElement(this.elem, ".expiry-month", "<input class='expiry-month' />");
 };
 
 /**
  * Initialise the expiry year input
  */
-PaymentezForm.prototype.initExpiryYearInput = function () {
-  this.expiryYearInput = PaymentezForm.detachOrCreateElement(this.elem, ".expiry-year", "<input class='expiry-year' />");
+PaymentForm.prototype.initExpiryYearInput = function () {
+  this.expiryYearInput = PaymentForm.detachOrCreateElement(this.elem, ".expiry-year", "<input class='expiry-year' />");
 };
 
 /**
  * Initialise the card CVC input
  */
-PaymentezForm.prototype.initCvcInput = function () {
+PaymentForm.prototype.initCvcInput = function () {
 
   // Find or create the CVC input element
-  this.cvcInput = PaymentezForm.detachOrCreateElement(this.elem, ".cvc", "<input class='cvc' />");
+  this.cvcInput = PaymentForm.detachOrCreateElement(this.elem, ".cvc", "<input class='cvc' />");
   // Ensure the CVC has a placeholder
-  if (!PaymentezForm.elementHasAttribute(this.cvcInput, "placeholder")) {
-    this.cvcInput.attr("placeholder", PaymentezForm.CVC_PLACEHOLDER);
+  if (!PaymentForm.elementHasAttribute(this.cvcInput, "placeholder")) {
+    this.cvcInput.attr("placeholder", PaymentForm.CVC_PLACEHOLDER);
   }
   this.cvcInput.attr("type", "tel");
   this.cvcInput.attr("maxlength", this.cvcLenght);
@@ -1566,17 +1566,17 @@ PaymentezForm.prototype.initCvcInput = function () {
 /**
  * Initialise the fiscal number input
  */
-PaymentezForm.prototype.initFiscalNumberInput = function () {
+PaymentForm.prototype.initFiscalNumberInput = function () {
 
   // Find or create the fiscal number input element
-  this.fiscalNumberInput = PaymentezForm.detachOrCreateElement(this.elem, ".fiscal-number", "<input class='fiscal-number' />");
+  this.fiscalNumberInput = PaymentForm.detachOrCreateElement(this.elem, ".fiscal-number", "<input class='fiscal-number' />");
   // Ensure the fiscal number element has a field name
-  if (!PaymentezForm.elementHasAttribute(this.fiscalNumberInput, "name")) {
+  if (!PaymentForm.elementHasAttribute(this.fiscalNumberInput, "name")) {
     this.fiscalNumberInput.attr("name", "fiscal-number");
   }
   // Ensure the fiscal number element has a placeholder
-  if (!PaymentezForm.elementHasAttribute(this.fiscalNumberInput, "placeholder")) {
-    this.fiscalNumberInput.attr("placeholder", PaymentezForm.FISCAL_NUMBER_PLACEHOLDER);
+  if (!PaymentForm.elementHasAttribute(this.fiscalNumberInput, "placeholder")) {
+    this.fiscalNumberInput.attr("placeholder", PaymentForm.FISCAL_NUMBER_PLACEHOLDER);
   }
   this.fiscalNumberInput.attr("type", "tel");
   this.fiscalNumberInput.attr("pattern", "[0-9]*");
@@ -1591,12 +1591,12 @@ PaymentezForm.prototype.initFiscalNumberInput = function () {
 /**
  * Initialise the card NIP input
  */
-PaymentezForm.prototype.initNipInput = function () {
+PaymentForm.prototype.initNipInput = function () {
   // Find or create the NIP input element
-  this.nipInput = PaymentezForm.detachOrCreateElement(this.elem, ".nip", "<input class='nip' />");
+  this.nipInput = PaymentForm.detachOrCreateElement(this.elem, ".nip", "<input class='nip' />");
   // Ensure the NIP has a placeholder
-  if (!PaymentezForm.elementHasAttribute(this.nipInput, "placeholder")) {
-    this.nipInput.attr("placeholder", PaymentezForm.NIP_PLACEHOLDER);
+  if (!PaymentForm.elementHasAttribute(this.nipInput, "placeholder")) {
+    this.nipInput.attr("placeholder", PaymentForm.NIP_PLACEHOLDER);
   }
   this.nipInput.attr("type", "tel");
   this.nipInput.attr("pattern", "[0-9]*");
@@ -1616,8 +1616,8 @@ PaymentezForm.prototype.initNipInput = function () {
 /**
  * Initialise the checkbox to otp validation option
  */
-PaymentezForm.prototype.initOtpValidation = function () {
-  this.otpValidation = PaymentezForm.detachOrCreateElement(this.elem, ".otp", "<input class='otp' />");
+PaymentForm.prototype.initOtpValidation = function () {
+  this.otpValidation = PaymentForm.detachOrCreateElement(this.elem, ".otp", "<input class='otp' />");
   this.otpValidation.attr("type", "checkbox");
   this.otpValidation.attr("id", "otp-option");
 };
@@ -1625,29 +1625,29 @@ PaymentezForm.prototype.initOtpValidation = function () {
 /**
  * Initialize the div to messages
  */
-PaymentezForm.prototype.initOtpValidation = function () {
-  this.otpValidation = PaymentezForm.detachOrCreateElement(this.elem, ".messages", "<div class='.messages' />");
+PaymentForm.prototype.initOtpValidation = function () {
+  this.otpValidation = PaymentForm.detachOrCreateElement(this.elem, ".messages", "<div class='.messages' />");
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
-PaymentezForm.prototype.setupCardNumberInput = function () {
+PaymentForm.prototype.setupCardNumberInput = function () {
   this.elem.append("<div class='card-number-wrapper'></div>");
   let wrapper = this.elem.find(".card-number-wrapper");
   wrapper.append(this.cardNumberInput);
   wrapper.append("<div class='card-type-icon'></div>");
   wrapper.append("<div class='icon'></div>");
-  wrapper.find(".icon").append(PaymentezForm.CREDIT_CARD_SVG);
+  wrapper.find(".icon").append(PaymentForm.CREDIT_CARD_SVG);
 
   // Events
   let $this = this;
   this.cardNumberInput.keydown(function (e) {
-    PaymentezForm.handleCreditCardNumberKey(e, $this.creditCardNumberMask);
+    PaymentForm.handleCreditCardNumberKey(e, $this.creditCardNumberMask);
   });
   this.cardNumberInput.keyup(function () {
     $this.refreshCreditCardType();
   });
-  //this.cardNumberInput.change(PaymentezForm.handleCreditCardNumberChange);
+  //this.cardNumberInput.change(PaymentForm.handleCreditCardNumberChange);
   this.cardNumberInput.on('paste', function () {
     setTimeout(function () {
       $this.refreshCreditCardNumberFormat();
@@ -1659,13 +1659,13 @@ PaymentezForm.prototype.setupCardNumberInput = function () {
   });
 };
 
-PaymentezForm.prototype.setupNameInput = function () {
+PaymentForm.prototype.setupNameInput = function () {
   if (this.captureName) {
     this.elem.append("<div class='name-wrapper'></div>");
     let wrapper = this.elem.find(".name-wrapper");
     wrapper.append(this.nameInput);
     wrapper.append("<div class='icon'></div>");
-    wrapper.find(".icon").append(PaymentezForm.USER_SVG);
+    wrapper.find(".icon").append(PaymentForm.USER_SVG);
 
     // Events
     let $this = this;
@@ -1675,13 +1675,13 @@ PaymentezForm.prototype.setupNameInput = function () {
   }
 };
 
-PaymentezForm.prototype.setupEmailInput = function () {
+PaymentForm.prototype.setupEmailInput = function () {
   if (this.captureEmail) {
     this.elem.append("<div class='email-container'><div class='email-wrapper'></div></div>");
     let wrapper = this.elem.find(".email-wrapper");
     wrapper.append(this.emailInput);
     wrapper.append("<div class='icon'></div>");
-    wrapper.find(".icon").append(PaymentezForm.MAIL_SVG);
+    wrapper.find(".icon").append(PaymentForm.MAIL_SVG);
 
     // Events
     let $this = this;
@@ -1691,13 +1691,13 @@ PaymentezForm.prototype.setupEmailInput = function () {
   }
 };
 
-PaymentezForm.prototype.setupCellPhoneInput = function () {
+PaymentForm.prototype.setupCellPhoneInput = function () {
   if (this.captureCellPhone) {
     this.elem.append("<div class='cellphone-container'><div class='cellphone-wrapper'></div></div>");
     let wrapper = this.elem.find(".cellphone-wrapper");
     wrapper.append(this.cellPhoneInput);
     wrapper.append("<div class='icon'></div>");
-    wrapper.find(".icon").append(PaymentezForm.CELLPHONE_SVG);
+    wrapper.find(".icon").append(PaymentForm.CELLPHONE_SVG);
 
     // Events
     let $this = this;
@@ -1707,7 +1707,7 @@ PaymentezForm.prototype.setupCellPhoneInput = function () {
   }
 };
 
-PaymentezForm.prototype.setupExpiryInput = function () {
+PaymentForm.prototype.setupExpiryInput = function () {
   this.elem.append("<div class='expiry-container'><div class='expiry-wrapper'></div></div>");
   let wrapper = this.elem.find(".expiry-wrapper");
   let expiryInput;
@@ -1734,18 +1734,18 @@ PaymentezForm.prototype.setupExpiryInput = function () {
       "</select>"
     );
     let expiryMonthOld = this.expiryMonthInput;
-    PaymentezForm.copyAllElementAttributes(expiryMonthOld, expiryMonthNew);
+    PaymentForm.copyAllElementAttributes(expiryMonthOld, expiryMonthNew);
     this.expiryMonthInput.remove();
     this.expiryMonthInput = expiryMonthNew;
 
     let expiryYearNew = $("<select><option value='any' selected='' hidden=''>YY</option></select>");
     let currentYear = parseInt(((new Date().getFullYear()).toString()).substring(2, 4));
-    for (let i = 0; i < PaymentezForm.EXPIRY_NUMBER_OF_YEARS; i++) {
+    for (let i = 0; i < PaymentForm.EXPIRY_NUMBER_OF_YEARS; i++) {
       expiryYearNew.append("<option value='" + currentYear + "'>" + currentYear + "</option>");
       currentYear = (currentYear + 1) % 100;
     }
     let expiryYearOld = this.expiryYearInput;
-    PaymentezForm.copyAllElementAttributes(expiryYearOld, expiryYearNew);
+    PaymentForm.copyAllElementAttributes(expiryYearOld, expiryYearNew);
     this.expiryYearInput.remove();
     this.expiryYearInput = expiryYearNew;
 
@@ -1767,13 +1767,13 @@ PaymentezForm.prototype.setupExpiryInput = function () {
     }
 
     // Construct the single expiry input for both expiry month and year
-    this.expiryMonthYearInput = PaymentezForm.detachOrCreateElement(this.elem, ".expiry", "<input class='expiry' />");
+    this.expiryMonthYearInput = PaymentForm.detachOrCreateElement(this.elem, ".expiry", "<input class='expiry' />");
     // Ensure the expiry input has a placeholder
-    if (!PaymentezForm.elementHasAttribute(this.expiryMonthYearInput, "placeholder")) {
-      this.expiryMonthYearInput.attr("placeholder", PaymentezForm.EXPIRY_PLACEHOLDER);
+    if (!PaymentForm.elementHasAttribute(this.expiryMonthYearInput, "placeholder")) {
+      this.expiryMonthYearInput.attr("placeholder", PaymentForm.EXPIRY_PLACEHOLDER);
     }
     this.expiryMonthYearInput.attr("type", "tel");
-    this.expiryMonthYearInput.attr("maxlength", PaymentezForm.EXPIRY_MASK.length);
+    this.expiryMonthYearInput.attr("maxlength", PaymentForm.EXPIRY_MASK.length);
     this.expiryMonthYearInput.attr("x-autocompletetype", "cc-exp");
     this.expiryMonthYearInput.attr("autocompletetype", "cc-exp");
     this.expiryMonthYearInput.attr("autocorrect", "off");
@@ -1783,11 +1783,11 @@ PaymentezForm.prototype.setupExpiryInput = function () {
     // Events
     let $this = this;
     this.expiryMonthYearInput.keydown(function (e) {
-      PaymentezForm.handleExpiryKey(e);
+      PaymentForm.handleExpiryKey(e);
       let val = $this.expiryMonthYearInput.val();
 
-      if (val.length === 1 && parseInt(val) > 1 && PaymentezForm.keyIsNumber(e)) {
-        $this.expiryMonthYearInput.val(PaymentezForm.applyFormatMask("0" + val, PaymentezForm.EXPIRY_MASK));
+      if (val.length === 1 && parseInt(val) > 1 && PaymentForm.keyIsNumber(e)) {
+        $this.expiryMonthYearInput.val(PaymentForm.applyFormatMask("0" + val, PaymentForm.EXPIRY_MASK));
       }
 
       if (!$this.EXPIRY_USE_DROPDOWNS && $this.expiryMonthYearInput != null) {
@@ -1811,19 +1811,19 @@ PaymentezForm.prototype.setupExpiryInput = function () {
 
   wrapper.append(expiryInput);
   wrapper.append("<div class='icon'></div>");
-  wrapper.find(".icon").append(PaymentezForm.CALENDAR_SVG);
+  wrapper.find(".icon").append(PaymentForm.CALENDAR_SVG);
 };
 
-PaymentezForm.prototype.setupCvcInput = function () {
+PaymentForm.prototype.setupCvcInput = function () {
   this.elem.append("<div class='cvc-container'><div class='cvc-wrapper'></div></div>");
   let wrapper = this.elem.find(".cvc-wrapper");
   wrapper.append(this.cvcInput);
   wrapper.append("<div class='icon'></div>");
-  wrapper.find(".icon").append(PaymentezForm.LOCK_SVG);
+  wrapper.find(".icon").append(PaymentForm.LOCK_SVG);
 
   // Events
   let $this = this;
-  this.cvcInput.keydown(PaymentezForm.filterNumberOnlyKey);
+  this.cvcInput.keydown(PaymentForm.filterNumberOnlyKey);
   this.cvcInput.blur(function () {
     $this.refreshCvcValidation();
   });
@@ -1834,29 +1834,29 @@ PaymentezForm.prototype.setupCvcInput = function () {
   });
 };
 
-PaymentezForm.prototype.setupFiscalNumberInput = function () {
+PaymentForm.prototype.setupFiscalNumberInput = function () {
   let card = this.elem.find(".card-number-wrapper");
   card.after("<div class='fiscal-number-wrapper'></div>");
   let wrapper = this.elem.find(".fiscal-number-wrapper");
   wrapper.append(this.fiscalNumberInput);
   wrapper.append("<div class='icon'></div>");
-  wrapper.find(".icon").append(PaymentezForm.USER_SVG);
+  wrapper.find(".icon").append(PaymentForm.USER_SVG);
 
   // Events for fiscalNumberInput
   let $this = this;
-  this.fiscalNumberInput.keydown(PaymentezForm.filterNumberOnlyKey);
+  this.fiscalNumberInput.keydown(PaymentForm.filterNumberOnlyKey);
   this.fiscalNumberInput.blur(function () {
     $this.refreshFiscalNumberValidation();
   });
 };
 
-PaymentezForm.prototype.setupNipInput = function () {
+PaymentForm.prototype.setupNipInput = function () {
   let fiscal = this.elem.find(".fiscal-number-wrapper");
   fiscal.after("<div class='nip-wrapper'></div>");
   let wrapper = this.elem.find(".nip-wrapper");
   wrapper.append(this.nipInput);
   wrapper.append("<div class='icon'></div>");
-  wrapper.find(".icon").append(PaymentezForm.LOCK_SVG);
+  wrapper.find(".icon").append(PaymentForm.LOCK_SVG);
 
   // Events for nipInput
   let $this = this;
@@ -1867,7 +1867,7 @@ PaymentezForm.prototype.setupNipInput = function () {
       $this.addVirtualKeyboard();
     }
   });
-  this.nipInput.keydown(PaymentezForm.filterNumberOnlyKey);
+  this.nipInput.keydown(PaymentForm.filterNumberOnlyKey);
   this.nipInput.on('paste', function () {
     setTimeout(function () {
       $this.refreshNip();
@@ -1879,14 +1879,14 @@ PaymentezForm.prototype.setupNipInput = function () {
 
 };
 
-PaymentezForm.prototype.setupOtpValidation = function () {
-  let wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".otp-wrapper", "<div class='otp-wrapper'></div>");
-  let label = PaymentezForm.detachOrCreateElement(this.elem, ".otp-label", "<label class='otp-label'></label>");
+PaymentForm.prototype.setupOtpValidation = function () {
+  let wrapper = PaymentForm.detachOrCreateElement(this.elem, ".otp-wrapper", "<div class='otp-wrapper'></div>");
+  let label = PaymentForm.detachOrCreateElement(this.elem, ".otp-label", "<label class='otp-label'></label>");
   label.attr("for", 'otp-option');
-  if (Paymentez.isCheckout()) {
-    label.append(PaymentezForm.OTP_PLACEHOLDER_CHECKOUT);
+  if (Payment.IS_CHECKOUT) {
+    label.append(PaymentForm.OTP_PLACEHOLDER_CHECKOUT);
   } else {
-    label.append(PaymentezForm.OTP_PLACEHOLDER_ADD);
+    label.append(PaymentForm.OTP_PLACEHOLDER_ADD);
   }
   wrapper.append(this.otpValidation);
   wrapper.append(label);
@@ -1899,15 +1899,15 @@ PaymentezForm.prototype.setupOtpValidation = function () {
   });
 };
 
-PaymentezForm.prototype.setupVirtualKeyboard = function () {
-  let array = PaymentezForm.generateRandoms();
+PaymentForm.prototype.setupVirtualKeyboard = function () {
+  let array = PaymentForm.generateRandoms();
   let beforeWrapper = this.elem.find(".nip-wrapper");
 
   if (this.USE_OTP) {
     beforeWrapper = this.elem.find(".otp-wrapper");
   }
 
-  let wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".keyboard-wrapper", "<div class='keyboard-wrapper'></div>");
+  let wrapper = PaymentForm.detachOrCreateElement(this.elem, ".keyboard-wrapper", "<div class='keyboard-wrapper'></div>");
   let $this = this;
   for (let i = 0; i < array.length; i++) {
     let keyContainer = document.createElement('div');
@@ -1946,31 +1946,31 @@ PaymentezForm.prototype.setupVirtualKeyboard = function () {
   beforeWrapper.after(wrapper);
 };
 
-PaymentezForm.prototype.setupValidationMessage = function () {
-  let wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".validation-message", "<div class='validation-message'></div>");
-  wrapper.addClass('paymentez_dialog_success');
-  if (Paymentez.isCheckout()) {
-    wrapper.text(PaymentezForm.OTP_EXPLICATION_CHECKOUT);
+PaymentForm.prototype.setupValidationMessage = function () {
+  let wrapper = PaymentForm.detachOrCreateElement(this.elem, ".validation-message", "<div class='validation-message'></div>");
+  wrapper.addClass('payment_dialog_success');
+  if (Payment.IS_CHECKOUT) {
+    wrapper.text(PaymentForm.OTP_EXPLICATION_CHECKOUT);
   } else {
-    wrapper.text(PaymentezForm.OTP_EXPLICATION_ADD);
+    wrapper.text(PaymentForm.OTP_EXPLICATION_ADD);
   }
   this.validationMessage = wrapper;
   this.elem.append(wrapper);
 };
 
-PaymentezForm.prototype.setupWarningMessage = function () {
-  let wrapper = PaymentezForm.detachOrCreateElement(this.elem, ".warning-message", "<div class='warning-message'></div>");
-  wrapper.addClass('paymentez_dialog_warning');
+PaymentForm.prototype.setupWarningMessage = function () {
+  let wrapper = PaymentForm.detachOrCreateElement(this.elem, ".warning-message", "<div class='warning-message'></div>");
+  wrapper.addClass('payment_dialog_warning');
   if (this.invalidCardTypeMessage) {
     wrapper.text(this.invalidCardTypeMessage);
   } else {
-    wrapper.text(PaymentezForm.INVALID_CARD_TYPE_MESSAGE);
+    wrapper.text(PaymentForm.INVALID_CARD_TYPE_MESSAGE);
   }
   this.warningMessage = wrapper;
   this.elem.append(wrapper);
 };
 
-PaymentezForm.prototype.expiryMonth = function () {
+PaymentForm.prototype.expiryMonth = function () {
   if (!this.EXPIRY_USE_DROPDOWNS && this.expiryMonthYearInput != null) {
     let val = this.expiryMonthYearInput.val();
     return val.length >= 2 ? parseInt(val.substr(0, 2)) : null;
@@ -1981,9 +1981,9 @@ PaymentezForm.prototype.expiryMonth = function () {
 /**
  * Refresh whether the expiry month is valid (update display to reflect)
  */
-PaymentezForm.prototype.refreshExpiryMonthValidation = function () {
+PaymentForm.prototype.refreshExpiryMonthValidation = function () {
   if (this.expiryContainerAdded()) {
-    if (PaymentezForm.isExpiryValid(this.getExpiryMonth(), this.getExpiryYear())) {
+    if (PaymentForm.isExpiryValid(this.getExpiryMonth(), this.getExpiryYear())) {
       this.setExpiryMonthAsValid();
       return true;
     } else {
@@ -1998,7 +1998,7 @@ PaymentezForm.prototype.refreshExpiryMonthValidation = function () {
 /**
  * Update the display to highlight the expiry month as valid.
  */
-PaymentezForm.prototype.setExpiryMonthAsValid = function () {
+PaymentForm.prototype.setExpiryMonthAsValid = function () {
   if (this.EXPIRY_USE_DROPDOWNS) {
     this.expiryMonthInput.parent().removeClass("has-error");
   } else {
@@ -2009,7 +2009,7 @@ PaymentezForm.prototype.setExpiryMonthAsValid = function () {
 /**
  * Update the display to highlight the expiry month as invalid.
  */
-PaymentezForm.prototype.setExpiryMonthAsInvalid = function () {
+PaymentForm.prototype.setExpiryMonthAsInvalid = function () {
   if (this.EXPIRY_USE_DROPDOWNS) {
     this.expiryMonthInput.parent().addClass("has-error");
   } else {
@@ -2026,7 +2026,7 @@ PaymentezForm.prototype.setExpiryMonthAsInvalid = function () {
  * @param attributeName
  * @returns {boolean}
  */
-PaymentezForm.elementHasAttribute = function (element, attributeName) {
+PaymentForm.elementHasAttribute = function (element, attributeName) {
   let attr = $(element).attr(attributeName);
   return typeof attr !== typeof undefined && attr !== false;
 };
@@ -2039,7 +2039,7 @@ PaymentezForm.elementHasAttribute = function (element, attributeName) {
  * @param html
  * @returns {*}
  */
-PaymentezForm.detachOrCreateElement = function (parentElement, selector, html) {
+PaymentForm.detachOrCreateElement = function (parentElement, selector, html) {
   let element = parentElement.find(selector);
   if (element[0]) {
     element.detach();
@@ -2055,7 +2055,7 @@ PaymentezForm.detachOrCreateElement = function (parentElement, selector, html) {
  * @param expiryMonth
  * @returns {boolean}
  */
-PaymentezForm.isValidMonth = function (expiryMonth) {
+PaymentForm.isValidMonth = function (expiryMonth) {
   return (expiryMonth >= 1 && expiryMonth <= 12);
 };
 
@@ -2066,7 +2066,7 @@ PaymentezForm.isValidMonth = function (expiryMonth) {
  * @param year
  * @returns {boolean}
  */
-PaymentezForm.isExpiryValid = function (month, year) {
+PaymentForm.isExpiryValid = function (month, year) {
   let today = new Date();
   let currentMonth = (today.getMonth() + 1);
   let currentYear = "" + today.getFullYear();
@@ -2080,6 +2080,6 @@ PaymentezForm.isExpiryValid = function (month, year) {
   month = parseInt(month);
   year = parseInt(year);
 
-  return PaymentezForm.isValidMonth(month) && ((year > currentYear) || (year === currentYear && month >= currentMonth));
+  return PaymentForm.isValidMonth(month) && ((year > currentYear) || (year === currentYear && month >= currentMonth));
 };
 
