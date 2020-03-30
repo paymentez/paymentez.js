@@ -1,4 +1,8 @@
 module.exports = function (grunt) {
+  // How to consume
+  // grunt build --version_sdk=2.0.0
+  // grunt build --version_sdk=stable
+  const version_sdk = grunt.option('version_sdk') || 'stable';
   grunt.initConfig({
 
     connect: {
@@ -8,6 +12,12 @@ module.exports = function (grunt) {
         }
       }
     },
+
+    //
+    // Version SDK
+    //
+    version_sdk: version_sdk,
+
     //
     // CSS Minify
     //
@@ -18,11 +28,10 @@ module.exports = function (grunt) {
       },
       "css": {
         files: {
-          "paymentez.min.css": ["./src/css/**/*.css"]
+          "payment_<%= version_sdk %>.min.css": ["./src/css/**/*.css"]
         }
       }
     },
-
 
     //
     // JavaScript Minify
@@ -33,11 +42,10 @@ module.exports = function (grunt) {
       },
       js: {
         files: {
-          "paymentez.min.js": ["src/js/**/*.js"]
+          "payment_<%= version_sdk %>.min.js": ["src/js/**/*.js"]
         }
       }
     },
-
 
     //
     // Watch Configuration
@@ -65,7 +73,6 @@ module.exports = function (grunt) {
 
   });
 
-
   //
   // Plugin loading
   //
@@ -76,11 +83,9 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-connect');
 
-
   //
   // Task definition
   //
   grunt.registerTask('default', ['connect', 'watch']);
   grunt.registerTask('build', ['cssmin:css', 'uglify:js']);
-
 };

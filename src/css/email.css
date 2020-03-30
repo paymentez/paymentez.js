@@ -1,14 +1,14 @@
-.paymentez-form .email-container {
+.payment-form .email-container {
   width: 50%;
   float: left;
 }
 
-.paymentez-form .email-wrapper {
+.payment-form .email-wrapper {
   box-sizing: border-box;
   margin-right: 5px;
 }
 
-.paymentez-form .email-wrapper .email {
+.payment-form .email-wrapper .email {
   display: block;
   width: 100%;
 }

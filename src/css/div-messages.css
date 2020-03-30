@@ -1,5 +1,5 @@
-.paymentez-form .warning-message,
-.paymentez-form .validation-message {
+.payment-form .warning-message,
+.payment-form .validation-message {
   text-align: center;
   display: inline-block;
   width: 100%;

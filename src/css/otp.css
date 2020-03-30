@@ -1,9 +1,9 @@
-.paymentez-form .otp-wrapper {
+.payment-form .otp-wrapper {
   width: 50%;
 }
 
 @media screen and (max-width: 600px) {
-  .paymentez-form .otp-wrapper {
+  .payment-form .otp-wrapper {
     width: 100%;
   }
 }

@@ -1,23 +1,23 @@
-.paymentez-form .nip-wrapper {
+.payment-form .nip-wrapper {
   width: 50%;
 }
 
-.paymentez-form .nip-wrapper .nip {
+.payment-form .nip-wrapper .nip {
   display: block;
   width: 100%;
   -webkit-text-security: disc;
 }
 
-.paymentez-form .nip-wrapper .nip:read-only {
+.payment-form .nip-wrapper .nip:read-only {
   background-color: #eeeeee !important;
 }
 
-.paymentez-form .nip-wrapper .nip:-moz-read-only {
+.payment-form .nip-wrapper .nip:-moz-read-only {
   background-color: #eeeeee !important;
 }
 
 @media screen and (max-width: 600px) {
-  .paymentez-form .nip-wrapper {
+  .payment-form .nip-wrapper {
     width: 100%;
   }
 }

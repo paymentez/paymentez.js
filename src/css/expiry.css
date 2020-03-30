@@ -1,35 +1,35 @@
-.paymentez-form .expiry-container {
+.payment-form .expiry-container {
   width: 50%;
   float: left;
 }
 
-.paymentez-form .expiry-wrapper {
+.payment-form .expiry-wrapper {
   box-sizing: border-box;
   margin-right: 5px;
 }
 
-.paymentez-form .expiry-wrapper .expiry {
+.payment-form .expiry-wrapper .expiry {
   display: block;
   width: 100%;
 }
 
-.paymentez-form .expiry-wrapper .expiry {
+.payment-form .expiry-wrapper .expiry {
   width: 100%;
   padding-left: 38px;
 }
 
-.paymentez-form .expiry-wrapper .expiry-month,
-.paymentez-form .expiry-wrapper .expiry-year {
+.payment-form .expiry-wrapper .expiry-month,
+.payment-form .expiry-wrapper .expiry-year {
   border-radius: 4px;
   display: inline-block;
   width: 48%;
   text-align-last: center;
 }
 
-.paymentez-form .expiry-wrapper .expiry-month {
+.payment-form .expiry-wrapper .expiry-month {
   padding-left: 38px;
 }
 
-.paymentez-form .expiry-wrapper .expiry-year {
+.payment-form .expiry-wrapper .expiry-year {
   margin-left: 4%;
 }
