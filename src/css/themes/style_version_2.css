@@ -1,31 +1,31 @@
-[paymentez_version_2].panel {
+[payment_version_2].panel {
   background-color: white;
 }
 
-[paymentez_version_2] .paymentez-form input.card-number,
-[paymentez_version_2] .paymentez-form input.cellphone,
-[paymentez_version_2] .paymentez-form input.cvc,
-[paymentez_version_2] .paymentez-form input.email,
-[paymentez_version_2] .paymentez-form input.fiscal-number,
-[paymentez_version_2] .paymentez-form input.name,
-[paymentez_version_2] .paymentez-form input.nip,
-[paymentez_version_2] .paymentez-form input.validation-option,
-[paymentez_version_2] .paymentez-form .expiry-wrapper .expiry-month,
-[paymentez_version_2] .paymentez-form .expiry-wrapper .expiry-year,
-[paymentez_version_2] .paymentez-form .expiry-wrapper .expiry,
-[paymentez_version_2] .paymentez-form select {
+[payment_version_2] .payment-form input.card-number,
+[payment_version_2] .payment-form input.cellphone,
+[payment_version_2] .payment-form input.cvc,
+[payment_version_2] .payment-form input.email,
+[payment_version_2] .payment-form input.fiscal-number,
+[payment_version_2] .payment-form input.name,
+[payment_version_2] .payment-form input.nip,
+[payment_version_2] .payment-form input.validation-option,
+[payment_version_2] .payment-form .expiry-wrapper .expiry-month,
+[payment_version_2] .payment-form .expiry-wrapper .expiry-year,
+[payment_version_2] .payment-form .expiry-wrapper .expiry,
+[payment_version_2] .payment-form select {
   text-align-last: left;
   border: 1px solid #ced4da;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-[paymentez_version_2] .panel {
+[payment_version_2] .panel {
   background: white;
   border-color: #ced4da;
 }
 
-[paymentez_version_2] .total-hr {
+[payment_version_2] .total-hr {
   margin-left: -20px;
   margin-right: -20px;
   background-color: #ced4da;
@@ -33,20 +33,20 @@
   display: block !important;
 }
 
-[paymentez_version_2] .total-hr--down {
+[payment_version_2] .total-hr--down {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
-[paymentez_version_2] .header-credit-card {
+[payment_version_2] .header-credit-card {
   font-size: 1.5rem;
   text-align: left;
   margin-bottom: 20px;
 }
 
-[paymentez_version_2] .header-company-name,
-[paymentez_version_2] .header-description,
-[paymentez_version_2] .paymentez_logo_popup_checkout,
-[paymentez_version_2] .logo-comercio-paymentez,
-[paymentez_version_2] .paymentez-form .icon {
+[payment_version_2] .header-company-name,
+[payment_version_2] .header-description,
+[payment_version_2] .payment_logo_popup_checkout,
+[payment_version_2] .logo-comercio-payment,
+[payment_version_2] .payment-form .icon {
   display: none;
 }
