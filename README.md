@@ -69,8 +69,9 @@ addCard converts sensitive card data to a single-use token which you can safely 
  * @param card the Card used to create this payment token
  * @param success_callback a callback to receive the token
  * @param failure_callback a callback to receive an error
+ * @param payment_form Payment Form instance
  */
-Payment.addCard(uid, email, cardToSave, successHandler, errorHandler);
+Payment.addCard(uid, email, cardToSave, successHandler, errorHandler, myCard);
 
 var successHandler = function(cardResponse) {
   console.log(cardResponse.card);
@@ -82,12 +83,6 @@ var successHandler = function(cardResponse) {
                 );    
   }else if(cardResponse.card.status === 'review'){
     $('#messages').html('Card Under Review<br>'+
-                  'status: ' + cardResponse.card.status + '<br>' +
-                  "Card Token: " + cardResponse.card.token + "<br>" +
-                  "transaction_reference: " + cardResponse.card.transaction_reference
-                ); 
-  }else if(cardResponse.card.status === 'pending'){
-    $('#messages').html('Card Pending To Approve<br>'+
                   'status: ' + cardResponse.card.status + '<br>' +
                   "Card Token: " + cardResponse.card.token + "<br>" +
                   "transaction_reference: " + cardResponse.card.transaction_reference

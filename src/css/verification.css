@@ -1,0 +1,44 @@
+.payment-form .verification-btn-wrapper,
+.payment-form .verification-wrapper {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 50%;
+}
+
+.payment-form .verification-wrapper .verification {
+  display: block;
+  width: 100%;
+  /*-webkit-text-security: disc;*/
+}
+
+@media screen and (max-width: 600px) {
+  .payment-form .verification-btn-wrapper,
+  .payment-form .verification-wrapper {
+    width: 100%;
+    padding: 0 !important;
+  }
+}
+
+.payment-form .verification-btn-wrapper .verification-btn {
+  color: #fff;
+  background-color: #17a2b8;
+  border-color: #fff;
+  border-radius: 4px;
+  width: 100%;
+  display: block;
+  cursor: pointer;
+}
+
+.payment-form .verification-wrapper {
+  padding-right: 4px;
+}
+
+.payment-form .verification-btn-wrapper {
+  padding-left: 4px;
+}
+
+.payment-form .verification-btn-wrapper .verification-btn:disabled,
+.payment-form .verification-btn-wrapper .verification-btn[disabled] {
+  opacity: .65;
+  cursor: not-allowed;
+}

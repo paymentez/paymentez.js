@@ -109,7 +109,8 @@ Payment.getServerURL = function () {
 Payment.createToken = function (
   createTokenRequest,
   successCallback,
-  erroCallback
+  errorCallback,
+  payment_form
 ) {
   let initFunction = function () {
     let SERVER_URL = this.getServerURL();
@@ -126,15 +127,17 @@ Payment.createToken = function (
 
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState === XMLHttpRequest.DONE) {
-        // XMLHttpRequest.DONE == 4
         try {
           let objResponse = JSON.parse(xmlhttp.responseText);
           if (xmlhttp.status === 200) {
-            successCallback(objResponse);
-          } else if (xmlhttp.status === 400) {
-            erroCallback(objResponse);
+            if (objResponse.card.status === "pending") {
+              objResponse.user = {id: createTokenRequest.user.id};
+              payment_form.PaymentForm('showVerification', objResponse, successCallback, errorCallback);
+            } else {
+              successCallback(objResponse);
+            }
           } else {
-            erroCallback(objResponse);
+            errorCallback(objResponse);
           }
         } catch (e) {
           let server_error = {
@@ -144,7 +147,7 @@ Payment.createToken = function (
               description: "Server Error"
             }
           };
-          erroCallback(server_error);
+          errorCallback(server_error);
         }
       }
     };
@@ -256,13 +259,15 @@ Payment.init = function (
  * @param card the Card used to create this payment token
  * @param success_callback a callback to receive the token
  * @param failure_callback a callback to receive an error
+ * @param payment_form Payment Form instance
  */
 Payment.addCard = function (
   uid,
   email,
   card,
   success_callback,
-  failure_callback
+  failure_callback,
+  payment_form
 ) {
   let session_id = Payment.getSessionId();
   Payment.dataCollector(session_id);
@@ -271,25 +276,24 @@ Payment.addCard = function (
     user: {
       id: uid,
       email: email,
-      fiscal_number: $(".fiscal-number").val()
+      fiscal_number: payment_form.PaymentForm('fiscalNumber')
     }
   };
   params["card"] = card["card"];
-  Payment.createToken(params, success_callback, failure_callback);
+  Payment.createToken(params, success_callback, failure_callback, payment_form);
 };
 
 Payment.getBinInformation = function (
   number_bin,
   form,
   successCallback,
-  erroCallback
+  errorCallback
 ) {
   let initFunction = function () {
     let xmlhttp = new XMLHttpRequest();
     if (this.IS_CHECKOUT) {
       let reference = $("#reference").val();
-      let url_bin =
-        "/v2/card_bin/intra/" + number_bin + "/?reference=" + reference;
+      let url_bin = "/v2/card_bin/intra/" + number_bin + "/?reference=" + reference;
       xmlhttp.open("GET", url_bin, true);
     } else {
       let SERVER_URL = this.getServerURL();
@@ -309,10 +313,8 @@ Payment.getBinInformation = function (
           let objResponse = JSON.parse(xmlhttp.responseText);
           if (xmlhttp.status === 200) {
             successCallback(objResponse, form);
-          } else if (xmlhttp.status === 400) {
-            erroCallback(objResponse);
           } else {
-            erroCallback(objResponse);
+            errorCallback(objResponse);
           }
         } catch (e) {
           let server_error = {
@@ -322,11 +324,71 @@ Payment.getBinInformation = function (
               description: "Server Error"
             }
           };
-          erroCallback(server_error);
+          errorCallback(server_error);
         }
       }
     };
     xmlhttp.send();
+  };
+  initFunction = initFunction.bind(this);
+  if (!this.IS_CHECKOUT) {
+    _getTime(initFunction);
+  } else {
+    initFunction();
+  }
+};
+
+Payment.verifyTransaction = function (
+  user_id,
+  transaction_id,
+  verification_type,
+  value,
+  successCallback,
+  errorCallback
+) {
+  let initFunction = function () {
+    let data = {
+      user: {id: user_id},
+      transaction: {id: transaction_id},
+      type: verification_type,
+      value: value,
+      more_info: true,
+    };
+    let xmlhttp = new XMLHttpRequest();
+    let url_verify = "/v2/transaction/verify";
+    let SERVER_URL = this.getServerURL();
+    xmlhttp.open("POST", SERVER_URL + url_verify, true);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.setRequestHeader(
+      "Auth-Token",
+      Payment.getAuthToken(
+        Payment.PAYMENT_CLIENT_APP_CODE,
+        Payment.PAYMENT_CLIENT_APP_KEY
+      )
+    );
+
+    xmlhttp.onreadystatechange = function () {
+      if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+        try {
+          let objResponse = JSON.parse(xmlhttp.responseText);
+          if (xmlhttp.status === 200) {
+            successCallback(objResponse);
+          } else {
+            errorCallback(objResponse);
+          }
+        } catch (e) {
+          let server_error = {
+            error: {
+              type: "Server Error",
+              help: "Server Error",
+              description: "Server Error"
+            }
+          };
+          errorCallback(server_error);
+        }
+      }
+    };
+    xmlhttp.send(JSON.stringify(data));
   };
   initFunction = initFunction.bind(this);
   if (!this.IS_CHECKOUT) {

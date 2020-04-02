@@ -1,3 +1,4 @@
+.payment-form .verification-container,
 .payment-form .card-number-wrapper,
 .payment-form .fiscal-number-wrapper,
 .payment-form .email-container,
@@ -8,6 +9,8 @@
   margin-bottom: 10px;
 }
 
+.payment-form .verification-btn-wrapper,
+.payment-form .verification-wrapper,
 .payment-form .card-number-wrapper,
 .payment-form .fiscal-number-wrapper,
 .payment-form .installments-wrapper,
@@ -25,6 +28,7 @@
   position: relative;
 }
 
+.payment-form .verification-container,
 .payment-form .card-number-wrapper,
 .payment-form .installments-wrapper,
 .payment-form .name-wrapper,
@@ -110,6 +114,7 @@
   box-shadow: none;
 }
 
+.payment-form .verification-container,
 .payment-form .fiscal-number-wrapper,
 .payment-form .card-number-wrapper,
 .payment-form .installments-wrapper,
@@ -117,6 +122,7 @@
   width: 100%;
 }
 
+.payment-form input.verification,
 .payment-form input.card-number,
 .payment-form input.fiscal-number,
 .payment-form input.validation-option,

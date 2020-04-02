@@ -28,6 +28,9 @@
     },
     validationOption: function () {
       return this.data("paymentform").getValidationOption();
+    },
+    showVerification: function (objResponse, successCallback, errorCallback) {
+      return this.data("paymentform").showVerification(objResponse, successCallback, errorCallback);
     }
   };
 

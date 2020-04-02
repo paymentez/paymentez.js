@@ -17,7 +17,7 @@ function PaymentForm(elem) {
   this.nip = '';
   this.USE_OTP = false;
   this.brand_name = '';
-  this.isBloqued = false;
+  this.isBlocked = false;
   this.useLunh = true;
 
   // Validate if its displaying in a mobile device
@@ -35,6 +35,7 @@ function PaymentForm(elem) {
   // initialize
   this.cvcLenght = 3;
   this.nipLenght = 4;
+  this.verificationLenght = 6;
   this.initEmailInput();
   this.initCellPhoneInput();
   this.initNameInput();
@@ -105,6 +106,8 @@ PaymentForm.OTP_EXPLICATION_ADD = "Escogiendo esta opción se va a generar una C
 PaymentForm.OTP_EXPLICATION_CHECKOUT = "Escogiendo esta opción se va a generar una Clave Temporal única, con la " +
   "que validarás tu compra.";
 PaymentForm.INVALID_CARD_TYPE_MESSAGE = "Tipo de tarjeta invalida para está operación.";
+PaymentForm.VERIFICATION_PLACEHOLDER = "Código OTP";
+PaymentForm.VERIFICATION_MESSAGE = "Esta operación requiere verificación";
 
 PaymentForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
   'x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" ' +
@@ -386,16 +389,55 @@ PaymentForm.applyFormatMask = function (string, mask) {
   return formattedString;
 };
 
+PaymentForm.prototype.showVerification = function (objResponse, successCallback, errorCallback) {
+  this.addCardProcess = {
+    response: objResponse,
+    successAddCardCallback: successCallback,
+    errorAddCardCallback: errorCallback,
+  };
+  this.invalidCardTypeMessage = PaymentForm.VERIFICATION_MESSAGE;
+  this.addWarningMessage();
+  this.addVerificationContainer();
+};
+
+PaymentForm.prototype.verifyTransaction = function () {
+  this.blockVerificationContainer();
+  let user_id = this.addCardProcess.response.user.id;
+  let transaction_id = this.addCardProcess.response.card.transaction_reference;
+  let verification_type = 'BY_OTP';  // TODO: Dynamic, according to the message in the answer
+  let value = this.getVerificationValue();
+  let $this = this;
+  Payment.verifyTransaction(user_id, transaction_id, verification_type, value,
+    function (response) {
+      $this.unBlockVerificationContainer();
+      if (response.transaction.status === 'pending') {
+      }
+      if (response.transaction.status === 'success') {
+        $this.addCardProcess.response.card.status = 'valid';
+      } else {
+        $this.addCardProcess.response.card.status = 'rejected';
+        $this.addCardProcess.response.card.message = response.transaction.message;
+      }
+      $this.removeVerificationContainer();
+      $this.addCardProcess.successAddCardCallback($this.addCardProcess.response);
+    },
+    function (response) {
+      $this.unBlockVerificationContainer();
+      $this.removeVerificationContainer();
+      $this.addCardProcess.errorAddCardCallback($this.addCardProcess.response);
+    });
+};
+
 PaymentForm.prototype.cardTypeFromNumberBin = function (number) {
   let number_bin = number.replace(" ", "").substring(0, 6);
   if (number >= 6 && this.numberBin !== number_bin) {
     this.numberBin = number_bin;
-    Payment.getBinInformation(number_bin, this, this.successCallback, function (error) {
+    Payment.getBinInformation(number_bin, this, this.successBinCallback, function (error) {
     });
   }
 };
 
-PaymentForm.prototype.successCallback = function (objResponse, form) {
+PaymentForm.prototype.successBinCallback = function (objResponse, form) {
   // Set luhn flag
   form.useLunh = objResponse.use_luhn;
 
@@ -441,7 +483,7 @@ PaymentForm.prototype.successCallback = function (objResponse, form) {
 
     if (!is_valid_type) {
       form.blockForm();
-    } else if (is_valid_type && form.isBloqued) {
+    } else if (is_valid_type && form.isBlocked) {
       form.unBlockForm();
     }
   }
@@ -817,6 +859,18 @@ PaymentForm.prototype.refreshValidationOption = function () {
   }
 };
 
+PaymentForm.prototype.refreshVerificationInputValidation = function () {
+  if (this.isVerificationValueValid()) {
+    this.verificationInput.parent().removeClass("has-error");
+    this.verificationBtn.removeAttr('disabled');
+    return true;
+  } else {
+    this.verificationInput.parent().addClass("has-error");
+    this.verificationBtn.attr('disabled', 'disabled');
+    return false;
+  }
+};
+
 PaymentForm.prototype.addValueToNip = function (value, key) {
   if (this.nipWrapperAdded()) {
     if (this.nipInput.val().length < this.nipLenght) {
@@ -929,6 +983,19 @@ PaymentForm.prototype.isFiscalNumberValid = function () {
 };
 
 /**
+ * Is the given input a valid verification?
+ *
+ * @returns {boolean}
+ */
+PaymentForm.prototype.isVerificationValueValid = function () {
+  if (this.verificationContainerAdded()) {
+    return this.getVerificationValue() != null && this.getVerificationValue().trim().length === this.verificationLenght;
+  } else {
+    return true;
+  }
+};
+
+/**
  * Validate if exists the fiscal number in the form
  *
  * @returns {boolean}
@@ -1006,6 +1073,16 @@ PaymentForm.prototype.virtualKeyboardAdded = function () {
 PaymentForm.prototype.warningMessageAdded = function () {
   let warningMessage = this.elem.find(".warning-message");
   return warningMessage.length >= 1;
+};
+
+/**
+ * Validate if exists the verification input in the form
+ *
+ * @returns {boolean}
+ */
+PaymentForm.prototype.verificationContainerAdded = function () {
+  let verification_el = this.elem.find(".verification-container");
+  return verification_el.length >= 1;
 };
 
 /**
@@ -1160,6 +1237,19 @@ PaymentForm.prototype.getNip = function () {
   }
 };
 
+/**
+ * Get the CVC number inputted.
+ *
+ * @returns {string}
+ */
+PaymentForm.prototype.getVerificationValue = function () {
+  if (this.verificationContainerAdded()) {
+    return this.verificationInput.val();
+  } else {
+    return '';
+  }
+};
+
 // --- --- --- --- --- --- --- --- --- --- ---
 
 /**
@@ -1168,7 +1258,7 @@ PaymentForm.prototype.getNip = function () {
  * @returns {string}
  */
 PaymentForm.prototype.blockForm = function () {
-  this.isBloqued = true;
+  this.isBlocked = true;
 
   // Setup display
   this.emailInput.val("");
@@ -1216,7 +1306,7 @@ PaymentForm.prototype.blockForm = function () {
  * @returns {string}
  */
 PaymentForm.prototype.unBlockForm = function () {
-  this.isBloqued = false;
+  this.isBlocked = false;
 
   // Setup display
   this.emailInput.removeAttr("disabled");
@@ -1283,19 +1373,23 @@ PaymentForm.prototype.refreshExpiryMonthYearInput = function () {
  *
  */
 PaymentForm.prototype.refreshCvc = function () {
-  let numbersOnly = PaymentForm.numbersOnlyString($(this.cvcInput).val());
-  let formattedNumber = PaymentForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
-  $(this.cvcInput).val(formattedNumber);
+  $(this.cvcInput).val(PaymentForm.numbersOnlyString($(this.cvcInput).val()));
 };
 
 /**
  *
  */
 PaymentForm.prototype.refreshNip = function () {
-  let numbersOnly = PaymentForm.numbersOnlyString($(this.nipInput).val());
-  let formattedNumber = PaymentForm.applyFormatMask(numbersOnly, this.creditCardNumberMask);
-  $(this.nipInput).val(formattedNumber);
+  $(this.nipInput).val(PaymentForm.numbersOnlyString($(this.nipInput).val()));
 };
+
+/**
+ *
+ */
+PaymentForm.prototype.refreshVerificationInput = function () {
+  $(this.verificationInput).val(PaymentForm.numbersOnlyString($(this.verificationInput).val()));
+};
+
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 PaymentForm.prototype.addFiscalNumber = function () {
@@ -1411,6 +1505,76 @@ PaymentForm.prototype.removeWarningMessage = function () {
     this.elem.find(".warning-message").remove();
   }
 };
+
+PaymentForm.prototype.addVerificationContainer = function () {
+  if (!this.verificationContainerAdded()) {
+    this.cardNumberInput.attr("disabled", "disabled");
+    this.emailInput.attr("disabled", "disabled");
+    this.cellPhoneInput.attr("disabled", "disabled");
+    this.nameInput.attr("disabled", "disabled");
+    this.cvcInput.attr("disabled", "disabled");
+
+    if (this.EXPIRY_USE_DROPDOWNS) {
+      this.expiryMonthInput.attr("disabled", "disabled");
+      this.expiryYearInput.attr("disabled", "disabled");
+    } else {
+      this.expiryMonthYearInput.attr("disabled", "disabled");
+    }
+
+    if (this.fiscalNumberAdded()) {
+      this.fiscalNumberInput.attr("disabled", "disabled")
+    }
+    if (this.nipWrapperAdded()) {
+      this.nipInput.attr("disabled", "disabled")
+    }
+
+    this.initVerificationInput();
+    this.setupVerificationInput();
+    this.setIconColour(this.iconColour);
+  }
+};
+
+PaymentForm.prototype.blockVerificationContainer = function () {
+  if (this.verificationContainerAdded()) {
+    this.verificationInput.attr('disabled', 'disabled');
+    this.verificationBtn.attr('disabled', 'disabled');
+  }
+};
+
+PaymentForm.prototype.unBlockVerificationContainer = function () {
+  if (this.verificationContainerAdded()) {
+    this.cardNumberInput.removeAttr('disabled');
+    this.emailInput.removeAttr('disabled');
+    this.cellPhoneInput.removeAttr('disabled');
+    this.nameInput.removeAttr('disabled');
+    this.cvcInput.removeAttr('disabled');
+
+    if (this.EXPIRY_USE_DROPDOWNS) {
+      this.expiryMonthInput.removeAttr('disabled');
+      this.expiryYearInput.removeAttr('disabled');
+    } else {
+      this.expiryMonthYearInput.removeAttr('disabled');
+    }
+
+    if (this.fiscalNumberAdded()) {
+      this.fiscalNumberInput.removeAttr('disabled');
+    }
+    if (this.nipWrapperAdded()) {
+      this.nipInput.removeAttr('disabled');
+    }
+
+    this.verificationInput.removeAttr('disabled');
+    this.verificationBtn.removeAttr('disabled');
+  }
+};
+
+PaymentForm.prototype.removeVerificationContainer = function () {
+  if (this.verificationContainerAdded()) {
+    this.removeWarningMessage();
+    this.elem.find(".verification-container").remove();
+  }
+};
+
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 /**
  * The next methods are temporary because only exito use otp and nip
@@ -1627,6 +1791,34 @@ PaymentForm.prototype.initOtpValidation = function () {
  */
 PaymentForm.prototype.initOtpValidation = function () {
   this.otpValidation = PaymentForm.detachOrCreateElement(this.elem, ".messages", "<div class='.messages' />");
+};
+
+/**
+ * Initialise the verification input and button
+ */
+PaymentForm.prototype.initVerificationInput = function () {
+  // Find or create the verification input element
+  this.verificationInput = PaymentForm.detachOrCreateElement(this.elem, ".verification", "<input class='verification' />");
+  // Ensure the verification has a placeholder
+  if (!PaymentForm.elementHasAttribute(this.verificationInput, "placeholder")) {
+    this.verificationInput.attr("placeholder", PaymentForm.VERIFICATION_PLACEHOLDER);
+  }
+  this.verificationInput.attr("type", "text");
+  this.verificationInput.attr("maxlength", this.verificationLenght);
+  this.verificationInput.attr("x-autocompletetype", "cc-csc");
+  this.verificationInput.attr("autocompletetype", "cc-csc");
+  this.verificationInput.attr("autocorrect", "off");
+  this.verificationInput.attr("spellcheck", "off");
+  this.verificationInput.attr("autocapitalize", "off");
+  // if (!this.IS_MOBILE) {
+  //   this.verificationInput.attr("type", "password");
+  // }
+
+  // Find or create the verification button element
+  this.verificationBtn = PaymentForm.detachOrCreateElement(this.elem, ".verification-btn", "<input class='verification-btn' />");
+  this.verificationBtn.attr("type", "button");
+  this.verificationBtn.attr("disabled", "disabled");
+  this.verificationBtn.attr("value", "Validar");
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -1968,6 +2160,36 @@ PaymentForm.prototype.setupWarningMessage = function () {
   }
   this.warningMessage = wrapper;
   this.elem.append(wrapper);
+};
+
+PaymentForm.prototype.setupVerificationInput = function () {
+  this.elem.append("<div class='verification-container'><div class='verification-wrapper'></div><div class='verification-btn-wrapper'></div></div>");
+
+  let container = this.elem.find(".verification-btn-wrapper");
+  container.append(this.verificationBtn);
+
+  let wrapper = this.elem.find(".verification-wrapper");
+  wrapper.append(this.verificationInput);
+  wrapper.append("<div class='icon'></div>");
+  wrapper.find(".icon").append(PaymentForm.LOCK_SVG);
+
+  // Events
+  let $this = this;
+  this.verificationInput.keydown(PaymentForm.filterNumberOnlyKey);
+  this.verificationInput.blur(function () {
+    $this.refreshVerificationInputValidation();
+  });
+  this.verificationInput.on('keyup', function () {
+    $this.refreshVerificationInputValidation();
+  });
+  this.verificationInput.on('paste', function () {
+    setTimeout(function () {
+      $this.refreshVerificationInput();
+    }, 1);
+  });
+  this.verificationBtn.on('click', function () {
+    $this.verifyTransaction();
+  });
 };
 
 PaymentForm.prototype.expiryMonth = function () {
