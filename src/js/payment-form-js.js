@@ -410,8 +410,7 @@ PaymentForm.prototype.verifyTransaction = function () {
   Payment.verifyTransaction(user_id, transaction_id, verification_type, value,
     function (response) {
       $this.unBlockVerificationContainer();
-      if (response.transaction.status === 'pending') {
-      }
+      $this.addCardProcess.response.transaction = $this.addCardProcess.response.transaction ? response.transaction : undefined;
       if (response.transaction.status === 'success') {
         $this.addCardProcess.response.card.status = 'valid';
       } else {
