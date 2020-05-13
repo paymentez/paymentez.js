@@ -391,9 +391,5 @@ Payment.verifyTransaction = function (
     xmlhttp.send(JSON.stringify(data));
   };
   initFunction = initFunction.bind(this);
-  if (!this.IS_CHECKOUT) {
-    _getTime(initFunction);
-  } else {
-    initFunction();
-  }
+  _getTime(initFunction);
 };
