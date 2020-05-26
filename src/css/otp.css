@@ -8,7 +8,7 @@
   }
 }
 
-.otp-wrapper .otp-label {
+.payment-form .otp-wrapper .otp-label {
   display: inline-block;
   color: #28a745;
   cursor: pointer;
@@ -21,11 +21,11 @@
   transition: all 0.3s ease;
 }
 
-.otp-wrapper .otp-label:hover {
+.payment-form .otp-wrapper .otp-label:hover {
   background: #d4edda;
 }
 
-.otp-wrapper .otp-label:before {
+.payment-form .otp-wrapper .otp-label:before {
   content: "";
   display: inline-block;
   width: 15px;
@@ -36,13 +36,13 @@
   border: 2px solid;
 }
 
-.otp-wrapper .otp,
-.otp-wrapper .otp:checked {
+.payment-form .otp-wrapper .otp,
+.payment-form .otp-wrapper .otp:checked {
   display: none;
 }
 
-.otp-wrapper .otp:checked + .otp-label,
-.otp-wrapper .otp:checked + .otp-label:before {
+.payment-form .otp-wrapper .otp:checked + .otp-label,
+.payment-form .otp-wrapper .otp:checked + .otp-label:before {
   color: #28a745;
   content: "x";
   border-bottom: 2px solid #28a745;
