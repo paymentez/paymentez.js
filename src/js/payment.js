@@ -130,7 +130,7 @@ Payment.createToken = function (
         try {
           let objResponse = JSON.parse(xmlhttp.responseText);
           if (xmlhttp.status === 200) {
-            if (objResponse.card.status === "pending") {
+            if (objResponse.card.status === "pending" && payment_form !== undefined) {
               objResponse.user = {id: createTokenRequest.user.id};
               payment_form.PaymentForm('showVerification', objResponse, successCallback, errorCallback);
             } else {
@@ -267,7 +267,7 @@ Payment.addCard = function (
   card,
   success_callback,
   failure_callback,
-  payment_form
+  payment_form = undefined
 ) {
   let session_id = Payment.getSessionId();
   Payment.dataCollector(session_id);
@@ -276,7 +276,7 @@ Payment.addCard = function (
     user: {
       id: uid,
       email: email,
-      fiscal_number: payment_form.PaymentForm('fiscalNumber')
+      fiscal_number: payment_form ? payment_form.PaymentForm('fiscalNumber') : $(".fiscal-number").val(),
     }
   };
   params["card"] = card["card"];

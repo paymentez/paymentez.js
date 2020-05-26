@@ -1,29 +1,29 @@
-.keyboard-wrapper {
+.payment-form .keyboard-wrapper {
   display: inline-block;
   position: relative;
   width: 80%;
 }
 
-.key-container {
+.payment-form .key-container {
   display: inline-block;
   position: relative;
   width: 33.3%;
 }
 
-.key-container button,
-.clean-container button {
+.payment-form .key-container button,
+.payment-form .clean-container button {
   font-size: 15px;
   padding: 4px 0px;
 }
 
-.clean-container {
+.payment-form .clean-container {
   display: inline-block;
   position: relative;
   width: 66.6%;
 }
 
-.key,
-.clean {
+.payment-form .key,
+.payment-form .clean {
   color: #fff;
   background-color: #17a2b8;
   border-color: #fff;
@@ -31,15 +31,15 @@
   width: 100%;
 }
 
-.key:hover,
-.clean:hover {
+.payment-form .key:hover,
+.payment-form .clean:hover {
   background-color: #138496;
 }
 
-.keyboard-wrapper:hover .key span {
+.payment-form .keyboard-wrapper:hover .key span {
   visibility: hidden;
 }
 
-.keyboard-wrapper:hover .key:after {
+.payment-form .keyboard-wrapper:hover .key:after {
   content: "*";
 }

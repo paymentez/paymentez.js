@@ -108,6 +108,7 @@ PaymentForm.OTP_EXPLICATION_CHECKOUT = "Escogiendo esta opción se va a generar 
 PaymentForm.INVALID_CARD_TYPE_MESSAGE = "Tipo de tarjeta invalida para está operación.";
 PaymentForm.VERIFICATION_PLACEHOLDER = "Código OTP";
 PaymentForm.VERIFICATION_MESSAGE = "Esta operación requiere verificación";
+PaymentForm.VERIFICATION_MESSAGE_2 = "OTP incorrecto, prueba nuevamente";
 
 PaymentForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
   'x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" ' +
@@ -395,7 +396,7 @@ PaymentForm.prototype.showVerification = function (objResponse, successCallback,
     successAddCardCallback: successCallback,
     errorAddCardCallback: errorCallback,
   };
-  this.invalidCardTypeMessage = PaymentForm.VERIFICATION_MESSAGE;
+  this.invalidCardTypeMessage = PaymentForm.VERIFICATION_MESSAGE !== this.invalidCardTypeMessage ? PaymentForm.VERIFICATION_MESSAGE : PaymentForm.VERIFICATION_MESSAGE_2;
   this.addWarningMessage();
   this.addVerificationContainer();
 };
@@ -410,14 +411,16 @@ PaymentForm.prototype.verifyTransaction = function () {
   Payment.verifyTransaction(user_id, transaction_id, verification_type, value,
     function (response) {
       $this.unBlockVerificationContainer();
+      $this.removeVerificationContainer();
       $this.addCardProcess.response.transaction = $this.addCardProcess.response.transaction ? response.transaction : undefined;
-      if (response.transaction.status === 'success') {
+      if (response.transaction.status === 'pending') {
+        return $this.showVerification($this.addCardProcess.response, $this.addCardProcess.successAddCardCallback, $this.addCardProcess.errorAddCardCallback)
+      } else if (response.transaction.status === 'success') {
         $this.addCardProcess.response.card.status = 'valid';
       } else {
         $this.addCardProcess.response.card.status = 'rejected';
         $this.addCardProcess.response.card.message = response.transaction.message;
       }
-      $this.removeVerificationContainer();
       $this.addCardProcess.successAddCardCallback($this.addCardProcess.response);
     },
     function (response) {

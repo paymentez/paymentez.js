@@ -1,30 +1,30 @@
-.payment_dialog_info, .payment_dialog_success, .payment_dialog_warning, .payment_dialog_error {
+.payment-form .payment_dialog_info, .payment_dialog_success, .payment_dialog_warning, .payment_dialog_error {
   margin: 10px 0px;
   padding: 6px;
   font-size: 14px;
 }
 
-.payment_dialog_info {
+.payment-form .payment_dialog_info {
   color: #00529B;
   background-color: #BDE5F8;
 }
 
-.payment_dialog_success {
+.payment-form .payment_dialog_success {
   color: #4F8A10;
   background-color: #DFF2BF;
 }
 
-.payment_dialog_warning {
+.payment-form .payment_dialog_warning {
   color: #9F6000;
   background-color: #FEEFB3;
 }
 
-.payment_dialog_error {
+.payment-form .payment_dialog_error {
   color: #D8000C;
   background-color: #FFD2D2;
 }
 
-.payment_dialog_info i, .payment_dialog_success i, .payment_dialog_warning i, .payment_dialog_error i {
+.payment-form .payment_dialog_info i, .payment_dialog_success i, .payment_dialog_warning i, .payment_dialog_error i {
   margin: 2px 2px;
   font-size: 1em;
   vertical-align: middle;
