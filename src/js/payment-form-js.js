@@ -459,7 +459,8 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
   form.USE_OTP = objResponse.otp;
   // form.USE_OTP = false;
 
-  if (form.cardType === 'sx' || form.cardType === 'vr') {
+  // Validate if fiscal_number is required
+  if (objResponse.required_fields && objResponse.required_fields.includes('fiscal_number')) {
     form.removeTuyaChanges();
     form.addFiscalNumber();
   }
