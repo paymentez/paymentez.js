@@ -11,7 +11,7 @@ Payment.KOUNT_ENVIRONMENT = "";
 Payment.KOUN_TEST_ENVIRONMENT = "https://tst.kaptcha.com/";
 Payment.KOUN_PROD_ENVIRONMENT = "https://ssl.kaptcha.com/";
 
-Payment.DOMAIN = "paymentez.com";
+Payment.DOMAIN = "paymentez.com";  // Update this for each white label
 Payment.SERVER_LOCAL_URL = "http://localhost:8080";
 Payment.SERVER_DEV_URL = `https://ccapi-dev.${Payment.DOMAIN}`;
 Payment.SERVER_STG_URL = `https://ccapi-stg.${Payment.DOMAIN}`;

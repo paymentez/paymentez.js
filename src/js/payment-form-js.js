@@ -1245,18 +1245,8 @@ PaymentForm.prototype.getFiscalNumber = function () {
  */
 PaymentForm.prototype.getValidationOption = function () {
   let val = PaymentForm.AUTH_CVC;
-  if (this.cardType === 'ex' || this.cardType === 'ak') {
-    if (this.USE_OTP) {
-      if (this.otpValidation.is(':checked')) {
-        val = PaymentForm.AUTH_OTP;
-      } else {
-        val = PaymentForm.AUTH_NIP;
-      }
-    } else {
-      val = PaymentForm.AUTH_NIP;
-    }
-  } else {
-    val = PaymentForm.AUTH_CVC;
+  if (this.nipWrapperAdded()) {
+    val = PaymentForm.AUTH_NIP;
   }
   return val;
 };
