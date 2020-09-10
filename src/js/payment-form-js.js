@@ -439,6 +439,58 @@ PaymentForm.prototype.cardTypeFromNumberBin = function (number) {
   }
 };
 
+PaymentForm.prototype.setRequiredFields = function (required_fields) {
+  const form = this;
+
+  if (!(required_fields && required_fields.length > 0)) {
+    form.removeFiscalNumber();
+    form.removeNip();
+    return
+  }
+
+  required_fields.forEach(function (required_field) {
+      let field_name = typeof (required_field) === 'object' ? Object.keys(required_field)[0] : required_field;
+
+      // Only should be contemplated the no default fields from SDK form (fiscal_number, tuya_key, fiscal_number_type)
+      switch (field_name) {
+        case 'fiscal_number':
+          form.addFiscalNumber();
+          break;
+        case 'tuya_key':
+          form.addNip();
+          break;
+        case 'fiscal_number_type':
+          break;
+      }
+    }
+  );
+};
+
+PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
+  const form = this;
+
+  if (!(no_required_fields && no_required_fields.length > 0)) {
+    form.addExpiryContainer();
+    form.addCvcContainer();
+    return
+  }
+
+  no_required_fields.forEach(function (no_required_field) {
+      let field_name = typeof (no_required_field) === 'object' ? Object.keys(no_required_field)[0] : no_required_field;
+
+      // Only should be contemplated the default fields from SDK form (expiration_date, cvv)
+      switch (field_name) {
+        case 'expiration_date':
+          form.removeExpiryContainer();
+          break;
+        case 'cvv':
+          form.removeCvcContainer();
+          break;
+      }
+    }
+  );
+};
+
 PaymentForm.prototype.successBinCallback = function (objResponse, form) {
   // Set luhn flag
   form.useLunh = objResponse.use_luhn;
@@ -446,34 +498,32 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
   // Set card type
   form.cardType = objResponse.card_type.length > 0 ? objResponse.card_type : '';
   form.brand_name = objResponse.brand_name.length > 0 ? objResponse.brand_name : '';
+
   // Set card type icon
   $(".card-type-icon").css("background-image", "url(" + objResponse.url_logo + ")");
 
-  // // Set card mask
+  // Set card mask
   form.creditCardNumberMask = objResponse.card_mask ? objResponse.card_mask : "XXXX XXXX XXXX XXXX";
   form.cardNumberInput.attr("maxlength", form.creditCardNumberMask.length);
 
-  form.setInstallmentsOptions(objResponse.installments_options);
+  // Set cvc lenght and cvc mask
+  form.cvcLenght = objResponse.cvv_length;
+  form.cvcInput.attr("maxlength", form.cvcLenght);
+  form.cvcMask = "X".repeat(form.cvcLenght);
+
+  // Set installment options
+  if (objResponse.installments_options && objResponse.installments_options.length > 0) {
+    form.setInstallmentsOptions(objResponse.installments_options);
+  }
 
   // Set use of otp
   form.USE_OTP = objResponse.otp;
-  // form.USE_OTP = false;
 
-  // Validate if fiscal_number is required
-  if (objResponse.required_fields && objResponse.required_fields.includes('fiscal_number')) {
-    form.removeTuyaChanges();
-    form.addFiscalNumber();
-  }
-  // Tuya requirements
-  else if (form.cardType === 'ex' || form.cardType === 'ak') {
-    form.addTuyaChanges();
-  } else {
-    form.removeTuyaChanges();
-    // Set cvc lenght and cvc mask
-    form.cvcLenght = objResponse.cvv_length;
-    form.cvcInput.attr("maxlength", form.cvcLenght);
-    form.cvcMask = "X".repeat(form.cvcLenght);
-  }
+  // Validate required fields for bin
+  form.setRequiredFields(objResponse.required_fields);
+
+  // Validate not required fields for bin
+  form.setNoRequiredFields(objResponse.no_required_fields);
 
   // Validate if card type is valid.
   if (form.exclusiveTypes) {
@@ -1195,18 +1245,8 @@ PaymentForm.prototype.getFiscalNumber = function () {
  */
 PaymentForm.prototype.getValidationOption = function () {
   let val = PaymentForm.AUTH_CVC;
-  if (this.cardType === 'ex' || this.cardType === 'ak') {
-    if (this.USE_OTP) {
-      if (this.otpValidation.is(':checked')) {
-        val = PaymentForm.AUTH_OTP;
-      } else {
-        val = PaymentForm.AUTH_NIP;
-      }
-    } else {
-      val = PaymentForm.AUTH_NIP;
-    }
-  } else {
-    val = PaymentForm.AUTH_CVC;
+  if (this.nipWrapperAdded()) {
+    val = PaymentForm.AUTH_NIP;
   }
   return val;
 };
