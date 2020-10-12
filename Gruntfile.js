@@ -5,6 +5,9 @@ module.exports = function (grunt) {
   const version_sdk = grunt.option('version_sdk') || 'stable';
   grunt.initConfig({
 
+    //
+    // Server in localhost
+    //
     connect: {
       server: {
         options: {
