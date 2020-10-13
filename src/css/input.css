@@ -1,7 +1,8 @@
 .payment-form .verification-container,
 .payment-form .card-number-wrapper,
 .payment-form .fiscal-number-wrapper,
-.payment-form .email-container,
+.payment-form .cellphone-container,
+.payment-form .email-wrapper,
 .payment-form .installments-wrapper,
 .payment-form .nip-wrapper,
 .payment-form .cvc-wrapper,
@@ -16,7 +17,6 @@
 .payment-form .installments-wrapper,
 .payment-form .name-wrapper,
 .payment-form .expiry-wrapper,
-.payment-form .cellphone-wrapper,
 .payment-form .email-wrapper,
 .payment-form .nip-wrapper,
 .payment-form .cvc-wrapper {
@@ -37,7 +37,7 @@
 .payment-form .otp-wrapper,
 .payment-form .cvc-container,
 .payment-form .cellphone-container,
-.payment-form .email-container,
+.payment-form .email-wrapper,
 .payment-form .expiry-container {
   display: inline-block;
 }
@@ -118,6 +118,8 @@
 .payment-form .fiscal-number-wrapper,
 .payment-form .card-number-wrapper,
 .payment-form .installments-wrapper,
+.payment-form .email-wrapper,
+.payment-form .cellphone-container,
 .payment-form .name-wrapper {
   width: 100%;
 }
@@ -129,6 +131,7 @@
 .payment-form input.name,
 .payment-form input.email,
 .payment-form input.cellphone,
+.payment-form select.cellphone-country-code,
 .payment-form input.nip,
 .payment-form input.cvc {
   padding-left: 38px;

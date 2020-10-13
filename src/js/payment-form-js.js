@@ -62,6 +62,8 @@ function PaymentForm(elem) {
   }
 
   this.refreshCreditCardType();
+  this.refreshCellPhoneFormat();
+  this.refreshCellphoneCountryCode();
 }
 
 PaymentForm.KEYS = {
@@ -87,6 +89,7 @@ PaymentForm.KEYS = {
 PaymentForm.prototype.creditCardNumberMask = "XXXX XXXX XXXX XXXX";
 PaymentForm.prototype.cvcMask = "XXX";
 PaymentForm.EXPIRY_MASK = "XX / XX";
+PaymentForm.CELLPHONE_MASK = "XXX XXX XXXX";
 PaymentForm.CREDIT_CARD_NUMBER_PLACEHOLDER = "Número de tarjeta";
 PaymentForm.NAME_PLACEHOLDER = "Nombre del titular";
 PaymentForm.EMAIL_PLACEHOLDER = "E-mail";
@@ -767,23 +770,6 @@ PaymentForm.handleMaskedNumberInputKey = function (e, mask) {
 };
 
 /**
- *
- *
- * @param e
- * @param cardMask
- */
-PaymentForm.handleCreditCardNumberKey = function (e, cardMask) {
-  PaymentForm.handleMaskedNumberInputKey(e, cardMask);
-};
-
-PaymentForm.handleCreditCardNumberChange = function (e) {
-};
-
-PaymentForm.handleExpiryKey = function (e) {
-  PaymentForm.handleMaskedNumberInputKey(e, PaymentForm.EXPIRY_MASK);
-};
-
-/**
  * Generate a random array to assign to tuya keyboard
  */
 PaymentForm.generateRandoms = function () {
@@ -975,7 +961,7 @@ PaymentForm.prototype.isEmailValid = function () {
 
 PaymentForm.prototype.isCellPhoneValid = function () {
   if (this.captureCellPhone)
-    return this.getCellPhone() != null && this.getCellPhone().length >= 5;
+    return this.getCellPhone() != null && this.getCellPhone().length >= 7;
   else
     return true;
 };
@@ -1204,7 +1190,7 @@ PaymentForm.prototype.getEmail = function () {
  * @returns {string}
  */
 PaymentForm.prototype.getCellPhone = function () {
-  return this.cellPhoneInput.val();
+  return `${this.cellphoneCountryCodeInput.val()}-${this.cellPhoneInput.val().replace(/ /g, '')}`;
 };
 
 /**
@@ -1433,6 +1419,23 @@ PaymentForm.prototype.refreshVerificationInput = function () {
   $(this.verificationInput).val(PaymentForm.numbersOnlyString($(this.verificationInput).val()));
 };
 
+/**
+ *
+ */
+PaymentForm.prototype.refreshCellPhoneFormat = function () {
+  let numbersOnly = PaymentForm.numbersOnlyString($(this.cellPhoneInput).val());
+  let formattedNumber = PaymentForm.applyFormatMask(numbersOnly, PaymentForm.CELLPHONE_MASK);
+  $(this.cellPhoneInput).val(formattedNumber);
+};
+
+/**
+ *
+ */
+PaymentForm.prototype.refreshCellphoneCountryCode = function () {
+  let flag = Payment.getCountryByCode(this.cellphoneCountryCodeInput.val()).flag;
+  this.cellPhoneCountryCodeFlag.setAttribute('src', flag);
+};
+
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 PaymentForm.prototype.addFiscalNumber = function () {
@@ -1619,27 +1622,6 @@ PaymentForm.prototype.removeVerificationContainer = function () {
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-/**
- * The next methods are temporary because only exito use otp and nip
- */
-PaymentForm.prototype.addTuyaChanges = function () {
-  this.addFiscalNumber();
-  this.addNip();
-  this.addOtpValidation();
-  this.removeExpiryContainer();
-  this.removeCvcContainer();
-};
-
-PaymentForm.prototype.removeTuyaChanges = function () {
-  this.addExpiryContainer();
-  this.addCvcContainer();
-  this.removeFiscalNumber();
-  this.removeNip();
-  this.removeOtpValidation();
-  this.removeVirtualKeyboard();
-  this.removeValidationMessage();
-};
-// --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 /**
  * Initialise the card number input
@@ -1718,10 +1700,14 @@ PaymentForm.prototype.initCellPhoneInput = function () {
   if (!this.captureCellPhone)
     this.captureCellPhone = this.elem.find(".cellphone")[0] != null;
   // Find or create the cellphone input element
+  this.cellphoneCountryCodeInput = PaymentForm.detachOrCreateElement(this.elem, ".cellphone-country-code", "<select class='cellphone-country-code' />");
   this.cellPhoneInput = PaymentForm.detachOrCreateElement(this.elem, ".cellphone", "<input class='cellphone' />");
   // Ensure the cellphone element has a field cellphone
   if (!PaymentForm.elementHasAttribute(this.cellPhoneInput, "name")) {
     this.cellPhoneInput.attr("name", "cellphone");
+  }
+  if (!PaymentForm.elementHasAttribute(this.cellphoneCountryCodeInput, "name")) {
+    this.cellphoneCountryCodeInput.attr("name", "cellphone-country-code");
   }
   // Ensure the cellphone element has a placeholder
   if (!PaymentForm.elementHasAttribute(this.cellPhoneInput, "placeholder")) {
@@ -1731,6 +1717,14 @@ PaymentForm.prototype.initCellPhoneInput = function () {
   this.cellPhoneInput.attr("autocorrect", "off");
   this.cellPhoneInput.attr("spellcheck", "off");
   this.cellPhoneInput.attr("autocapitalize", "off");
+
+  let $this = this;
+  Payment.COUNTRIES.forEach(function (country) {
+    let option = document.createElement("option");
+    option.value = country.calling_code;
+    option.text = country.name;
+    $this.cellphoneCountryCodeInput.append(option);
+  });
 };
 
 /**
@@ -1877,12 +1871,11 @@ PaymentForm.prototype.setupCardNumberInput = function () {
   // Events
   let $this = this;
   this.cardNumberInput.keydown(function (e) {
-    PaymentForm.handleCreditCardNumberKey(e, $this.creditCardNumberMask);
+    PaymentForm.handleMaskedNumberInputKey(e, $this.creditCardNumberMask);
   });
   this.cardNumberInput.keyup(function () {
     $this.refreshCreditCardType();
   });
-  //this.cardNumberInput.change(PaymentForm.handleCreditCardNumberChange);
   this.cardNumberInput.on('paste', function () {
     setTimeout(function () {
       $this.refreshCreditCardNumberFormat();
@@ -1912,7 +1905,7 @@ PaymentForm.prototype.setupNameInput = function () {
 
 PaymentForm.prototype.setupEmailInput = function () {
   if (this.captureEmail) {
-    this.elem.append("<div class='email-container'><div class='email-wrapper'></div></div>");
+    this.elem.append("<div class='email-wrapper'></div>");
     let wrapper = this.elem.find(".email-wrapper");
     wrapper.append(this.emailInput);
     wrapper.append("<div class='icon'></div>");
@@ -1930,14 +1923,25 @@ PaymentForm.prototype.setupCellPhoneInput = function () {
   if (this.captureCellPhone) {
     this.elem.append("<div class='cellphone-container'><div class='cellphone-wrapper'></div></div>");
     let wrapper = this.elem.find(".cellphone-wrapper");
+    wrapper.append(this.cellphoneCountryCodeInput);
     wrapper.append(this.cellPhoneInput);
-    wrapper.append("<div class='icon'></div>");
-    wrapper.find(".icon").append(PaymentForm.CELLPHONE_SVG);
+    wrapper.append("<div class='icon'><img class=' flag'/></div>");
+    this.cellPhoneCountryCodeFlag = wrapper.find(".flag")[0];
+
+    wrapper.append("<div class='icon icon-phone'></div>");
+    wrapper.find(".icon-phone").append(PaymentForm.CELLPHONE_SVG);
 
     // Events
     let $this = this;
+    this.cellPhoneInput.keydown(function (e) {
+      PaymentForm.handleMaskedNumberInputKey(e, PaymentForm.CELLPHONE_MASK);
+    });
     this.cellPhoneInput.blur(function () {
+      $this.refreshCellPhoneFormat();
       $this.refreshCellPhoneValidation();
+    });
+    this.cellphoneCountryCodeInput.change(function () {
+      $this.refreshCellphoneCountryCode();
     });
   }
 };
@@ -2018,7 +2022,7 @@ PaymentForm.prototype.setupExpiryInput = function () {
     // Events
     let $this = this;
     this.expiryMonthYearInput.keydown(function (e) {
-      PaymentForm.handleExpiryKey(e);
+      PaymentForm.handleMaskedNumberInputKey(e, PaymentForm.EXPIRY_MASK);
       let val = $this.expiryMonthYearInput.val();
 
       if (val.length === 1 && parseInt(val) > 1 && PaymentForm.keyIsNumber(e)) {
