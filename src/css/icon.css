@@ -8,6 +8,15 @@
   pointer-events: none;
 }
 
+.payment-form .cellphone-wrapper .icon-phone {
+  margin-left: 30%;
+}
+
+.payment-form .cellphone-wrapper .flag {
+  width: 24px;
+  height: 17px;
+}
+
 .payment-form .icon.right {
   right: 8px;
   left: auto;

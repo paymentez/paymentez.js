@@ -230,6 +230,7 @@ Payment.addCard = function (uid, email, card, success_callback, failure_callback
     user: {
       id: uid,
       email: email,
+      phone: payment_form ? payment_form.PaymentForm('cellPhone') : $(".cellphone").val(),
       fiscal_number: payment_form ? payment_form.PaymentForm('fiscalNumber') : $(".fiscal-number").val(),
     },
     card: card["card"],
