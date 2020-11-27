@@ -452,20 +452,20 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
   }
 
   required_fields.forEach(function (required_field) {
-      let field_name = typeof (required_field) === 'object' ? Object.keys(required_field)[0] : required_field;
+    let field_name = typeof (required_field) === 'object' ? Object.keys(required_field)[0] : required_field;
 
-      // Only should be contemplated the no default fields from SDK form (fiscal_number, tuya_key, fiscal_number_type)
-      switch (field_name) {
-        case 'fiscal_number':
-          form.addFiscalNumber();
-          break;
-        case 'tuya_key':
-          form.addNip();
-          break;
-        case 'fiscal_number_type':
-          break;
-      }
+    // Only should be contemplated the no default fields from SDK form (fiscal_number, tuya_key, fiscal_number_type)
+    switch (field_name) {
+      case 'fiscal_number':
+        form.addFiscalNumber();
+        break;
+      case 'tuya_key':
+        form.addNip();
+        break;
+      case 'fiscal_number_type':
+        break;
     }
+  }
   );
 };
 
@@ -479,18 +479,18 @@ PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
   }
 
   no_required_fields.forEach(function (no_required_field) {
-      let field_name = typeof (no_required_field) === 'object' ? Object.keys(no_required_field)[0] : no_required_field;
+    let field_name = typeof (no_required_field) === 'object' ? Object.keys(no_required_field)[0] : no_required_field;
 
-      // Only should be contemplated the default fields from SDK form (expiration_date, cvv)
-      switch (field_name) {
-        case 'expiration_date':
-          form.removeExpiryContainer();
-          break;
-        case 'cvv':
-          form.removeCvcContainer();
-          break;
-      }
+    // Only should be contemplated the default fields from SDK form (expiration_date, cvv)
+    switch (field_name) {
+      case 'expiration_date':
+        form.removeExpiryContainer();
+        break;
+      case 'cvv':
+        form.removeCvcContainer();
+        break;
     }
+  }
   );
 };
 
@@ -1367,7 +1367,7 @@ PaymentForm.prototype.unBlockForm = function () {
  * @param colour
  */
 PaymentForm.prototype.setIconColour = function (colour) {
-  this.elem.find(".icon .svg").css({"fill": colour});
+  this.elem.find(".icon .svg").css({ "fill": colour });
 };
 
 /**
@@ -1428,12 +1428,15 @@ PaymentForm.prototype.refreshCellPhoneFormat = function () {
   $(this.cellPhoneInput).val(formattedNumber);
 };
 
-/**
- *
+/** 
+ * Get country flag image src
  */
 PaymentForm.prototype.refreshCellphoneCountryCode = function () {
-  let flag = Payment.getCountryByCode(this.cellphoneCountryCodeInput.val()).flag;
-  this.cellPhoneCountryCodeFlag.setAttribute('src', flag);
+  let countryId = this.cellphoneCountryCodeInput.find("option:selected").data("country-id") || null;
+  if (countryId) {
+    let flag = Payment.getCountryById(countryId).flag;
+    this.cellPhoneCountryCodeFlag.setAttribute('src', flag);
+  }
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -1719,12 +1722,23 @@ PaymentForm.prototype.initCellPhoneInput = function () {
   this.cellPhoneInput.attr("autocapitalize", "off");
 
   let $this = this;
-  Payment.COUNTRIES.forEach(function (country) {
-    let option = document.createElement("option");
-    option.value = country.calling_code;
-    option.text = country.name;
-    $this.cellphoneCountryCodeInput.append(option);
-  });
+
+  const options = Payment.COUNTRIES.filter(country => country.active === true);
+
+  setTimeout(() => {
+    this.cellphoneSelectize = $this.cellphoneCountryCodeInput.selectize(
+      {
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        options: options,
+      }
+    );
+    this.cellphoneSelectizeControl = this.cellphoneSelectize[0].selectize;
+    const defaultCountry = Payment.guessCountry();
+    this.cellphoneSelectizeControl.setValue(defaultCountry)
+  }, 0);
+
 };
 
 /**
@@ -1925,7 +1939,7 @@ PaymentForm.prototype.setupCellPhoneInput = function () {
     let wrapper = this.elem.find(".cellphone-wrapper");
     wrapper.append(this.cellphoneCountryCodeInput);
     wrapper.append(this.cellPhoneInput);
-    wrapper.append("<div class='icon'><img class=' flag'/></div>");
+    wrapper.append("<div class='icon'><img class='flag'/></div>");
     this.cellPhoneCountryCodeFlag = wrapper.find(".flag")[0];
 
     wrapper.append("<div class='icon icon-phone'></div>");
