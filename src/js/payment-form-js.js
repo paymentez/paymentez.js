@@ -62,8 +62,10 @@ function PaymentForm(elem) {
   }
 
   this.refreshCreditCardType();
-  this.refreshCellPhoneFormat();
-  this.refreshCellphoneCountryCode();
+  if (this.captureCellPhone) {
+    this.refreshCellPhoneFormat();
+    this.refreshCellphoneCountryCode();
+  }
 }
 
 PaymentForm.KEYS = {
