@@ -1726,7 +1726,7 @@ PaymentForm.prototype.initCellPhoneInput = function () {
 
   let $this = this;
 
-  const options = Payment.COUNTRIES.filter(country => country.active === true);
+  const options = Payment.COUNTRIES.filter(country => country.active);
 
   setTimeout(() => {
     this.cellphoneSelectize = $this.cellphoneCountryCodeInput.selectize(
