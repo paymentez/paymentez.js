@@ -1738,7 +1738,6 @@ PaymentForm.prototype.initCellPhoneInput = function () {
       }
     );
     this.cellphoneSelectizeControl = this.cellphoneSelectize[0].selectize;
-    console.log(this.defaultCountryCode)
     const defaultCountry = this.defaultCountryCode ? this.defaultCountryCode : Payment.guessCountry();
     this.cellphoneSelectizeControl.setValue(defaultCountry)
   }, 0);
