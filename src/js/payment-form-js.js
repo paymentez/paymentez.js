@@ -26,6 +26,7 @@ function PaymentForm(elem) {
 
   this.captureEmail = this.elem.data("capture-email") ? this.elem.data("capture-email") : false;
   this.captureCellPhone = this.elem.data("capture-cellphone") ? this.elem.data("capture-cellphone") : false;
+  this.defaultCountryCode = this.elem.data("default-country") ? this.elem.data("default-country") : false;
   this.captureName = this.elem.data("capture-name") ? this.elem.data("capture-name") : false;
   this.iconColour = this.elem.data("icon-colour") ? this.elem.data("icon-colour") : false;
   this.EXPIRY_USE_DROPDOWNS = this.elem.data("use-dropdowns") ? this.elem.data("use-dropdowns") : false;
@@ -1432,9 +1433,9 @@ PaymentForm.prototype.refreshCellPhoneFormat = function () {
  * Get country flag image src
  */
 PaymentForm.prototype.refreshCellphoneCountryCode = function () {
-  let countryId = this.cellphoneCountryCodeInput.find("option:selected").data("country-id") || null;
-  if (countryId) {
-    let flag = Payment.getCountryById(countryId).flag;
+  let currentCountryCode = this.cellphoneCountryCodeInput.find("option:selected").data("country-code") || null;
+  if (currentCountryCode) {
+    let flag = Payment.getCountryByCountryCode(currentCountryCode).flag;
     this.cellPhoneCountryCodeFlag.setAttribute('src', flag);
   }
 };
@@ -1728,14 +1729,15 @@ PaymentForm.prototype.initCellPhoneInput = function () {
   setTimeout(() => {
     this.cellphoneSelectize = $this.cellphoneCountryCodeInput.selectize(
       {
-        valueField: 'id',
+        valueField: 'country_code',
         labelField: 'name',
         searchField: 'name',
         options: options,
       }
     );
     this.cellphoneSelectizeControl = this.cellphoneSelectize[0].selectize;
-    const defaultCountry = Payment.guessCountry();
+    console.log(this.defaultCountryCode)
+    const defaultCountry = this.defaultCountryCode ? this.defaultCountryCode : Payment.guessCountry();
     this.cellphoneSelectizeControl.setValue(defaultCountry)
   }, 0);
 
