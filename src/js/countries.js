@@ -1485,7 +1485,7 @@ Payment.COUNTRIES = [
   },
   {
     "flag": "https://restcountries.eu/data/esp.svg",
-    "name": "Spain",
+    "name": "España",
     "country_code": "ESP",
     "calling_code": "34",
     "active": true
