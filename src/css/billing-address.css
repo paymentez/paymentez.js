@@ -1,0 +1,14 @@
+.payment-form .billing-address-wrapper {
+  position: relative;
+}
+
+.payment-form .billing-address-wrapper {
+  display: inline-block;
+  width: 28%;
+  margin-right: 2%;
+}
+
+.payment-form .billing-address-wrapper .billing-address {
+  display: inline-block;
+  width: 70%;
+}

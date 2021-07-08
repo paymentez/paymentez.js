@@ -29,6 +29,10 @@
     cellPhone: function () {
       return this.data("paymentform").getCellPhone();
     },
+    // TODO: Esto dónde se pone para que se envíe a CCAPI?
+    billingAddress: function () {
+      return this.data("paymentform").getBillingAddress();
+    },
     validationOption: function () {
       return this.data("paymentform").getValidationOption();
     },
