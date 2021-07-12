@@ -9,6 +9,7 @@
 .payment-form .name-wrapper {
   margin-bottom: 10px;
 }
+.payment-form .billing-address-container,
 
 .payment-form .verification-btn-wrapper,
 .payment-form .verification-wrapper,
@@ -41,6 +42,7 @@
 .payment-form .expiry-container {
   display: inline-block;
 }
+.payment-form .billing-address-container,
 
 .payment-form::after {
   content: ' ';
@@ -123,6 +125,7 @@
 .payment-form .name-wrapper {
   width: 100%;
 }
+.payment-form .billing-address-container,
 
 .payment-form input.verification,
 .payment-form input.card-number,

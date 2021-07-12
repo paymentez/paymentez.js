@@ -10,6 +10,7 @@
 [payment_version_2] .payment-form input.name,
 [payment_version_2] .payment-form input.nip,
 [payment_version_2] .payment-form input.validation-option,
+[payment_version_2] .payment-form input.zip-code,
 [payment_version_2] .payment-form .expiry-wrapper .expiry-month,
 [payment_version_2] .payment-form .expiry-wrapper .expiry-year,
 [payment_version_2] .payment-form .expiry-wrapper .expiry,

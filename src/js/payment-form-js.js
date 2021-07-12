@@ -32,6 +32,7 @@ function PaymentForm(elem) {
   this.EXPIRY_USE_DROPDOWNS = this.elem.data("use-dropdowns") ? this.elem.data("use-dropdowns") : false;
   this.exclusiveTypes = this.elem.data("exclusive-types") ? this.elem.data("exclusive-types").split(",") : false;
   this.invalidCardTypeMessage = this.elem.data("invalid-card-type-message") ? this.elem.data("invalid-card-type-message") : false;
+  this.useBillingAddress = this.elem.data("use-billing-address") ? this.elem.data("use-billing-address") : false;
 
   // initialize
   this.cvcLenght = 3;
@@ -44,6 +45,9 @@ function PaymentForm(elem) {
   this.initExpiryMonthInput();
   this.initExpiryYearInput();
   this.initCvcInput();
+  if (this.useBillingAddress) {
+    this.initZipCodeInput();
+  }
 
   this.elem.empty();
 
@@ -54,6 +58,9 @@ function PaymentForm(elem) {
   this.setupCardNumberInput();
   this.setupExpiryInput();
   this.setupCvcInput();
+  if (this.useBillingAddress) {
+    this.setupZipCodeInput();
+  }
 
   this.elem.append(this.current_data);
 
@@ -115,6 +122,7 @@ PaymentForm.INVALID_CARD_TYPE_MESSAGE = "Tipo de tarjeta invalida para está ope
 PaymentForm.VERIFICATION_PLACEHOLDER = "Código OTP";
 PaymentForm.VERIFICATION_MESSAGE = "Esta operación requiere verificación";
 PaymentForm.VERIFICATION_MESSAGE_2 = "OTP incorrecto, prueba nuevamente";
+PaymentForm.ZIP_CODE_PLACEHOLDER = "Código Postal";
 
 PaymentForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
   'x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" ' +
@@ -810,8 +818,9 @@ PaymentForm.prototype.isValidData = function () {
   let is_card_number_valid = this.refreshCardNumberValidation();
   let is_fiscal_number_valid = this.refreshFiscalNumberValidation();
   let is_nip_valid = this.refreshNipValidation();
+  let is_zip_code_valid = this.refreshZipCodeValidation();
   return is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid
-    && is_email_valid && is_cellphone_valid && is_fiscal_number_valid && is_nip_valid;
+    && is_email_valid && is_cellphone_valid && is_fiscal_number_valid && is_nip_valid && is_zip_code_valid;
 };
 
 PaymentForm.prototype.refreshCvcValidation = function () {
@@ -910,6 +919,18 @@ PaymentForm.prototype.refreshVerificationInputValidation = function () {
     this.verificationInput.parent().addClass("has-error");
     this.verificationBtn.attr('disabled', 'disabled');
     return false;
+  }
+};
+
+PaymentForm.prototype.refreshZipCodeValidation = function () {
+  if (this.billingAddressAdded() && this.isZipCodeValid()) {
+    this.zipCodeInput.parent().removeClass("has-error");
+    return true;
+  } else if (this.billingAddressAdded() && !this.isZipCodeValid()) {
+    this.zipCodeInput.parent().addClass("has-error");
+    return false;
+  } else {
+    return true;
   }
 };
 
@@ -1038,6 +1059,18 @@ PaymentForm.prototype.isVerificationValueValid = function () {
 };
 
 /**
+ * Is the given input a valid zip code?
+ *
+ * @returns {boolean}
+ */
+PaymentForm.prototype.isZipCodeValid = function () {
+  if (this.billingAddressAdded())
+    return this.getZipCode() != null;
+  else
+    return true
+};
+
+/**
  * Validate if exists the fiscal number in the form
  *
  * @returns {boolean}
@@ -1125,6 +1158,16 @@ PaymentForm.prototype.warningMessageAdded = function () {
 PaymentForm.prototype.verificationContainerAdded = function () {
   let verification_el = this.elem.find(".verification-container");
   return verification_el.length >= 1;
+};
+
+/**
+ * Validate if exists the billing address in the form
+ *
+ * @returns {boolean}
+ */
+PaymentForm.prototype.billingAddressAdded = function () {
+  let billingAddress = this.elem.find(".billing-address-container");
+  return billingAddress.length >= 1;
 };
 
 /**
@@ -1282,6 +1325,37 @@ PaymentForm.prototype.getVerificationValue = function () {
   }
 };
 
+/**
+ * Get the zip code inputted.
+ *
+ * @returns {string}
+ */
+PaymentForm.prototype.getZipCode = function () {
+  if (this.billingAddressAdded()) {
+    return this.zipCodeInput.val();
+  } else {
+    return '';
+  }
+};
+
+/**
+ * Get the billing address object.
+ *
+ * @returns {object}
+ */
+PaymentForm.prototype.getBillingAddress = function () {
+  let data = null;
+  if (this.isValidData()) {
+    data = {
+      "billing_address": {
+        "zip_code": this.getZipCode(),
+      }
+    };
+  }
+
+  return data;
+};
+
 // --- --- --- --- --- --- --- --- --- --- ---
 
 /**
@@ -1326,6 +1400,11 @@ PaymentForm.prototype.blockForm = function () {
     this.nipInput.attr("disabled", "disabled");
   }
 
+  if (this.billingAddressAdded()) {
+    this.zipCodeInput.val("");
+    this.zipCodeInput.attr("disabled", "disabled");
+  }
+
   this.cardNumberInput.parent().addClass("has-error");
 
   this.addWarningMessage();
@@ -1357,6 +1436,9 @@ PaymentForm.prototype.unBlockForm = function () {
   if (this.nipWrapperAdded()) {
     this.cleanNipInput();
     this.nipInput.removeAttr("disabled");
+  }
+  if (this.billingAddressAdded()) {
+    this.zipCodeInput.removeAttr("disabled");
   }
   this.cardNumberInput.parent().removeClass("has-error");
   this.removeWarningMessage();
@@ -1431,7 +1513,7 @@ PaymentForm.prototype.refreshCellPhoneFormat = function () {
   $(this.cellPhoneInput).val(formattedNumber);
 };
 
-/** 
+/**
  * Get country flag image src
  */
 PaymentForm.prototype.refreshCellphoneCountryCode = function () {
@@ -1875,6 +1957,30 @@ PaymentForm.prototype.initVerificationInput = function () {
   this.verificationBtn.attr("value", "Validar");
 };
 
+/**
+ * Initialise the zip code input
+ */
+PaymentForm.prototype.initZipCodeInput = function () {
+  this.zipCodeInput = PaymentForm.detachOrCreateElement(this.elem, ".zip-code", "<input class='zip-code' />");
+
+  if (!PaymentForm.elementHasAttribute(this.zipCodeInput, "name")) {
+    this.zipCodeInput.attr("name", "zip-code");
+  }
+
+  if (!PaymentForm.elementHasAttribute(this.zipCodeInput, "placeholder")) {
+    this.zipCodeInput.attr("placeholder", PaymentForm.ZIP_CODE_PLACEHOLDER);
+  }
+
+  this.zipCodeInput.attr("type", "tel");
+  this.zipCodeInput.attr("pattern", "[0-9]*");
+  this.zipCodeInput.attr("inputmode", "numeric");
+  this.zipCodeInput.attr("x-autocompletetype", "cc-csc");
+  this.zipCodeInput.attr("autocompletetype", "cc-csc");
+  this.zipCodeInput.attr("autocorrect", "off");
+  this.zipCodeInput.attr("spellcheck", "off");
+  this.zipCodeInput.attr("autocapitalize", "off");
+};
+
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 PaymentForm.prototype.setupCardNumberInput = function () {
@@ -2253,6 +2359,20 @@ PaymentForm.prototype.setupVerificationInput = function () {
   });
   this.verificationBtn.on('click', function () {
     $this.verifyTransaction();
+  });
+};
+
+PaymentForm.prototype.setupZipCodeInput = function () {
+  this.elem.append("<div class='billing-address-container'><div class='billing-address-wrapper'></div></div>");
+  let wrapper = this.elem.find(".billing-address-wrapper");
+  wrapper.append(this.zipCodeInput);
+  wrapper.append("<div class='icon'></div>");
+  wrapper.find(".icon").append(PaymentForm.USER_SVG);
+
+  let $this = this;
+  this.zipCodeInput.keydown(PaymentForm.filterNumberOnlyKey);
+  this.zipCodeInput.blur(function () {
+    $this.refreshZipCodeValidation();
   });
 };
 
