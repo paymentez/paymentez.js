@@ -1,8 +1,8 @@
-[paymentez_version_1] hr {
+[payment_version_1] hr {
   display: none;
 }
 
-[paymentez_version_1] .btn {
+[payment_version_1] .btn {
   background: rgb(140, 197, 65);
   /* Old browsers */
   background: -moz-linear-gradient(top, rgba(140, 197, 65, 1) 0%, rgba(20, 167, 81, 1) 100%);
@@ -28,10 +28,10 @@
   margin-top: 20px;
 }
 
-[paymentez_version_1] .paymentez-button-popup.cancel {
+[payment_version_1] .payment-button-popup.cancel {
   display: none;
 }
 
-[paymentez_version_1] .header-credit-card {
+[payment_version_1] .header-credit-card {
   display: none;
 }

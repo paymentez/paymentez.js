@@ -1,14 +1,14 @@
-.paymentez-form .cellphone-container {
-  width: 50%;
-  float: right;
+.payment-form .cellphone-wrapper {
+  position: relative;
 }
 
-.paymentez-form .cellphone-wrapper {
-  box-sizing: border-box;
-  margin-left: 5px;
+.payment-form .cellphone-wrapper .cellphone-country-code {
+  display: inline-block;
+  width: 28%;
+  margin-right: 2%;
 }
 
-.paymentez-form .cellphone-wrapper .cellphone {
-  display: block;
-  width: 100%;
+.payment-form .cellphone-wrapper .cellphone {
+  display: inline-block;
+  width: 70%;
 }

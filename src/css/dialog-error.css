@@ -1,26 +1,31 @@
-.paymentez_dialog_info, .paymentez_dialog_success, .paymentez_dialog_warning, .paymentez_dialog_error {
-    margin: 10px 0px;
-    padding:6px;
-    font-size: 14px;
+.payment-form .payment_dialog_info, .payment_dialog_success, .payment_dialog_warning, .payment_dialog_error {
+  margin: 10px 0px;
+  padding: 6px;
+  font-size: 14px;
 }
-.paymentez_dialog_info {
-    color: #00529B;
-    background-color: #BDE5F8;
+
+.payment-form .payment_dialog_info {
+  color: #00529B;
+  background-color: #BDE5F8;
 }
-.paymentez_dialog_success {
-    color: #4F8A10;
-    background-color: #DFF2BF;
+
+.payment-form .payment_dialog_success {
+  color: #4F8A10;
+  background-color: #DFF2BF;
 }
-.paymentez_dialog_warning {
-    color: #9F6000;
-    background-color: #FEEFB3;
+
+.payment-form .payment_dialog_warning {
+  color: #9F6000;
+  background-color: #FEEFB3;
 }
-.paymentez_dialog_error {
-    color: #D8000C;
-    background-color: #FFD2D2;
+
+.payment-form .payment_dialog_error {
+  color: #D8000C;
+  background-color: #FFD2D2;
 }
-.paymentez_dialog_info i, .paymentez_dialog_success i, .paymentez_dialog_warning i, .paymentez_dialog_error i {
-    margin:2px 2px;
-    font-size:1em;
-    vertical-align:middle;
+
+.payment-form .payment_dialog_info i, .payment_dialog_success i, .payment_dialog_warning i, .payment_dialog_error i {
+  margin: 2px 2px;
+  font-size: 1em;
+  vertical-align: middle;
 }

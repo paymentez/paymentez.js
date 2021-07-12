@@ -1,55 +1,59 @@
-.paymentez-form .card-number-wrapper,
-.paymentez-form .fiscal-number-wrapper,
-.paymentez-form .email-container,
-.paymentez-form .installments-wrapper,
-.paymentez-form .nip-wrapper,
-.paymentez-form .cvc-wrapper,
-.paymentez-form .name-wrapper {
+.payment-form .verification-container,
+.payment-form .card-number-wrapper,
+.payment-form .fiscal-number-wrapper,
+.payment-form .cellphone-container,
+.payment-form .email-wrapper,
+.payment-form .installments-wrapper,
+.payment-form .nip-wrapper,
+.payment-form .cvc-wrapper,
+.payment-form .name-wrapper {
   margin-bottom: 10px;
 }
 
-.paymentez-form .card-number-wrapper,
-.paymentez-form .fiscal-number-wrapper,
-.paymentez-form .installments-wrapper,
-.paymentez-form .name-wrapper,
-.paymentez-form .expiry-wrapper,
-.paymentez-form .cellphone-wrapper,
-.paymentez-form .email-wrapper,
-.paymentez-form .nip-wrapper,
-.paymentez-form .cvc-wrapper {
-  -webkit-box-shadow:0 1px 0 rgba(255,255,255,0.7),inset 0 1px 0 rgba(255,255,255,0.7);
-  -moz-box-shadow:0 1px 0 rgba(255,255,255,0.7),inset 0 1px 0 rgba(255,255,255,0.7);
-  -ms-box-shadow:0 1px 0 rgba(255,255,255,0.7),inset 0 1px 0 rgba(255,255,255,0.7);
-  -o-box-shadow: 0 1px 0 rgba(255,255,255,0.7),inset 0 1px 0 rgba(255,255,255,0.7);
-  box-shadow:0 1px 0 rgba(255,255,255,0.7),inset 0 1px 0 rgba(255,255,255,0.7);
+.payment-form .verification-btn-wrapper,
+.payment-form .verification-wrapper,
+.payment-form .card-number-wrapper,
+.payment-form .fiscal-number-wrapper,
+.payment-form .installments-wrapper,
+.payment-form .name-wrapper,
+.payment-form .expiry-wrapper,
+.payment-form .email-wrapper,
+.payment-form .nip-wrapper,
+.payment-form .cvc-wrapper {
+  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  -ms-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  -o-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.7);
   position: relative;
 }
 
-.paymentez-form .card-number-wrapper,
-.paymentez-form .installments-wrapper,
-.paymentez-form .name-wrapper,
-.paymentez-form .fiscal-number-wrapper,
-.paymentez-form .nip-wrapper,
-.paymentez-form .otp-wrapper,
-.paymentez-form .cvc-container,
-.paymentez-form .cellphone-container,
-.paymentez-form .email-container,
-.paymentez-form .expiry-container {
+.payment-form .verification-container,
+.payment-form .card-number-wrapper,
+.payment-form .installments-wrapper,
+.payment-form .name-wrapper,
+.payment-form .fiscal-number-wrapper,
+.payment-form .nip-wrapper,
+.payment-form .otp-wrapper,
+.payment-form .cvc-container,
+.payment-form .cellphone-container,
+.payment-form .email-wrapper,
+.payment-form .expiry-container {
   display: inline-block;
 }
 
-.paymentez-form::after {
+.payment-form::after {
   content: ' ';
   display: table;
   clear: both;
 }
 
-.paymentez-form input,
-.paymentez-form select {
+.payment-form input,
+.payment-form select {
   color: #676767;
   font-size: 15px;
   font-weight: 300;
-  font-family: "Helvetica Neue","Helvetica",Arial,sans-serif;
+  font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
   height: 36px;
   border: 1px solid #d9d9d9;
 
@@ -61,14 +65,14 @@
   box-sizing: border-box;
   padding: 0;
 
-  -webkit-transition: border-color .15s linear,box-shadow .15s linear;
-  -moz-transition: border-color .15s linear,box-shadow .15s linear;
-  -ms-transition: border-color .15s linear,box-shadow .15s linear;
-  -o-transition: border-color .15s linear,box-shadow .15s linear;
-  transition: border-color .15s linear,box-shadow .15s linear;
+  -webkit-transition: border-color .15s linear, box-shadow .15s linear;
+  -moz-transition: border-color .15s linear, box-shadow .15s linear;
+  -ms-transition: border-color .15s linear, box-shadow .15s linear;
+  -o-transition: border-color .15s linear, box-shadow .15s linear;
+  transition: border-color .15s linear, box-shadow .15s linear;
 }
 
-.paymentez-form select {
+.payment-form select {
   -moz-appearance: none;
   -webkit-appearance: none;
   text-indent: 0.01px;
@@ -77,54 +81,59 @@
   width: 100%;
 }
 
-.paymentez-form input[disabled],
-.paymentez-form select[disabled] {
+.payment-form input[disabled],
+.payment-form select[disabled] {
   background-color: #eee;
   color: #555;
 }
 
-.paymentez-form select option[hidden] {
+.payment-form select option[hidden] {
   color: #ABA9A9;
 }
 
-.paymentez-form input:focus,
-.paymentez-form select:focus {
+.payment-form input:focus,
+.payment-form select:focus {
   background-color: #fff;
-  outline:0;
+  outline: 0;
   border-color: #66afe9;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
 }
 
-.paymentez-form input[readonly="readonly"]:not([disabled]),
-.paymentez-form input[readonly]:not([disabled]) {
-   background-color: #fff;
-   cursor: pointer;
- }
+.payment-form input[readonly="readonly"]:not([disabled]),
+.payment-form input[readonly]:not([disabled]) {
+  background-color: #fff;
+  cursor: pointer;
+}
 
-.paymentez-form .has-error select,
-.paymentez-form .has-error select:focus,
-.paymentez-form .has-error input,
-.paymentez-form .has-error input:focus {
+.payment-form .has-error select,
+.payment-form .has-error select:focus,
+.payment-form .has-error input,
+.payment-form .has-error input:focus {
   border-color: #F64B2F !important;
   box-shadow: none;
 }
 
-.paymentez-form .fiscal-number-wrapper,
-.paymentez-form .card-number-wrapper,
-.paymentez-form .installments-wrapper,
-.paymentez-form .name-wrapper{
+.payment-form .verification-container,
+.payment-form .fiscal-number-wrapper,
+.payment-form .card-number-wrapper,
+.payment-form .installments-wrapper,
+.payment-form .email-wrapper,
+.payment-form .cellphone-container,
+.payment-form .name-wrapper {
   width: 100%;
 }
 
-.paymentez-form input.card-number,
-.paymentez-form input.fiscal-number,
-.paymentez-form input.validation-option,
-.paymentez-form input.name,
-.paymentez-form input.email,
-.paymentez-form input.cellphone,
-.paymentez-form input.nip,
-.paymentez-form input.cvc {
+.payment-form input.verification,
+.payment-form input.card-number,
+.payment-form input.fiscal-number,
+.payment-form input.validation-option,
+.payment-form input.name,
+.payment-form input.email,
+.payment-form input.cellphone,
+.payment-form select.cellphone-country-code,
+.payment-form input.nip,
+.payment-form input.cvc {
   padding-left: 38px;
   padding-right: 5px;
   width: 100%;
