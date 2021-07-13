@@ -556,8 +556,12 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
 PaymentForm.prototype.setInstallmentsOptions = function (installments) {
   let selectInstallments = $(".installments");
   selectInstallments.empty();
-  $.each(installments, function (option, value) {
-    selectInstallments.append($("<option></option>").attr("value", value).text(value));
+  $.each(installments, function (index, value) {
+    let text = value;
+    if (value === 0) {
+      text = 'Sin cuotas';
+    }
+    selectInstallments.append($("<option></option>").attr("value", value).text(text));
   });
 };
 
@@ -1431,7 +1435,7 @@ PaymentForm.prototype.refreshCellPhoneFormat = function () {
   $(this.cellPhoneInput).val(formattedNumber);
 };
 
-/** 
+/**
  * Get country flag image src
  */
 PaymentForm.prototype.refreshCellphoneCountryCode = function () {
