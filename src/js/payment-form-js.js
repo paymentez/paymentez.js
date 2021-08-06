@@ -12,11 +12,11 @@ PaymentForm.prototype.constructor = PaymentForm;
 function PaymentForm(elem) {
   this.elem = jQuery(elem);
   this.current_data = this.elem.children("div");
-  this.cardType = '';
-  this.numberBin = '';
-  this.nip = '';
+  this.cardType = "";
+  this.numberBin = "";
+  this.nip = "";
   this.USE_OTP = false;
-  this.brand_name = '';
+  this.brand_name = "";
   this.isBlocked = false;
   this.useLunh = true;
 
@@ -70,23 +70,23 @@ function PaymentForm(elem) {
 }
 
 PaymentForm.KEYS = {
-  "0": 48,
-  "9": 57,
-  "NUMPAD_0": 96,
-  "NUMPAD_9": 105,
-  "DELETE": 46,
-  "BACKSPACE": 8,
-  "ARROW_LEFT": 37,
-  "ARROW_RIGHT": 39,
-  "ARROW_UP": 38,
-  "ARROW_DOWN": 40,
-  "HOME": 36,
-  "END": 35,
-  "TAB": 9,
-  "A": 65,
-  "X": 88,
-  "C": 67,
-  "V": 86
+  0: 48,
+  9: 57,
+  NUMPAD_0: 96,
+  NUMPAD_9: 105,
+  DELETE: 46,
+  BACKSPACE: 8,
+  ARROW_LEFT: 37,
+  ARROW_RIGHT: 39,
+  ARROW_UP: 38,
+  ARROW_DOWN: 40,
+  HOME: 36,
+  END: 35,
+  TAB: 9,
+  A: 65,
+  X: 88,
+  C: 67,
+  V: 86,
 };
 
 PaymentForm.prototype.creditCardNumberMask = "XXXX XXXX XXXX XXXX";
@@ -99,7 +99,7 @@ PaymentForm.EMAIL_PLACEHOLDER = "E-mail";
 PaymentForm.CELLPHONE_PLACEHOLDER = "Celular";
 PaymentForm.FISCAL_NUMBER_PLACEHOLDER = "Documento de Identificación";
 PaymentForm.EXPIRY_PLACEHOLDER = "MM / YY";
-PaymentForm.EXPIRY_NUMBER_OF_YEARS = 10;
+PaymentForm.EXPIRY_NUMBER_OF_YEARS = 30;
 PaymentForm.AUTH_CVC = "AUTH_CVC";
 PaymentForm.AUTH_NIP = "AUTH_NIP";
 PaymentForm.AUTH_OTP = "AUTH_OTP";
@@ -107,106 +107,114 @@ PaymentForm.CVC_PLACEHOLDER = "CVC";
 PaymentForm.NIP_PLACEHOLDER = "Clave Tuya";
 PaymentForm.OTP_PLACEHOLDER_ADD = "No tengo o no recuerdo mi clave";
 PaymentForm.OTP_PLACEHOLDER_CHECKOUT = "Continuar compra sin clave";
-PaymentForm.OTP_EXPLICATION_ADD = "Escogiendo esta opción se va a generar una Clave Temporal única, con la que " +
+PaymentForm.OTP_EXPLICATION_ADD =
+  "Escogiendo esta opción se va a generar una Clave Temporal única, con la que " +
   "validarás tu tarjeta. Haz clic en “Guardar” para continuar con el proceso.";
-PaymentForm.OTP_EXPLICATION_CHECKOUT = "Escogiendo esta opción se va a generar una Clave Temporal única, con la " +
-  "que validarás tu compra.";
+PaymentForm.OTP_EXPLICATION_CHECKOUT =
+  "Escogiendo esta opción se va a generar una Clave Temporal única, con la " + "que validarás tu compra.";
 PaymentForm.INVALID_CARD_TYPE_MESSAGE = "Tipo de tarjeta invalida para está operación.";
 PaymentForm.VERIFICATION_PLACEHOLDER = "Código OTP";
 PaymentForm.VERIFICATION_MESSAGE = "Esta operación requiere verificación";
 PaymentForm.VERIFICATION_MESSAGE_2 = "OTP incorrecto, prueba nuevamente";
 
-PaymentForm.CELLPHONE_SVG = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
+PaymentForm.CELLPHONE_SVG =
+  '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24px" height="17px" ' +
   'x="0px" y="0px" viewBox="0 0 27.442 27.442" style="enable-background:new 0 0 27.442 27.442;" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink"> <g> ' +
   '<path class="svg" d="M19.494,0H7.948C6.843,0,5.951,0.896,5.951,1.999v23.446c0,1.102,0.892,1.997,1.997,1.997h11.546' +
-  'c1.103,0,1.997-0.895,1.997-1.997V1.999C21.491,0.896,20.597,0,19.494,0z M10.872,1.214h5.7c0.144,0,0.261,0.215,0.261' +
-  ',0.481s-0.117,0.482-0.261,0.482h-5.7c-0.145,0-0.26-0.216-0.26-0.482C10.612,1.429,10.727,1.214,10.872,1.214z M13.72' +
-  '2,25.469c-0.703,0-1.275-0.572-1.275-1.276s0.572-1.274,1.275-1.274c0.701,0,1.273,0.57,1.273,1.274S14.423,25.469,13.' +
+  "c1.103,0,1.997-0.895,1.997-1.997V1.999C21.491,0.896,20.597,0,19.494,0z M10.872,1.214h5.7c0.144,0,0.261,0.215,0.261" +
+  ",0.481s-0.117,0.482-0.261,0.482h-5.7c-0.145,0-0.26-0.216-0.26-0.482C10.612,1.429,10.727,1.214,10.872,1.214z M13.72" +
+  "2,25.469c-0.703,0-1.275-0.572-1.275-1.276s0.572-1.274,1.275-1.274c0.701,0,1.273,0.57,1.273,1.274S14.423,25.469,13." +
   '722,25.469z M19.995,21.1H7.448V3.373h12.547V21.1z"/> </g> </svg>';
 
-PaymentForm.CREDIT_CARD_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
+PaymentForm.CREDIT_CARD_SVG =
+  '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="3px" width="24px" height="17px" viewBox="0 0 216 146" ' +
   'enable-background="new 0 0 216 146" xml:space="preserve"> <g> <path class="svg" d="M182.385,14.258c-2.553-2.553-5.' +
-  '621-3.829-9.205-3.829H42.821c-3.585,0-6.653,1.276-9.207,3.829c-2.553,2.553-3.829,5.621-3.829,9.206v99.071c0,3.585,' +
-  '1.276,6.654,3.829,9.207c2.554,2.553,5.622,3.829,9.207,3.829H173.18c3.584,0,6.652-1.276,9.205-3.829s3.83-5.622,3.83' +
-  '-9.207V23.464C186.215,19.879,184.938,16.811,182.385,14.258z M175.785,122.536c0,0.707-0.258,1.317-0.773,1.834c-0.51' +
-  '6,0.515-1.127,0.772-1.832,0.772H42.821c-0.706,0-1.317-0.258-1.833-0.773c-0.516-0.518-0.774-1.127-0.774-1.834V73h13' +
-  '5.571V122.536z M175.785,41.713H40.214v-18.25c0-0.706,0.257-1.316,0.774-1.833c0.516-0.515,1.127-0.773,1.833-0.773H1' +
+  "621-3.829-9.205-3.829H42.821c-3.585,0-6.653,1.276-9.207,3.829c-2.553,2.553-3.829,5.621-3.829,9.206v99.071c0,3.585," +
+  "1.276,6.654,3.829,9.207c2.554,2.553,5.622,3.829,9.207,3.829H173.18c3.584,0,6.652-1.276,9.205-3.829s3.83-5.622,3.83" +
+  "-9.207V23.464C186.215,19.879,184.938,16.811,182.385,14.258z M175.785,122.536c0,0.707-0.258,1.317-0.773,1.834c-0.51" +
+  "6,0.515-1.127,0.772-1.832,0.772H42.821c-0.706,0-1.317-0.258-1.833-0.773c-0.516-0.518-0.774-1.127-0.774-1.834V73h13" +
+  "5.571V122.536z M175.785,41.713H40.214v-18.25c0-0.706,0.257-1.316,0.774-1.833c0.516-0.515,1.127-0.773,1.833-0.773H1" +
   '73.18c0.705,0,1.316,0.257,1.832,0.773c0.516,0.517,0.773,1.127,0.773,1.833V41.713z"/> ' +
   '<rect class="svg" x="50.643" y="104.285" width="20.857" height="10.429"/> ' +
   '<rect class="svg" x="81.929" y="104.285" width="31.286" height="10.429"/> </g> </svg>';
 
-PaymentForm.LOCK_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
+PaymentForm.LOCK_SVG =
+  '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="3px" width="24px" height="17px" viewBox="0 0 216 146" ' +
   'enable-background="new 0 0 216 146" xml:space="preserve"> <path class="svg" d="M152.646,70.067c-1.521-1.521-3.367-' +
-  '2.281-5.541-2.281H144.5V52.142c0-9.994-3.585-18.575-10.754-25.745c-7.17-7.17-15.751-10.755-25.746-10.755s-18.577,3' +
-  '.585-25.746,10.755C75.084,33.567,71.5,42.148,71.5,52.142v15.644h-2.607c-2.172,0-4.019,0.76-5.54,2.281c-1.521,1.52-' +
-  '2.281,3.367-2.281,5.541v46.929c0,2.172,0.76,4.019,2.281,5.54c1.521,1.52,3.368,2.281,5.54,2.281h78.214c2.174,0,4.02' +
-  '-0.76,5.541-2.281c1.52-1.521,2.281-3.368,2.281-5.54V75.607C154.93,73.435,154.168,71.588,152.646,70.067z M128.857,6' +
-  '7.786H87.143V52.142c0-5.757,2.037-10.673,6.111-14.746c4.074-4.074,8.989-6.11,14.747-6.11s10.673,2.036,14.746,6.11c' +
+  "2.281-5.541-2.281H144.5V52.142c0-9.994-3.585-18.575-10.754-25.745c-7.17-7.17-15.751-10.755-25.746-10.755s-18.577,3" +
+  ".585-25.746,10.755C75.084,33.567,71.5,42.148,71.5,52.142v15.644h-2.607c-2.172,0-4.019,0.76-5.54,2.281c-1.521,1.52-" +
+  "2.281,3.367-2.281,5.541v46.929c0,2.172,0.76,4.019,2.281,5.54c1.521,1.52,3.368,2.281,5.54,2.281h78.214c2.174,0,4.02" +
+  "-0.76,5.541-2.281c1.52-1.521,2.281-3.368,2.281-5.54V75.607C154.93,73.435,154.168,71.588,152.646,70.067z M128.857,6" +
+  "7.786H87.143V52.142c0-5.757,2.037-10.673,6.111-14.746c4.074-4.074,8.989-6.11,14.747-6.11s10.673,2.036,14.746,6.11c" +
   '4.073,4.073,6.11,8.989,6.11,14.746V67.786z"/></svg>';
 
-PaymentForm.CALENDAR_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
+PaymentForm.CALENDAR_SVG =
+  '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="4px" width="24px" height="16px" viewBox="0 0 216 146" ' +
   'enable-background="new 0 0 216 146" xml:space="preserve"> <path class="svg" d="M172.691,23.953c-2.062-2.064-4.508-' +
-  '3.096-7.332-3.096h-10.428v-7.822c0-3.584-1.277-6.653-3.83-9.206c-2.554-2.553-5.621-3.83-9.207-3.83h-5.213c-3.586,0' +
-  '-6.654,1.277-9.207,3.83c-2.554,2.553-3.83,5.622-3.83,9.206v7.822H92.359v-7.822c0-3.584-1.277-6.653-3.83-9.206c-2.5' +
-  '53-2.553-5.622-3.83-9.207-3.83h-5.214c-3.585,0-6.654,1.277-9.207,3.83c-2.553,2.553-3.83,5.622-3.83,9.206v7.822H50.' +
-  '643c-2.825,0-5.269,1.032-7.333,3.096s-3.096,4.509-3.096,7.333v104.287c0,2.823,1.032,5.267,3.096,7.332c2.064,2.064,' +
-  '4.508,3.096,7.333,3.096h114.714c2.824,0,5.27-1.032,7.332-3.096c2.064-2.064,3.096-4.509,3.096-7.332V31.286C175.785,' +
-  '28.461,174.754,26.017,172.691,23.953z M134.073,13.036c0-0.761,0.243-1.386,0.731-1.874c0.488-0.488,1.113-0.733,1.87' +
-  '5-0.733h5.213c0.762,0,1.385,0.244,1.875,0.733c0.488,0.489,0.732,1.114,0.732,1.874V36.5c0,0.761-0.244,1.385-0.732,1' +
-  '.874c-0.49,0.488-1.113,0.733-1.875,0.733h-5.213c-0.762,0-1.387-0.244-1.875-0.733s-0.731-1.113-0.731-1.874V13.036z ' +
-  'M71.501,13.036c0-0.761,0.244-1.386,0.733-1.874c0.489-0.488,1.113-0.733,1.874-0.733h5.214c0.761,0,1.386,0.244,1.874' +
-  ',0.733c0.488,0.489,0.733,1.114,0.733,1.874V36.5c0,0.761-0.244,1.386-0.733,1.874c-0.489,0.488-1.113,0.733-1.874,0.7' +
-  '33h-5.214c-0.761,0-1.386-0.244-1.874-0.733c-0.488-0.489-0.733-1.113-0.733-1.874V13.036z M165.357,135.572H50.643V52' +
+  "3.096-7.332-3.096h-10.428v-7.822c0-3.584-1.277-6.653-3.83-9.206c-2.554-2.553-5.621-3.83-9.207-3.83h-5.213c-3.586,0" +
+  "-6.654,1.277-9.207,3.83c-2.554,2.553-3.83,5.622-3.83,9.206v7.822H92.359v-7.822c0-3.584-1.277-6.653-3.83-9.206c-2.5" +
+  "53-2.553-5.622-3.83-9.207-3.83h-5.214c-3.585,0-6.654,1.277-9.207,3.83c-2.553,2.553-3.83,5.622-3.83,9.206v7.822H50." +
+  "643c-2.825,0-5.269,1.032-7.333,3.096s-3.096,4.509-3.096,7.333v104.287c0,2.823,1.032,5.267,3.096,7.332c2.064,2.064," +
+  "4.508,3.096,7.333,3.096h114.714c2.824,0,5.27-1.032,7.332-3.096c2.064-2.064,3.096-4.509,3.096-7.332V31.286C175.785," +
+  "28.461,174.754,26.017,172.691,23.953z M134.073,13.036c0-0.761,0.243-1.386,0.731-1.874c0.488-0.488,1.113-0.733,1.87" +
+  "5-0.733h5.213c0.762,0,1.385,0.244,1.875,0.733c0.488,0.489,0.732,1.114,0.732,1.874V36.5c0,0.761-0.244,1.385-0.732,1" +
+  ".874c-0.49,0.488-1.113,0.733-1.875,0.733h-5.213c-0.762,0-1.387-0.244-1.875-0.733s-0.731-1.113-0.731-1.874V13.036z " +
+  "M71.501,13.036c0-0.761,0.244-1.386,0.733-1.874c0.489-0.488,1.113-0.733,1.874-0.733h5.214c0.761,0,1.386,0.244,1.874" +
+  ",0.733c0.488,0.489,0.733,1.114,0.733,1.874V36.5c0,0.761-0.244,1.386-0.733,1.874c-0.489,0.488-1.113,0.733-1.874,0.7" +
+  "33h-5.214c-0.761,0-1.386-0.244-1.874-0.733c-0.488-0.489-0.733-1.113-0.733-1.874V13.036z M165.357,135.572H50.643V52" +
   '.143h114.714V135.572z"/> </svg>';
 
-PaymentForm.USER_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
+PaymentForm.USER_SVG =
+  '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="4px" width="24px" height="16px" viewBox="0 0 216 146" ' +
   'enable-background="new 0 0 216 146" xml:space="preserve"> <g> <path class="svg" d="M107.999,73c8.638,0,16.011-3.05' +
-  '6,22.12-9.166c6.111-6.11,9.166-13.483,9.166-22.12c0-8.636-3.055-16.009-9.166-22.12c-6.11-6.11-13.484-9.165-22.12-9' +
-  '.165c-8.636,0-16.01,3.055-22.12,9.165c-6.111,6.111-9.166,13.484-9.166,22.12c0,8.637,3.055,16.01,9.166,22.12C91.99,' +
+  "6,22.12-9.166c6.111-6.11,9.166-13.483,9.166-22.12c0-8.636-3.055-16.009-9.166-22.12c-6.11-6.11-13.484-9.165-22.12-9" +
+  ".165c-8.636,0-16.01,3.055-22.12,9.165c-6.111,6.111-9.166,13.484-9.166,22.12c0,8.637,3.055,16.01,9.166,22.12C91.99," +
   '69.944,99.363,73,107.999,73z"/> <path class="svg" d="M165.07,106.037c-0.191-2.743-0.571-5.703-1.141-8.881c-0.57-3.' +
-  '178-1.291-6.124-2.16-8.84c-0.869-2.715-2.037-5.363-3.504-7.943c-1.466-2.58-3.15-4.78-5.052-6.6s-4.223-3.272-6.965-' +
-  '4.358c-2.744-1.086-5.772-1.63-9.085-1.63c-0.489,0-1.63,0.584-3.422,1.752s-3.815,2.472-6.069,3.911c-2.254,1.438-5.1' +
-  '88,2.743-8.799,3.909c-3.612,1.168-7.237,1.752-10.877,1.752c-3.639,0-7.264-0.584-10.876-1.752c-3.611-1.166-6.545-2.' +
-  '471-8.799-3.909c-2.254-1.439-4.277-2.743-6.069-3.911c-1.793-1.168-2.933-1.752-3.422-1.752c-3.313,0-6.341,0.544-9.0' +
-  '84,1.63s-5.065,2.539-6.966,4.358c-1.901,1.82-3.585,4.02-5.051,6.6s-2.634,5.229-3.503,7.943c-0.869,2.716-1.589,5.66' +
-  '2-2.159,8.84c-0.571,3.178-0.951,6.137-1.141,8.881c-0.19,2.744-0.285,5.554-0.285,8.433c0,6.517,1.983,11.664,5.948,1' +
-  '5.439c3.965,3.774,9.234,5.661,15.806,5.661h71.208c6.572,0,11.84-1.887,15.806-5.661c3.966-3.775,5.948-8.921,5.948-1' +
+  "178-1.291-6.124-2.16-8.84c-0.869-2.715-2.037-5.363-3.504-7.943c-1.466-2.58-3.15-4.78-5.052-6.6s-4.223-3.272-6.965-" +
+  "4.358c-2.744-1.086-5.772-1.63-9.085-1.63c-0.489,0-1.63,0.584-3.422,1.752s-3.815,2.472-6.069,3.911c-2.254,1.438-5.1" +
+  "88,2.743-8.799,3.909c-3.612,1.168-7.237,1.752-10.877,1.752c-3.639,0-7.264-0.584-10.876-1.752c-3.611-1.166-6.545-2." +
+  "471-8.799-3.909c-2.254-1.439-4.277-2.743-6.069-3.911c-1.793-1.168-2.933-1.752-3.422-1.752c-3.313,0-6.341,0.544-9.0" +
+  "84,1.63s-5.065,2.539-6.966,4.358c-1.901,1.82-3.585,4.02-5.051,6.6s-2.634,5.229-3.503,7.943c-0.869,2.716-1.589,5.66" +
+  "2-2.159,8.84c-0.571,3.178-0.951,6.137-1.141,8.881c-0.19,2.744-0.285,5.554-0.285,8.433c0,6.517,1.983,11.664,5.948,1" +
+  "5.439c3.965,3.774,9.234,5.661,15.806,5.661h71.208c6.572,0,11.84-1.887,15.806-5.661c3.966-3.775,5.948-8.921,5.948-1" +
   '5.439C165.357,111.591,165.262,108.78,165.07,106.037z"/> </g> </svg>';
 
-PaymentForm.MAIL_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
+PaymentForm.MAIL_SVG =
+  '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="4px" width="24px" height="16px" viewBox="0 0 216 146" ' +
   'enable-background="new 0 0 216 146" xml:space="preserve"> <path class="svg" d="M177.171,19.472c-2.553-2.553-5.622-' +
-  '3.829-9.206-3.829H48.036c-3.585,0-6.654,1.276-9.207,3.829C36.276,22.025,35,25.094,35,28.679v88.644c0,3.585,1.276,6' +
-  '.652,3.829,9.205c2.553,2.555,5.622,3.83,9.207,3.83h119.929c3.584,0,6.653-1.275,9.206-3.83c2.554-2.553,3.829-5.621,' +
-  '3.829-9.205V28.679C181,25.094,179.725,22.025,177.171,19.472zM170.57,117.321c0,0.706-0.258,1.317-0.774,1.833s-1.127' +
-  ',0.773-1.832,0.773H48.035c-0.706,0-1.317-0.257-1.833-0.773c-0.516-0.516-0.774-1.127-0.774-1.833V54.75c1.738,1.955,' +
-  '3.612,3.748,5.622,5.377c14.557,11.189,26.126,20.368,34.708,27.538c2.77,2.336,5.024,4.155,6.762,5.459s4.087,2.62,7.' +
-  '047,3.951s5.744,1.995,8.351,1.995H108h0.081c2.606,0,5.392-0.664,8.351-1.995c2.961-1.331,5.311-2.647,7.049-3.951c1.' +
-  '737-1.304,3.992-3.123,6.762-5.459c8.582-7.17,20.15-16.349,34.707-27.538c2.01-1.629,3.885-3.422,5.621-5.377V117.321' +
-  'z M170.57,30.797v0.896c0,3.204-1.262,6.776-3.787,10.713c-2.525,3.938-5.256,7.075-8.188,9.41c-10.484,8.257-21.373,1' +
-  '6.865-32.672,25.827c-0.326,0.271-1.277,1.073-2.852,2.403c-1.574,1.331-2.824,2.351-3.748,3.056c-0.924,0.707-2.131,1' +
-  '.562-3.625,2.566s-2.865,1.752-4.114,2.24s-2.417,0.732-3.503,0.732H108h-0.082c-1.086,0-2.253-0.244-3.503-0.732c-1.2' +
-  '49-0.488-2.621-1.236-4.114-2.24c-1.493-1.004-2.702-1.859-3.625-2.566c-0.923-0.705-2.173-1.725-3.748-3.056c-1.575-1' +
-  '.33-2.526-2.132-2.852-2.403c-11.297-8.962-22.187-17.57-32.67-25.827c-7.985-6.3-11.977-14.013-11.977-23.138c0-0.706' +
-  ',0.258-1.317,0.774-1.833c0.516-0.516,1.127-0.774,1.833-0.774h119.929c0.434,0.244,0.814,0.312,1.141,0.204c0.326-0.1' +
-  '1,0.57,0.094,0.732,0.61c0.163,0.516,0.312,0.76,0.448,0.733c0.136-0.027,0.218,0.312,0.245,1.019c0.025,0.706,0.039,1' +
+  "3.829-9.206-3.829H48.036c-3.585,0-6.654,1.276-9.207,3.829C36.276,22.025,35,25.094,35,28.679v88.644c0,3.585,1.276,6" +
+  ".652,3.829,9.205c2.553,2.555,5.622,3.83,9.207,3.83h119.929c3.584,0,6.653-1.275,9.206-3.83c2.554-2.553,3.829-5.621," +
+  "3.829-9.205V28.679C181,25.094,179.725,22.025,177.171,19.472zM170.57,117.321c0,0.706-0.258,1.317-0.774,1.833s-1.127" +
+  ",0.773-1.832,0.773H48.035c-0.706,0-1.317-0.257-1.833-0.773c-0.516-0.516-0.774-1.127-0.774-1.833V54.75c1.738,1.955," +
+  "3.612,3.748,5.622,5.377c14.557,11.189,26.126,20.368,34.708,27.538c2.77,2.336,5.024,4.155,6.762,5.459s4.087,2.62,7." +
+  "047,3.951s5.744,1.995,8.351,1.995H108h0.081c2.606,0,5.392-0.664,8.351-1.995c2.961-1.331,5.311-2.647,7.049-3.951c1." +
+  "737-1.304,3.992-3.123,6.762-5.459c8.582-7.17,20.15-16.349,34.707-27.538c2.01-1.629,3.885-3.422,5.621-5.377V117.321" +
+  "z M170.57,30.797v0.896c0,3.204-1.262,6.776-3.787,10.713c-2.525,3.938-5.256,7.075-8.188,9.41c-10.484,8.257-21.373,1" +
+  "6.865-32.672,25.827c-0.326,0.271-1.277,1.073-2.852,2.403c-1.574,1.331-2.824,2.351-3.748,3.056c-0.924,0.707-2.131,1" +
+  ".562-3.625,2.566s-2.865,1.752-4.114,2.24s-2.417,0.732-3.503,0.732H108h-0.082c-1.086,0-2.253-0.244-3.503-0.732c-1.2" +
+  "49-0.488-2.621-1.236-4.114-2.24c-1.493-1.004-2.702-1.859-3.625-2.566c-0.923-0.705-2.173-1.725-3.748-3.056c-1.575-1" +
+  ".33-2.526-2.132-2.852-2.403c-11.297-8.962-22.187-17.57-32.67-25.827c-7.985-6.3-11.977-14.013-11.977-23.138c0-0.706" +
+  ",0.258-1.317,0.774-1.833c0.516-0.516,1.127-0.774,1.833-0.774h119.929c0.434,0.244,0.814,0.312,1.141,0.204c0.326-0.1" +
+  "1,0.57,0.094,0.732,0.61c0.163,0.516,0.312,0.76,0.448,0.733c0.136-0.027,0.218,0.312,0.245,1.019c0.025,0.706,0.039,1" +
   '.061,0.039,1.061V30.797z"/> </svg>';
 
-PaymentForm.INFORMATION_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
+PaymentForm.INFORMATION_SVG =
+  '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" ' +
   'xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="4px" width="24px" height="16px" viewBox="0 0 216 146" ' +
   'enable-background="new 0 0 216 146" xml:space="preserve"> <g> <path class="svg" d="M97.571,41.714h20.859c1.411,0,2' +
-  '.633-0.516,3.666-1.548c1.031-1.031,1.547-2.254,1.547-3.666V20.857c0-1.412-0.516-2.634-1.549-3.667c-1.031-1.031-2.2' +
-  '54-1.548-3.666-1.548H97.571c-1.412,0-2.634,0.517-3.666,1.548c-1.032,1.032-1.548,2.255-1.548,3.667V36.5c0,1.412,0.5' +
+  ".633-0.516,3.666-1.548c1.031-1.031,1.547-2.254,1.547-3.666V20.857c0-1.412-0.516-2.634-1.549-3.667c-1.031-1.031-2.2" +
+  "54-1.548-3.666-1.548H97.571c-1.412,0-2.634,0.517-3.666,1.548c-1.032,1.032-1.548,2.255-1.548,3.667V36.5c0,1.412,0.5" +
   '16,2.635,1.548,3.666C94.937,41.198,96.159,41.714,97.571,41.714z"/><path class="svg" d="M132.523,111.048c-1.031-1.0' +
-  '32-2.254-1.548-3.666-1.548h-5.215V62.571c0-1.412-0.516-2.634-1.547-3.666c-1.033-1.032-2.255-1.548-3.666-1.548H87.1' +
-  '43c-1.412,0-2.634,0.516-3.666,1.548c-1.032,1.032-1.548,2.254-1.548,3.666V73c0,1.412,0.516,2.635,1.548,3.666c1.032,' +
-  '1.032,2.254,1.548,3.666,1.548h5.215V109.5h-5.215c-1.412,0-2.634,0.516-3.666,1.548c-1.032,1.032-1.548,2.254-1.548,3' +
-  '.666v10.429c0,1.412,0.516,2.635,1.548,3.668c1.032,1.03,2.254,1.547,3.666,1.547h41.714c1.412,0,2.634-0.517,3.666-1.' +
+  "32-2.254-1.548-3.666-1.548h-5.215V62.571c0-1.412-0.516-2.634-1.547-3.666c-1.033-1.032-2.255-1.548-3.666-1.548H87.1" +
+  "43c-1.412,0-2.634,0.516-3.666,1.548c-1.032,1.032-1.548,2.254-1.548,3.666V73c0,1.412,0.516,2.635,1.548,3.666c1.032," +
+  "1.032,2.254,1.548,3.666,1.548h5.215V109.5h-5.215c-1.412,0-2.634,0.516-3.666,1.548c-1.032,1.032-1.548,2.254-1.548,3" +
+  ".666v10.429c0,1.412,0.516,2.635,1.548,3.668c1.032,1.03,2.254,1.547,3.666,1.547h41.714c1.412,0,2.634-0.517,3.666-1." +
   '547c1.031-1.033,1.547-2.256,1.547-3.668v-10.429C134.07,113.302,133.557,112.08,132.523,111.048z"/> </g> </svg>';
 
 /**
@@ -321,13 +329,13 @@ PaymentForm.keyIsNavigation = function (e) {
  */
 PaymentForm.keyIsKeyboardCommand = function (e) {
   let keyCode = PaymentForm.keyCodeFromEvent(e);
-  return PaymentForm.keyIsCommandFromEvent(e) &&
-    (
-      keyCode === PaymentForm.KEYS["A"] ||
+  return (
+    PaymentForm.keyIsCommandFromEvent(e) &&
+    (keyCode === PaymentForm.KEYS["A"] ||
       keyCode === PaymentForm.KEYS["X"] ||
       keyCode === PaymentForm.KEYS["C"] ||
-      keyCode === PaymentForm.KEYS["V"]
-    );
+      keyCode === PaymentForm.KEYS["V"])
+  );
 };
 
 /**
@@ -402,7 +410,10 @@ PaymentForm.prototype.showVerification = function (objResponse, successCallback,
     successAddCardCallback: successCallback,
     errorAddCardCallback: errorCallback,
   };
-  this.invalidCardTypeMessage = PaymentForm.VERIFICATION_MESSAGE !== this.invalidCardTypeMessage ? PaymentForm.VERIFICATION_MESSAGE : PaymentForm.VERIFICATION_MESSAGE_2;
+  this.invalidCardTypeMessage =
+    PaymentForm.VERIFICATION_MESSAGE !== this.invalidCardTypeMessage
+      ? PaymentForm.VERIFICATION_MESSAGE
+      : PaymentForm.VERIFICATION_MESSAGE_2;
   this.addWarningMessage();
   this.addVerificationContainer();
 };
@@ -411,20 +422,28 @@ PaymentForm.prototype.verifyTransaction = function () {
   this.blockVerificationContainer();
   let user_id = this.addCardProcess.response.user.id;
   let transaction_id = this.addCardProcess.response.card.transaction_reference;
-  let verification_type = 'BY_OTP';  // TODO: Dynamic, according to the message in the answer
+  let verification_type = "BY_OTP"; // TODO: Dynamic, according to the message in the answer
   let value = this.getVerificationValue();
   let $this = this;
-  Payment.verifyTransaction(user_id, transaction_id, verification_type, value,
+  Payment.verifyTransaction(
+    user_id,
+    transaction_id,
+    verification_type,
+    value,
     function (response) {
       $this.unBlockVerificationContainer();
       $this.removeVerificationContainer();
       $this.addCardProcess.response.transaction = $this.addCardProcess.response.transaction ? response.transaction : undefined;
-      if (response.transaction.status === 'pending') {
-        return $this.showVerification($this.addCardProcess.response, $this.addCardProcess.successAddCardCallback, $this.addCardProcess.errorAddCardCallback)
-      } else if (response.transaction.status === 'success') {
-        $this.addCardProcess.response.card.status = 'valid';
+      if (response.transaction.status === "pending") {
+        return $this.showVerification(
+          $this.addCardProcess.response,
+          $this.addCardProcess.successAddCardCallback,
+          $this.addCardProcess.errorAddCardCallback
+        );
+      } else if (response.transaction.status === "success") {
+        $this.addCardProcess.response.card.status = "valid";
       } else {
-        $this.addCardProcess.response.card.status = 'rejected';
+        $this.addCardProcess.response.card.status = "rejected";
         $this.addCardProcess.response.card.message = response.transaction.message;
       }
       $this.addCardProcess.successAddCardCallback($this.addCardProcess.response);
@@ -433,15 +452,15 @@ PaymentForm.prototype.verifyTransaction = function () {
       $this.unBlockVerificationContainer();
       $this.removeVerificationContainer();
       $this.addCardProcess.errorAddCardCallback($this.addCardProcess.response);
-    });
+    }
+  );
 };
 
 PaymentForm.prototype.cardTypeFromNumberBin = function (number) {
   let number_bin = number.replace(" ", "").substring(0, 6);
   if (number >= 6 && this.numberBin !== number_bin) {
     this.numberBin = number_bin;
-    Payment.getBinInformation(number_bin, this, this.successBinCallback, function (error) {
-    });
+    Payment.getBinInformation(number_bin, this, this.successBinCallback, function (error) {});
   }
 };
 
@@ -451,25 +470,24 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
   if (!(required_fields && required_fields.length > 0)) {
     form.removeFiscalNumber();
     form.removeNip();
-    return
+    return;
   }
 
   required_fields.forEach(function (required_field) {
-    let field_name = typeof (required_field) === 'object' ? Object.keys(required_field)[0] : required_field;
+    let field_name = typeof required_field === "object" ? Object.keys(required_field)[0] : required_field;
 
     // Only should be contemplated the no default fields from SDK form (fiscal_number, tuya_key, fiscal_number_type)
     switch (field_name) {
-      case 'fiscal_number':
+      case "fiscal_number":
         form.addFiscalNumber();
         break;
-      case 'tuya_key':
+      case "tuya_key":
         form.addNip();
         break;
-      case 'fiscal_number_type':
+      case "fiscal_number_type":
         break;
     }
-  }
-  );
+  });
 };
 
 PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
@@ -478,23 +496,22 @@ PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
   if (!(no_required_fields && no_required_fields.length > 0)) {
     form.addExpiryContainer();
     form.addCvcContainer();
-    return
+    return;
   }
 
   no_required_fields.forEach(function (no_required_field) {
-    let field_name = typeof (no_required_field) === 'object' ? Object.keys(no_required_field)[0] : no_required_field;
+    let field_name = typeof no_required_field === "object" ? Object.keys(no_required_field)[0] : no_required_field;
 
     // Only should be contemplated the default fields from SDK form (expiration_date, cvv)
     switch (field_name) {
-      case 'expiration_date':
+      case "expiration_date":
         form.removeExpiryContainer();
         break;
-      case 'cvv':
+      case "cvv":
         form.removeCvcContainer();
         break;
     }
-  }
-  );
+  });
 };
 
 PaymentForm.prototype.successBinCallback = function (objResponse, form) {
@@ -502,8 +519,8 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
   form.useLunh = objResponse.use_luhn;
 
   // Set card type
-  form.cardType = objResponse.card_type.length > 0 ? objResponse.card_type : '';
-  form.brand_name = objResponse.brand_name.length > 0 ? objResponse.brand_name : '';
+  form.cardType = objResponse.card_type.length > 0 ? objResponse.card_type : "";
+  form.brand_name = objResponse.brand_name.length > 0 ? objResponse.brand_name : "";
 
   // Set card type icon
   $(".card-type-icon").css("background-image", "url(" + objResponse.url_logo + ")");
@@ -597,7 +614,7 @@ PaymentForm.setCaretPosition = function (element, caretPos) {
   if (element != null) {
     if (element.createTextRange) {
       let range = element.createTextRange();
-      range.move('character', caretPos);
+      range.move("character", caretPos);
       range.select();
     } else {
       if (element.selectionStart) {
@@ -681,7 +698,6 @@ PaymentForm.filterNumberOnlyKey = function (e) {
  * @returns {*}
  */
 PaymentForm.digitFromKeyCode = function (keyCode) {
-
   if (keyCode >= PaymentForm.KEYS["0"] && keyCode <= PaymentForm.KEYS["9"]) {
     return keyCode - PaymentForm.KEYS["0"];
   }
@@ -730,17 +746,14 @@ PaymentForm.handleMaskedNumberInputKey = function (e, mask) {
 
     // Remove values highlighted (if highlighted)
     if (rangeHighlighted) {
-      numbersOnly = (numbersOnly.slice(0, normalisedStartCaretPosition) +
-        numbersOnly.slice(normalisedEndCaretPosition));
+      numbersOnly = numbersOnly.slice(0, normalisedStartCaretPosition) + numbersOnly.slice(normalisedEndCaretPosition);
     }
 
     // Forward Action
     if (caretStart !== mask.length) {
-
       // Insert number digit
       if (isNumber && rawText.length <= mask.length) {
-        numbersOnly = (numbersOnly.slice(0, normalisedStartCaretPosition) + digit +
-          numbersOnly.slice(normalisedStartCaretPosition));
+        numbersOnly = numbersOnly.slice(0, normalisedStartCaretPosition) + digit + numbersOnly.slice(normalisedStartCaretPosition);
         newCaretPosition = Math.max(
           PaymentForm.denormaliseCaretPosition(mask, normalisedStartCaretPosition + 1),
           PaymentForm.denormaliseCaretPosition(mask, normalisedStartCaretPosition + 2) - 1
@@ -749,19 +762,15 @@ PaymentForm.handleMaskedNumberInputKey = function (e, mask) {
 
       // Delete
       if (isDelete) {
-        numbersOnly = (numbersOnly.slice(0, normalisedStartCaretPosition) +
-          numbersOnly.slice(normalisedStartCaretPosition + 1));
+        numbersOnly = numbersOnly.slice(0, normalisedStartCaretPosition) + numbersOnly.slice(normalisedStartCaretPosition + 1);
       }
-
     }
 
     // Backward Action
     if (caretStart !== 0) {
-
       // Backspace
       if (isBackspace && !rangeHighlighted) {
-        numbersOnly = (numbersOnly.slice(0, normalisedStartCaretPosition - 1) +
-          numbersOnly.slice(normalisedStartCaretPosition));
+        numbersOnly = numbersOnly.slice(0, normalisedStartCaretPosition - 1) + numbersOnly.slice(normalisedStartCaretPosition);
         newCaretPosition = PaymentForm.denormaliseCaretPosition(mask, normalisedStartCaretPosition - 1);
       }
     }
@@ -776,7 +785,7 @@ PaymentForm.handleMaskedNumberInputKey = function (e, mask) {
  * Generate a random array to assign to tuya keyboard
  */
 PaymentForm.generateRandoms = function () {
-  let myArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  let myArray = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   let i, j, k;
   for (i = myArray.length; i; i--) {
     j = Math.floor(Math.random() * i);
@@ -810,8 +819,16 @@ PaymentForm.prototype.isValidData = function () {
   let is_card_number_valid = this.refreshCardNumberValidation();
   let is_fiscal_number_valid = this.refreshFiscalNumberValidation();
   let is_nip_valid = this.refreshNipValidation();
-  return is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid
-    && is_email_valid && is_cellphone_valid && is_fiscal_number_valid && is_nip_valid;
+  return (
+    is_date_valid &&
+    is_cvc_valid &&
+    is_card_holder_valid &&
+    is_card_number_valid &&
+    is_email_valid &&
+    is_cellphone_valid &&
+    is_fiscal_number_valid &&
+    is_nip_valid
+  );
 };
 
 PaymentForm.prototype.refreshCvcValidation = function () {
@@ -886,7 +903,7 @@ PaymentForm.prototype.refreshNipValidation = function () {
       return false;
     }
   } else {
-    return true
+    return true;
   }
 };
 
@@ -904,11 +921,11 @@ PaymentForm.prototype.refreshValidationOption = function () {
 PaymentForm.prototype.refreshVerificationInputValidation = function () {
   if (this.isVerificationValueValid()) {
     this.verificationInput.parent().removeClass("has-error");
-    this.verificationBtn.removeAttr('disabled');
+    this.verificationBtn.removeAttr("disabled");
     return true;
   } else {
     this.verificationInput.parent().addClass("has-error");
-    this.verificationBtn.attr('disabled', 'disabled');
+    this.verificationBtn.attr("disabled", "disabled");
     return false;
   }
 };
@@ -924,8 +941,7 @@ PaymentForm.prototype.addValueToNip = function (value, key) {
 };
 
 PaymentForm.prototype.cleanNipInput = function () {
-  if (this.nipWrapperAdded())
-    this.nipInput.val("");
+  if (this.nipWrapperAdded()) this.nipInput.val("");
   this.nip = "";
 };
 
@@ -948,25 +964,21 @@ PaymentForm.prototype.isCvcValid = function () {
  * @returns {boolean}
  */
 PaymentForm.prototype.isCardHolderNameValid = function () {
-  if (this.captureName)
-    return this.getName() != null && this.getName().length >= 5;
-  else
-    return true;
+  if (this.captureName) return this.getName() != null && this.getName().length >= 5;
+  else return true;
 };
 
 PaymentForm.prototype.isEmailValid = function () {
   if (this.captureEmail) {
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    let re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return this.getEmail() != null && this.getEmail().length >= 5 && re.test(this.getEmail());
-  } else
-    return true;
+  } else return true;
 };
 
 PaymentForm.prototype.isCellPhoneValid = function () {
-  if (this.captureCellPhone)
-    return this.getCellPhone() != null && this.getCellPhone().length >= 7;
-  else
-    return true;
+  if (this.captureCellPhone) return this.getCellPhone() != null && this.getCellPhone().length >= 7;
+  else return true;
 };
 
 /**
@@ -977,11 +989,13 @@ PaymentForm.prototype.isCellPhoneValid = function () {
 PaymentForm.prototype.isCardNumberValid = function () {
   let value = this.getCardNumber();
   if (!this.useLunh) return true;
-  if (value === '') return false;
+  if (value === "") return false;
   if (/[^0-9-\s]+/.test(value)) return false;
 
   // The Luhn Algorithm. It's so pretty.
-  let nCheck = 0, nDigit = 0, bEven = false;
+  let nCheck = 0,
+    nDigit = 0,
+    bEven = false;
   value = value.replace(/\D/g, "");
 
   for (let n = value.length - 1; n >= 0; n--) {
@@ -996,7 +1010,7 @@ PaymentForm.prototype.isCardNumberValid = function () {
     bEven = !bEven;
   }
 
-  return (nCheck % 10) === 0;
+  return nCheck % 10 === 0;
 };
 
 /**
@@ -1018,10 +1032,8 @@ PaymentForm.prototype.isNipValid = function () {
  * @returns {boolean}
  */
 PaymentForm.prototype.isFiscalNumberValid = function () {
-  if (this.fiscalNumberAdded())
-    return this.getFiscalNumber() != null && this.getFiscalNumber().length >= 6;
-  else
-    return true
+  if (this.fiscalNumberAdded()) return this.getFiscalNumber() != null && this.getFiscalNumber().length >= 6;
+  else return true;
 };
 
 /**
@@ -1144,16 +1156,16 @@ PaymentForm.prototype.getCard = function () {
     }
 
     data = {
-      "card": {
-        "number": this.getCardNumber().split(' ').join(''),
-        "holder_name": this.getName(),
-        "expiry_year": Number(year),
-        "expiry_month": Number(this.getExpiryMonth()),
-        "type": this.cardType,
-        "cvc": this.getCvc(),
-        "nip": this.getNip(),
-        "card_auth": this.getValidationOption(),
-      }
+      card: {
+        number: this.getCardNumber().split(" ").join(""),
+        holder_name: this.getName(),
+        expiry_year: Number(year),
+        expiry_month: Number(this.getExpiryMonth()),
+        type: this.cardType,
+        cvc: this.getCvc(),
+        nip: this.getNip(),
+        card_auth: this.getValidationOption(),
+      },
     };
   }
 
@@ -1193,7 +1205,7 @@ PaymentForm.prototype.getEmail = function () {
  * @returns {string}
  */
 PaymentForm.prototype.getCellPhone = function () {
-  return `${this.cellphoneCountryCodeInput.val()}-${this.cellPhoneInput.val().replace(/ /g, '')}`;
+  return `${this.cellphoneCountryCodeInput.val()}-${this.cellPhoneInput.val().replace(/ /g, "")}`;
 };
 
 /**
@@ -1223,7 +1235,7 @@ PaymentForm.prototype.getFiscalNumber = function () {
   if (this.fiscalNumberAdded()) {
     return this.fiscalNumberInput.val();
   } else {
-    return '';
+    return "";
   }
 };
 
@@ -1261,7 +1273,7 @@ PaymentForm.prototype.getCvc = function () {
 PaymentForm.prototype.getNip = function () {
   if (this.getValidationOption() === PaymentForm.AUTH_NIP) {
     if (this.nipWrapperAdded() && !this.USE_VIRTUAL_KEYBOARD) {
-      this.nip = (this.nipInput.val());
+      this.nip = this.nipInput.val();
     }
     return this.nip;
   } else {
@@ -1278,7 +1290,7 @@ PaymentForm.prototype.getVerificationValue = function () {
   if (this.verificationContainerAdded()) {
     return this.verificationInput.val();
   } else {
-    return '';
+    return "";
   }
 };
 
@@ -1331,7 +1343,6 @@ PaymentForm.prototype.blockForm = function () {
   this.addWarningMessage();
 };
 
-
 /**
  * Reset the form to enable the initial inputs
  *
@@ -1370,7 +1381,7 @@ PaymentForm.prototype.unBlockForm = function () {
  * @param colour
  */
 PaymentForm.prototype.setIconColour = function (colour) {
-  this.elem.find(".icon .svg").css({ "fill": colour });
+  this.elem.find(".icon .svg").css({ fill: colour });
 };
 
 /**
@@ -1431,14 +1442,14 @@ PaymentForm.prototype.refreshCellPhoneFormat = function () {
   $(this.cellPhoneInput).val(formattedNumber);
 };
 
-/** 
+/**
  * Get country flag image src
  */
 PaymentForm.prototype.refreshCellphoneCountryCode = function () {
   let currentCountryCode = this.cellphoneCountryCodeInput.find("option:selected").data("country-code") || null;
   if (currentCountryCode) {
     let flag = Payment.getCountryByCountryCode(currentCountryCode).flag;
-    this.cellPhoneCountryCodeFlag.setAttribute('src', flag);
+    this.cellPhoneCountryCodeFlag.setAttribute("src", flag);
   }
 };
 
@@ -1524,7 +1535,7 @@ PaymentForm.prototype.removeOtpValidation = function () {
 
 PaymentForm.prototype.addVirtualKeyboard = function () {
   if (!this.virtualKeyboardAdded() && this.getValidationOption() === PaymentForm.AUTH_NIP) {
-    this.setupVirtualKeyboard()
+    this.setupVirtualKeyboard();
   }
 };
 
@@ -1536,7 +1547,7 @@ PaymentForm.prototype.removeVirtualKeyboard = function () {
 
 PaymentForm.prototype.addValidationMessage = function () {
   if (!this.validationMessageAdded()) {
-    this.setupValidationMessage()
+    this.setupValidationMessage();
   }
 };
 
@@ -1574,10 +1585,10 @@ PaymentForm.prototype.addVerificationContainer = function () {
     }
 
     if (this.fiscalNumberAdded()) {
-      this.fiscalNumberInput.attr("disabled", "disabled")
+      this.fiscalNumberInput.attr("disabled", "disabled");
     }
     if (this.nipWrapperAdded()) {
-      this.nipInput.attr("disabled", "disabled")
+      this.nipInput.attr("disabled", "disabled");
     }
 
     this.initVerificationInput();
@@ -1588,35 +1599,35 @@ PaymentForm.prototype.addVerificationContainer = function () {
 
 PaymentForm.prototype.blockVerificationContainer = function () {
   if (this.verificationContainerAdded()) {
-    this.verificationInput.attr('disabled', 'disabled');
-    this.verificationBtn.attr('disabled', 'disabled');
+    this.verificationInput.attr("disabled", "disabled");
+    this.verificationBtn.attr("disabled", "disabled");
   }
 };
 
 PaymentForm.prototype.unBlockVerificationContainer = function () {
   if (this.verificationContainerAdded()) {
-    this.cardNumberInput.removeAttr('disabled');
-    this.emailInput.removeAttr('disabled');
-    this.cellPhoneInput.removeAttr('disabled');
-    this.nameInput.removeAttr('disabled');
-    this.cvcInput.removeAttr('disabled');
+    this.cardNumberInput.removeAttr("disabled");
+    this.emailInput.removeAttr("disabled");
+    this.cellPhoneInput.removeAttr("disabled");
+    this.nameInput.removeAttr("disabled");
+    this.cvcInput.removeAttr("disabled");
 
     if (this.EXPIRY_USE_DROPDOWNS) {
-      this.expiryMonthInput.removeAttr('disabled');
-      this.expiryYearInput.removeAttr('disabled');
+      this.expiryMonthInput.removeAttr("disabled");
+      this.expiryYearInput.removeAttr("disabled");
     } else {
-      this.expiryMonthYearInput.removeAttr('disabled');
+      this.expiryMonthYearInput.removeAttr("disabled");
     }
 
     if (this.fiscalNumberAdded()) {
-      this.fiscalNumberInput.removeAttr('disabled');
+      this.fiscalNumberInput.removeAttr("disabled");
     }
     if (this.nipWrapperAdded()) {
-      this.nipInput.removeAttr('disabled');
+      this.nipInput.removeAttr("disabled");
     }
 
-    this.verificationInput.removeAttr('disabled');
-    this.verificationBtn.removeAttr('disabled');
+    this.verificationInput.removeAttr("disabled");
+    this.verificationBtn.removeAttr("disabled");
   }
 };
 
@@ -1633,7 +1644,6 @@ PaymentForm.prototype.removeVerificationContainer = function () {
  * Initialise the card number input
  */
 PaymentForm.prototype.initCardNumberInput = function () {
-
   // Find or create the card number input element
   this.cardNumberInput = PaymentForm.detachOrCreateElement(this.elem, ".card-number", "<input class='card-number' />");
   // Ensure the card number element has a name
@@ -1657,10 +1667,8 @@ PaymentForm.prototype.initCardNumberInput = function () {
  * Initialise the name input
  */
 PaymentForm.prototype.initNameInput = function () {
-
   // Enable name input if a field has been created
-  if (!this.captureName)
-    this.captureName = this.elem.find(".name")[0] != null;
+  if (!this.captureName) this.captureName = this.elem.find(".name")[0] != null;
   // Find or create the name input element
   this.nameInput = PaymentForm.detachOrCreateElement(this.elem, ".name", "<input class='name' />");
   // Ensure the name element has a field name
@@ -1677,10 +1685,8 @@ PaymentForm.prototype.initNameInput = function () {
  * Initialise the email input
  */
 PaymentForm.prototype.initEmailInput = function () {
-
   // Enable email input if a field has been created
-  if (!this.captureEmail)
-    this.captureEmail = this.elem.find(".email")[0] != null;
+  if (!this.captureEmail) this.captureEmail = this.elem.find(".email")[0] != null;
   // Find or create the email input element
   this.emailInput = PaymentForm.detachOrCreateElement(this.elem, ".email", "<input class='email' />");
   // Ensure the email element has a field email
@@ -1701,12 +1707,14 @@ PaymentForm.prototype.initEmailInput = function () {
  * Initialise the cellphone input
  */
 PaymentForm.prototype.initCellPhoneInput = function () {
-
   // Enable cellphone input if a field has been created
-  if (!this.captureCellPhone)
-    this.captureCellPhone = this.elem.find(".cellphone")[0] != null;
+  if (!this.captureCellPhone) this.captureCellPhone = this.elem.find(".cellphone")[0] != null;
   // Find or create the cellphone input element
-  this.cellphoneCountryCodeInput = PaymentForm.detachOrCreateElement(this.elem, ".cellphone-country-code", "<select class='cellphone-country-code' />");
+  this.cellphoneCountryCodeInput = PaymentForm.detachOrCreateElement(
+    this.elem,
+    ".cellphone-country-code",
+    "<select class='cellphone-country-code' />"
+  );
   this.cellPhoneInput = PaymentForm.detachOrCreateElement(this.elem, ".cellphone", "<input class='cellphone' />");
   // Ensure the cellphone element has a field cellphone
   if (!PaymentForm.elementHasAttribute(this.cellPhoneInput, "name")) {
@@ -1726,22 +1734,19 @@ PaymentForm.prototype.initCellPhoneInput = function () {
 
   let $this = this;
 
-  const options = Payment.COUNTRIES.filter(country => country.active);
+  const options = Payment.COUNTRIES.filter((country) => country.active);
 
   setTimeout(() => {
-    this.cellphoneSelectize = $this.cellphoneCountryCodeInput.selectize(
-      {
-        valueField: 'country_code',
-        labelField: 'name',
-        searchField: 'name',
-        options: options,
-      }
-    );
+    this.cellphoneSelectize = $this.cellphoneCountryCodeInput.selectize({
+      valueField: "country_code",
+      labelField: "name",
+      searchField: "name",
+      options: options,
+    });
     this.cellphoneSelectizeControl = this.cellphoneSelectize[0].selectize;
     const defaultCountry = this.defaultCountryCode ? this.defaultCountryCode : Payment.guessCountry();
-    this.cellphoneSelectizeControl.setValue(defaultCountry)
+    this.cellphoneSelectizeControl.setValue(defaultCountry);
   }, 0);
-
 };
 
 /**
@@ -1762,7 +1767,6 @@ PaymentForm.prototype.initExpiryYearInput = function () {
  * Initialise the card CVC input
  */
 PaymentForm.prototype.initCvcInput = function () {
-
   // Find or create the CVC input element
   this.cvcInput = PaymentForm.detachOrCreateElement(this.elem, ".cvc", "<input class='cvc' />");
   // Ensure the CVC has a placeholder
@@ -1785,7 +1789,6 @@ PaymentForm.prototype.initCvcInput = function () {
  * Initialise the fiscal number input
  */
 PaymentForm.prototype.initFiscalNumberInput = function () {
-
   // Find or create the fiscal number input element
   this.fiscalNumberInput = PaymentForm.detachOrCreateElement(this.elem, ".fiscal-number", "<input class='fiscal-number' />");
   // Ensure the fiscal number element has a field name
@@ -1893,7 +1896,7 @@ PaymentForm.prototype.setupCardNumberInput = function () {
   this.cardNumberInput.keyup(function () {
     $this.refreshCreditCardType();
   });
-  this.cardNumberInput.on('paste', function () {
+  this.cardNumberInput.on("paste", function () {
     setTimeout(function () {
       $this.refreshCreditCardNumberFormat();
       $this.refreshCreditCardType();
@@ -1974,20 +1977,20 @@ PaymentForm.prototype.setupExpiryInput = function () {
 
     let expiryMonthNew = $(
       "<select>" +
-      "<option value='any' selected='' hidden=''>MM</option>" +
-      "<option value='1'>01</option>" +
-      "<option value='2'>02</option>" +
-      "<option value='3'>03</option>" +
-      "<option value='4'>04</option>" +
-      "<option value='5'>05</option>" +
-      "<option value='6'>06</option>" +
-      "<option value='7'>07</option>" +
-      "<option value='8'>08</option>" +
-      "<option value='9'>09</option>" +
-      "<option value='10'>10</option>" +
-      "<option value='11'>11</option>" +
-      "<option value='12'>12</option>" +
-      "</select>"
+        "<option value='any' selected='' hidden=''>MM</option>" +
+        "<option value='1'>01</option>" +
+        "<option value='2'>02</option>" +
+        "<option value='3'>03</option>" +
+        "<option value='4'>04</option>" +
+        "<option value='5'>05</option>" +
+        "<option value='6'>06</option>" +
+        "<option value='7'>07</option>" +
+        "<option value='8'>08</option>" +
+        "<option value='9'>09</option>" +
+        "<option value='10'>10</option>" +
+        "<option value='11'>11</option>" +
+        "<option value='12'>12</option>" +
+        "</select>"
     );
     let expiryMonthOld = this.expiryMonthInput;
     PaymentForm.copyAllElementAttributes(expiryMonthOld, expiryMonthNew);
@@ -1995,7 +1998,7 @@ PaymentForm.prototype.setupExpiryInput = function () {
     this.expiryMonthInput = expiryMonthNew;
 
     let expiryYearNew = $("<select><option value='any' selected='' hidden=''>YY</option></select>");
-    let currentYear = parseInt(((new Date().getFullYear()).toString()).substring(2, 4));
+    let currentYear = parseInt(new Date().getFullYear().toString().substring(2, 4));
     for (let i = 0; i < PaymentForm.EXPIRY_NUMBER_OF_YEARS; i++) {
       expiryYearNew.append("<option value='" + currentYear + "'>" + currentYear + "</option>");
       currentYear = (currentYear + 1) % 100;
@@ -2007,7 +2010,6 @@ PaymentForm.prototype.setupExpiryInput = function () {
 
     expiryInput.append(this.expiryMonthInput);
     expiryInput.append(this.expiryYearInput);
-
   }
 
   // Use single text field input for card expiry
@@ -2054,7 +2056,7 @@ PaymentForm.prototype.setupExpiryInput = function () {
     this.expiryMonthYearInput.blur(function () {
       $this.refreshExpiryMonthValidation();
     });
-    this.expiryMonthYearInput.on('paste', function () {
+    this.expiryMonthYearInput.on("paste", function () {
       setTimeout(function () {
         $this.refreshExpiryMonthYearInput();
       }, 1);
@@ -2083,7 +2085,7 @@ PaymentForm.prototype.setupCvcInput = function () {
   this.cvcInput.blur(function () {
     $this.refreshCvcValidation();
   });
-  this.cvcInput.on('paste', function () {
+  this.cvcInput.on("paste", function () {
     setTimeout(function () {
       $this.refreshCvc();
     }, 1);
@@ -2124,7 +2126,7 @@ PaymentForm.prototype.setupNipInput = function () {
     }
   });
   this.nipInput.keydown(PaymentForm.filterNumberOnlyKey);
-  this.nipInput.on('paste', function () {
+  this.nipInput.on("paste", function () {
     setTimeout(function () {
       $this.refreshNip();
     }, 1);
@@ -2132,13 +2134,12 @@ PaymentForm.prototype.setupNipInput = function () {
   this.nipInput.blur(function () {
     $this.refreshNipValidation();
   });
-
 };
 
 PaymentForm.prototype.setupOtpValidation = function () {
   let wrapper = PaymentForm.detachOrCreateElement(this.elem, ".otp-wrapper", "<div class='otp-wrapper'></div>");
   let label = PaymentForm.detachOrCreateElement(this.elem, ".otp-label", "<label class='otp-label'></label>");
-  label.attr("for", 'otp-option');
+  label.attr("for", "otp-option");
   if (Payment.IS_CHECKOUT) {
     label.append(PaymentForm.OTP_PLACEHOLDER_CHECKOUT);
   } else {
@@ -2166,17 +2167,17 @@ PaymentForm.prototype.setupVirtualKeyboard = function () {
   let wrapper = PaymentForm.detachOrCreateElement(this.elem, ".keyboard-wrapper", "<div class='keyboard-wrapper'></div>");
   let $this = this;
   for (let i = 0; i < array.length; i++) {
-    let keyContainer = document.createElement('div');
-    keyContainer.setAttribute('class', 'key-container');
-    let button = document.createElement('button');
-    button.setAttribute('class', 'key');
+    let keyContainer = document.createElement("div");
+    keyContainer.setAttribute("class", "key-container");
+    let button = document.createElement("button");
+    button.setAttribute("class", "key");
     let value = i + 1;
-    if ((i + 1) <= 9) {
-      button.setAttribute('value', value);
+    if (i + 1 <= 9) {
+      button.setAttribute("value", value);
     } else {
-      button.setAttribute('value', 0);
+      button.setAttribute("value", 0);
     }
-    let span = document.createElement('span');
+    let span = document.createElement("span");
     let key = document.createTextNode(array[i]);
     span.append(key);
     button.append(span);
@@ -2187,11 +2188,11 @@ PaymentForm.prototype.setupVirtualKeyboard = function () {
     keyContainer.append(button);
     wrapper.append(keyContainer);
   }
-  let cleanContainer = document.createElement('div');
-  cleanContainer.setAttribute('class', 'clean-container');
-  let cleanButton = document.createElement('button');
-  cleanButton.setAttribute('class', 'clean');
-  let cleanKey = document.createTextNode('Borrar');
+  let cleanContainer = document.createElement("div");
+  cleanContainer.setAttribute("class", "clean-container");
+  let cleanButton = document.createElement("button");
+  cleanButton.setAttribute("class", "clean");
+  let cleanKey = document.createTextNode("Borrar");
   cleanButton.append(cleanKey);
   cleanButton.addEventListener("click", function (e) {
     $this.cleanNipInput();
@@ -2204,7 +2205,7 @@ PaymentForm.prototype.setupVirtualKeyboard = function () {
 
 PaymentForm.prototype.setupValidationMessage = function () {
   let wrapper = PaymentForm.detachOrCreateElement(this.elem, ".validation-message", "<div class='validation-message'></div>");
-  wrapper.addClass('payment_dialog_success');
+  wrapper.addClass("payment_dialog_success");
   if (Payment.IS_CHECKOUT) {
     wrapper.text(PaymentForm.OTP_EXPLICATION_CHECKOUT);
   } else {
@@ -2216,7 +2217,7 @@ PaymentForm.prototype.setupValidationMessage = function () {
 
 PaymentForm.prototype.setupWarningMessage = function () {
   let wrapper = PaymentForm.detachOrCreateElement(this.elem, ".warning-message", "<div class='warning-message'></div>");
-  wrapper.addClass('payment_dialog_warning');
+  wrapper.addClass("payment_dialog_warning");
   if (this.invalidCardTypeMessage) {
     wrapper.text(this.invalidCardTypeMessage);
   } else {
@@ -2227,7 +2228,9 @@ PaymentForm.prototype.setupWarningMessage = function () {
 };
 
 PaymentForm.prototype.setupVerificationInput = function () {
-  this.elem.append("<div class='verification-container'><div class='verification-wrapper'></div><div class='verification-btn-wrapper'></div></div>");
+  this.elem.append(
+    "<div class='verification-container'><div class='verification-wrapper'></div><div class='verification-btn-wrapper'></div></div>"
+  );
 
   let container = this.elem.find(".verification-btn-wrapper");
   container.append(this.verificationBtn);
@@ -2243,15 +2246,15 @@ PaymentForm.prototype.setupVerificationInput = function () {
   this.verificationInput.blur(function () {
     $this.refreshVerificationInputValidation();
   });
-  this.verificationInput.on('keyup', function () {
+  this.verificationInput.on("keyup", function () {
     $this.refreshVerificationInputValidation();
   });
-  this.verificationInput.on('paste', function () {
+  this.verificationInput.on("paste", function () {
     setTimeout(function () {
       $this.refreshVerificationInput();
     }, 1);
   });
-  this.verificationBtn.on('click', function () {
+  this.verificationBtn.on("click", function () {
     $this.verifyTransaction();
   });
 };
@@ -2342,7 +2345,7 @@ PaymentForm.detachOrCreateElement = function (parentElement, selector, html) {
  * @returns {boolean}
  */
 PaymentForm.isValidMonth = function (expiryMonth) {
-  return (expiryMonth >= 1 && expiryMonth <= 12);
+  return expiryMonth >= 1 && expiryMonth <= 12;
 };
 
 /**
@@ -2354,7 +2357,7 @@ PaymentForm.isValidMonth = function (expiryMonth) {
  */
 PaymentForm.isExpiryValid = function (month, year) {
   let today = new Date();
-  let currentMonth = (today.getMonth() + 1);
+  let currentMonth = today.getMonth() + 1;
   let currentYear = "" + today.getFullYear();
 
   if (("" + year).length === 2) {
@@ -2366,6 +2369,5 @@ PaymentForm.isExpiryValid = function (month, year) {
   month = parseInt(month);
   year = parseInt(year);
 
-  return PaymentForm.isValidMonth(month) && ((year > currentYear) || (year === currentYear && month >= currentMonth));
+  return PaymentForm.isValidMonth(month) && (year > currentYear || (year === currentYear && month >= currentMonth));
 };
-
