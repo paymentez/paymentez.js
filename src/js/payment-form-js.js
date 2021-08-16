@@ -99,7 +99,7 @@ PaymentForm.EMAIL_PLACEHOLDER = "E-mail";
 PaymentForm.CELLPHONE_PLACEHOLDER = "Celular";
 PaymentForm.FISCAL_NUMBER_PLACEHOLDER = "Documento de Identificación";
 PaymentForm.EXPIRY_PLACEHOLDER = "MM / YY";
-PaymentForm.EXPIRY_NUMBER_OF_YEARS = 10;
+PaymentForm.EXPIRY_NUMBER_OF_YEARS = 30;
 PaymentForm.AUTH_CVC = "AUTH_CVC";
 PaymentForm.AUTH_NIP = "AUTH_NIP";
 PaymentForm.AUTH_OTP = "AUTH_OTP";
@@ -2368,4 +2368,3 @@ PaymentForm.isExpiryValid = function (month, year) {
 
   return PaymentForm.isValidMonth(month) && ((year > currentYear) || (year === currentYear && month >= currentMonth));
 };
-
