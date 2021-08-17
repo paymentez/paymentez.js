@@ -99,7 +99,7 @@ PaymentForm.EMAIL_PLACEHOLDER = "E-mail";
 PaymentForm.CELLPHONE_PLACEHOLDER = "Celular";
 PaymentForm.FISCAL_NUMBER_PLACEHOLDER = "Documento de Identificación";
 PaymentForm.EXPIRY_PLACEHOLDER = "MM / YY";
-PaymentForm.EXPIRY_NUMBER_OF_YEARS = 10;
+PaymentForm.EXPIRY_NUMBER_OF_YEARS = 30;
 PaymentForm.AUTH_CVC = "AUTH_CVC";
 PaymentForm.AUTH_NIP = "AUTH_NIP";
 PaymentForm.AUTH_OTP = "AUTH_OTP";
@@ -556,8 +556,12 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
 PaymentForm.prototype.setInstallmentsOptions = function (installments) {
   let selectInstallments = $(".installments");
   selectInstallments.empty();
-  $.each(installments, function (option, value) {
-    selectInstallments.append($("<option></option>").attr("value", value).text(value));
+  $.each(installments, function (index, value) {
+    let text = value;
+    if (value === 0) {
+      text = 'Sin cuotas';
+    }
+    selectInstallments.append($("<option></option>").attr("value", value).text(text));
   });
 };
 
@@ -1431,7 +1435,7 @@ PaymentForm.prototype.refreshCellPhoneFormat = function () {
   $(this.cellPhoneInput).val(formattedNumber);
 };
 
-/** 
+/**
  * Get country flag image src
  */
 PaymentForm.prototype.refreshCellphoneCountryCode = function () {
@@ -2368,4 +2372,3 @@ PaymentForm.isExpiryValid = function (month, year) {
 
   return PaymentForm.isValidMonth(month) && ((year > currentYear) || (year === currentYear && month >= currentMonth));
 };
-
