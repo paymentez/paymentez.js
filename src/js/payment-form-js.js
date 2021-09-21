@@ -2055,7 +2055,17 @@ PaymentForm.prototype.setupExpiryInput = function () {
         $this.expiryYearInput.val(val.length === 7 ? val.substr(5, 2) : null);
       }
     });
-    this.expiryMonthYearInput.blur(function () {
+
+    // When autocomplete in browser aplly the if
+    this.expiryMonthYearInput.blur(function (e) {
+      let val = $this.expiryMonthYearInput.val();
+      
+      if(val.length === 5 ) {
+        $this.expiryMonthInput.val(val.substr(0,2));
+        $this.expiryYearInput.val(val.substr(3, 5));
+        $this.expiryMonthYearInput.val(val.substr(0,2) + " / " + val.substr(3,5))
+      }
+
       $this.refreshExpiryMonthValidation();
     });
     this.expiryMonthYearInput.on('paste', function () {
