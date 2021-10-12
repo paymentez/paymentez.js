@@ -2062,8 +2062,8 @@ PaymentForm.prototype.setupExpiryInput = function () {
       
       if(val.length === 5 ) {
         $this.expiryMonthInput.val(val.substr(0,2));
-        $this.expiryYearInput.val(val.substr(3, 5));
-        $this.expiryMonthYearInput.val(val.substr(0,2) + " / " + val.substr(3,5))
+        $this.expiryYearInput.val(val.substr(3, 4));
+        $this.expiryMonthYearInput.val(val.substr(0,2) + " / " + val.substr(3,4))
       }
 
       $this.refreshExpiryMonthValidation();
