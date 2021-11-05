@@ -1903,7 +1903,7 @@ PaymentForm.prototype.setupCardNumberInput = function () {
       $this.refreshCreditCardType();
     }, 1);
   });
-  this.cardNumberInput.blur(function (e) {
+  this.cardNumberInput.blur(function () {
     let val = $this.cardNumberInput[0].value;
     if(val.length === 16) {
       $this.cardNumberInput.val(val.substr(0,4) + " " + val.substr(4,4) + " " + val.substr(8,4) + " " + val.substr(12,4))
