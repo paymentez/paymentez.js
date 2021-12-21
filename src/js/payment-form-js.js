@@ -1904,9 +1904,9 @@ PaymentForm.prototype.setupCardNumberInput = function () {
     }, 1);
   });
   this.cardNumberInput.blur(function () {
-    let val = $this.cardNumberInput[0].value;
-    if(val.length === 16) {
-      $this.cardNumberInput.val(val.substr(0,4) + " " + val.substr(4,4) + " " + val.substr(8,4) + " " + val.substr(12,4))
+    const val = $this.cardNumberInput[0].value;
+    if (val.length === 16) {
+      $this.cardNumberInput.val(val.substr(0, 4) + " " + val.substr(4, 4) + " " + val.substr(8, 4) + " " + val.substr(12, 4))
     }
     $this.refreshCardNumberValidation();
   });
@@ -2062,9 +2062,9 @@ PaymentForm.prototype.setupExpiryInput = function () {
 
     // When autocomplete in browser aplly the if
     this.expiryMonthYearInput.blur(function (e) {
-      let val = $this.expiryMonthYearInput.val();
-      
-      if(val.length === 5 ) {
+      const val = $this.expiryMonthYearInput.val();
+
+      if (val.length === 5) {
         $this.expiryMonthInput.val(val.substr(0, 2));
         $this.expiryYearInput.val(val.substr(3, 2));
         $this.expiryMonthYearInput.val(val.substr(0, 2) + " / " + val.substr(3, 2))
