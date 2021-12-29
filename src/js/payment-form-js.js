@@ -24,6 +24,7 @@ function PaymentForm(elem) {
   this.IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   this.USE_VIRTUAL_KEYBOARD = !this.IS_MOBILE;
 
+  this.locale = this.elem.data("locale") ? this.elem.data("locale") : "en";
   this.captureEmail = this.elem.data("capture-email") ? this.elem.data("capture-email") : false;
   this.captureCellPhone = this.elem.data("capture-cellphone") ? this.elem.data("capture-cellphone") : false;
   this.defaultCountryCode = this.elem.data("default-country") ? this.elem.data("default-country") : false;
@@ -32,6 +33,7 @@ function PaymentForm(elem) {
   this.EXPIRY_USE_DROPDOWNS = this.elem.data("use-dropdowns") ? this.elem.data("use-dropdowns") : false;
   this.exclusiveTypes = this.elem.data("exclusive-types") ? this.elem.data("exclusive-types").split(",") : false;
   this.invalidCardTypeMessage = this.elem.data("invalid-card-type-message") ? this.elem.data("invalid-card-type-message") : false;
+  this.captureBillingAddress = this.elem.data("capture-billing-address") ? this.elem.data("capture-billing-address") : false;
 
   // initialize
   this.cvcLenght = 3;
@@ -44,6 +46,7 @@ function PaymentForm(elem) {
   this.initExpiryMonthInput();
   this.initExpiryYearInput();
   this.initCvcInput();
+  this.initBillingAddress();
 
   this.elem.empty();
 
@@ -54,6 +57,7 @@ function PaymentForm(elem) {
   this.setupCardNumberInput();
   this.setupExpiryInput();
   this.setupCvcInput();
+  this.setupBillingAddress();
 
   this.elem.append(this.current_data);
 
@@ -67,6 +71,7 @@ function PaymentForm(elem) {
     this.refreshCellPhoneFormat();
     this.refreshCellphoneCountryCode();
   }
+  if (this.billingAddressAdded()) this.refreshBillingAddressCountryFlag();
 }
 
 PaymentForm.KEYS = {
@@ -396,6 +401,14 @@ PaymentForm.applyFormatMask = function (string, mask) {
   return formattedString;
 };
 
+/**
+ * @param {String} label
+ * @return String
+ */
+PaymentForm.prototype.__ = function (label) {
+  return SDK_i18n.get_label(this.locale, label);
+}
+
 PaymentForm.prototype.showVerification = function (objResponse, successCallback, errorCallback) {
   this.addCardProcess = {
     response: objResponse,
@@ -455,20 +468,20 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
   }
 
   required_fields.forEach(function (required_field) {
-    let field_name = typeof (required_field) === 'object' ? Object.keys(required_field)[0] : required_field;
+      let field_name = typeof (required_field) === 'object' ? Object.keys(required_field)[0] : required_field;
 
-    // Only should be contemplated the no default fields from SDK form (fiscal_number, tuya_key, fiscal_number_type)
-    switch (field_name) {
-      case 'fiscal_number':
-        form.addFiscalNumber();
-        break;
-      case 'tuya_key':
-        form.addNip();
-        break;
-      case 'fiscal_number_type':
-        break;
+      // Only should be contemplated the no default fields from SDK form (fiscal_number, tuya_key, fiscal_number_type)
+      switch (field_name) {
+        case 'fiscal_number':
+          form.addFiscalNumber();
+          break;
+        case 'tuya_key':
+          form.addNip();
+          break;
+        case 'fiscal_number_type':
+          break;
+      }
     }
-  }
   );
 };
 
@@ -482,18 +495,18 @@ PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
   }
 
   no_required_fields.forEach(function (no_required_field) {
-    let field_name = typeof (no_required_field) === 'object' ? Object.keys(no_required_field)[0] : no_required_field;
+      let field_name = typeof (no_required_field) === 'object' ? Object.keys(no_required_field)[0] : no_required_field;
 
-    // Only should be contemplated the default fields from SDK form (expiration_date, cvv)
-    switch (field_name) {
-      case 'expiration_date':
-        form.removeExpiryContainer();
-        break;
-      case 'cvv':
-        form.removeCvcContainer();
-        break;
+      // Only should be contemplated the default fields from SDK form (expiration_date, cvv)
+      switch (field_name) {
+        case 'expiration_date':
+          form.removeExpiryContainer();
+          break;
+        case 'cvv':
+          form.removeCvcContainer();
+          break;
+      }
     }
-  }
   );
 };
 
@@ -917,6 +930,50 @@ PaymentForm.prototype.refreshVerificationInputValidation = function () {
   }
 };
 
+// TODO: Remove this because should be a select
+PaymentForm.prototype.refreshBillingAddressStateValidation = function () {
+  let valid = this.isBillingAddressStateValid()
+  valid ? this.billingAddressState.removeClass("has-error") : this.billingAddressState.addClass("has-error");
+  return valid
+};
+
+PaymentForm.prototype.refreshBillingAddressCityValidation = function () {
+  let valid = this.isBillingAddressCityValid();
+  valid ? this.billingAddressCity.removeClass("has-error") : this.billingAddressCity.addClass("has-error");
+  return valid
+};
+
+PaymentForm.prototype.refreshBillingAddressDistrictValidation = function () {
+  let valid = this.isBillingAddressDistrictValid();
+  valid ? this.billingAddressDistrict.removeClass("has-error") : this.billingAddressDistrict.addClass("has-error");
+  return valid
+};
+
+PaymentForm.prototype.refreshBillingAddressZipValidation = function () {
+  let valid = this.isBillingAddressZipValid();
+  valid ? this.billingAddressZip.removeClass("has-error") : this.billingAddressZip.addClass("has-error");
+  return valid
+};
+
+PaymentForm.prototype.refreshBillingAddressStreetValidation = function () {
+  let valid = this.isBillingAddressStreetValid();
+  valid ? this.billingAddressStreet.removeClass("has-error") : this.billingAddressStreet.addClass("has-error");
+  return valid
+};
+
+PaymentForm.prototype.refreshBillingAddressHouseNumberValidation = function () {
+  let valid = this.isBillingAddressHouseNumberValid();
+  valid ? this.billingAddressHouseNumber.removeClass("has-error") : this.billingAddressHouseNumber.addClass("has-error");
+  return valid
+};
+
+PaymentForm.prototype.refreshBillingAddressAdditionalValidation = function () {
+  let valid = this.isBillingAddressAdditionalValid();
+  valid ? this.billingAddressAdditional.removeClass("has-error") : this.billingAddressAdditional.addClass("has-error");
+  return valid
+};
+//======================================================================================================
+
 PaymentForm.prototype.addValueToNip = function (value, key) {
   if (this.nipWrapperAdded()) {
     if (this.nipInput.val().length < this.nipLenght) {
@@ -1041,6 +1098,72 @@ PaymentForm.prototype.isVerificationValueValid = function () {
   }
 };
 
+// TODO: Remove this because should be a select
+PaymentForm.prototype.isBillingAddressStateValid = function () {
+  if (this.captureBillingAddress) {
+    let value = this.getBillingAddressState();
+    return value !== null && value.length === 2;
+  } else
+    return true;
+};
+
+PaymentForm.prototype.isBillingAddressCityValid = function () {
+  if (this.captureBillingAddress) {
+    console.log('Validating');
+    let value = this.getBillingAddressCity();
+    console.log('Assign '.value);
+    console.log(value !== null && 1 < value.length && value.length < 100);
+    return value !== null && 1 < value.length && value.length < 100;
+  } else
+    console.log('Sin billing address');
+  return true;
+};
+
+PaymentForm.prototype.isBillingAddressDistrictValid = function () {
+  if (this.captureBillingAddress) {
+    let value = this.getBillingAddressDistrict();
+    return value !== null && 1 < value.length && value.length < 100;
+  } else
+    return true;
+};
+
+PaymentForm.prototype.isBillingAddressZipValid = function () {
+  if (this.captureBillingAddress) {
+    let value = this.getBillingAddressZip();
+    return value !== null && 1 < value.length && value.length < 100;
+  } else
+    return true;
+};
+
+PaymentForm.prototype.isBillingAddressStreetValid = function () {
+  if (this.captureBillingAddress) {
+    let value = this.getBillingAddressStreet();
+    return value !== null && 1 < value.length && value.length < 100;
+  } else
+    return true;
+};
+
+PaymentForm.prototype.isBillingAddressHouseNumberValid = function () {
+  if (this.captureBillingAddress) {
+    let value = this.getBillingAddressHouseNumber();
+    return value !== null && 0 < value.length && value.length < 100;
+  } else
+    return true;
+};
+
+PaymentForm.prototype.isBillingAddressAdditionalValid = function () {
+  if (this.captureBillingAddress) {
+    let value = this.getBillingAddressAdditional();
+    if (value !== null) {
+      return 1 < value.length && value.length < 100;
+    } else {
+      return true
+    }
+  } else
+    return true;
+};
+//========================================================================================================
+
 /**
  * Validate if exists the fiscal number in the form
  *
@@ -1132,6 +1255,18 @@ PaymentForm.prototype.verificationContainerAdded = function () {
 };
 
 /**
+ * Validate if the billing address is displayed
+ *
+ * @returns {boolean}
+ */
+PaymentForm.prototype.billingAddressAdded = function () {
+  let billing_container = this.elem.find(".billing-address-container");
+  return billing_container.length >= 1;
+};
+
+// ======
+
+/**
  * Get the card object.
  *
  * @returns {object}
@@ -1197,7 +1332,8 @@ PaymentForm.prototype.getEmail = function () {
  * @returns {string}
  */
 PaymentForm.prototype.getCellPhone = function () {
-  return `${this.cellphoneCountryCodeInput.val()}-${this.cellPhoneInput.val().replace(/ /g, '')}`;
+  let calling_code = Payment.getCountryByCountryCode(this.cellphoneCountryCodeInput.val()).calling_code;
+  return `${calling_code}-${this.cellPhoneInput.val().replace(/ /g, '')}`;
 };
 
 /**
@@ -1284,6 +1420,92 @@ PaymentForm.prototype.getVerificationValue = function () {
   } else {
     return '';
   }
+};
+
+PaymentForm.prototype.getBillingAddressCountry = function () {
+  if (this.billingAddressAdded()) {
+    return this.billingAddressCountry.val().trim();
+  } else {
+    return null;
+  }
+};
+
+PaymentForm.prototype.getBillingAddressState = function () {
+  if (this.billingAddressAdded()) {
+    return this.billingAddressState.val().trim();
+  } else {
+    return null;
+  }
+};
+
+PaymentForm.prototype.getBillingAddressCity = function () {
+  if (this.billingAddressAdded()) {
+    return this.billingAddressCity.val().trim();
+  } else {
+    return null;
+  }
+};
+
+PaymentForm.prototype.getBillingAddressDistrict = function () {
+  if (this.billingAddressAdded()) {
+    return this.billingAddressDistrict.val().trim();
+  } else {
+    return null;
+  }
+};
+
+PaymentForm.prototype.getBillingAddressZip = function () {
+  if (this.billingAddressAdded()) {
+    return this.billingAddressZip.val().trim();
+  } else {
+    return null;
+  }
+};
+
+PaymentForm.prototype.getBillingAddressStreet = function () {
+  if (this.billingAddressAdded()) {
+    return this.billingAddressStreet.val().trim();
+  } else {
+    return null;
+  }
+};
+
+PaymentForm.prototype.getBillingAddressHouseNumber = function () {
+  if (this.billingAddressAdded()) {
+    return this.billingAddressHouseNumber.val().trim();
+  } else {
+    return null;
+  }
+};
+
+PaymentForm.prototype.getBillingAddressAdditional = function () {
+  if (this.billingAddressAdded()) {
+    return this.billingAddressAdditional.val().trim();
+  } else {
+    return null;
+  }
+};
+
+/**
+ * Get billing address
+ *
+ * @returns {object}
+ */
+PaymentForm.prototype.getBillingAddress = function () {
+  let billing_address = {};
+  if (this.billingAddressAdded()) {
+    billing_address = {
+      "country": this.getBillingAddressCountry(),
+      "state": this.getBillingAddressState(),
+      "city": this.getBillingAddressCity(),
+      "district": this.getBillingAddressDistrict(),
+      "zip": this.getBillingAddressZip(),
+      "street": this.getBillingAddressStreet(),
+      "house_number": this.getBillingAddressHouseNumber(),
+      "additional_address_info": this.getBillingAddressAdditional(),
+    }
+  }
+  return billing_address;
 };
 
 // --- --- --- --- --- --- --- --- --- --- ---
@@ -1374,7 +1596,7 @@ PaymentForm.prototype.unBlockForm = function () {
  * @param colour
  */
 PaymentForm.prototype.setIconColour = function (colour) {
-  this.elem.find(".icon .svg").css({ "fill": colour });
+  this.elem.find(".icon .svg").css({"fill": colour});
 };
 
 /**
@@ -1439,11 +1661,31 @@ PaymentForm.prototype.refreshCellPhoneFormat = function () {
  * Get country flag image src
  */
 PaymentForm.prototype.refreshCellphoneCountryCode = function () {
-  let currentCountryCode = this.cellphoneCountryCodeInput.find("option:selected").data("country-code") || null;
+  let currentCountryCode = this.cellphoneCountryCodeInput.find("option:selected").data("code") || null;
   if (currentCountryCode) {
     let flag = Payment.getCountryByCountryCode(currentCountryCode).flag;
     this.cellPhoneCountryCodeFlag.setAttribute('src', flag);
   }
+};
+
+/**
+ * Get country flag image src
+ */
+PaymentForm.prototype.refreshBillingAddressCountryFlag = function () {
+  let currentCountryCode = this.billingAddressCountry.find("option:selected").data("code") || null;
+  if (currentCountryCode) {
+    let flag = Payment.getCountryByCountryCode(currentCountryCode).flag;
+    this.billingAddressCountryFlag.setAttribute('src', flag);
+  }
+};
+
+/**
+ *
+ */
+PaymentForm.prototype.refreshCellPhoneFormat = function () {
+  let numbersOnly = PaymentForm.numbersOnlyString($(this.cellPhoneInput).val());
+  let formattedNumber = PaymentForm.applyFormatMask(numbersOnly, PaymentForm.CELLPHONE_MASK);
+  $(this.cellPhoneInput).val(formattedNumber);
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -1735,7 +1977,7 @@ PaymentForm.prototype.initCellPhoneInput = function () {
   setTimeout(() => {
     this.cellphoneSelectize = $this.cellphoneCountryCodeInput.selectize(
       {
-        valueField: 'country_code',
+        valueField: 'code',
         labelField: 'name',
         searchField: 'name',
         options: options,
@@ -1877,6 +2119,48 @@ PaymentForm.prototype.initVerificationInput = function () {
   this.verificationBtn.attr("type", "button");
   this.verificationBtn.attr("disabled", "disabled");
   this.verificationBtn.attr("value", "Validar");
+};
+
+/**
+ * Initialise the billing address form
+ */
+PaymentForm.prototype.initBillingAddress = function () {
+  // Validate if is required initialize the form
+  if (!this.captureBillingAddress) return
+
+  // Country options
+  this.billingAddressCountry = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressCountry", "<select class='billingAddressCountry' />");
+  let $this = this;
+  setTimeout(() => {
+    let billingCountrySelectize = $this.billingAddressCountry.selectize(
+      {
+        valueField: 'code',
+        labelField: 'name',
+        searchField: 'name',
+        options: Payment.COUNTRIES.filter(country => country.active),
+      }
+    );
+    let billingCountrySelectizeControl = billingCountrySelectize[0].selectize;
+    const defaultCountry = this.defaultCountryCode ? this.defaultCountryCode : Payment.guessCountry();
+    billingCountrySelectizeControl.setValue(defaultCountry)
+  }, 0);
+
+  // Create billing elements
+  this.billingAddressStreet = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressStreet", "<input class='billingAddressStreet' />");
+  this.billingAddressHouseNumber = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressHouseNumber", "<input class='billingAddressHouseNumber' />");
+  this.billingAddressCity = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressCity", "<input class='billingAddressCity' />");
+  this.billingAddressZip = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressZip", "<input class='billingAddressZip' />");
+  this.billingAddressState = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressState", "<input class='billingAddressState' />");
+  this.billingAddressDistrict = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressDistrict", "<input class='billingAddressDistrict' />");
+  this.billingAddressAdditional = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressAdditional", "<input class='billingAddressAdditional' />");
+
+  this.billingAddressStreet.attr("placeholder", this.__('billingAddressStreet'));
+  this.billingAddressHouseNumber.attr("placeholder", this.__('billingAddressHouseNumber'));
+  this.billingAddressCity.attr("placeholder", this.__('billingAddressCity'));
+  this.billingAddressZip.attr("placeholder", this.__('billingAddressZip'));
+  this.billingAddressState.attr("placeholder", this.__('billingAddressState'));
+  this.billingAddressDistrict.attr("placeholder", this.__('billingAddressDistrict'));
+  this.billingAddressAdditional.attr("placeholder", this.__('billingAddressAdditional'));
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -2059,11 +2343,11 @@ PaymentForm.prototype.setupExpiryInput = function () {
     // When autocomplete in browser aplly the if
     this.expiryMonthYearInput.blur(function (e) {
       let val = $this.expiryMonthYearInput.val();
-      
-      if(val.length === 5 ) {
-        $this.expiryMonthInput.val(val.substr(0,2));
+
+      if (val.length === 5) {
+        $this.expiryMonthInput.val(val.substr(0, 2));
         $this.expiryYearInput.val(val.substr(3, 4));
-        $this.expiryMonthYearInput.val(val.substr(0,2) + " / " + val.substr(3,4))
+        $this.expiryMonthYearInput.val(val.substr(0, 2) + " / " + val.substr(3, 4))
       }
 
       $this.refreshExpiryMonthValidation();
@@ -2315,6 +2599,68 @@ PaymentForm.prototype.setExpiryMonthAsInvalid = function () {
   } else {
     this.expiryMonthYearInput.parent().addClass("has-error");
   }
+};
+
+/**
+ * Update
+ */
+PaymentForm.prototype.setupBillingAddress = function () {
+  // Validate if is required setup the form
+  if (!this.captureBillingAddress) return
+
+  this.elem.append("<div class='billing-address-container'></div>");
+  let container = this.elem.find(".billing-address-container");
+
+  container.append(`<p><span>${this.__('billingAddressRequired')}</span></p>`);
+
+  container.append("<div class='billing-address-wrapper'></div>");
+  let wrapper = container.find(".billing-address-wrapper");
+  wrapper.append(this.billingAddressCountry);
+  wrapper.append(this.billingAddressState);
+  wrapper.append("<div class='icon'><img class='flag'/></div>");
+  this.billingAddressCountryFlag = wrapper.find(".flag")[0];
+
+  container.append("<div class='billing-address-wrapper1'></div>");
+  let wrapper1 = container.find(".billing-address-wrapper1");
+  wrapper1.append(this.billingAddressStreet);
+  wrapper1.append(this.billingAddressDistrict);
+
+  container.append("<div class='billing-address-wrapper2'></div>");
+  let wrapper2 = container.find(".billing-address-wrapper2");
+  wrapper2.append(this.billingAddressCity);
+  wrapper2.append(this.billingAddressZip);
+
+  container.append("<div class='billing-address-wrapper3'></div>");
+  let wrapper3 = container.find(".billing-address-wrapper3");
+  wrapper3.append(this.billingAddressHouseNumber);
+  wrapper3.append(this.billingAddressAdditional);
+
+  // Events
+  let $this = this;
+  this.billingAddressCountry.change(function () {
+    $this.refreshBillingAddressCountryFlag();
+  });
+  this.billingAddressState.blur(function () {
+    $this.refreshBillingAddressStateValidation();
+  });
+  this.billingAddressCity.blur(function () {
+    $this.refreshBillingAddressCityValidation();
+  });
+  this.billingAddressDistrict.blur(function () {
+    $this.refreshBillingAddressDistrictValidation();
+  });
+  this.billingAddressZip.blur(function () {
+    $this.refreshBillingAddressZipValidation();
+  });
+  this.billingAddressStreet.blur(function () {
+    $this.refreshBillingAddressStreetValidation();
+  });
+  this.billingAddressHouseNumber.blur(function () {
+    $this.refreshBillingAddressHouseNumberValidation();
+  });
+  this.billingAddressAdditional.blur(function () {
+    $this.refreshBillingAddressAdditionalValidation();
+  });
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
