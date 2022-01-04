@@ -2232,6 +2232,8 @@ PaymentForm.prototype.setupCardNumberInput = function () {
     }, 1);
   });
   this.cardNumberInput.blur(function () {
+    $this.refreshCreditCardNumberFormat();
+    $this.refreshCreditCardType();
     $this.refreshCardNumberValidation();
   });
 };
@@ -2384,14 +2386,14 @@ PaymentForm.prototype.setupExpiryInput = function () {
       }
     });
 
-    // When autocomplete in browser aplly the if
+    // When autocomplete in browser apply the if
     this.expiryMonthYearInput.blur(function (e) {
-      let val = $this.expiryMonthYearInput.val();
+      const val = $this.expiryMonthYearInput.val();
 
       if (val.length === 5) {
         $this.expiryMonthInput.val(val.substr(0, 2));
-        $this.expiryYearInput.val(val.substr(3, 4));
-        $this.expiryMonthYearInput.val(val.substr(0, 2) + " / " + val.substr(3, 4))
+        $this.expiryYearInput.val(val.substr(3, 2));
+        $this.expiryMonthYearInput.val(val.substr(0, 2) + " / " + val.substr(3, 2))
       }
 
       $this.refreshExpiryMonthValidation();
