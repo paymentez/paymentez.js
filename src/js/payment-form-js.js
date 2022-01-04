@@ -99,7 +99,7 @@ PaymentForm.EMAIL_PLACEHOLDER = "E-mail";
 PaymentForm.CELLPHONE_PLACEHOLDER = "Celular";
 PaymentForm.FISCAL_NUMBER_PLACEHOLDER = "Documento de Identificación";
 PaymentForm.EXPIRY_PLACEHOLDER = "MM / YY";
-PaymentForm.EXPIRY_NUMBER_OF_YEARS = 10;
+PaymentForm.EXPIRY_NUMBER_OF_YEARS = 30;
 PaymentForm.AUTH_CVC = "AUTH_CVC";
 PaymentForm.AUTH_NIP = "AUTH_NIP";
 PaymentForm.AUTH_OTP = "AUTH_OTP";
@@ -556,8 +556,12 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
 PaymentForm.prototype.setInstallmentsOptions = function (installments) {
   let selectInstallments = $(".installments");
   selectInstallments.empty();
-  $.each(installments, function (option, value) {
-    selectInstallments.append($("<option></option>").attr("value", value).text(value));
+  $.each(installments, function (index, value) {
+    let text = value;
+    if (value === 0) {
+      text = 'Sin cuotas';
+    }
+    selectInstallments.append($("<option></option>").attr("value", value).text(text));
   });
 };
 
@@ -1431,7 +1435,7 @@ PaymentForm.prototype.refreshCellPhoneFormat = function () {
   $(this.cellPhoneInput).val(formattedNumber);
 };
 
-/** 
+/**
  * Get country flag image src
  */
 PaymentForm.prototype.refreshCellphoneCountryCode = function () {
@@ -1900,6 +1904,10 @@ PaymentForm.prototype.setupCardNumberInput = function () {
     }, 1);
   });
   this.cardNumberInput.blur(function () {
+    const val = $this.cardNumberInput[0].value;
+    if (val.length === 16) {
+      $this.cardNumberInput.val(val.substr(0, 4) + " " + val.substr(4, 4) + " " + val.substr(8, 4) + " " + val.substr(12, 4))
+    }
     $this.refreshCardNumberValidation();
   });
 };
@@ -2051,7 +2059,17 @@ PaymentForm.prototype.setupExpiryInput = function () {
         $this.expiryYearInput.val(val.length === 7 ? val.substr(5, 2) : null);
       }
     });
-    this.expiryMonthYearInput.blur(function () {
+
+    // When autocomplete in browser aplly the if
+    this.expiryMonthYearInput.blur(function (e) {
+      const val = $this.expiryMonthYearInput.val();
+
+      if (val.length === 5) {
+        $this.expiryMonthInput.val(val.substr(0, 2));
+        $this.expiryYearInput.val(val.substr(3, 2));
+        $this.expiryMonthYearInput.val(val.substr(0, 2) + " / " + val.substr(3, 2))
+      }
+
       $this.refreshExpiryMonthValidation();
     });
     this.expiryMonthYearInput.on('paste', function () {
@@ -2368,4 +2386,3 @@ PaymentForm.isExpiryValid = function (month, year) {
 
   return PaymentForm.isValidMonth(month) && ((year > currentYear) || (year === currentYear && month >= currentMonth));
 };
-
