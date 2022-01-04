@@ -12,3 +12,9 @@
   display: inline-block;
   width: 70%;
 }
+
+.payment-form .cellphone-wrapper .cellphone-country-code .selectize-input {
+  padding-left: 38px;
+  padding-right: 15px;
+  width: 100%;
+}

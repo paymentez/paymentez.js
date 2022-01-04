@@ -114,6 +114,14 @@
   box-shadow: none;
 }
 
+.payment-form select.has-error,
+.payment-form select:focus.has-error,
+.payment-form input.has-error,
+.payment-form input:focus.has-error {
+  border-color: #F64B2F !important;
+  box-shadow: none;
+}
+
 .payment-form .verification-container,
 .payment-form .fiscal-number-wrapper,
 .payment-form .card-number-wrapper,
