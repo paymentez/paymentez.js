@@ -19,6 +19,7 @@
 .payment-form .billing-address-container .billing-address-wrapper1 input,
 .payment-form .billing-address-container .billing-address-wrapper2 input,
 .payment-form .billing-address-container .billing-address-wrapper3 input,
+.payment-form .billing-address-container .billing-address-wrapper .billingAddressState,
 .payment-form .billing-address-container .billing-address-wrapper .billingAddressCountry {
   width: 49%;
 }
@@ -41,6 +42,12 @@
 .payment-form .billing-address-container p span {
   background: #f5f5f7;
   padding: 0 10px;
+}
+
+.payment-form .billing-address-container .billing-address-wrapper .billingAddressState .selectize-input {
+  padding-left: 20px;
+  padding-right: 15px;
+  width: 100%;
 }
 
 .payment-form .billing-address-container .billing-address-wrapper .billingAddressCountry .selectize-input {

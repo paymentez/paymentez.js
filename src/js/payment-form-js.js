@@ -813,6 +813,19 @@ PaymentForm.prototype.getCardNumber = function () {
   return this.cardNumberInput.val();
 };
 
+PaymentForm.prototype.isValidBillingAddress = function () {
+  if (!this.captureBillingAddress) return true
+  let iv_country = this.refreshBillingAddressCountryValidation();
+  let iv_state = this.refreshBillingAddressStateValidation();
+  let iv_city = this.refreshBillingAddressCityValidation();
+  let iv_district = this.refreshBillingAddressDistrictValidation();
+  let iv_zip = this.refreshBillingAddressZipValidation();
+  let iv_street = this.refreshBillingAddressStreetValidation();
+  let iv_housenumber = this.refreshBillingAddressHouseNumberValidation();
+  let iv_additional = this.refreshBillingAddressAdditionalValidation();
+  return iv_country && iv_state && iv_city && iv_district && iv_zip && iv_street && iv_housenumber && iv_additional;
+}
+
 /**
  * Is the given data a valid card?
  *
@@ -827,8 +840,10 @@ PaymentForm.prototype.isValidData = function () {
   let is_card_number_valid = this.refreshCardNumberValidation();
   let is_fiscal_number_valid = this.refreshFiscalNumberValidation();
   let is_nip_valid = this.refreshNipValidation();
+  let is_valid_billing_address = this.isValidBillingAddress();
   return is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid
-    && is_email_valid && is_cellphone_valid && is_fiscal_number_valid && is_nip_valid;
+    && is_email_valid && is_cellphone_valid && is_fiscal_number_valid && is_nip_valid
+    && is_valid_billing_address;
 };
 
 PaymentForm.prototype.refreshCvcValidation = function () {
@@ -930,7 +945,12 @@ PaymentForm.prototype.refreshVerificationInputValidation = function () {
   }
 };
 
-// TODO: Remove this because should be a select
+PaymentForm.prototype.refreshBillingAddressCountryValidation = function () {
+  let valid = this.isBillingAddressCountryValid()
+  valid ? this.billingAddressCountry.removeClass("has-error") : this.billingAddressCountry.addClass("has-error");
+  return valid
+};
+
 PaymentForm.prototype.refreshBillingAddressStateValidation = function () {
   let valid = this.isBillingAddressStateValid()
   valid ? this.billingAddressState.removeClass("has-error") : this.billingAddressState.addClass("has-error");
@@ -1098,69 +1118,52 @@ PaymentForm.prototype.isVerificationValueValid = function () {
   }
 };
 
-// TODO: Remove this because should be a select
+PaymentForm.prototype.isBillingAddressCountryValid = function () {
+  if (!this.captureBillingAddress) return true
+  let value = this.getBillingAddressCountry();
+  return value !== null && value.length === 3;
+};
+
 PaymentForm.prototype.isBillingAddressStateValid = function () {
-  if (this.captureBillingAddress) {
-    let value = this.getBillingAddressState();
-    return value !== null && value.length === 2;
-  } else
-    return true;
+  if (!this.captureBillingAddress) return true
+  let value = this.getBillingAddressState();
+  return value !== null && value.length >= 2;
 };
 
 PaymentForm.prototype.isBillingAddressCityValid = function () {
-  if (this.captureBillingAddress) {
-    console.log('Validating');
-    let value = this.getBillingAddressCity();
-    console.log('Assign '.value);
-    console.log(value !== null && 1 < value.length && value.length < 100);
-    return value !== null && 1 < value.length && value.length < 100;
-  } else
-    console.log('Sin billing address');
-  return true;
+  if (!this.captureBillingAddress) return true
+  let value = this.getBillingAddressCity();
+  return value !== null && 1 < value.length && value.length < 100;
 };
 
 PaymentForm.prototype.isBillingAddressDistrictValid = function () {
-  if (this.captureBillingAddress) {
-    let value = this.getBillingAddressDistrict();
-    return value !== null && 1 < value.length && value.length < 100;
-  } else
-    return true;
+  if (!this.captureBillingAddress) return true
+  let value = this.getBillingAddressDistrict();
+  return value !== null && 1 < value.length && value.length < 100;
 };
 
 PaymentForm.prototype.isBillingAddressZipValid = function () {
-  if (this.captureBillingAddress) {
-    let value = this.getBillingAddressZip();
-    return value !== null && 1 < value.length && value.length < 100;
-  } else
-    return true;
+  if (!this.captureBillingAddress) return true
+  let value = this.getBillingAddressZip();
+  return value !== null && 1 < value.length && value.length < 100;
 };
 
 PaymentForm.prototype.isBillingAddressStreetValid = function () {
-  if (this.captureBillingAddress) {
-    let value = this.getBillingAddressStreet();
-    return value !== null && 1 < value.length && value.length < 100;
-  } else
-    return true;
+  if (!this.captureBillingAddress) return true
+  let value = this.getBillingAddressStreet();
+  return value !== null && 1 < value.length && value.length < 100;
 };
 
 PaymentForm.prototype.isBillingAddressHouseNumberValid = function () {
-  if (this.captureBillingAddress) {
-    let value = this.getBillingAddressHouseNumber();
-    return value !== null && 0 < value.length && value.length < 100;
-  } else
-    return true;
+  if (!this.captureBillingAddress) return true
+  let value = this.getBillingAddressHouseNumber();
+  return value !== null && 0 < value.length && value.length < 100;
 };
 
 PaymentForm.prototype.isBillingAddressAdditionalValid = function () {
-  if (this.captureBillingAddress) {
-    let value = this.getBillingAddressAdditional();
-    if (value !== null) {
-      return 1 < value.length && value.length < 100;
-    } else {
-      return true
-    }
-  } else
-    return true;
+  if (!this.captureBillingAddress) return true
+  let value = this.getBillingAddressAdditional();
+  return (value === null || value === "") || (0 < value.length && value.length < 100);
 };
 //========================================================================================================
 
@@ -1273,28 +1276,28 @@ PaymentForm.prototype.billingAddressAdded = function () {
  */
 PaymentForm.prototype.getCard = function () {
   let data = null;
-  if (this.isValidData()) {
-    let today = new Date();
-    let currentYear = "" + today.getFullYear();
-    let year = this.getExpiryYear();
+  if (!this.isValidData()) return data;
 
-    if (("" + year).length === 2) {
-      year = currentYear.substring(0, 2) + "" + this.getExpiryYear();
-    }
+  let today = new Date();
+  let currentYear = "" + today.getFullYear();
+  let year = this.getExpiryYear();
 
-    data = {
-      "card": {
-        "number": this.getCardNumber().split(' ').join(''),
-        "holder_name": this.getName(),
-        "expiry_year": Number(year),
-        "expiry_month": Number(this.getExpiryMonth()),
-        "type": this.cardType,
-        "cvc": this.getCvc(),
-        "nip": this.getNip(),
-        "card_auth": this.getValidationOption(),
-      }
-    };
+  if (("" + year).length === 2) {
+    year = currentYear.substring(0, 2) + "" + this.getExpiryYear();
   }
+
+  data = {
+    "card": {
+      "number": this.getCardNumber().split(' ').join(''),
+      "holder_name": this.getName(),
+      "expiry_year": Number(year),
+      "expiry_month": Number(this.getExpiryMonth()),
+      "type": this.cardType,
+      "cvc": this.getCvc(),
+      "nip": this.getNip(),
+      "card_auth": this.getValidationOption(),
+    }
+  };
 
   return data;
 };
@@ -1676,6 +1679,41 @@ PaymentForm.prototype.refreshBillingAddressCountryFlag = function () {
   if (currentCountryCode) {
     let flag = Payment.getCountryByCountryCode(currentCountryCode).flag;
     this.billingAddressCountryFlag.setAttribute('src', flag);
+  }
+};
+
+PaymentForm.prototype.refreshBillingAddressStateOptions = function () {
+  const defaultCountry = Payment.getCountryByCountryCode(this.getBillingAddressCountry());
+  if (defaultCountry === undefined) {
+    this.billingStateSelectizeControl.clear();
+    this.billingStateSelectizeControl.clearOptions();
+    return
+  }
+
+  let states = defaultCountry.states
+  if (states === undefined) {
+    states = [{
+      code: defaultCountry.code,
+      name: defaultCountry.name,
+    }]
+  }
+
+  if (this.billingStateSelectizeControl === undefined) {
+    let billingStateSelectize = this.billingAddressState.selectize(
+      {
+        valueField: 'code',
+        labelField: 'name',
+        searchField: 'name',
+        options: states,
+      }
+    );
+    this.billingStateSelectizeControl = billingStateSelectize[0].selectize;
+    this.billingStateSelectizeControl.setValue(states[0].code);
+  } else {
+    this.billingStateSelectizeControl.clear();
+    this.billingStateSelectizeControl.clearOptions();
+    this.billingStateSelectizeControl.addOption(states);
+    this.billingStateSelectizeControl.setValue(states[0].code);
   }
 };
 
@@ -2141,25 +2179,31 @@ PaymentForm.prototype.initBillingAddress = function () {
       }
     );
     let billingCountrySelectizeControl = billingCountrySelectize[0].selectize;
-    const defaultCountry = this.defaultCountryCode ? this.defaultCountryCode : Payment.guessCountry();
+    const defaultCountry = $this.defaultCountryCode ? $this.defaultCountryCode : Payment.guessCountry();
     billingCountrySelectizeControl.setValue(defaultCountry)
   }, 0);
 
+  // State options
+  this.billingAddressState = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressState", "<select class='billingAddressState' />");
+  setTimeout(() => {
+    $this.refreshBillingAddressStateOptions();
+  }, 0);
+
   // Create billing elements
+  this.billingAddressCity = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressCity", "<input class='billingAddressCity' />");
+  this.billingAddressDistrict = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressDistrict", "<input class='billingAddressDistrict' />");
+  this.billingAddressZip = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressZip", "<input class='billingAddressZip' />");
   this.billingAddressStreet = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressStreet", "<input class='billingAddressStreet' />");
   this.billingAddressHouseNumber = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressHouseNumber", "<input class='billingAddressHouseNumber' />");
-  this.billingAddressCity = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressCity", "<input class='billingAddressCity' />");
-  this.billingAddressZip = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressZip", "<input class='billingAddressZip' />");
-  this.billingAddressState = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressState", "<input class='billingAddressState' />");
-  this.billingAddressDistrict = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressDistrict", "<input class='billingAddressDistrict' />");
   this.billingAddressAdditional = PaymentForm.detachOrCreateElement(this.elem, ".billingAddressAdditional", "<input class='billingAddressAdditional' />");
 
+  this.billingAddressCountry.attr("placeholder", this.__('billingAddressCountry'));
+  this.billingAddressState.attr("placeholder", this.__('billingAddressState'));
+  this.billingAddressCity.attr("placeholder", this.__('billingAddressCity'));
+  this.billingAddressDistrict.attr("placeholder", this.__('billingAddressDistrict'));
+  this.billingAddressZip.attr("placeholder", this.__('billingAddressZip'));
   this.billingAddressStreet.attr("placeholder", this.__('billingAddressStreet'));
   this.billingAddressHouseNumber.attr("placeholder", this.__('billingAddressHouseNumber'));
-  this.billingAddressCity.attr("placeholder", this.__('billingAddressCity'));
-  this.billingAddressZip.attr("placeholder", this.__('billingAddressZip'));
-  this.billingAddressState.attr("placeholder", this.__('billingAddressState'));
-  this.billingAddressDistrict.attr("placeholder", this.__('billingAddressDistrict'));
   this.billingAddressAdditional.attr("placeholder", this.__('billingAddressAdditional'));
 };
 
@@ -2601,9 +2645,6 @@ PaymentForm.prototype.setExpiryMonthAsInvalid = function () {
   }
 };
 
-/**
- * Update
- */
 PaymentForm.prototype.setupBillingAddress = function () {
   // Validate if is required setup the form
   if (!this.captureBillingAddress) return
@@ -2622,13 +2663,13 @@ PaymentForm.prototype.setupBillingAddress = function () {
 
   container.append("<div class='billing-address-wrapper1'></div>");
   let wrapper1 = container.find(".billing-address-wrapper1");
-  wrapper1.append(this.billingAddressStreet);
+  wrapper1.append(this.billingAddressCity);
   wrapper1.append(this.billingAddressDistrict);
 
   container.append("<div class='billing-address-wrapper2'></div>");
   let wrapper2 = container.find(".billing-address-wrapper2");
-  wrapper2.append(this.billingAddressCity);
   wrapper2.append(this.billingAddressZip);
+  wrapper2.append(this.billingAddressStreet);
 
   container.append("<div class='billing-address-wrapper3'></div>");
   let wrapper3 = container.find(".billing-address-wrapper3");
@@ -2639,6 +2680,10 @@ PaymentForm.prototype.setupBillingAddress = function () {
   let $this = this;
   this.billingAddressCountry.change(function () {
     $this.refreshBillingAddressCountryFlag();
+    $this.refreshBillingAddressStateOptions();
+  });
+  this.billingAddressCountry.blur(function () {
+    $this.refreshBillingAddressCountryValidation();
   });
   this.billingAddressState.blur(function () {
     $this.refreshBillingAddressStateValidation();
