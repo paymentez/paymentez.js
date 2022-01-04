@@ -235,6 +235,7 @@ Payment.addCard = function (uid, email, card, success_callback, failure_callback
     },
     card: card["card"],
     extra_params: this.TDS_2,
+    billing_address: payment_form ? payment_form.PaymentForm('billingAddress') : {},
   };
   Payment.createToken(params, success_callback, failure_callback, payment_form);
 };

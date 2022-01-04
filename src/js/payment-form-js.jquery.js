@@ -32,6 +32,9 @@
     validationOption: function () {
       return this.data("paymentform").getValidationOption();
     },
+    billingAddress: function () {
+      return this.data("paymentform").getBillingAddress();
+    },
     showVerification: function (objResponse, successCallback, errorCallback) {
       return this.data("paymentform").showVerification(objResponse, successCallback, errorCallback);
     }
