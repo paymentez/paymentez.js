@@ -89,6 +89,6 @@ module.exports = function (grunt) {
   //
   // Task definition
   //
-  grunt.registerTask('default', ['connect', 'watch']);
+  grunt.registerTask('serve', ['connect', 'watch']);
   grunt.registerTask('build', ['cssmin:css', 'uglify:js']);
 };

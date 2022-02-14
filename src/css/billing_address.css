@@ -1,0 +1,62 @@
+.payment-form .billing-address-container {
+  display: inline-block;
+  width: 100%;
+}
+
+.payment-form .billing-address-container .billing-address-wrapper,
+.payment-form .billing-address-container .billing-address-wrapper1,
+.payment-form .billing-address-container .billing-address-wrapper2,
+.payment-form .billing-address-container .billing-address-wrapper3,
+.payment-form .billing-address-container .billing-address-wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.payment-form .billing-address-container .billing-address-wrapper input,
+.payment-form .billing-address-container .billing-address-wrapper1 input,
+.payment-form .billing-address-container .billing-address-wrapper2 input,
+.payment-form .billing-address-container .billing-address-wrapper3 input,
+.payment-form .billing-address-container .billing-address-wrapper .billingAddressState,
+.payment-form .billing-address-container .billing-address-wrapper .billingAddressCountry {
+  width: 49%;
+}
+
+.payment-form .billing-address-container .billing-address-wrapper input,
+.payment-form .billing-address-container .billing-address-wrapper1 input,
+.payment-form .billing-address-container .billing-address-wrapper2 input,
+.payment-form .billing-address-container .billing-address-wrapper3 input {
+  padding-left: 20px !important;
+}
+
+.payment-form .billing-address-container p {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #000;
+  line-height: 0.1em;
+  margin: 10px 0 20px;
+}
+
+.payment-form .billing-address-container p span {
+  background: #f5f5f7;
+  padding: 0 10px;
+}
+
+.payment-form .billing-address-container .billing-address-wrapper .billingAddressState .selectize-input {
+  padding-left: 20px;
+  padding-right: 15px;
+  width: 100%;
+}
+
+.payment-form .billing-address-container .billing-address-wrapper .billingAddressCountry .selectize-input {
+  padding-left: 38px;
+  padding-right: 15px;
+  width: 100%;
+}
+
+.payment-form .billing-address-container .billing-address-wrapper .flag {
+  width: 24px;
+  height: 17px;
+}
