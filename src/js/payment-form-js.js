@@ -553,8 +553,9 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
   form.setNoRequiredFields(objResponse.no_required_fields);
 
   // Validate if card brand is valid.
-  let valid_brand_id = false;
+  let valid_brand_id = true;
   if (form.allowed_card_brands) {
+    valid_brand_id = false;
     form.allowed_card_brands.forEach(function (brand_id) {
       if (form.card_brand_id === brand_id) {
         valid_brand_id = true;
@@ -563,8 +564,9 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
   }
 
   // Validate if card type is valid.
-  let valid_payment_method_type = false;
+  let valid_payment_method_type = true;
   if (form.allowed_card_types) {
+    valid_payment_method_type = false;
     form.allowed_card_types.forEach(function (type) {
       if (form.payment_method_type === parseInt(type)) {
         valid_payment_method_type = true;
