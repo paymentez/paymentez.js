@@ -12,7 +12,8 @@ PaymentForm.prototype.constructor = PaymentForm;
 function PaymentForm(elem) {
   this.elem = jQuery(elem);
   this.current_data = this.elem.children("div");
-  this.cardType = '';
+  this.card_brand_id = '';
+  this.payment_method_type = null;
   this.numberBin = '';
   this.nip = '';
   this.USE_OTP = false;
@@ -34,6 +35,12 @@ function PaymentForm(elem) {
   this.exclusiveTypes = this.elem.data("exclusive-types") ? this.elem.data("exclusive-types").split(",") : false;
   this.invalidCardTypeMessage = this.elem.data("invalid-card-type-message") ? this.elem.data("invalid-card-type-message") : false;
   this.captureBillingAddress = this.elem.data("capture-billing-address") ? this.elem.data("capture-billing-address") : false;
+  this.allowed_card_types = this.elem.data("allowed-card-types") ? this.elem.data("allowed-card-types").toString().split(",") : false;
+
+  // This is for support the first conf 'exclusive-types', try to delete in new version when nobody use it
+  let allowed_card_brands_options = this.elem.data("exclusive-types") || this.elem.data("allowed-card-brands");
+  this.allowed_card_brands = allowed_card_brands_options ? allowed_card_brands_options.split(",") : false;
+
 
   // initialize
   this.cvcLenght = 3;
@@ -515,7 +522,8 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
   form.useLunh = objResponse.use_luhn;
 
   // Set card type
-  form.cardType = objResponse.card_type.length > 0 ? objResponse.card_type : '';
+  form.card_brand_id = objResponse.card_type.length > 0 ? objResponse.card_type : '';
+  form.payment_method_type = objResponse.payment_method_type;
   form.brand_name = objResponse.brand_name.length > 0 ? objResponse.brand_name : '';
 
   // Set card type icon
@@ -544,21 +552,33 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
   // Validate not required fields for bin
   form.setNoRequiredFields(objResponse.no_required_fields);
 
-  // Validate if card type is valid.
-  if (form.exclusiveTypes) {
-    let is_valid_type = false;
-    form.exclusiveTypes.forEach(function (type) {
-      if (form.cardType === type) {
-        is_valid_type = true;
+  // Validate if card brand is valid.
+  let valid_brand_id = false;
+  if (form.allowed_card_brands) {
+    form.allowed_card_brands.forEach(function (brand_id) {
+      if (form.card_brand_id === brand_id) {
+        valid_brand_id = true;
       }
     });
-
-    if (!is_valid_type) {
-      form.blockForm();
-    } else if (is_valid_type && form.isBlocked) {
-      form.unBlockForm();
-    }
   }
+
+  // Validate if card type is valid.
+  let valid_payment_method_type = false;
+  if (form.allowed_card_types) {
+    form.allowed_card_types.forEach(function (type) {
+      if (form.payment_method_type === parseInt(type)) {
+        valid_payment_method_type = true;
+      }
+    });
+  }
+
+  let valid_card = valid_brand_id && valid_payment_method_type
+  if (!valid_card) {
+    form.blockForm();
+  } else if (valid_card && form.isBlocked) {
+    form.unBlockForm();
+  }
+
 };
 
 /**
@@ -1292,7 +1312,7 @@ PaymentForm.prototype.getCard = function () {
       "holder_name": this.getName(),
       "expiry_year": Number(year),
       "expiry_month": Number(this.getExpiryMonth()),
-      "type": this.cardType,
+      "type": this.card_brand_id,
       "cvc": this.getCvc(),
       "nip": this.getNip(),
       "card_auth": this.getValidationOption(),
