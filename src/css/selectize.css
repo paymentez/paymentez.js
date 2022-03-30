@@ -208,7 +208,7 @@
 .selectize-dropdown-content {
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: 200px;
+    max-height: 120px;
     overflow-scrolling: touch;
 }
 .selectize-dropdown .spinner {
