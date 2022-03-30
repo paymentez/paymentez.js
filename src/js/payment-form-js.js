@@ -2297,6 +2297,7 @@ PaymentForm.prototype.initPocketTypeInput = function () {
     {'code': 'CSD6', 'name': 'Bono Lonchera'},
     {'code': 'CSD7', 'name': 'Bono Nacimiento'},
     {'code': 'CSD8', 'name': 'Mundo Digital'},
+    {'code': 'CSD9', 'name': 'Adulto Mayor'},
   ]
 
   // Pocket types
