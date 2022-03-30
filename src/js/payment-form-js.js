@@ -471,6 +471,7 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
   if (!(required_fields && required_fields.length > 0)) {
     form.removeFiscalNumber();
     form.removeNip();
+    form.removePocketType();
     return
   }
 
@@ -486,6 +487,9 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
           form.addNip();
           break;
         case 'fiscal_number_type':
+          break;
+        case 'pocket_type':
+          form.addPocketType();
           break;
       }
     }
@@ -863,9 +867,10 @@ PaymentForm.prototype.isValidData = function () {
   let is_fiscal_number_valid = this.refreshFiscalNumberValidation();
   let is_nip_valid = this.refreshNipValidation();
   let is_valid_billing_address = this.isValidBillingAddress();
+  let is_valid_pocket_type = this.isPocketTypeValid();
   return is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid
     && is_email_valid && is_cellphone_valid && is_fiscal_number_valid && is_nip_valid
-    && is_valid_billing_address;
+    && is_valid_billing_address && is_valid_pocket_type;
 };
 
 PaymentForm.prototype.refreshCvcValidation = function () {
@@ -1012,6 +1017,12 @@ PaymentForm.prototype.refreshBillingAddressHouseNumberValidation = function () {
 PaymentForm.prototype.refreshBillingAddressAdditionalValidation = function () {
   let valid = this.isBillingAddressAdditionalValid();
   valid ? this.billingAddressAdditional.removeClass("has-error") : this.billingAddressAdditional.addClass("has-error");
+  return valid
+};
+
+PaymentForm.prototype.refreshPocketTypeValidation = function () {
+  let valid = this.isPocketTypeValid();
+  valid ? this.pocketType.removeClass("has-error") : this.pocketType.addClass("has-error");
   return valid
 };
 //======================================================================================================
@@ -1187,6 +1198,12 @@ PaymentForm.prototype.isBillingAddressAdditionalValid = function () {
   let value = this.getBillingAddressAdditional();
   return (value === null || value === "") || (0 < value.length && value.length < 100);
 };
+
+PaymentForm.prototype.isPocketTypeValid = function () {
+  if (!this.pocketTypeAdded()) return true
+  let value = this.getPocketType();
+  return value !== null && value.length >= 2;
+};
 //========================================================================================================
 
 /**
@@ -1289,7 +1306,17 @@ PaymentForm.prototype.billingAddressAdded = function () {
   return billing_container.length >= 1;
 };
 
-// ======
+/**
+ * Validate if exists the pocket type in the form
+ *
+ * @returns {boolean}
+ */
+PaymentForm.prototype.pocketTypeAdded = function () {
+  let pocket_type = this.elem.find(".pocket-type-container");
+  return pocket_type.length >= 1;
+};
+
+// ======================================================================================================
 
 /**
  * Get the card object.
@@ -1320,6 +1347,12 @@ PaymentForm.prototype.getCard = function () {
       "card_auth": this.getValidationOption(),
     }
   };
+
+  if (this.getPocketType()) {
+    data.card.brand_options = {
+      'type_pocket': this.getPocketType()
+    }
+  }
 
   return data;
 };
@@ -1531,6 +1564,14 @@ PaymentForm.prototype.getBillingAddress = function () {
     }
   }
   return billing_address;
+};
+
+PaymentForm.prototype.getPocketType = function () {
+  if (this.pocketTypeAdded()) {
+    return this.pocketType.val().trim();
+  } else {
+    return null;
+  }
 };
 
 // --- --- --- --- --- --- --- --- --- --- ---
@@ -1933,6 +1974,20 @@ PaymentForm.prototype.removeVerificationContainer = function () {
   }
 };
 
+PaymentForm.prototype.addPocketType = function () {
+  if (!this.pocketTypeAdded()) {
+    this.initPocketTypeInput();
+    this.setupPocketTypeInput();
+    this.setIconColour(this.iconColour);
+  }
+};
+
+PaymentForm.prototype.removePocketType = function () {
+  if (this.pocketTypeAdded()) {
+    this.elem.find(".pocket-type-container").remove();
+  }
+};
+
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 /**
@@ -2227,6 +2282,40 @@ PaymentForm.prototype.initBillingAddress = function () {
   this.billingAddressStreet.attr("placeholder", this.__('billingAddressStreet'));
   this.billingAddressHouseNumber.attr("placeholder", this.__('billingAddressHouseNumber'));
   this.billingAddressAdditional.attr("placeholder", this.__('billingAddressAdditional'));
+};
+
+/**
+ * Initialise the pocket type input
+ */
+PaymentForm.prototype.initPocketTypeInput = function () {
+  let pocketTypes = [
+    {'code': 'CSD1', 'name': 'Cuota Monetaria'},
+    {'code': 'CSD2', 'name': 'Subsidio Escolar'},
+    {'code': 'CSD3', 'name': 'Bono Efectivo'},
+    {'code': 'CSD4', 'name': 'Ahorros'},
+    {'code': 'CSD5', 'name': 'Cupo Credito'},
+    {'code': 'CSD6', 'name': 'Bono Lonchera'},
+    {'code': 'CSD7', 'name': 'Bono Nacimiento'},
+    {'code': 'CSD8', 'name': 'Mundo Digital'},
+  ]
+
+  // Pocket types
+  this.pocketType = PaymentForm.detachOrCreateElement(this.elem, ".pocketType", "<select class='pocketType' />");
+  let $this = this;
+  setTimeout(() => {
+    let pocketTypeSelectize = $this.pocketType.selectize(
+      {
+        valueField: 'code',
+        labelField: 'name',
+        searchField: 'name',
+        options: pocketTypes
+      }
+    );
+    let pocketTypeSelectizeControl = pocketTypeSelectize[0].selectize;
+    pocketTypeSelectizeControl.setValue(pocketTypes[0])
+  }, 0);
+
+  this.pocketType.attr("placeholder", this.__('pocketType'));
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -2630,45 +2719,6 @@ PaymentForm.prototype.expiryMonth = function () {
   return null;
 };
 
-/**
- * Refresh whether the expiry month is valid (update display to reflect)
- */
-PaymentForm.prototype.refreshExpiryMonthValidation = function () {
-  if (this.expiryContainerAdded()) {
-    if (PaymentForm.isExpiryValid(this.getExpiryMonth(), this.getExpiryYear())) {
-      this.setExpiryMonthAsValid();
-      return true;
-    } else {
-      this.setExpiryMonthAsInvalid();
-      return false;
-    }
-  } else {
-    return true;
-  }
-};
-
-/**
- * Update the display to highlight the expiry month as valid.
- */
-PaymentForm.prototype.setExpiryMonthAsValid = function () {
-  if (this.EXPIRY_USE_DROPDOWNS) {
-    this.expiryMonthInput.parent().removeClass("has-error");
-  } else {
-    this.expiryMonthYearInput.parent().removeClass("has-error");
-  }
-};
-
-/**
- * Update the display to highlight the expiry month as invalid.
- */
-PaymentForm.prototype.setExpiryMonthAsInvalid = function () {
-  if (this.EXPIRY_USE_DROPDOWNS) {
-    this.expiryMonthInput.parent().addClass("has-error");
-  } else {
-    this.expiryMonthYearInput.parent().addClass("has-error");
-  }
-};
-
 PaymentForm.prototype.setupBillingAddress = function () {
   // Validate if is required setup the form
   if (!this.captureBillingAddress) return
@@ -2730,6 +2780,60 @@ PaymentForm.prototype.setupBillingAddress = function () {
   this.billingAddressAdditional.blur(function () {
     $this.refreshBillingAddressAdditionalValidation();
   });
+};
+
+PaymentForm.prototype.setupPocketTypeInput = function () {
+  this.elem.append("<div class='pocket-type-container'></div>");
+  let container = this.elem.find(".pocket-type-container");
+  container.append(`<p><span>${this.__('pocketTypeRequired')}</span></p>`);
+  container.append(this.pocketType);
+
+  // Events
+  let $this = this;
+  this.pocketType.blur(function () {
+    $this.refreshPocketTypeValidation();
+  });
+};
+
+// ==========================================================================================
+
+/**
+ * Refresh whether the expiry month is valid (update display to reflect)
+ */
+PaymentForm.prototype.refreshExpiryMonthValidation = function () {
+  if (this.expiryContainerAdded()) {
+    if (PaymentForm.isExpiryValid(this.getExpiryMonth(), this.getExpiryYear())) {
+      this.setExpiryMonthAsValid();
+      return true;
+    } else {
+      this.setExpiryMonthAsInvalid();
+      return false;
+    }
+  } else {
+    return true;
+  }
+};
+
+/**
+ * Update the display to highlight the expiry month as valid.
+ */
+PaymentForm.prototype.setExpiryMonthAsValid = function () {
+  if (this.EXPIRY_USE_DROPDOWNS) {
+    this.expiryMonthInput.parent().removeClass("has-error");
+  } else {
+    this.expiryMonthYearInput.parent().removeClass("has-error");
+  }
+};
+
+/**
+ * Update the display to highlight the expiry month as invalid.
+ */
+PaymentForm.prototype.setExpiryMonthAsInvalid = function () {
+  if (this.EXPIRY_USE_DROPDOWNS) {
+    this.expiryMonthInput.parent().addClass("has-error");
+  } else {
+    this.expiryMonthYearInput.parent().addClass("has-error");
+  }
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
