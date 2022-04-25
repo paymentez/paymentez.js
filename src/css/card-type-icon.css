@@ -12,7 +12,6 @@
 }
 
 div[style$="ic_sodexo.svg"] {
-  background-color: red;
   right: 27px;
   transform: scale(3);
 }
