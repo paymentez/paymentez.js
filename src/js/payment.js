@@ -11,7 +11,7 @@ Payment.KOUNT_ENVIRONMENT = "";
 Payment.KOUN_TEST_ENVIRONMENT = "https://tst.kaptcha.com/";
 Payment.KOUN_PROD_ENVIRONMENT = "https://ssl.kaptcha.com/";
 
-Payment.DOMAIN = "paymentez.com";  // Update this for each white label
+Payment.DOMAIN = "paymentez.com"; // Update this for each white label
 Payment.SERVER_LOCAL_URL = "http://localhost:8080";
 Payment.SERVER_DEV_URL = `https://ccapi-dev.${Payment.DOMAIN}`;
 Payment.SERVER_STG_URL = `https://ccapi-stg.${Payment.DOMAIN}`;
@@ -21,7 +21,7 @@ Payment.SERVER_PROD_URL = `https://ccapi.${Payment.DOMAIN}`;
 Payment.PG_MICROS_STAGING = `https://pg-micros-stg.${Payment.DOMAIN}/v1/unixtime/`;
 Payment.PG_MICROS_PRODUCTION = `https://pg-micros.${Payment.DOMAIN}/v1/unixtime/`;
 
-let AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
+window.AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
 
 function _getTime(callback) {
   let xhr = new XMLHttpRequest();
@@ -29,10 +29,10 @@ function _getTime(callback) {
     if (xhr.status >= 200 && xhr.status < 300) {
       let response = JSON.parse(xhr.responseText);
       if (!!response.unixtime) {
-        AUTH_TIMESTAMP_SERVER = String(response.unixtime);
+        window.AUTH_TIMESTAMP_SERVER = String(response.unixtime);
       }
     } else {
-      AUTH_TIMESTAMP_SERVER = String(new Date().getTime());
+      window.AUTH_TIMESTAMP_SERVER = String(new Date().getTime());
     }
     callback();
   };
@@ -46,8 +46,7 @@ function _getTime(callback) {
   xhr.send();
 }
 
-function Payment() {
-}
+function Payment() {}
 
 Payment.uuidv4 = function () {
   return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -67,7 +66,10 @@ Payment.getUniqToken = function (auth_timestamp, payment_client_app_key) {
 };
 
 Payment.getAuthToken = function (payment_client_app_code, app_client_key) {
-  let string_auth_token = `${payment_client_app_code};${AUTH_TIMESTAMP_SERVER};${Payment.getUniqToken(AUTH_TIMESTAMP_SERVER, app_client_key)}`
+  let string_auth_token = `${payment_client_app_code};${window.AUTH_TIMESTAMP_SERVER};${Payment.getUniqToken(
+    window.AUTH_TIMESTAMP_SERVER,
+    app_client_key
+  )}`;
   return btoa(string_auth_token);
 };
 
@@ -108,8 +110,8 @@ Payment.createToken = function (createTokenRequest, successCallback, errorCallba
           let objResponse = JSON.parse(xmlhttp.responseText);
           if (xmlhttp.status === 200) {
             if (objResponse.card.status === "pending" && payment_form !== undefined) {
-              objResponse.user = {id: createTokenRequest.user.id};
-              payment_form.PaymentForm('showVerification', objResponse, successCallback, errorCallback);
+              objResponse.user = { id: createTokenRequest.user.id };
+              payment_form.PaymentForm("showVerification", objResponse, successCallback, errorCallback);
             } else {
               successCallback(objResponse);
             }
@@ -121,8 +123,8 @@ Payment.createToken = function (createTokenRequest, successCallback, errorCallba
             error: {
               type: "Server Error",
               help: "Server Error",
-              description: "Server Error"
-            }
+              description: "Server Error",
+            },
           };
           errorCallback(server_error);
         }
@@ -137,32 +139,31 @@ Payment.dataCollector = function (session_id) {
   Payment.KOUNT_ENVIRONMENT = Payment.ENV_MODE === "prod" ? Payment.KOUN_PROD_ENVIRONMENT : Payment.KOUN_TEST_ENVIRONMENT;
   Payment.TDS_2 = {
     threeDS2_data: {
-      term_url: 'https://example.com',  // TODO: Remove this
-      device_type: 'browser',
+      term_url: "https://example.com", // TODO: Remove this
+      device_type: "browser",
     },
     browser_info: {
-      ip: '127.0.0.1',  // TODO: Remove this
+      ip: "127.0.0.1", // TODO: Remove this
       language: navigator.language || navigator.userLanguage,
       java_enabled: navigator.javaEnabled(),
       js_enabled: true,
       color_depth: window.screen.colorDepth,
       screen_height: window.screen.height,
       screen_width: window.screen.width,
-      timezone_offset: new Date().getTimezoneOffset() / (-60),
+      timezone_offset: new Date().getTimezoneOffset() / -60,
       user_agent: navigator.userAgent,
-      accept_header: 'text/html',
-    }
-  }
+      accept_header: "text/html",
+    },
+  };
 
   let body, iframe, image;
   if (
     typeof document !== "undefined" &&
     typeof document.body !== "undefined" &&
     document.body &&
-    (document.readyState === "interactive" ||
-      document.readyState === "complete")
+    (document.readyState === "interactive" || document.readyState === "complete")
   ) {
-    const kount_url = `${Payment.KOUNT_ENVIRONMENT}logo.htm?m=${Payment.MERCHANT_ID}&s=${session_id}`
+    const kount_url = `${Payment.KOUNT_ENVIRONMENT}logo.htm?m=${Payment.MERCHANT_ID}&s=${session_id}`;
     body = document.getElementsByTagName("body")[0];
     iframe = document.createElement("iframe");
     iframe.setAttribute("id", "riskIframe");
@@ -178,7 +179,7 @@ Payment.dataCollector = function (session_id) {
     try {
       iframe.appendChild(image);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
     body.appendChild(iframe);
   } else {
@@ -230,12 +231,12 @@ Payment.addCard = function (uid, email, card, success_callback, failure_callback
     user: {
       id: uid,
       email: email,
-      phone: payment_form ? payment_form.PaymentForm('cellPhone') : $(".cellphone").val(),
-      fiscal_number: payment_form ? payment_form.PaymentForm('fiscalNumber') : $(".fiscal-number").val(),
+      phone: payment_form ? payment_form.PaymentForm("cellPhone") : $(".cellphone").val(),
+      fiscal_number: payment_form ? payment_form.PaymentForm("fiscalNumber") : $(".fiscal-number").val(),
     },
     card: card["card"],
     extra_params: this.TDS_2,
-    billing_address: payment_form ? payment_form.PaymentForm('billingAddress') : {},
+    billing_address: payment_form ? payment_form.PaymentForm("billingAddress") : {},
   };
   Payment.createToken(params, success_callback, failure_callback, payment_form);
 };
@@ -251,13 +252,7 @@ Payment.getBinInformation = function (number_bin, form, successCallback, errorCa
       let SERVER_URL = this.getServerURL();
       let url_bin = SERVER_URL + "/v2/card_bin/" + number_bin;
       xmlhttp.open("GET", url_bin, true);
-      xmlhttp.setRequestHeader(
-        "Auth-Token",
-        this.getAuthToken(
-          this.PAYMENT_CLIENT_APP_CODE,
-          this.PAYMENT_CLIENT_APP_KEY
-        )
-      );
+      xmlhttp.setRequestHeader("Auth-Token", this.getAuthToken(this.PAYMENT_CLIENT_APP_CODE, this.PAYMENT_CLIENT_APP_KEY));
     }
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState === XMLHttpRequest.DONE) {
@@ -273,8 +268,8 @@ Payment.getBinInformation = function (number_bin, form, successCallback, errorCa
             error: {
               type: "Server Error",
               help: "Server Error",
-              description: "Server Error"
-            }
+              description: "Server Error",
+            },
           };
           errorCallback(server_error);
         }
@@ -292,8 +287,8 @@ Payment.getBinInformation = function (number_bin, form, successCallback, errorCa
 Payment.verifyTransaction = function (user_id, transaction_id, verification_type, value, successCallback, errorCallback) {
   const initFunction = function () {
     let data = {
-      user: {id: user_id},
-      transaction: {id: transaction_id},
+      user: { id: user_id },
+      transaction: { id: transaction_id },
       type: verification_type,
       value: value,
       more_info: true,
@@ -303,13 +298,7 @@ Payment.verifyTransaction = function (user_id, transaction_id, verification_type
     let SERVER_URL = this.getServerURL();
     xmlhttp.open("POST", SERVER_URL + url_verify, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.setRequestHeader(
-      "Auth-Token",
-      Payment.getAuthToken(
-        Payment.PAYMENT_CLIENT_APP_CODE,
-        Payment.PAYMENT_CLIENT_APP_KEY
-      )
-    );
+    xmlhttp.setRequestHeader("Auth-Token", Payment.getAuthToken(Payment.PAYMENT_CLIENT_APP_CODE, Payment.PAYMENT_CLIENT_APP_KEY));
 
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState === XMLHttpRequest.DONE) {
@@ -325,8 +314,8 @@ Payment.verifyTransaction = function (user_id, transaction_id, verification_type
             error: {
               type: "Server Error",
               help: "Server Error",
-              description: "Server Error"
-            }
+              description: "Server Error",
+            },
           };
           errorCallback(server_error);
         }
