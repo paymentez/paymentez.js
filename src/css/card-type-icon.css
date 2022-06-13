@@ -10,3 +10,8 @@
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
+
+div[style*="ic_sodexo.svg"] {
+  right: 27px !important;
+  transform: scale(3);
+}
