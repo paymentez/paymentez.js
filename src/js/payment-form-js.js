@@ -34,6 +34,7 @@ function PaymentForm(elem) {
   this.exclusiveTypes = this.elem.data("exclusive-types") ? this.elem.data("exclusive-types").split(",") : false;
   this.invalidCardTypeMessage = this.elem.data("invalid-card-type-message") ? this.elem.data("invalid-card-type-message") : false;
   this.captureBillingAddress = this.elem.data("capture-billing-address") ? this.elem.data("capture-billing-address") : false;
+  this.captureFiscalNumber = this.elem.data("capture-fiscal-number") ? this.elem.data("capture-fiscal-number") : false;
 
   // initialize
   this.cvcLenght = 3;
@@ -47,6 +48,7 @@ function PaymentForm(elem) {
   this.initExpiryYearInput();
   this.initCvcInput();
   this.initBillingAddress();
+  this.initFiscalNumberInput();
 
   this.elem.empty();
 
@@ -58,6 +60,7 @@ function PaymentForm(elem) {
   this.setupExpiryInput();
   this.setupCvcInput();
   this.setupBillingAddress();
+  this.setupFiscalNumberInput();
 
   this.elem.append(this.current_data);
 
@@ -462,7 +465,9 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
   const form = this;
 
   if (!(required_fields && required_fields.length > 0)) {
-    form.removeFiscalNumber();
+    if (!form.fiscalNumberAdded()) {
+      form.removeFiscalNumber();
+    }
     form.removeNip();
     return
   }
@@ -1296,6 +1301,7 @@ PaymentForm.prototype.getCard = function () {
       "cvc": this.getCvc(),
       "nip": this.getNip(),
       "card_auth": this.getValidationOption(),
+      "fiscal_number": this.getFiscalNumber()
     }
   };
 

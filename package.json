@@ -4,7 +4,7 @@
     "Developer Team <dev@paymentez>"
   ],
   "description": "Credit Card input form with validation and allows you to create a token with credit/debit card details in your web apps, by preventing sensitive card data from crossing your server (More information, read PCI compliance).",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "main": "./payment_stable.min.js",
   "homepage": "https://paymentez.com",
   "moduleType": [
