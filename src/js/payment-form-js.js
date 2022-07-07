@@ -12,7 +12,8 @@ PaymentForm.prototype.constructor = PaymentForm;
 function PaymentForm(elem) {
   this.elem = jQuery(elem);
   this.current_data = this.elem.children("div");
-  this.cardType = '';
+  this.card_brand_id = '';
+  this.payment_method_type = null;
   this.numberBin = '';
   this.nip = '';
   this.USE_OTP = false;
@@ -34,7 +35,13 @@ function PaymentForm(elem) {
   this.exclusiveTypes = this.elem.data("exclusive-types") ? this.elem.data("exclusive-types").split(",") : false;
   this.invalidCardTypeMessage = this.elem.data("invalid-card-type-message") ? this.elem.data("invalid-card-type-message") : false;
   this.captureBillingAddress = this.elem.data("capture-billing-address") ? this.elem.data("capture-billing-address") : false;
+  this.allowed_card_types = this.elem.data("allowed-card-types") ? this.elem.data("allowed-card-types").toString().split(",") : false;
   this.captureFiscalNumber = this.elem.data("capture-fiscal-number") ? this.elem.data("capture-fiscal-number") : false;
+
+  // This is for support the first conf 'exclusive-types', try to delete in new version when nobody use it
+  let allowed_card_brands_options = this.elem.data("exclusive-types") || this.elem.data("allowed-card-brands");
+  this.allowed_card_brands = allowed_card_brands_options ? allowed_card_brands_options.split(",") : false;
+
 
   // initialize
   this.cvcLenght = 3;
@@ -469,6 +476,7 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
       form.removeFiscalNumber();
     }
     form.removeNip();
+    form.removePocketType();
     return
   }
 
@@ -484,6 +492,9 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
           form.addNip();
           break;
         case 'fiscal_number_type':
+          break;
+        case 'pocket_type':
+          form.addPocketType();
           break;
       }
     }
@@ -520,7 +531,8 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
   form.useLunh = objResponse.use_luhn;
 
   // Set card type
-  form.cardType = objResponse.card_type.length > 0 ? objResponse.card_type : '';
+  form.card_brand_id = objResponse.card_type.length > 0 ? objResponse.card_type : '';
+  form.payment_method_type = objResponse.payment_method_type;
   form.brand_name = objResponse.brand_name.length > 0 ? objResponse.brand_name : '';
 
   // Set card type icon
@@ -549,21 +561,35 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
   // Validate not required fields for bin
   form.setNoRequiredFields(objResponse.no_required_fields);
 
-  // Validate if card type is valid.
-  if (form.exclusiveTypes) {
-    let is_valid_type = false;
-    form.exclusiveTypes.forEach(function (type) {
-      if (form.cardType === type) {
-        is_valid_type = true;
+  // Validate if card brand is valid.
+  let valid_brand_id = true;
+  if (form.allowed_card_brands) {
+    valid_brand_id = false;
+    form.allowed_card_brands.forEach(function (brand_id) {
+      if (form.card_brand_id === brand_id) {
+        valid_brand_id = true;
       }
     });
-
-    if (!is_valid_type) {
-      form.blockForm();
-    } else if (is_valid_type && form.isBlocked) {
-      form.unBlockForm();
-    }
   }
+
+  // Validate if card type is valid.
+  let valid_payment_method_type = true;
+  if (form.allowed_card_types) {
+    valid_payment_method_type = false;
+    form.allowed_card_types.forEach(function (type) {
+      if (form.payment_method_type === parseInt(type)) {
+        valid_payment_method_type = true;
+      }
+    });
+  }
+
+  let valid_card = valid_brand_id && valid_payment_method_type
+  if (!valid_card) {
+    form.blockForm();
+  } else if (valid_card && form.isBlocked) {
+    form.unBlockForm();
+  }
+
 };
 
 /**
@@ -846,9 +872,10 @@ PaymentForm.prototype.isValidData = function () {
   let is_fiscal_number_valid = this.refreshFiscalNumberValidation();
   let is_nip_valid = this.refreshNipValidation();
   let is_valid_billing_address = this.isValidBillingAddress();
+  let is_valid_pocket_type = this.isPocketTypeValid();
   return is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid
     && is_email_valid && is_cellphone_valid && is_fiscal_number_valid && is_nip_valid
-    && is_valid_billing_address;
+    && is_valid_billing_address && is_valid_pocket_type;
 };
 
 PaymentForm.prototype.refreshCvcValidation = function () {
@@ -995,6 +1022,12 @@ PaymentForm.prototype.refreshBillingAddressHouseNumberValidation = function () {
 PaymentForm.prototype.refreshBillingAddressAdditionalValidation = function () {
   let valid = this.isBillingAddressAdditionalValid();
   valid ? this.billingAddressAdditional.removeClass("has-error") : this.billingAddressAdditional.addClass("has-error");
+  return valid
+};
+
+PaymentForm.prototype.refreshPocketTypeValidation = function () {
+  let valid = this.isPocketTypeValid();
+  valid ? this.pocketType.removeClass("has-error") : this.pocketType.addClass("has-error");
   return valid
 };
 //======================================================================================================
@@ -1170,6 +1203,12 @@ PaymentForm.prototype.isBillingAddressAdditionalValid = function () {
   let value = this.getBillingAddressAdditional();
   return (value === null || value === "") || (0 < value.length && value.length < 100);
 };
+
+PaymentForm.prototype.isPocketTypeValid = function () {
+  if (!this.pocketTypeAdded()) return true
+  let value = this.getPocketType();
+  return value !== null && value.length >= 2;
+};
 //========================================================================================================
 
 /**
@@ -1272,7 +1311,17 @@ PaymentForm.prototype.billingAddressAdded = function () {
   return billing_container.length >= 1;
 };
 
-// ======
+/**
+ * Validate if exists the pocket type in the form
+ *
+ * @returns {boolean}
+ */
+PaymentForm.prototype.pocketTypeAdded = function () {
+  let pocket_type = this.elem.find(".pocket-type-container");
+  return pocket_type.length >= 1;
+};
+
+// ======================================================================================================
 
 /**
  * Get the card object.
@@ -1297,13 +1346,19 @@ PaymentForm.prototype.getCard = function () {
       "holder_name": this.getName(),
       "expiry_year": Number(year),
       "expiry_month": Number(this.getExpiryMonth()),
-      "type": this.cardType,
+      "type": this.card_brand_id,
       "cvc": this.getCvc(),
       "nip": this.getNip(),
       "card_auth": this.getValidationOption(),
       "fiscal_number": this.getFiscalNumber()
     }
   };
+
+  if (this.getPocketType()) {
+    data.card.brand_options = {
+      'type_pocket': this.getPocketType()
+    }
+  }
 
   return data;
 };
@@ -1515,6 +1570,14 @@ PaymentForm.prototype.getBillingAddress = function () {
     }
   }
   return billing_address;
+};
+
+PaymentForm.prototype.getPocketType = function () {
+  if (this.pocketTypeAdded()) {
+    return this.pocketType.val().trim();
+  } else {
+    return null;
+  }
 };
 
 // --- --- --- --- --- --- --- --- --- --- ---
@@ -1917,6 +1980,20 @@ PaymentForm.prototype.removeVerificationContainer = function () {
   }
 };
 
+PaymentForm.prototype.addPocketType = function () {
+  if (!this.pocketTypeAdded()) {
+    this.initPocketTypeInput();
+    this.setupPocketTypeInput();
+    this.setIconColour(this.iconColour);
+  }
+};
+
+PaymentForm.prototype.removePocketType = function () {
+  if (this.pocketTypeAdded()) {
+    this.elem.find(".pocket-type-container").remove();
+  }
+};
+
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 /**
@@ -2211,6 +2288,41 @@ PaymentForm.prototype.initBillingAddress = function () {
   this.billingAddressStreet.attr("placeholder", this.__('billingAddressStreet'));
   this.billingAddressHouseNumber.attr("placeholder", this.__('billingAddressHouseNumber'));
   this.billingAddressAdditional.attr("placeholder", this.__('billingAddressAdditional'));
+};
+
+/**
+ * Initialise the pocket type input
+ */
+PaymentForm.prototype.initPocketTypeInput = function () {
+  let pocketTypes = [
+    {'code': 'CSD1', 'name': 'Cuota Monetaria'},
+    {'code': 'CSD2', 'name': 'Subsidio Escolar'},
+    {'code': 'CSD3', 'name': 'Bono Efectivo'},
+    {'code': 'CSD4', 'name': 'Ahorros'},
+    {'code': 'CSD5', 'name': 'Cupo Credito'},
+    {'code': 'CSD6', 'name': 'Bono Lonchera'},
+    {'code': 'CSD7', 'name': 'Bono Nacimiento'},
+    {'code': 'CSD8', 'name': 'Mundo Digital'},
+    {'code': 'CSD9', 'name': 'Adulto Mayor'},
+  ]
+
+  // Pocket types
+  this.pocketType = PaymentForm.detachOrCreateElement(this.elem, ".pocketType", "<select class='pocketType' />");
+  let $this = this;
+  setTimeout(() => {
+    let pocketTypeSelectize = $this.pocketType.selectize(
+      {
+        valueField: 'code',
+        labelField: 'name',
+        searchField: 'name',
+        options: pocketTypes
+      }
+    );
+    let pocketTypeSelectizeControl = pocketTypeSelectize[0].selectize;
+    pocketTypeSelectizeControl.setValue(pocketTypes[0])
+  }, 0);
+
+  this.pocketType.attr("placeholder", this.__('pocketType'));
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -2614,45 +2726,6 @@ PaymentForm.prototype.expiryMonth = function () {
   return null;
 };
 
-/**
- * Refresh whether the expiry month is valid (update display to reflect)
- */
-PaymentForm.prototype.refreshExpiryMonthValidation = function () {
-  if (this.expiryContainerAdded()) {
-    if (PaymentForm.isExpiryValid(this.getExpiryMonth(), this.getExpiryYear())) {
-      this.setExpiryMonthAsValid();
-      return true;
-    } else {
-      this.setExpiryMonthAsInvalid();
-      return false;
-    }
-  } else {
-    return true;
-  }
-};
-
-/**
- * Update the display to highlight the expiry month as valid.
- */
-PaymentForm.prototype.setExpiryMonthAsValid = function () {
-  if (this.EXPIRY_USE_DROPDOWNS) {
-    this.expiryMonthInput.parent().removeClass("has-error");
-  } else {
-    this.expiryMonthYearInput.parent().removeClass("has-error");
-  }
-};
-
-/**
- * Update the display to highlight the expiry month as invalid.
- */
-PaymentForm.prototype.setExpiryMonthAsInvalid = function () {
-  if (this.EXPIRY_USE_DROPDOWNS) {
-    this.expiryMonthInput.parent().addClass("has-error");
-  } else {
-    this.expiryMonthYearInput.parent().addClass("has-error");
-  }
-};
-
 PaymentForm.prototype.setupBillingAddress = function () {
   // Validate if is required setup the form
   if (!this.captureBillingAddress) return
@@ -2714,6 +2787,60 @@ PaymentForm.prototype.setupBillingAddress = function () {
   this.billingAddressAdditional.blur(function () {
     $this.refreshBillingAddressAdditionalValidation();
   });
+};
+
+PaymentForm.prototype.setupPocketTypeInput = function () {
+  this.elem.append("<div class='pocket-type-container'></div>");
+  let container = this.elem.find(".pocket-type-container");
+  container.append(`<p><span>${this.__('pocketTypeRequired')}</span></p>`);
+  container.append(this.pocketType);
+
+  // Events
+  let $this = this;
+  this.pocketType.blur(function () {
+    $this.refreshPocketTypeValidation();
+  });
+};
+
+// ==========================================================================================
+
+/**
+ * Refresh whether the expiry month is valid (update display to reflect)
+ */
+PaymentForm.prototype.refreshExpiryMonthValidation = function () {
+  if (this.expiryContainerAdded()) {
+    if (PaymentForm.isExpiryValid(this.getExpiryMonth(), this.getExpiryYear())) {
+      this.setExpiryMonthAsValid();
+      return true;
+    } else {
+      this.setExpiryMonthAsInvalid();
+      return false;
+    }
+  } else {
+    return true;
+  }
+};
+
+/**
+ * Update the display to highlight the expiry month as valid.
+ */
+PaymentForm.prototype.setExpiryMonthAsValid = function () {
+  if (this.EXPIRY_USE_DROPDOWNS) {
+    this.expiryMonthInput.parent().removeClass("has-error");
+  } else {
+    this.expiryMonthYearInput.parent().removeClass("has-error");
+  }
+};
+
+/**
+ * Update the display to highlight the expiry month as invalid.
+ */
+PaymentForm.prototype.setExpiryMonthAsInvalid = function () {
+  if (this.EXPIRY_USE_DROPDOWNS) {
+    this.expiryMonthInput.parent().addClass("has-error");
+  } else {
+    this.expiryMonthYearInput.parent().addClass("has-error");
+  }
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
