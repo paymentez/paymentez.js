@@ -472,7 +472,7 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
   const form = this;
 
   if (!(required_fields && required_fields.length > 0)) {
-    if (!form.fiscalNumberAdded()) {
+    if (!this.captureFiscalNumber) {
       form.removeFiscalNumber();
     }
     form.removeNip();
@@ -1137,6 +1137,7 @@ PaymentForm.prototype.isNipValid = function () {
  * @returns {boolean}
  */
 PaymentForm.prototype.isFiscalNumberValid = function () {
+  if (!this.captureFiscalNumber) return true
   if (this.fiscalNumberAdded())
     return this.getFiscalNumber() != null && this.getFiscalNumber().length >= 6;
   else
@@ -2153,6 +2154,8 @@ PaymentForm.prototype.initCvcInput = function () {
  */
 PaymentForm.prototype.initFiscalNumberInput = function () {
 
+  if (!this.captureFiscalNumber) return
+
   // Find or create the fiscal number input element
   this.fiscalNumberInput = PaymentForm.detachOrCreateElement(this.elem, ".fiscal-number", "<input class='fiscal-number' />");
   // Ensure the fiscal number element has a field name
@@ -2553,6 +2556,7 @@ PaymentForm.prototype.setupCvcInput = function () {
 };
 
 PaymentForm.prototype.setupFiscalNumberInput = function () {
+  if (!this.captureFiscalNumber) return
   let card = this.elem.find(".card-number-wrapper");
   card.after("<div class='fiscal-number-wrapper'></div>");
   let wrapper = this.elem.find(".fiscal-number-wrapper");
