@@ -506,7 +506,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "1684",
     "code": "ASM",
     "code_2": "AS",
@@ -524,7 +524,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "376",
     "code": "AND",
     "code_2": "AD",
@@ -790,7 +790,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "374",
     "code": "ARM",
     "code_2": "AM",
@@ -866,7 +866,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "61",
     "code": "AUS",
     "code_2": "AU",
@@ -912,7 +912,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "43",
     "code": "AUT",
     "code_2": "AT",
@@ -1619,7 +1619,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "32",
     "code": "BEL",
     "code_2": "BE",
@@ -1723,7 +1723,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "229",
     "code": "BEN",
     "code_2": "BJ",
@@ -1779,7 +1779,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "975",
     "code": "BTN",
     "code_2": "BT",
@@ -1936,7 +1936,7 @@ Payment.COUNTRIES = [
     "numeric_code": "535"
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "387",
     "code": "BIH",
     "code_2": "BA",
@@ -2216,7 +2216,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "673",
     "code": "BRN",
     "code_2": "BN",
@@ -2247,7 +2247,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "359",
     "code": "BGR",
     "code_2": "BG",
@@ -2565,7 +2565,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "855",
     "code": "KHM",
     "code_2": "KH",
@@ -2788,7 +2788,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "238",
     "code": "CPV",
     "code_2": "CV",
@@ -3248,7 +3248,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "61",
     "code": "CXR",
     "code_2": "CX",
@@ -3266,7 +3266,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "61",
     "code": "CCK",
     "code_2": "CC",
@@ -3572,7 +3572,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "682",
     "code": "COK",
     "code_2": "CK",
@@ -3633,7 +3633,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "385",
     "code": "HRV",
     "code_2": "HR",
@@ -3806,7 +3806,7 @@ Payment.COUNTRIES = [
     "numeric_code": "531"
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "357",
     "code": "CYP",
     "code_2": "CY",
@@ -3844,7 +3844,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "420",
     "code": "CZE",
     "code_2": "CZ",
@@ -3890,7 +3890,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "45",
     "code": "DNK",
     "code_2": "DK",
@@ -4248,7 +4248,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "20",
     "code": "EGY",
     "code_2": "EG",
@@ -4436,7 +4436,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "240",
     "code": "GNQ",
     "code_2": "GQ",
@@ -4486,7 +4486,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "291",
     "code": "ERI",
     "code_2": "ER",
@@ -4540,7 +4540,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "372",
     "code": "EST",
     "code_2": "EE",
@@ -4686,7 +4686,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "298",
     "code": "FRO",
     "code_2": "FO",
@@ -4705,7 +4705,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "679",
     "code": "FJI",
     "code_2": "FJ",
@@ -4739,7 +4739,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "358",
     "code": "FIN",
     "code_2": "FI",
@@ -5321,7 +5321,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "689",
     "code": "PYF",
     "code_2": "PF",
@@ -5339,7 +5339,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "",
     "code": "ATF",
     "code_2": "TF",
@@ -5357,7 +5357,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "241",
     "code": "GAB",
     "code_2": "GA",
@@ -5407,7 +5407,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "220",
     "code": "GMB",
     "code_2": "GM",
@@ -5445,7 +5445,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "995",
     "code": "GEO",
     "code_2": "GE",
@@ -5771,7 +5771,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "49",
     "code": "DEU",
     "code_2": "DE",
@@ -5903,7 +5903,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "350",
     "code": "GIB",
     "code_2": "GI",
@@ -5921,7 +5921,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "30",
     "code": "GRC",
     "code_2": "GR",
@@ -6245,7 +6245,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "1671",
     "code": "GUM",
     "code_2": "GU",
@@ -6365,7 +6365,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "44",
     "code": "GGY",
     "code_2": "GG",
@@ -6378,7 +6378,7 @@ Payment.COUNTRIES = [
     "numeric_code": "831"
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "224",
     "code": "GIN",
     "code_2": "GN",
@@ -6556,7 +6556,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "245",
     "code": "GNB",
     "code_2": "GW",
@@ -6706,7 +6706,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "",
     "code": "HMD",
     "code_2": "HM",
@@ -6722,7 +6722,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "379",
     "code": "VAT",
     "code_2": "VA",
@@ -6826,7 +6826,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "852",
     "code": "HKG",
     "code_2": "HK",
@@ -6844,7 +6844,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "36",
     "code": "HUN",
     "code_2": "HU",
@@ -7026,7 +7026,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "354",
     "code": "ISL",
     "code_2": "IS",
@@ -7076,7 +7076,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "91",
     "code": "IND",
     "code_2": "IN",
@@ -7218,7 +7218,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "62",
     "code": "IDN",
     "code_2": "ID",
@@ -7368,7 +7368,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "225",
     "code": "CIV",
     "code_2": "CI",
@@ -7650,7 +7650,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "353",
     "code": "IRL",
     "code_2": "IE",
@@ -7760,7 +7760,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "44",
     "code": "IMN",
     "code_2": "IM",
@@ -7773,7 +7773,7 @@ Payment.COUNTRIES = [
     "numeric_code": "833"
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "972",
     "code": "ISR",
     "code_2": "IL",
@@ -7811,7 +7811,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "39",
     "code": "ITA",
     "code_2": "IT",
@@ -8387,7 +8387,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "81",
     "code": "JPN",
     "code_2": "JP",
@@ -8585,7 +8585,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "44",
     "code": "JEY",
     "code_2": "JE",
@@ -8883,7 +8883,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "856",
     "code": "LAO",
     "code_2": "LA",
@@ -8965,7 +8965,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "371",
     "code": "LVA",
     "code_2": "LV",
@@ -9336,7 +9336,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "423",
     "code": "LIE",
     "code_2": "LI",
@@ -9354,7 +9354,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "370",
     "code": "LTU",
     "code_2": "LT",
@@ -9408,7 +9408,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "352",
     "code": "LUX",
     "code_2": "LU",
@@ -9434,7 +9434,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "853",
     "code": "MAC",
     "code_2": "MO",
@@ -9452,7 +9452,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "389",
     "code": "MKD",
     "code_2": "MK",
@@ -9470,7 +9470,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "261",
     "code": "MDG",
     "code_2": "MG",
@@ -9508,7 +9508,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "265",
     "code": "MWI",
     "code_2": "MW",
@@ -9630,7 +9630,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "60",
     "code": "MYS",
     "code_2": "MY",
@@ -9704,7 +9704,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "960",
     "code": "MDV",
     "code_2": "MV",
@@ -9798,7 +9798,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "223",
     "code": "MLI",
     "code_2": "ML",
@@ -9848,7 +9848,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "356",
     "code": "MLT",
     "code_2": "MT",
@@ -9866,7 +9866,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "692",
     "code": "MHL",
     "code_2": "MH",
@@ -10002,7 +10002,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "222",
     "code": "MRT",
     "code_2": "MR",
@@ -10306,7 +10306,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "691",
     "code": "FSM",
     "code_2": "FM",
@@ -10336,7 +10336,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "373",
     "code": "MDA",
     "code_2": "MD",
@@ -10550,7 +10550,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "377",
     "code": "MCO",
     "code_2": "MC",
@@ -10568,7 +10568,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "976",
     "code": "MNG",
     "code_2": "MN",
@@ -10670,7 +10670,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "382",
     "code": "MNE",
     "code_2": "ME",
@@ -10700,7 +10700,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "212",
     "code": "MAR",
     "code_2": "MA",
@@ -10946,7 +10946,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "258",
     "code": "MOZ",
     "code_2": "MZ",
@@ -11004,7 +11004,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "95",
     "code": "MMR",
     "code_2": "MM",
@@ -11159,7 +11159,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "977",
     "code": "NPL",
     "code_2": "NP",
@@ -11311,7 +11311,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "687",
     "code": "NCL",
     "code_2": "NC",
@@ -11329,7 +11329,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "64",
     "code": "NZL",
     "code_2": "NZ",
@@ -11493,7 +11493,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "227",
     "code": "NER",
     "code_2": "NE",
@@ -11539,7 +11539,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "234",
     "code": "NGA",
     "code_2": "NG",
@@ -11677,7 +11677,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "683",
     "code": "NIU",
     "code_2": "NU",
@@ -11695,7 +11695,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "672",
     "code": "NFK",
     "code_2": "NF",
@@ -11775,7 +11775,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "1670",
     "code": "MNP",
     "code_2": "MP",
@@ -11793,7 +11793,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "47",
     "code": "NOR",
     "code_2": "NO",
@@ -11983,7 +11983,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "680",
     "code": "PLW",
     "code_2": "PW",
@@ -12070,7 +12070,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "675",
     "code": "PNG",
     "code_2": "PG",
@@ -12364,7 +12364,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "63",
     "code": "PHL",
     "code_2": "PH",
@@ -12382,7 +12382,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "64",
     "code": "PCN",
     "code_2": "PN",
@@ -12400,7 +12400,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "48",
     "code": "POL",
     "code_2": "PL",
@@ -12610,7 +12610,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "351",
     "code": "PRT",
     "code_2": "PT",
@@ -12722,7 +12722,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "974",
     "code": "QAT",
     "code_2": "QA",
@@ -12772,7 +12772,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "262",
     "code": "REU",
     "code_2": "RE",
@@ -12790,7 +12790,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "40",
     "code": "ROU",
     "code_2": "RO",
@@ -13412,7 +13412,7 @@ Payment.COUNTRIES = [
     "numeric_code": "652"
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "290",
     "code": "SHN",
     "code_2": "SH",
@@ -13523,7 +13523,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "685",
     "code": "WSM",
     "code_2": "WS",
@@ -13581,7 +13581,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "378",
     "code": "SMR",
     "code_2": "SM",
@@ -13599,7 +13599,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "239",
     "code": "STP",
     "code_2": "ST",
@@ -13621,7 +13621,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "966",
     "code": "SAU",
     "code_2": "SA",
@@ -13741,7 +13741,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "381",
     "code": "SRB",
     "code_2": "RS",
@@ -13753,7 +13753,7 @@ Payment.COUNTRIES = [
     "numeric_code": "688"
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "248",
     "code": "SYC",
     "code_2": "SC",
@@ -13831,7 +13831,7 @@ Payment.COUNTRIES = [
     "numeric_code": "534"
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "421",
     "code": "SVK",
     "code_2": "SK",
@@ -13877,7 +13877,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "386",
     "code": "SVN",
     "code_2": "SI",
@@ -13939,7 +13939,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "677",
     "code": "SLB",
     "code_2": "SB",
@@ -14071,7 +14071,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "27",
     "code": "ZAF",
     "code_2": "ZA",
@@ -14139,7 +14139,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "82",
     "code": "KOR",
     "code_2": "KR",
@@ -14833,7 +14833,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "4779",
     "code": "SJM",
     "code_2": "SJ",
@@ -14882,7 +14882,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "46",
     "code": "SWE",
     "code_2": "SE",
@@ -14980,7 +14980,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "41",
     "code": "CHE",
     "code_2": "CH",
@@ -15168,7 +15168,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "886",
     "code": "TWN",
     "code_2": "TW",
@@ -15280,7 +15280,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "255",
     "code": "TZA",
     "code_2": "TZ",
@@ -15394,7 +15394,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "66",
     "code": "THA",
     "code_2": "TH",
@@ -15716,7 +15716,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "670",
     "code": "TLS",
     "code_2": "TL",
@@ -15728,7 +15728,7 @@ Payment.COUNTRIES = [
     "numeric_code": "626"
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "228",
     "code": "TGO",
     "code_2": "TG",
@@ -15762,7 +15762,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "690",
     "code": "TKL",
     "code_2": "TK",
@@ -15780,7 +15780,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "676",
     "code": "TON",
     "code_2": "TO",
@@ -15876,7 +15876,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "216",
     "code": "TUN",
     "code_2": "TN",
@@ -15982,7 +15982,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "90",
     "code": "TUR",
     "code_2": "TR",
@@ -16553,7 +16553,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "380",
     "code": "UKR",
     "code_2": "UA",
@@ -16675,7 +16675,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "971",
     "code": "ARE",
     "code_2": "AE",
@@ -16717,7 +16717,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "44",
     "code": "GBR",
     "code_2": "GB",
@@ -18483,7 +18483,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "681",
     "code": "WLF",
     "code_2": "WF",
@@ -18653,7 +18653,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "263",
     "code": "ZWE",
     "code_2": "ZW",
