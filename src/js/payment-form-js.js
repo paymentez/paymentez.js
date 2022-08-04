@@ -1799,6 +1799,7 @@ PaymentForm.prototype.refreshCellPhoneFormat = function () {
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 PaymentForm.prototype.addFiscalNumber = function () {
+  this.captureFiscalNumber = true;
   if (!this.fiscalNumberAdded()) {
     this.initFiscalNumberInput();
     this.setupFiscalNumberInput();
