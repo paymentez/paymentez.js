@@ -36,6 +36,7 @@ function PaymentForm(elem) {
   this.invalidCardTypeMessage = this.elem.data("invalid-card-type-message") ? this.elem.data("invalid-card-type-message") : false;
   this.captureBillingAddress = this.elem.data("capture-billing-address") ? this.elem.data("capture-billing-address") : false;
   this.allowed_card_types = this.elem.data("allowed-card-types") ? this.elem.data("allowed-card-types").toString().split(",") : false;
+  this.captureFiscalNumber = this.elem.data("capture-fiscal-number") ? this.elem.data("capture-fiscal-number") : false;
 
   // This is for support the first conf 'exclusive-types', try to delete in new version when nobody use it
   let allowed_card_brands_options = this.elem.data("exclusive-types") || this.elem.data("allowed-card-brands");
@@ -54,6 +55,7 @@ function PaymentForm(elem) {
   this.initExpiryYearInput();
   this.initCvcInput();
   this.initBillingAddress();
+  this.initFiscalNumberInput();
 
   this.elem.empty();
 
@@ -65,6 +67,7 @@ function PaymentForm(elem) {
   this.setupExpiryInput();
   this.setupCvcInput();
   this.setupBillingAddress();
+  this.setupFiscalNumberInput();
 
   this.elem.append(this.current_data);
 
@@ -469,7 +472,9 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
   const form = this;
 
   if (!(required_fields && required_fields.length > 0)) {
-    form.removeFiscalNumber();
+    if (!this.captureFiscalNumber) {
+      form.removeFiscalNumber();
+    }
     form.removeNip();
     form.removePocketType();
     return
@@ -1132,6 +1137,7 @@ PaymentForm.prototype.isNipValid = function () {
  * @returns {boolean}
  */
 PaymentForm.prototype.isFiscalNumberValid = function () {
+  if (!this.captureFiscalNumber) return true
   if (this.fiscalNumberAdded())
     return this.getFiscalNumber() != null && this.getFiscalNumber().length >= 6;
   else
@@ -1345,6 +1351,7 @@ PaymentForm.prototype.getCard = function () {
       "cvc": this.getCvc(),
       "nip": this.getNip(),
       "card_auth": this.getValidationOption(),
+      "fiscal_number": this.getFiscalNumber()
     }
   };
 
@@ -2147,6 +2154,8 @@ PaymentForm.prototype.initCvcInput = function () {
  */
 PaymentForm.prototype.initFiscalNumberInput = function () {
 
+  if (!this.captureFiscalNumber) return
+
   // Find or create the fiscal number input element
   this.fiscalNumberInput = PaymentForm.detachOrCreateElement(this.elem, ".fiscal-number", "<input class='fiscal-number' />");
   // Ensure the fiscal number element has a field name
@@ -2547,6 +2556,7 @@ PaymentForm.prototype.setupCvcInput = function () {
 };
 
 PaymentForm.prototype.setupFiscalNumberInput = function () {
+  if (!this.captureFiscalNumber) return
   let card = this.elem.find(".card-number-wrapper");
   card.after("<div class='fiscal-number-wrapper'></div>");
   let wrapper = this.elem.find(".fiscal-number-wrapper");
