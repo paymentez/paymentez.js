@@ -55,7 +55,9 @@ function PaymentForm(elem) {
   this.initExpiryYearInput();
   this.initCvcInput();
   this.initBillingAddress();
-  this.initFiscalNumberInput();
+  if (this.captureFiscalNumber) {
+    this.initFiscalNumberInput();
+  }
 
   this.elem.empty();
 
@@ -67,7 +69,9 @@ function PaymentForm(elem) {
   this.setupExpiryInput();
   this.setupCvcInput();
   this.setupBillingAddress();
-  this.setupFiscalNumberInput();
+  if (this.captureFiscalNumber) {
+    this.setupFiscalNumberInput();
+  }
 
   this.elem.append(this.current_data);
 
@@ -1137,8 +1141,7 @@ PaymentForm.prototype.isNipValid = function () {
  * @returns {boolean}
  */
 PaymentForm.prototype.isFiscalNumberValid = function () {
-  if (!this.captureFiscalNumber) return true
-  if (this.fiscalNumberAdded())
+  if (this.fiscalNumberAdded() || this.captureFiscalNumber)
     return this.getFiscalNumber() != null && this.getFiscalNumber().length >= 6;
   else
     return true
@@ -1799,7 +1802,6 @@ PaymentForm.prototype.refreshCellPhoneFormat = function () {
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
 PaymentForm.prototype.addFiscalNumber = function () {
-  this.captureFiscalNumber = true;
   if (!this.fiscalNumberAdded()) {
     this.initFiscalNumberInput();
     this.setupFiscalNumberInput();
@@ -2154,8 +2156,6 @@ PaymentForm.prototype.initCvcInput = function () {
  * Initialise the fiscal number input
  */
 PaymentForm.prototype.initFiscalNumberInput = function () {
-
-  if (!this.captureFiscalNumber) return
 
   // Find or create the fiscal number input element
   this.fiscalNumberInput = PaymentForm.detachOrCreateElement(this.elem, ".fiscal-number", "<input class='fiscal-number' />");
@@ -2557,7 +2557,6 @@ PaymentForm.prototype.setupCvcInput = function () {
 };
 
 PaymentForm.prototype.setupFiscalNumberInput = function () {
-  if (!this.captureFiscalNumber) return
   let card = this.elem.find(".card-number-wrapper");
   card.after("<div class='fiscal-number-wrapper'></div>");
   let wrapper = this.elem.find(".fiscal-number-wrapper");
