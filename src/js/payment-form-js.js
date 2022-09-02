@@ -2357,11 +2357,19 @@ PaymentForm.prototype.setupNameInput = function () {
     wrapper.append(this.nameInput);
     wrapper.append("<div class='icon'></div>");
     wrapper.find(".icon").append(PaymentForm.USER_SVG);
+    const alphaOnlyPattern = new RegExp('^[a-zA-Z ]+$');
+    let previousValue = '';
 
     // Events
     let $this = this;
     this.nameInput.blur(function () {
       $this.refreshCardHolderNameValidation();
+    });
+    this.nameInput.on("input", function(){
+      var regexp = /[^a-zA-Z]/g;
+      if($(this).val().match(regexp)) {
+        $(this).val( $(this).val().replace(regexp,'') );
+      }
     });
   }
 };
