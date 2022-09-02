@@ -2357,8 +2357,6 @@ PaymentForm.prototype.setupNameInput = function () {
     wrapper.append(this.nameInput);
     wrapper.append("<div class='icon'></div>");
     wrapper.find(".icon").append(PaymentForm.USER_SVG);
-    const alphaOnlyPattern = new RegExp('^[a-zA-Z ]+$');
-    let previousValue = '';
 
     // Events
     let $this = this;
