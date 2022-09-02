@@ -2376,7 +2376,7 @@ PaymentForm.prototype.setupNameInput = function () {
     this.nameInput.on("input", function(){
       var regexp = /[^a-zA-Z]/g;
       if($(this).val().match(regexp)) {
-        $(this).val( $(this).val().replace(regexp,'') );
+        $(this).val( $(this).val().replace(regexp, '') );
       }
     });
   }
