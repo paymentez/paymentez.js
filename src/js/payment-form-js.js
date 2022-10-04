@@ -2373,6 +2373,12 @@ PaymentForm.prototype.setupNameInput = function () {
     this.nameInput.blur(function () {
       $this.refreshCardHolderNameValidation();
     });
+    this.nameInput.on("input", function(){
+      var regexp = /[^a-zA-Z]/g;
+      if($(this).val().match(regexp)) {
+        $(this).val( $(this).val().replace(regexp, '') );
+      }
+    });
   }
 };
 
