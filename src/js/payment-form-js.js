@@ -2167,9 +2167,9 @@ PaymentForm.prototype.initFiscalNumberInput = function () {
   if (!PaymentForm.elementHasAttribute(this.fiscalNumberInput, "placeholder")) {
     this.fiscalNumberInput.attr("placeholder", PaymentForm.FISCAL_NUMBER_PLACEHOLDER);
   }
-  this.fiscalNumberInput.attr("type", "tel");
-  this.fiscalNumberInput.attr("pattern", "[0-9]*");
-  this.fiscalNumberInput.attr("inputmode", "numeric");
+  this.fiscalNumberInput.attr("type", "text");
+  this.fiscalNumberInput.attr("pattern", "[0-9A-Za-z]*");
+  this.fiscalNumberInput.attr("inputmode", "text");
   this.fiscalNumberInput.attr("x-autocompletetype", "cc-csc");
   this.fiscalNumberInput.attr("autocompletetype", "cc-csc");
   this.fiscalNumberInput.attr("autocorrect", "off");
@@ -2374,7 +2374,7 @@ PaymentForm.prototype.setupNameInput = function () {
       $this.refreshCardHolderNameValidation();
     });
     this.nameInput.on("input", function(){
-      var regexp = /[^a-zA-Z]/g;
+      var regexp = /[^a-zA-Z ]/g;
       if($(this).val().match(regexp)) {
         $(this).val( $(this).val().replace(regexp, '') );
       }
@@ -2572,7 +2572,6 @@ PaymentForm.prototype.setupFiscalNumberInput = function () {
 
   // Events for fiscalNumberInput
   let $this = this;
-  this.fiscalNumberInput.keydown(PaymentForm.filterNumberOnlyKey);
   this.fiscalNumberInput.blur(function () {
     $this.refreshFiscalNumberValidation();
   });
