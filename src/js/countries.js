@@ -3807,6 +3807,18 @@ Payment.COUNTRIES = [
   },
   {
     "active": true,
+    "calling_code": "599",
+    "code": "ANT",
+    "code_2": "AN",
+    "currencies": [
+      "ANG"
+    ],
+    "flag": "https://cdn-images-public.s3.amazonaws.com/flags/ant.svg",
+    "name": "Netherlands Antilles",
+    "numeric_code": "530"
+  },
+  {
+    "active": true,
     "calling_code": "357",
     "code": "CYP",
     "code_2": "CY",
@@ -4777,7 +4789,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "33",
     "code": "FRA",
     "code_2": "FR",
