@@ -1,3 +1,4 @@
+// Countries data source: https://restcountries.com/
 Payment.COUNTRIES = [
   {
     "active": false,
@@ -146,7 +147,7 @@ Payment.COUNTRIES = [
     "numeric_code": "248"
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "355",
     "code": "ALB",
     "code_2": "AL",
@@ -304,7 +305,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "213",
     "code": "DZA",
     "code_2": "DZ",
@@ -542,7 +543,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "244",
     "code": "AGO",
     "code_2": "AO",
@@ -1581,7 +1582,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "375",
     "code": "BLR",
     "code_2": "BY",
@@ -2491,7 +2492,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "257",
     "code": "BDI",
     "code_2": "BI",
@@ -3430,7 +3431,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "269",
     "code": "COM",
     "code_2": "KM",
@@ -3980,7 +3981,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "253",
     "code": "DJI",
     "code_2": "DJ",
@@ -4174,87 +4175,87 @@ Payment.COUNTRIES = [
     "numeric_code": "218",
     "states": [
       {
-        "code": "A",
+        "code": "AZ",
         "name": "Azuay"
       },
       {
-        "code": "B",
+        "code": "BO",
         "name": "Bolivar"
       },
       {
-        "code": "F",
+        "code": "CA",
         "name": "Canar"
       },
       {
-        "code": "C",
+        "code": "CP",
         "name": "Carchi"
       },
       {
-        "code": "X",
+        "code": "CO",
         "name": "Cotopaxi"
       },
       {
-        "code": "H",
+        "code": "CH",
         "name": "Chimborazo"
       },
       {
-        "code": "O",
+        "code": "OR",
         "name": "El Oro"
       },
       {
-        "code": "E",
+        "code": "ES",
         "name": "Esmeraldas"
       },
       {
-        "code": "W",
+        "code": "GA",
         "name": "Galapagos"
       },
       {
-        "code": "G",
+        "code": "GU",
         "name": "Guayas"
       },
       {
-        "code": "I",
+        "code": "IM",
         "name": "Imbabura"
       },
       {
-        "code": "L",
+        "code": "LO",
         "name": "Loja"
       },
       {
-        "code": "R",
+        "code": "RI",
         "name": "Los Rios"
       },
       {
-        "code": "M",
+        "code": "MA",
         "name": "Manabi"
       },
       {
-        "code": "S",
+        "code": "SA",
         "name": "Morona-Santiago"
       },
       {
-        "code": "N",
+        "code": "NA",
         "name": "Napo"
       },
       {
-        "code": "Y",
+        "code": "PA",
         "name": "Pastaza"
       },
       {
-        "code": "P",
+        "code": "PI",
         "name": "Pichincha"
       },
       {
-        "code": "U",
+        "code": "SU",
         "name": "Sucumbios"
       },
       {
-        "code": "T",
+        "code": "TU",
         "name": "Tungurahua"
       },
       {
-        "code": "Z",
+        "code": "ZA",
         "name": "Zarnora-Chinchipe"
       }
     ]
@@ -4626,7 +4627,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "251",
     "code": "ETH",
     "code_2": "ET",
@@ -8796,7 +8797,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "686",
     "code": "KIR",
     "code_2": "KI",
@@ -8820,6 +8821,48 @@ Payment.COUNTRIES = [
         "code": "P",
         "name": "Phoenix Islands"
       }
+    ]
+  },
+  {
+    "active": true,
+    "calling_code": "383",
+    "code": "UNK",
+    "code_2": "XK",
+    "currencies": [
+      "EUR"
+    ],
+    "flag": "https://cdn-images-public.s3.amazonaws.com/flags/unk.svg",
+    "name": "Kosovo",
+    "numeric_code": "383",
+    "states": [
+      {
+        "code": "Pe",
+        "name": "Peja"
+      },
+      {
+        "code": "Mi",
+        "name": "Mitrovica"
+      },
+      {
+        "code": "Pr",
+        "name": "Pristina"
+      },
+      {
+        "code": "Gj",
+        "name": "Gjilan"
+      },
+      {
+        "code": "Gj",
+        "name": "Gjakova"
+      },
+      {
+        "code": "Pr",
+        "name": "Prizren"
+      },
+      {
+        "code": "Fe",
+        "name": "Ferizaj"
+      },
     ]
   },
   {
@@ -9123,7 +9166,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "961",
     "code": "LBN",
     "code_2": "LB",
@@ -9161,7 +9204,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "266",
     "code": "LSO",
     "code_2": "LS",
@@ -11086,7 +11129,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "264",
     "code": "NAM",
     "code_2": "NA",
@@ -11153,7 +11196,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "674",
     "code": "NRU",
     "code_2": "NR",
@@ -11903,7 +11946,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "968",
     "code": "OMN",
     "code_2": "OM",
@@ -13783,7 +13826,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "232",
     "code": "SLE",
     "code_2": "SL",
@@ -14523,7 +14566,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "94",
     "code": "LKA",
     "code_2": "LK",
@@ -14863,7 +14906,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "268",
     "code": "SWZ",
     "code_2": "SZ",
@@ -16376,7 +16419,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "688",
     "code": "TUV",
     "code_2": "TV",
@@ -18093,7 +18136,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "678",
     "code": "VUT",
     "code_2": "VU",
@@ -18615,7 +18658,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "260",
     "code": "ZMB",
     "code_2": "ZM",
