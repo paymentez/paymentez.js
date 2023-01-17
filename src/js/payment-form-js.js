@@ -2538,8 +2538,8 @@ PaymentForm.prototype.setupExpiryInput = function () {
   }
 
   wrapper.append(expiryInput);
-  wrapper.append("<div class='icon'></div>");
-  wrapper.find(".icon").append(PaymentForm.CALENDAR_SVG);
+  expiryInput.append("<div class='icon'></div>");
+  expiryInput.find(".icon").append(PaymentForm.CALENDAR_SVG);
 };
 
 PaymentForm.prototype.setupCvcInput = function () {
