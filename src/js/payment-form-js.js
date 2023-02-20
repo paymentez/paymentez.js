@@ -228,6 +228,22 @@ PaymentForm.INFORMATION_SVG = '<svg version="1.1" id="Capa_1" xmlns="http://www.
   '.666v10.429c0,1.412,0.516,2.635,1.548,3.668c1.032,1.03,2.254,1.547,3.666,1.547h41.714c1.412,0,2.634-0.517,3.666-1.' +
   '547c1.031-1.033,1.547-2.256,1.547-3.668v-10.429C134.07,113.302,133.557,112.08,132.523,111.048z"/> </g> </svg>';
 
+PaymentForm.REMOVE_SVG = '<svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.75 9.875H6.25C5.85938 9.90104 5.65104 10.1094 5.625 10.5C5.65104 10.8906 5.85938 11.099 6.25 11.125H13.75C14.1406 11.099 14.349 10.8906 14.375 10.5C14.349 10.1094 14.1406 9.90104 13.75 9.875ZM10 0.5C8.125 0.526042 6.44531 0.981771 4.96094 1.86719C3.45052 2.7526 2.2526 3.95052 1.36719 5.46094C0.481771 6.94531 0.0260417 8.625 0 10.5C0.0260417 12.375 0.481771 14.0547 1.36719 15.5391C2.2526 17.0495 3.45052 18.2474 4.96094 19.1328C6.44531 20.0182 8.125 20.474 10 20.5C11.875 20.474 13.5547 20.0182 15.0391 19.1328C16.5495 18.2474 17.7474 17.0495 18.6328 15.5391C19.5182 14.0547 19.974 12.375 20 10.5C19.974 8.625 19.5182 6.94531 18.6328 5.46094C17.7474 3.95052 16.5495 2.7526 15.0391 1.86719C13.5547 0.981771 11.875 0.526042 10 0.5ZM10 19.25C8.38542 19.224 6.91406 18.8203 5.58594 18.0391C4.28385 17.2578 3.24219 16.2161 2.46094 14.9141C1.67969 13.5859 1.27604 12.1146 1.25 10.5C1.27604 8.88542 1.67969 7.41406 2.46094 6.08594C3.24219 4.78385 4.28385 3.74219 5.58594 2.96094C6.91406 2.17969 8.38542 1.77604 10 1.75C11.6146 1.77604 13.0859 2.17969 14.4141 2.96094C15.7161 3.74219 16.7578 4.78385 17.5391 6.08594C18.3203 7.41406 18.724 8.88542 18.75 10.5C18.724 12.1146 18.3203 13.5859 17.5391 14.9141C16.7578 16.2161 15.7161 17.2578 14.4141 18.0391C13.0859 18.8203 11.6146 19.224 10 19.25Z" fill="currentColor"/></svg>';
+
+PaymentForm.ADD_SVG = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d = "M8 0C6.5 0.0208333 5.15625 0.385417 3.96875 1.09375C2.76042 1.80208 1.80208 2.76042 1.09375 3.96875C0.385417 5.15625 0.0208333 6.5 0 8C0.0208333 9.5 0.385417 10.8438 1.09375 12.0312C1.80208 13.2396 2.76042 14.1979 3.96875 14.9062C5.15625 15.6146 6.5 15.9792 8 16C9.5 15.9792 10.8438 15.6146 12.0312 14.9062C13.2396 14.1979 14.1979 13.2396 14.9062 12.0312C15.6146 10.8438 15.9792 9.5 16 8C15.9792 6.5 15.6146 5.15625 14.9062 3.96875C14.1979 2.76042 13.2396 1.80208 12.0312 1.09375C10.8438 0.385417 9.5 0.0208333 8 0ZM8 15C6.70833 14.9792 5.53125 14.6562 4.46875 14.0312C3.42708 13.4062 2.59375 12.5729 1.96875 11.5312C1.34375 10.4688 1.02083 9.29167 1 8C1.02083 6.70833 1.34375 5.53125 1.96875 4.46875C2.59375 3.42708 3.42708 2.59375 4.46875 1.96875C5.53125 1.34375 6.70833 1.02083 8 1C9.29167 1.02083 10.4688 1.34375 11.5312 1.96875C12.5729 2.59375 13.4062 3.42708 14.0312 4.46875C14.6562 5.53125 14.9792 6.70833 15 8C14.9792 9.29167 14.6562 10.4688 14.0312 11.5312C13.4062 12.5729 12.5729 13.4062 11.5312 14.0312C10.4688 14.6562 9.29167 14.9792 8 15ZM11 7.5H8.5V5C8.47917 4.6875 8.3125 4.52083 8 4.5C7.6875 4.52083 7.52083 4.6875 7.5 5V7.5H5C4.6875 7.52083 4.52083 7.6875 4.5 8C4.52083 8.3125 4.6875 8.47917 5 8.5H7.5V11C7.52083 11.3125 7.6875 11.4792 8 11.5C8.3125 11.4792 8.47917 11.3125 8.5 11V8.5H11C11.3125 8.47917 11.4792 8.3125 11.5 8C11.4792 7.6875 11.3125 7.52083 11 7.5Z" fill="currentColor" /></svg >'
+
+PaymentForm.pocketTypes = [
+  { 'code': 'CSD1', 'name': 'Cuota Monetaria' },
+  { 'code': 'CSD2', 'name': 'Subsidio Escolar' },
+  { 'code': 'CSD3', 'name': 'Bono Efectivo' },
+  { 'code': 'CSD4', 'name': 'Ahorros' },
+  { 'code': 'CSD5', 'name': 'Cupo Credito' },
+  { 'code': 'CSD6', 'name': 'Bono Lonchera' },
+  { 'code': 'CSD7', 'name': 'Bono Nacimiento' },
+  { 'code': 'CSD8', 'name': 'Mundo Digital' },
+  { 'code': 'CSD9', 'name': 'Adulto Mayor' },
+];
+
 /**
  * Get the key code from the given event.
  *
@@ -471,11 +487,10 @@ PaymentForm.prototype.cardTypeFromNumberBin = function (number) {
     });
   }
 };
-
 PaymentForm.prototype.setRequiredFields = function (required_fields) {
   const form = this;
-
-  if (!(required_fields && required_fields.length > 0)) {
+  const required_fields1 = ["pocket_type"]
+  if (!(required_fields1 && required_fields1.length > 0)) {
     if (!this.captureFiscalNumber) {
       form.removeFiscalNumber();
     }
@@ -484,24 +499,24 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
     return
   }
 
-  required_fields.forEach(function (required_field) {
-      let field_name = typeof (required_field) === 'object' ? Object.keys(required_field)[0] : required_field;
+  required_fields1.forEach(function (required_field) {
+    let field_name = typeof (required_field) === 'object' ? Object.keys(required_field)[0] : required_field;
 
-      // Only should be contemplated the no default fields from SDK form (fiscal_number, tuya_key, fiscal_number_type)
-      switch (field_name) {
-        case 'fiscal_number':
-          form.addFiscalNumber();
-          break;
-        case 'tuya_key':
-          form.addNip();
-          break;
-        case 'fiscal_number_type':
-          break;
-        case 'pocket_type':
-          form.addPocketType();
-          break;
-      }
+    // Only should be contemplated the no default fields from SDK form (fiscal_number, tuya_key, fiscal_number_type)
+    switch (field_name) {
+      case 'fiscal_number':
+        form.addFiscalNumber();
+        break;
+      case 'tuya_key':
+        form.addNip();
+        break;
+      case 'fiscal_number_type':
+        break;
+      case 'pocket_type':
+        form.addPocketType();
+        break;
     }
+  }
   );
 };
 
@@ -515,18 +530,18 @@ PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
   }
 
   no_required_fields.forEach(function (no_required_field) {
-      let field_name = typeof (no_required_field) === 'object' ? Object.keys(no_required_field)[0] : no_required_field;
+    let field_name = typeof (no_required_field) === 'object' ? Object.keys(no_required_field)[0] : no_required_field;
 
-      // Only should be contemplated the default fields from SDK form (expiration_date, cvv)
-      switch (field_name) {
-        case 'expiration_date':
-          form.removeExpiryContainer();
-          break;
-        case 'cvv':
-          form.removeCvcContainer();
-          break;
-      }
+    // Only should be contemplated the default fields from SDK form (expiration_date, cvv)
+    switch (field_name) {
+      case 'expiration_date':
+        form.removeExpiryContainer();
+        break;
+      case 'cvv':
+        form.removeCvcContainer();
+        break;
     }
+  }
   );
 };
 
@@ -1213,6 +1228,11 @@ PaymentForm.prototype.isPocketTypeValid = function () {
   let value = this.getPocketType();
   return value !== null && value.length >= 2;
 };
+PaymentForm.prototype.isPocketTypeAmountValid = function (index) {
+  if (!this.pocketTypeItems[index]) return true;
+  let value = this.getPocketTypeAmount(index);
+  return value !== null && value.length > 0;
+};
 //========================================================================================================
 
 /**
@@ -1324,6 +1344,12 @@ PaymentForm.prototype.pocketTypeAdded = function () {
   let pocket_type = this.elem.find(".pocket-type-container");
   return pocket_type.length >= 1;
 };
+
+
+PaymentForm.prototype.pocketTypeElmAdded = function (type, index) {
+  const pocket_elm = this.elem.find(`.pocket-${type}-${index}]`);
+  return pocket_elm.length >= 1;
+}
 
 // ======================================================================================================
 
@@ -1584,6 +1610,14 @@ PaymentForm.prototype.getPocketType = function () {
   }
 };
 
+PaymentForm.prototype.getPocketTypeAmount = function (index) {
+  if (this.pocketTypeElmAdded("amount", index)) {
+    return this.pocketTypeItems[index]["amount"].val().trim();
+  } else {
+    return null;
+  }
+};
+
 // --- --- --- --- --- --- --- --- --- --- ---
 
 /**
@@ -1672,7 +1706,7 @@ PaymentForm.prototype.unBlockForm = function () {
  * @param colour
  */
 PaymentForm.prototype.setIconColour = function (colour) {
-  this.elem.find(".icon .svg").css({"fill": colour});
+  this.elem.find(".icon .svg").css({ "fill": colour });
 };
 
 /**
@@ -1987,7 +2021,7 @@ PaymentForm.prototype.removeVerificationContainer = function () {
 PaymentForm.prototype.addPocketType = function () {
   if (!this.pocketTypeAdded()) {
     this.initPocketTypeInput();
-    this.setupPocketTypeInput();
+    this.setupPocketTypeContainer();
     this.setIconColour(this.iconColour);
   }
 };
@@ -2297,17 +2331,18 @@ PaymentForm.prototype.initBillingAddress = function () {
 /**
  * Initialise the pocket type input
  */
+
 PaymentForm.prototype.initPocketTypeInput = function () {
   let pocketTypes = [
-    {'code': 'CSD1', 'name': 'Cuota Monetaria'},
-    {'code': 'CSD2', 'name': 'Subsidio Escolar'},
-    {'code': 'CSD3', 'name': 'Bono Efectivo'},
-    {'code': 'CSD4', 'name': 'Ahorros'},
-    {'code': 'CSD5', 'name': 'Cupo Credito'},
-    {'code': 'CSD6', 'name': 'Bono Lonchera'},
-    {'code': 'CSD7', 'name': 'Bono Nacimiento'},
-    {'code': 'CSD8', 'name': 'Mundo Digital'},
-    {'code': 'CSD9', 'name': 'Adulto Mayor'},
+    { 'code': 'CSD1', 'name': 'Cuota Monetaria' },
+    { 'code': 'CSD2', 'name': 'Subsidio Escolar' },
+    { 'code': 'CSD3', 'name': 'Bono Efectivo' },
+    { 'code': 'CSD4', 'name': 'Ahorros' },
+    { 'code': 'CSD5', 'name': 'Cupo Credito' },
+    { 'code': 'CSD6', 'name': 'Bono Lonchera' },
+    { 'code': 'CSD7', 'name': 'Bono Nacimiento' },
+    { 'code': 'CSD8', 'name': 'Mundo Digital' },
+    { 'code': 'CSD9', 'name': 'Adulto Mayor' },
   ]
 
   // Pocket types
@@ -2326,7 +2361,9 @@ PaymentForm.prototype.initPocketTypeInput = function () {
     pocketTypeSelectizeControl.setValue(pocketTypes[0])
   }, 0);
 
-  this.pocketType.attr("placeholder", this.__('pocketType'));
+  this.pocketType.attr("placeholder", this.__('pocketTypeSelect'));
+
+  //crear select, input y boton
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -2798,17 +2835,145 @@ PaymentForm.prototype.setupBillingAddress = function () {
   });
 };
 
-PaymentForm.prototype.setupPocketTypeInput = function () {
-  this.elem.append("<div class='pocket-type-container'></div>");
-  let container = this.elem.find(".pocket-type-container");
-  container.append(`<p><span>${this.__('pocketTypeRequired')}</span></p>`);
-  container.append(this.pocketType);
+
+PaymentForm.prototype.setupPocketTypeAmount = function (pocketTypeItemSelectWrapper, index) {
+
+  currentPocketTypeAmountInput = PaymentForm.detachOrCreateElement(this.elem, '.pocketTypeAmount-' + index, `<input class='pocket-type-amount pocket-type-amount-${index}' />`);
+  pocketTypeItemSelectWrapper.append(currentPocketTypeAmountInput);
+
+  if (!PaymentForm.elementHasAttribute(currentPocketTypeAmountInput, "name")) {
+    currentPocketTypeAmountInput.attr("name", "amount-" + index);
+  }
+
+  if (!PaymentForm.elementHasAttribute(currentPocketTypeAmountInput, "placeholder")) {
+    currentPocketTypeAmountInput.attr("placeholder", this.__('pocketTypeAmount'));
+  }
+
+  currentPocketTypeAmountInput.attr("type", "number");
+  currentPocketTypeAmountInput.attr("autocorrect", "off");
+  currentPocketTypeAmountInput.attr("spellcheck", "off");
+  currentPocketTypeAmountInput.attr("autocapitalize", "off");
 
   // Events
   let $this = this;
-  this.pocketType.blur(function () {
-    $this.refreshPocketTypeValidation();
+  currentPocketTypeAmountInput.keydown(PaymentForm.filterNumberOnlyKey);
+  currentPocketTypeAmountInput.blur(function () {
+    // $this.refreshPocketTypeAmountValidation();
   });
+}
+
+PaymentForm.prototype.setupPocketTypeSelect = function (pocketTypeItemSelectWrapper, index) {
+  this.pocketTypeItems[index]["select"] = PaymentForm.detachOrCreateElement(this.elem, ".pocketTypeSelect-" + index, `<select class='pocket-type-select pocket-type-select-${index}' />`);
+  pocketTypeItemSelectWrapper.append(this.pocketTypeItems[index]["select"]);
+  $this = this;
+  setTimeout(() => {
+
+    this.pocketTypeSelectize = $this.pocketTypeItems[index]["select"].selectize(
+      {
+        valueField: 'code',
+        labelField: 'name',
+        searchField: 'name',
+        options: PaymentForm.pocketTypes,
+      }
+    );
+    this.pocketTypeSelectizeControl = this.pocketTypeSelectize[0].selectize;
+    this.pocketTypeSelectizeControl.setValue(PaymentForm.pocketTypes[0]);
+
+  }, 0);
+  this.pocketTypeItems[index]["select"].attr("placeholder", this.__('pocketTypeSelect'));
+}
+
+PaymentForm.prototype.removePocketTypeItem = function (index) {
+  let $this = this;
+  $this.elem.find(".pocket-type-item").eq(index).remove();
+  $this.pocketTypeItems.splice(index, 1);
+  if ($this.pocketTypeItems.length <= 1) {
+    $this.elem.find(".pocket-type-button-remove").addClass("disabled");
+  }
+
+  if (this.pocketTypeItems.length <= 3) {
+    $this.elem.find(".pocket-type-button-add").removeClass("disabled");
+  }
+  // $this.refreshPocketTypeAmountValidation();
+  // $this.refreshPocketTypeSelectValidation();
+  // $this.refreshPocketTypeAmounts();
+}
+
+PaymentForm.prototype.setupPocketTypeButton = function (pocketTypeItemSelectWrapper, index) {
+  this.pocketTypeItems[index]["button"] = PaymentForm.detachOrCreateElement(this.elem, '.pocketTypeButton-' + index, `<span class='pocket-type-button pocket-type-button-remove pocket-type-button-${index}' />`);
+  const currentPocketTypeAmountButton = this.pocketTypeItems[index]["button"];
+  pocketTypeItemSelectWrapper.append(currentPocketTypeAmountButton);
+
+  currentPocketTypeAmountButton.append("<span class='icon icon-remove'></span>");
+  currentPocketTypeAmountButton.find(".icon-remove").append(PaymentForm.REMOVE_SVG);
+  let $this = this;
+  currentPocketTypeAmountButton.click(function () {
+    $this.removePocketTypeItem(index);
+  });
+  if (this.pocketTypeItems.length <= 1) {
+    currentPocketTypeAmountButton.addClass("disabled");
+  } else {
+    this.pocketTypeItems[0]["button"].removeClass("disabled");
+  }
+
+
+}
+
+PaymentForm.prototype.createPocketTypeItem = function (pocketTypeIndex) {
+
+  this.pocketTypeItems[pocketTypeIndex] = {
+    "amount": null,
+    "type": null,
+    "button": null
+  }
+
+  const pocketTypeItemContainer = this.elem.find(".pocket-type-items-container");
+  // const pocketTypeId = `pocket-type-item-${pocketTypeIndex}`;
+  let $this = this;
+  pocketTypeItemContainer
+    .append(`<div class='pocket-type-item'></div>`);
+
+  // const pocketTypeItemSelectWrapper = $this.elem.find('.' + pocketTypeId);
+  const pocketTypeItemSelectWrapper = pocketTypeItemContainer.find(".pocket-type-item").last();
+
+  $this.setupPocketTypeAmount(pocketTypeItemSelectWrapper, pocketTypeIndex);
+  $this.setupPocketTypeSelect(pocketTypeItemSelectWrapper, pocketTypeIndex);
+  $this.setupPocketTypeButton(pocketTypeItemSelectWrapper, pocketTypeIndex);
+}
+
+
+PaymentForm.prototype.setupPocketTypeContainer = function () {
+  this.elem.append("<div class='pocket-type-container'></div>");
+  let container = this.elem.find(".pocket-type-container");
+  container.append(`<p><span>${this.__('pocketTypeRequired')}</span></p>`);
+  container.append("<div class='pocket-type-items-container'></div>");
+  this.pocketTypeItems = []
+  this.createPocketTypeItem(0);
+  container.append(
+    "<div class='pocket-type-footer'>" +
+    "<div class='pocketTypeAmountLabel'>" +
+    "<span>$ 0,00 de $1.000,00</span>" +
+    "</div>" +
+    "<div class='pocket-type-add-item'>" +
+    "<span class='pocket-type-button pocket-type-button-add'>" +
+    "<span class='icon icon-add'></span>" +
+    `<span>${this.__('pocketTypeAddLabel')}</span>` +
+    "</span>" +
+    "</div>" +
+    "</div>");
+  $this = this;
+  setTimeout(() => {
+    container.find(".icon-add").append(PaymentForm.ADD_SVG);
+    const addButton = this.elem.find(".pocket-type-button-add");
+    addButton.click(() => {
+      if ($this.pocketTypeItems.length <= 3) {
+        if ($this.pocketTypeItems.length >= 3) {
+          addButton.addClass("disabled");
+        }
+        $this.createPocketTypeItem(this.pocketTypeItems.length);
+      }
+    })
+  }, 0);
 };
 
 // ==========================================================================================

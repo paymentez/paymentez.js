@@ -10,7 +10,10 @@ translations['en'] = {
   billingAddressDistrict: 'District',
   billingAddressAdditional: 'Additional Information',
   pocketTypeRequired: 'Pocket Type is required',
-  pocketType: 'Pocket Type',
+  pocketTypeAmount: 'Amount',
+  pocketTypeSelect: 'Pocket Type',
+  pocketTypeAddLabel: 'Add Pocket',
+
 }
 
 translations['es'] = {
@@ -24,21 +27,27 @@ translations['es'] = {
   billingAddressDistrict: 'Distrito',
   billingAddressAdditional: 'Información adicional',
   pocketTypeRequired: 'Se requiere el tipo de bolsillo',
-  pocketType: 'Tipo de bolsillo',
+  pocketTypeAmount: 'Monto',
+  pocketTypeSelect: 'Tipo de bolsillo',
+  pocketTypeAddLabel: 'Agregar bolsillo',
+
 }
 
 translations['pt'] = {
-  billingAddressRequired: 'Billing address is required',
-  billingAddressStreet: 'Street',
-  billingAddressHouseNumber: 'HouseNumber',
-  billingAddressCity: 'City',
-  billingAddressZip: 'Zip',
-  billingAddressState: 'State',
-  billingAddressCountry: 'Country',
-  billingAddressDistrict: 'District',
-  billingAddressAdditional: 'Additional',
-  pocketTypeRequired: 'Pocket Type is required',
-  pocketType: 'Pocket Type',
+  billingAddressRequired: 'Endereço de cobrança é obrigatório',
+  billingAddressStreet: 'Rua',
+  billingAddressHouseNumber: 'Número',
+  billingAddressCity: 'Cidade',
+  billingAddressZip: 'Código postal',
+  billingAddressState: 'Estado',
+  billingAddressCountry: 'País',
+  billingAddressDistrict: 'Bairro',
+  billingAddressAdditional: 'Complemento',
+  pocketTypeRequired: 'Tipo de bolso é obrigatório',
+  pocketTypeAmount: 'Valor',
+  pocketTypeSelect: 'Tipo de bolso',
+  pocketTypeAddLabel: 'Adicionar bolso',
+
 }
 
 

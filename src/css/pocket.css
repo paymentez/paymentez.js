@@ -21,8 +21,94 @@
   width: 100%;
 }
 
-.payment-form .pocket-type-container .selectize-control .selectize-input {
-  padding-left: 15px;
-  padding-right: 15px;
+.payment-form .pocket-type-container .pocket-type-item,
+.payment-form .pocket-type-footer {
+  display: grid;
+  grid-gap: 10px;
+}
+
+.payment-form .pocket-type-container .pocket-type-item {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 36px;
+  margin-bottom: 10px;
+}
+
+.payment-form .pocket-type-container .selectize-input,
+.payment-form .pocket-type-container .pocket-type-amount {
+  padding-left: 5px;
+  padding-right: 5px;
   width: 100%;
+}
+
+.payment-form .pocket-type-container .pocket-type-button {
+  height: 36px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.payment-form .pocket-type-container .pocket-type-button-remove {
+  width: 36px;
+  justify-content: center;
+  color: #1DBE86
+}
+
+.payment-form .pocket-type-container .pocket-type-button-remove.disabled {
+  pointer-events: none;
+  color: #CED4DA;
+}
+
+.payment-form .pocket-type-container .pocket-type-button-add {
+  justify-content: flex-end;
+}
+
+.payment-form .pocket-type-container .pocket-type-button-add.disabled,
+.payment-form .pocket-type-container .pocket-type-button-add:hover .payment-form .pocket-type-container .pocket-type-button-add:focus {
+  pointer-events: none;
+  color: #CED4DA;
+}
+
+.payment-form .pocket-type-container .pocket-type-button .icon {
+  width: 100%;
+  height: 100%;
+  position: inherit;
+  left: 0;
+  top: 0;
+}
+
+.payment-form .pocket-type-container .pocket-type-button .icon-add {
+  width: 16px;
+  height: 16px;
+  margin-right: 7px;
+}
+
+.payment-form .pocket-type-container .pocket-type-button .icon-remove {
+  width: 20px;
+  height: 20px;
+}
+
+
+.payment-form .pocket-type-footer {
+  grid-template-columns: 1fr auto;
+  justify-content: space-between;
+}
+
+.payment-form .pocketTypeAmountLabel {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  color: #757575;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.payment-form .pocket-type-add-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: #1DBE86;
+}
+
+.payment-form .pocket-type-add-item:hover,
+.payment-form .pocket-type-add-item:focus {
+  color: #138E6F;
 }
