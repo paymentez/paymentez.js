@@ -1,4 +1,7 @@
-.payment-form .payment_dialog_info, .payment_dialog_success, .payment_dialog_warning, .payment_dialog_error {
+.payment-form .payment_dialog_info,
+.payment_dialog_success,
+.payment_dialog_warning,
+.payment_dialog_error {
   margin: 10px 0px;
   padding: 6px;
   font-size: 14px;
@@ -24,7 +27,10 @@
   background-color: #FFD2D2;
 }
 
-.payment-form .payment_dialog_info i, .payment_dialog_success i, .payment_dialog_warning i, .payment_dialog_error i {
+.payment-form .payment_dialog_info i,
+.payment_dialog_success i,
+.payment_dialog_warning i,
+.payment_dialog_error i {
   margin: 2px 2px;
   font-size: 1em;
   vertical-align: middle;
