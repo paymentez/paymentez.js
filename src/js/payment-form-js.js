@@ -489,8 +489,8 @@ PaymentForm.prototype.cardTypeFromNumberBin = function (number) {
 };
 PaymentForm.prototype.setRequiredFields = function (required_fields) {
   const form = this;
-  const required_fields1 = ["pocket_type"]
-  if (!(required_fields1 && required_fields1.length > 0)) {
+  // const required_fields = ["pocket_type"]
+  if (!(required_fields && required_fields.length > 0)) {
     if (!this.captureFiscalNumber) {
       form.removeFiscalNumber();
     }
@@ -499,7 +499,7 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
     return
   }
 
-  required_fields1.forEach(function (required_field) {
+  required_fields.forEach(function (required_field) {
     let field_name = typeof (required_field) === 'object' ? Object.keys(required_field)[0] : required_field;
 
     // Only should be contemplated the no default fields from SDK form (fiscal_number, tuya_key, fiscal_number_type)
