@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
   <title>Example Add Card</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
-  <link href="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.css" rel="stylesheet" type="text/css"/>
-  <script src="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.js" charset="UTF-8"></script>
+  <!-- <link href="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.css" rel="stylesheet" type="text/css" /> -->
+  <link rel="stylesheet" href="../payment_stable.min.css">
+  <!-- <script src="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.js" charset="UTF-8"></script> -->
+
+
+  <script src="../payment_stable.min.js"></script>
 
   <style>
     .panel {
@@ -22,10 +28,14 @@
     }
 
     .btn {
-      background: rgb(140, 197, 65); /* Old browsers */
-      background: -moz-linear-gradient(top, rgba(140, 197, 65, 1) 0%, rgba(20, 167, 81, 1) 100%); /* FF3.6-15 */
-      background: -webkit-linear-gradient(top, rgba(140, 197, 65, 1) 0%, rgba(20, 167, 81, 1) 100%); /* Chrome10-25,Safari5.1-6 */
-      background: linear-gradient(to bottom, rgba(140, 197, 65, 1) 0%, rgba(20, 167, 81, 1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      background: rgb(140, 197, 65);
+      /* Old browsers */
+      background: -moz-linear-gradient(top, rgba(140, 197, 65, 1) 0%, rgba(20, 167, 81, 1) 100%);
+      /* FF3.6-15 */
+      background: -webkit-linear-gradient(top, rgba(140, 197, 65, 1) 0%, rgba(20, 167, 81, 1) 100%);
+      /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(to bottom, rgba(140, 197, 65, 1) 0%, rgba(20, 167, 81, 1) 100%);
+      /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
       filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#44afe7', endColorstr='#3198df', GradientType=0);
       color: #fff;
       display: block;
@@ -49,16 +59,17 @@
   </style>
 
 </head>
-<body>
-<div class="panel">
-  <form id="add-card-form">
-    <div class="payment-form" id="my-card" data-capture-name="true"></div>
-    <button class="btn">Save</button>
-    <br/>
-    <div id="messages"></div>
-  </form>
 
-</div>
+<body>
+  <div class="panel">
+    <form id="add-card-form">
+      <div class="payment-form" id="my-card" data-capture-name="true"></div>
+      <button class="btn">Save</button>
+      <br />
+      <div id="messages"></div>
+    </form>
+
+  </div>
 </body>
 
 <script>
@@ -87,7 +98,8 @@
      * @param payment_client_app_code provided by Paymentez.
      * @param payment_client_app_key provided by Paymentez.
      */
-    Payment.init('stg', 'PAYMENT_CLIENT_APP_CODE', 'PAYMENT_CLIENT_APP_KEY');
+    // Payment.init('stg', 'PAYMENT_CLIENT_APP_CODE', 'PAYMENT_CLIENT_APP_KEY');
+    Payment.init('stg', 'AbiColApp', "2PmoFfjZJzjKTnuSYCFySMfHlOIBz7");
 
     let form = $("#add-card-form");
     let submitButton = form.find("button");
@@ -171,4 +183,5 @@
 
   });
 </script>
+
 </html>
