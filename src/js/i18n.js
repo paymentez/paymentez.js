@@ -1,4 +1,5 @@
 let translations = {}
+
 translations['en'] = {
   billingAddressRequired: 'Billing address is required',
   billingAddressStreet: 'Street',
@@ -12,8 +13,8 @@ translations['en'] = {
   pocketTypeRequired: 'Pocket Type is required',
   pocketTypeAmount: 'Amount',
   pocketTypeSelect: 'Pocket Type',
+  pocketInstallments: 'Installments',
   pocketTypeAddLabel: 'Add Pocket',
-
 }
 
 translations['es'] = {
@@ -29,8 +30,8 @@ translations['es'] = {
   pocketTypeRequired: 'Se requiere el tipo de bolsillo',
   pocketTypeAmount: 'Monto',
   pocketTypeSelect: 'Tipo de bolsillo',
+  pocketInstallments: 'Cuotas',
   pocketTypeAddLabel: 'Agregar bolsillo',
-
 }
 
 translations['pt'] = {
@@ -46,8 +47,8 @@ translations['pt'] = {
   pocketTypeRequired: 'Tipo de bolso é obrigatório',
   pocketTypeAmount: 'Valor',
   pocketTypeSelect: 'Tipo de bolso',
+  pocketInstallments: 'Parcelas',
   pocketTypeAddLabel: 'Adicionar bolso',
-
 }
 
 

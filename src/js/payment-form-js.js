@@ -20,6 +20,7 @@ function PaymentForm(elem) {
   this.brand_name = '';
   this.isBlocked = false;
   this.useLunh = true;
+  this.configuration = {};
 
   // Validate if its displaying in a mobile device
   this.IS_MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -232,17 +233,25 @@ PaymentForm.REMOVE_SVG = '<svg width="20" height="21" viewBox="0 0 20 21" fill="
 
 PaymentForm.ADD_SVG = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d = "M8 0C6.5 0.0208333 5.15625 0.385417 3.96875 1.09375C2.76042 1.80208 1.80208 2.76042 1.09375 3.96875C0.385417 5.15625 0.0208333 6.5 0 8C0.0208333 9.5 0.385417 10.8438 1.09375 12.0312C1.80208 13.2396 2.76042 14.1979 3.96875 14.9062C5.15625 15.6146 6.5 15.9792 8 16C9.5 15.9792 10.8438 15.6146 12.0312 14.9062C13.2396 14.1979 14.1979 13.2396 14.9062 12.0312C15.6146 10.8438 15.9792 9.5 16 8C15.9792 6.5 15.6146 5.15625 14.9062 3.96875C14.1979 2.76042 13.2396 1.80208 12.0312 1.09375C10.8438 0.385417 9.5 0.0208333 8 0ZM8 15C6.70833 14.9792 5.53125 14.6562 4.46875 14.0312C3.42708 13.4062 2.59375 12.5729 1.96875 11.5312C1.34375 10.4688 1.02083 9.29167 1 8C1.02083 6.70833 1.34375 5.53125 1.96875 4.46875C2.59375 3.42708 3.42708 2.59375 4.46875 1.96875C5.53125 1.34375 6.70833 1.02083 8 1C9.29167 1.02083 10.4688 1.34375 11.5312 1.96875C12.5729 2.59375 13.4062 3.42708 14.0312 4.46875C14.6562 5.53125 14.9792 6.70833 15 8C14.9792 9.29167 14.6562 10.4688 14.0312 11.5312C13.4062 12.5729 12.5729 13.4062 11.5312 14.0312C10.4688 14.6562 9.29167 14.9792 8 15ZM11 7.5H8.5V5C8.47917 4.6875 8.3125 4.52083 8 4.5C7.6875 4.52083 7.52083 4.6875 7.5 5V7.5H5C4.6875 7.52083 4.52083 7.6875 4.5 8C4.52083 8.3125 4.6875 8.47917 5 8.5H7.5V11C7.52083 11.3125 7.6875 11.4792 8 11.5C8.3125 11.4792 8.47917 11.3125 8.5 11V8.5H11C11.3125 8.47917 11.4792 8.3125 11.5 8C11.4792 7.6875 11.3125 7.52083 11 7.5Z" fill="currentColor" /></svg >'
 
-PaymentForm.pocketTypes = [
-  { 'code': 'CSD1', 'name': 'Cuota Monetaria' },
-  { 'code': 'CSD2', 'name': 'Subsidio Escolar' },
-  { 'code': 'CSD3', 'name': 'Bono Efectivo' },
-  { 'code': 'CSD4', 'name': 'Ahorros' },
-  { 'code': 'CSD5', 'name': 'Cupo Credito' },
-  { 'code': 'CSD6', 'name': 'Bono Lonchera' },
-  { 'code': 'CSD7', 'name': 'Bono Nacimiento' },
-  { 'code': 'CSD8', 'name': 'Mundo Digital' },
-  { 'code': 'CSD9', 'name': 'Adulto Mayor' },
-];
+PaymentForm.pocketTypes = {
+  items: [],
+  availableOptions: new Set([]),
+  optionsType: {},
+  "options": [
+    { 'code': 'CSD1', 'name': 'Cuota Monetaria' },
+    { 'code': 'CSD2', 'name': 'Subsidio Escolar' },
+    { 'code': 'CSD3', 'name': 'Bono Efectivo' },
+    { 'code': 'CSD4', 'name': 'Ahorros' },
+    { 'code': 'CSD5', 'name': 'Cupo Credito' },
+    { 'code': 'CSD6', 'name': 'Bono Lonchera' },
+    { 'code': 'CSD7', 'name': 'Bono Nacimiento' },
+    { 'code': 'CSD8', 'name': 'Mundo Digital' },
+    { 'code': 'CSD9', 'name': 'Adulto Mayor' },
+    { 'code': 'CSD10', 'name': 'Subsidio Familiar' },
+    { 'code': 'CSD11', 'name': 'Bolsillo Debito' },
+  ]
+};
+
 
 /**
  * Get the key code from the given event.
@@ -489,7 +498,6 @@ PaymentForm.prototype.cardTypeFromNumberBin = function (number) {
 };
 PaymentForm.prototype.setRequiredFields = function (required_fields) {
   const form = this;
-  // const required_fields = ["pocket_type"]
   if (!(required_fields && required_fields.length > 0)) {
     if (!this.captureFiscalNumber) {
       form.removeFiscalNumber();
@@ -546,6 +554,14 @@ PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
 };
 
 PaymentForm.prototype.successBinCallback = function (objResponse, form) {
+  // BORRAR AL SUBIR A PRODUCCION
+  console.log(DEBUG_DATA)
+  if (DEBUG_DATA) {
+    objResponse = DEBUG_DATA;
+  }
+  console.log(objResponse, "objResponse")
+  // BORRAR AL SUBIR A PRODUCCION
+
   // Set luhn flag
   form.useLunh = objResponse.use_luhn;
 
@@ -573,6 +589,9 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
 
   // Set use of otp
   form.USE_OTP = objResponse.otp;
+
+  // Set configurations
+  form.configuration = objResponse.configuration;
 
   // Validate required fields for bin
   form.setRequiredFields(objResponse.required_fields);
@@ -1229,7 +1248,7 @@ PaymentForm.prototype.isPocketTypeValid = function () {
   return value !== null && value.length >= 2;
 };
 PaymentForm.prototype.isPocketTypeAmountValid = function (index) {
-  if (!this.pocketTypeItems[index]) return true;
+  if (!this.pocketTypes.items[index]) return true;
   let value = this.getPocketTypeAmount(index);
   return value !== null && value.length > 0;
 };
@@ -1612,7 +1631,7 @@ PaymentForm.prototype.getPocketType = function () {
 
 PaymentForm.prototype.getPocketTypeAmount = function (index) {
   if (this.pocketTypeElmAdded("amount", index)) {
-    return this.pocketTypeItems[index]["amount"].val().trim();
+    return this.pocketTypes.items[index]["amount"].val().trim();
   } else {
     return null;
   }
@@ -2020,7 +2039,6 @@ PaymentForm.prototype.removeVerificationContainer = function () {
 
 PaymentForm.prototype.addPocketType = function () {
   if (!this.pocketTypeAdded()) {
-    this.initPocketTypeInput();
     this.setupPocketTypeContainer();
     this.setIconColour(this.iconColour);
   }
@@ -2326,44 +2344,6 @@ PaymentForm.prototype.initBillingAddress = function () {
   this.billingAddressStreet.attr("placeholder", this.__('billingAddressStreet'));
   this.billingAddressHouseNumber.attr("placeholder", this.__('billingAddressHouseNumber'));
   this.billingAddressAdditional.attr("placeholder", this.__('billingAddressAdditional'));
-};
-
-/**
- * Initialise the pocket type input
- */
-
-PaymentForm.prototype.initPocketTypeInput = function () {
-  // let pocketTypes = [
-  //   { 'code': 'CSD1', 'name': 'Cuota Monetaria' },
-  //   { 'code': 'CSD2', 'name': 'Subsidio Escolar' },
-  //   { 'code': 'CSD3', 'name': 'Bono Efectivo' },
-  //   { 'code': 'CSD4', 'name': 'Ahorros' },
-  //   { 'code': 'CSD5', 'name': 'Cupo Credito' },
-  //   { 'code': 'CSD6', 'name': 'Bono Lonchera' },
-  //   { 'code': 'CSD7', 'name': 'Bono Nacimiento' },
-  //   { 'code': 'CSD8', 'name': 'Mundo Digital' },
-  //   { 'code': 'CSD9', 'name': 'Adulto Mayor' },
-  // ]
-
-  // // Pocket types
-  // this.pocketType = PaymentForm.detachOrCreateElement(this.elem, ".pocketType", "<select class='pocketType' />");
-  // let $this = this;
-  // setTimeout(() => {
-  //   let pocketTypeSelectize = $this.pocketType.selectize(
-  //     {
-  //       valueField: 'code',
-  //       labelField: 'name',
-  //       searchField: 'name',
-  //       options: pocketTypes
-  //     }
-  //   );
-  //   let pocketTypeSelectizeControl = pocketTypeSelectize[0].selectize;
-  //   pocketTypeSelectizeControl.setValue(pocketTypes[0])
-  // }, 0);
-
-  // this.pocketType.attr("placeholder", this.__('pocketTypeSelect'));
-
-  //crear select, input y boton
 };
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -2838,120 +2818,189 @@ PaymentForm.prototype.setupBillingAddress = function () {
 
 PaymentForm.prototype.setupPocketTypeAmount = function (pocketTypeItemSelectWrapper, index) {
 
+  PaymentForm.pocketTypes.items[index]["amount"] = PaymentForm.detachOrCreateElement(
+    this.elem,
+    '.pocketTypeAmount',
+    `<input class='pocket-type-amount' />`
+  );
+  const cPTAmountInput = PaymentForm.pocketTypes.items[index]["amount"];
+  pocketTypeItemSelectWrapper.append(cPTAmountInput);
 
-  this.pocketTypeItems[index]["amount"] = PaymentForm.detachOrCreateElement(this.elem, '.pocketTypeAmount', `<input class='pocket-type-amount' />`);
-  pocketTypeItemSelectWrapper.append(this.pocketTypeItems[index]["amount"]);
-
-  const currentPocketTypeAmountInput = this.pocketTypeItems[index]["amount"];
-  const randomId = PaymentForm.generateRandoms().join("");
-
-  if (!PaymentForm.elementHasAttribute(currentPocketTypeAmountInput, "name")) {
-    currentPocketTypeAmountInput.attr("name", "amount-" + randomId);
+  if (!PaymentForm.elementHasAttribute(cPTAmountInput, "name")) {
+    const randomId = PaymentForm.generateRandoms().join("").slice(4);
+    cPTAmountInput.attr("name", "amount-" + randomId);
   }
 
-  if (!PaymentForm.elementHasAttribute(currentPocketTypeAmountInput, "placeholder")) {
-    currentPocketTypeAmountInput.attr("placeholder", this.__('pocketTypeAmount'));
+  if (!PaymentForm.elementHasAttribute(cPTAmountInput, "placeholder")) {
+    cPTAmountInput.attr("placeholder", this.__('pocketTypeAmount'));
   }
 
-  currentPocketTypeAmountInput.attr("type", "number");
-  currentPocketTypeAmountInput.attr("autocorrect", "off");
-  currentPocketTypeAmountInput.attr("spellcheck", "off");
-  currentPocketTypeAmountInput.attr("autocapitalize", "off");
+  cPTAmountInput
+    .attr("type", "number")
+    .attr("autocorrect", "off")
+    .attr("spellcheck", "off")
+    .attr("autocapitalize", "off");
 
   // Events
   let $this = this;
-  currentPocketTypeAmountInput.keydown(PaymentForm.filterNumberOnlyKey);
-  currentPocketTypeAmountInput.blur(function () {
+  cPTAmountInput.keydown(PaymentForm.filterNumberOnlyKey);
+  cPTAmountInput.blur(function () {
     // $this.refreshPocketTypeAmountValidation();
   });
 }
 
 PaymentForm.prototype.setupPocketTypeSelect = function (pocketTypeItemSelectWrapper, index) {
-  this.pocketTypeItems[index]["select"] = PaymentForm.detachOrCreateElement(this.elem, ".pocketTypeSelect-" + index, `<select class='pocket-type-select pocket-type-select-${index}' />`);
-  pocketTypeItemSelectWrapper.append(this.pocketTypeItems[index]["select"]);
-  $this = this;
-  setTimeout(() => {
+  PaymentForm.pocketTypes.items[index]["select"] = PaymentForm.detachOrCreateElement(
+    this.elem,
+    ".pocketTypeSelect-",
+    "<select class='pocket-type-select pocket-type-select' />"
+  );
+  const cPTSelect = PaymentForm.pocketTypes.items[index]["select"];
 
-    this.pocketTypeSelectize = $this.pocketTypeItems[index]["select"].selectize(
+  if (!PaymentForm.elementHasAttribute(cPTSelect, "name")) {
+    const randomId = PaymentForm.generateRandoms().join("").slice(4);
+    cPTSelect.attr("name", "amount-" + randomId);
+  }
+
+  const options = PaymentForm.pocketTypes.options.filter((option) => {
+    return [...PaymentForm.pocketTypes.availableOptions].includes(option.code);
+  });
+
+  pocketTypeItemSelectWrapper.append(cPTSelect);
+
+  cPTSelect
+    .attr("placeholder", this.__('pocketTypeSelect'))
+    .selectize(
       {
         valueField: 'code',
         labelField: 'name',
         searchField: 'name',
-        options: PaymentForm.pocketTypes,
-      }
+        options: options,
+        hideSelected: true,
+        onInitialize: function () {
+          PaymentForm.pocketTypes.items[index]["selectController"] = this;
+          this.setValue(options[0]["code"]);
+        },
+        onChange(value) {
+          pocketTypeItemSelectWrapper.attr("data-type", PaymentForm.pocketTypes.optionsType[value]);
+        }
+      },
     );
-    this.pocketTypeSelectizeControl = this.pocketTypeSelectize[0].selectize;
-    this.pocketTypeSelectizeControl.setValue(PaymentForm.pocketTypes[0]);
-
-  }, 0);
-  this.pocketTypeItems[index]["select"].attr("placeholder", this.__('pocketTypeSelect'));
 }
 
 PaymentForm.prototype.removePocketTypeItem = function (index) {
-  let $this = this;
   $this.elem.find(".pocket-type-item").eq(index).remove();
-  $this.pocketTypeItems.splice(index, 1);
-  if ($this.pocketTypeItems.length <= 1) {
+  PaymentForm.pocketTypes.items.splice(index, 1);
+  if (PaymentForm.pocketTypes.items.length <= 1) {
     $this.elem.find(".pocket-type-button-remove").addClass("disabled");
   }
-
-  if (this.pocketTypeItems.length <= 3) {
+  if (PaymentForm.pocketTypes.items.length <= 3) {
     $this.elem.find(".pocket-type-button-add").removeClass("disabled");
   }
+  // let $this = this;
   // $this.refreshPocketTypeAmountValidation();
   // $this.refreshPocketTypeSelectValidation();
   // $this.refreshPocketTypeAmounts();
 }
 
+PaymentForm.prototype.setupPocketTypeInstallments = function (pocketTypeItemSelectWrapper, index) {
+  PaymentForm.pocketTypes.items[index]["installments"] = PaymentForm.detachOrCreateElement(
+    this.elem, '.pocketTypeInstallments',
+    "<select class='pocket-type-installments' />"
+  );
+
+  const cPTInstallments = PaymentForm.pocketTypes.items[index]["installments"];
+  // if (!PaymentForm.elementHasAttribute(cPTInstallments, "placeholder")) {
+  //   cPTInstallments.attr("placeholder", this.__('pocketInstallments'));
+  // }
+
+  //pendiente agregar opciones
+  // for (let i = 1; i <= 12; i++) {
+  //   const option = new Option(i, i);
+  //   cPTInstallments.add(option);
+  // }
+  pocketTypeItemSelectWrapper.append(cPTInstallments);
+}
+
 PaymentForm.prototype.setupPocketTypeButton = function (pocketTypeItemSelectWrapper, index) {
-  this.pocketTypeItems[index]["button"] = PaymentForm.detachOrCreateElement(this.elem, '.pocketTypeButton-' + index, `<span class='pocket-type-button pocket-type-button-remove pocket-type-button-${index}' />`);
-  const currentPocketTypeAmountButton = this.pocketTypeItems[index]["button"];
+
+  PaymentForm.pocketTypes.items[index]["button"] = PaymentForm.detachOrCreateElement(
+    this.elem, '.pocketTypeButton',
+    "<span class='pocket-type-button pocket-type-button-remove pocket-type-button'>" +
+    `<span class='icon icon-remove'>${PaymentForm.REMOVE_SVG}</span>` +
+    "</span>"
+  );
+
+  const currentPocketTypeAmountButton = PaymentForm.pocketTypes.items[index]["button"];
   pocketTypeItemSelectWrapper.append(currentPocketTypeAmountButton);
 
-  currentPocketTypeAmountButton.append("<span class='icon icon-remove'></span>");
-  currentPocketTypeAmountButton.find(".icon-remove").append(PaymentForm.REMOVE_SVG);
   let $this = this;
+
   currentPocketTypeAmountButton.click(function (event) {
     const currentIndex = Array.from(document.querySelectorAll('.pocket-type-item')).indexOf(event.target.parentNode);
     $this.removePocketTypeItem(currentIndex);
   });
-  if (this.pocketTypeItems.length <= 1) {
+
+  if (PaymentForm.pocketTypes.items.length <= 1) {
     currentPocketTypeAmountButton.addClass("disabled");
   } else {
-    this.pocketTypeItems[0]["button"].removeClass("disabled");
+    PaymentForm.pocketTypes.items[0]["button"].removeClass("disabled");
   }
-
 
 }
 
 PaymentForm.prototype.createPocketTypeItem = function (pocketTypeIndex) {
 
-  this.pocketTypeItems[pocketTypeIndex] = {
+  PaymentForm.pocketTypes.items[pocketTypeIndex] = {
     "amount": null,
     "type": null,
+    "selectController": null,
+    "installments": null,
     "button": null
   }
 
   const pocketTypeItemContainer = this.elem.find(".pocket-type-items-container");
-  let $this = this;
-  pocketTypeItemContainer
-    .append(`<div class='pocket-type-item'></div>`);
-
+  // let $this = this;
+  pocketTypeItemContainer.append(`<div class='pocket-type-item'></div>`);
   const pocketTypeItemSelectWrapper = pocketTypeItemContainer.find(".pocket-type-item").last();
-
-  $this.setupPocketTypeAmount(pocketTypeItemSelectWrapper, pocketTypeIndex);
-  $this.setupPocketTypeSelect(pocketTypeItemSelectWrapper, pocketTypeIndex);
-  $this.setupPocketTypeButton(pocketTypeItemSelectWrapper, pocketTypeIndex);
+  this.setupPocketTypeAmount(pocketTypeItemSelectWrapper, pocketTypeIndex);
+  this.setupPocketTypeSelect(pocketTypeItemSelectWrapper, pocketTypeIndex);
+  this.setupPocketTypeInstallments(pocketTypeItemSelectWrapper, pocketTypeIndex);
+  this.setupPocketTypeButton(pocketTypeItemSelectWrapper, pocketTypeIndex);
 }
 
 
 PaymentForm.prototype.setupPocketTypeContainer = function () {
-  this.elem.append("<div class='pocket-type-container'></div>");
+
+  this.elem.append(
+    "<div class='pocket-type-container'>" +
+    "<p>" +
+    `<span>${this.__('pocketTypeRequired')}</span>` +
+    "<div class='pocket-type-items-container'></div>" +
+    "</p>" +
+    "</div>"
+  );
+
+  $this = this;
+
+  const pocketTypes = PaymentForm.pocketTypes;
+  const optionsType = Object.keys(this.configuration).reduce(function (result, key) {
+    const currentFields = $this.configuration[key]["type_pockets"];
+    return { ...result, ...currentFields };
+  }, {});
+  const options = Object.values(this.configuration)
+    .flatMap(config => Object.keys(config.type_pockets))
+    .sort();
+  pocketTypes.optionsType = optionsType;
+  pocketTypes.availableOptions = new Set(options);
+  pocketTypes.optionsType = Object.values(this.configuration)
+    .flatMap(config => Object.entries(config.type_pockets))
+    .reduce((result, [key, value]) => ({ ...result, [key]: value }), {});
+
   let container = this.elem.find(".pocket-type-container");
-  container.append(`<p><span>${this.__('pocketTypeRequired')}</span></p>`);
-  container.append("<div class='pocket-type-items-container'></div>");
-  this.pocketTypeItems = []
+
   this.createPocketTypeItem(0);
+
   container.append(
     "<div class='pocket-type-footer'>" +
     "<div class='pocketTypeAmountLabel'>" +
@@ -2959,24 +3008,23 @@ PaymentForm.prototype.setupPocketTypeContainer = function () {
     "</div>" +
     "<div class='pocket-type-add-item'>" +
     "<span class='pocket-type-button pocket-type-button-add'>" +
-    "<span class='icon icon-add'></span>" +
+    `<span class='icon icon-add'>${PaymentForm.ADD_SVG}</span>` +
     `<span>${this.__('pocketTypeAddLabel')}</span>` +
     "</span>" +
     "</div>" +
     "</div>");
-  $this = this;
-  setTimeout(() => {
-    container.find(".icon-add").append(PaymentForm.ADD_SVG);
-    const addButton = this.elem.find(".pocket-type-button-add");
-    addButton.click(() => {
-      if ($this.pocketTypeItems.length <= 3) {
-        if ($this.pocketTypeItems.length >= 3) {
-          addButton.addClass("disabled");
-        }
-        $this.createPocketTypeItem(this.pocketTypeItems.length);
+
+  const addButton = this.elem.find(".pocket-type-button-add");
+
+  addButton.click(() => {
+    if (pocketTypes.items.length <= 3) {
+      if (pocketTypes.items.length >= 3) {
+        addButton.addClass("disabled");
       }
-    })
-  }, 0);
+      $this.createPocketTypeItem(pocketTypes.items.length);
+    }
+  })
+
 };
 
 // ==========================================================================================
