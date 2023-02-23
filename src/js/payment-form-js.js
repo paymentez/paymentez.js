@@ -1433,7 +1433,7 @@ PaymentForm.prototype.getCard = function () {
           {
             "type_pocket": "CSD4",
             "installments": 1,
-            "amount": 1
+            "amount": 1100
           }
         ]
       }
