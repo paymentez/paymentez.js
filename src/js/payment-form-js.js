@@ -484,6 +484,7 @@ PaymentForm.prototype.verifyTransaction = function () {
       $this.addCardProcess.successAddCardCallback($this.addCardProcess.response);
     },
     function (response) {
+      console.log(response);
       $this.unBlockVerificationContainer();
       $this.removeVerificationContainer();
       $this.addCardProcess.errorAddCardCallback($this.addCardProcess.response);
@@ -498,6 +499,7 @@ PaymentForm.prototype.cardTypeFromNumberBin = function (number) {
     });
   }
 };
+
 PaymentForm.prototype.setRequiredFields = function (required_fields) {
   const form = this;
   if (!(required_fields && required_fields.length > 0)) {
@@ -1699,7 +1701,6 @@ PaymentForm.prototype.getPocketTypeData = function () {
 PaymentForm.prototype.getPocketTypeAmount = function (index) {
   const pocketItem = this.pocketTypes.items[index];
   if (pocketItem.amount && pocketItem.amount[0]) {
-    console.log(pocketItem.amount[0].value)
     return parseInt(pocketItem.amount[0].value);
   }
   return null;
@@ -1730,7 +1731,6 @@ PaymentForm.prototype.getPocketTypeSelect = function (index) {
 PaymentForm.prototype.getPocketTypeInstallments = function (index) {
   const pocketItem = this.pocketTypes.items[index];
   if (pocketItem) {
-    console.log(pocketItem.installments.val());
     return pocketItem.installments.val();
   }
   return null;
@@ -3005,7 +3005,7 @@ PaymentForm.prototype.setupPocketTypeInstallments = function (pocketTypeItemSele
     this.elem, '.pocketTypeInstallments',
     "<select class='pocket-type-installments' />"
   );
-  this.setInstallmentsOptions([...Array(48).keys()], cPTInstallments);
+  this.setInstallmentsOptions([...Array(49).keys()], cPTInstallments);
   cPTInstallments.attr("name", this.createUniqueName("pocket-type-installments-"));
   pocketTypeItemSelectWrapper.append(cPTInstallments);
 }
