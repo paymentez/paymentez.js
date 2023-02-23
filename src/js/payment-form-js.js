@@ -1280,7 +1280,7 @@ PaymentForm.prototype.isBillingAddressAdditionalValid = function () {
 PaymentForm.prototype.isPocketTypeAmountValid = function (index) {
   if (!this.pocketTypes.items[index]) return true;
   let value = this.getPocketTypeAmount(index);
-  return value !== null && value.length > 0;
+  return value !== null && value > 0;
 };
 
 PaymentForm.prototype.isPocketTypeSelectValid = function (index) {
