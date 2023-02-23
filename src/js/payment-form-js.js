@@ -1244,6 +1244,11 @@ PaymentForm.prototype.isBillingAddressAdditionalValid = function () {
 
 PaymentForm.prototype.isPocketTypeValid = function () {
   if (!this.pocketTypeAdded()) return true;
+  // es valido si cada campo amount tiene almenos dos caracteres y si el campo type no es vacio
+  // let valid = true;
+  // for (let i = 0; i < this.pocketTypes.items.length; i++) {
+  //   valid = valid && this.isPocketTypeAmountValid(i);
+  // }
   return true;
   // let value = this.getPocketType();
   // return value !== null && value.length >= 2;
@@ -1251,6 +1256,7 @@ PaymentForm.prototype.isPocketTypeValid = function () {
 PaymentForm.prototype.isPocketTypeAmountValid = function (index) {
   if (!this.pocketTypes.items[index]) return true;
   let value = this.getPocketTypeAmount(index);
+  console.log(value);
   return value !== null && value.length > 0;
 };
 //========================================================================================================
@@ -1427,7 +1433,7 @@ PaymentForm.prototype.getCard = function () {
           {
             "type_pocket": "CSD4",
             "installments": 1,
-            "amount": 100
+            "amount": 1
           }
         ]
       }
@@ -1652,7 +1658,8 @@ PaymentForm.prototype.getBillingAddress = function () {
 
 PaymentForm.prototype.getPocketType = function () {
   if (this.pocketTypeAdded()) {
-    // pendiente 
+
+    // pendiente
     return 123;
     // return this.pocketType.val().trim();
   } else {
