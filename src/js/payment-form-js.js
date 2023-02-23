@@ -1670,7 +1670,7 @@ PaymentForm.prototype.getPocketTransactions = function () {
       type_pocket: this.getPocketTypeSelect(index),
     };
     if (this.pocketTypes.optionsType[pocketTransaction.type_pocket] === "credit") {
-      pocketTransaction.installments = this.getPocketTypeInstallments(index);
+      pocketTransaction.installments = parseInt(this.getPocketTypeInstallments(index));
     }
     return pocketTransaction;
   }, this);
@@ -1700,7 +1700,7 @@ PaymentForm.prototype.getPocketTypeAmount = function (index) {
   const pocketItem = this.pocketTypes.items[index];
   if (pocketItem.amount && pocketItem.amount[0]) {
     console.log(pocketItem.amount[0].value)
-    return pocketItem.amount[0].value;
+    return parseInt(pocketItem.amount[0].value);
   }
   return null;
 };
