@@ -60,6 +60,25 @@ function PaymentForm(elem) {
     this.initFiscalNumberInput();
   }
 
+  this.pocketTypes = {
+    items: [],
+    availableOptions: new Set([]),
+    optionsType: {},
+    "options": [
+      { 'code': 'CSD1', 'name': 'Cuota Monetaria' },
+      { 'code': 'CSD2', 'name': 'Subsidio Escolar' },
+      { 'code': 'CSD3', 'name': 'Bono Efectivo' },
+      { 'code': 'CSD4', 'name': 'Ahorros' },
+      { 'code': 'CSD5', 'name': 'Cupo Credito' },
+      { 'code': 'CSD6', 'name': 'Bono Lonchera' },
+      { 'code': 'CSD7', 'name': 'Bono Nacimiento' },
+      { 'code': 'CSD8', 'name': 'Mundo Digital' },
+      { 'code': 'CSD9', 'name': 'Adulto Mayor' },
+      { 'code': 'CSD10', 'name': 'Subsidio Familiar' },
+      { 'code': 'CSD11', 'name': 'Bolsillo Debito' },
+    ]
+  }
+
   this.elem.empty();
 
   // Setup display
@@ -233,24 +252,7 @@ PaymentForm.REMOVE_SVG = '<svg width="20" height="21" viewBox="0 0 20 21" fill="
 
 PaymentForm.ADD_SVG = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d = "M8 0C6.5 0.0208333 5.15625 0.385417 3.96875 1.09375C2.76042 1.80208 1.80208 2.76042 1.09375 3.96875C0.385417 5.15625 0.0208333 6.5 0 8C0.0208333 9.5 0.385417 10.8438 1.09375 12.0312C1.80208 13.2396 2.76042 14.1979 3.96875 14.9062C5.15625 15.6146 6.5 15.9792 8 16C9.5 15.9792 10.8438 15.6146 12.0312 14.9062C13.2396 14.1979 14.1979 13.2396 14.9062 12.0312C15.6146 10.8438 15.9792 9.5 16 8C15.9792 6.5 15.6146 5.15625 14.9062 3.96875C14.1979 2.76042 13.2396 1.80208 12.0312 1.09375C10.8438 0.385417 9.5 0.0208333 8 0ZM8 15C6.70833 14.9792 5.53125 14.6562 4.46875 14.0312C3.42708 13.4062 2.59375 12.5729 1.96875 11.5312C1.34375 10.4688 1.02083 9.29167 1 8C1.02083 6.70833 1.34375 5.53125 1.96875 4.46875C2.59375 3.42708 3.42708 2.59375 4.46875 1.96875C5.53125 1.34375 6.70833 1.02083 8 1C9.29167 1.02083 10.4688 1.34375 11.5312 1.96875C12.5729 2.59375 13.4062 3.42708 14.0312 4.46875C14.6562 5.53125 14.9792 6.70833 15 8C14.9792 9.29167 14.6562 10.4688 14.0312 11.5312C13.4062 12.5729 12.5729 13.4062 11.5312 14.0312C10.4688 14.6562 9.29167 14.9792 8 15ZM11 7.5H8.5V5C8.47917 4.6875 8.3125 4.52083 8 4.5C7.6875 4.52083 7.52083 4.6875 7.5 5V7.5H5C4.6875 7.52083 4.52083 7.6875 4.5 8C4.52083 8.3125 4.6875 8.47917 5 8.5H7.5V11C7.52083 11.3125 7.6875 11.4792 8 11.5C8.3125 11.4792 8.47917 11.3125 8.5 11V8.5H11C11.3125 8.47917 11.4792 8.3125 11.5 8C11.4792 7.6875 11.3125 7.52083 11 7.5Z" fill="currentColor" /></svg >'
 
-PaymentForm.pocketTypes = {
-  items: [],
-  availableOptions: new Set([]),
-  optionsType: {},
-  "options": [
-    { 'code': 'CSD1', 'name': 'Cuota Monetaria' },
-    { 'code': 'CSD2', 'name': 'Subsidio Escolar' },
-    { 'code': 'CSD3', 'name': 'Bono Efectivo' },
-    { 'code': 'CSD4', 'name': 'Ahorros' },
-    { 'code': 'CSD5', 'name': 'Cupo Credito' },
-    { 'code': 'CSD6', 'name': 'Bono Lonchera' },
-    { 'code': 'CSD7', 'name': 'Bono Nacimiento' },
-    { 'code': 'CSD8', 'name': 'Mundo Digital' },
-    { 'code': 'CSD9', 'name': 'Adulto Mayor' },
-    { 'code': 'CSD10', 'name': 'Subsidio Familiar' },
-    { 'code': 'CSD11', 'name': 'Bolsillo Debito' },
-  ]
-};
+
 
 
 /**
@@ -635,16 +637,13 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
  *
  * @param installments - array
  */
-PaymentForm.prototype.setInstallmentsOptions = function (installments) {
-  let selectInstallments = $(".installments");
+PaymentForm.prototype.setInstallmentsOptions = function (installments, selectedInstallment = null) {
+  const selectInstallments = selectedInstallment || $(".installments");
   selectInstallments.empty();
-  $.each(installments, function (index, value) {
-    let text = value;
-    if (value === 0) {
-      text = 'Sin cuotas';
-    }
-    selectInstallments.append($("<option></option>").attr("value", value).text(text));
-  });
+  installments.forEach(function (value) {
+    const text = value === 0 ? this.__('installments') : value;
+    selectInstallments.append($("<option>").attr("value", value).text(text));
+  }, this);
 };
 
 /**
@@ -895,6 +894,17 @@ PaymentForm.prototype.isValidBillingAddress = function () {
   return iv_country && iv_state && iv_city && iv_district && iv_zip && iv_street && iv_housenumber && iv_additional;
 }
 
+PaymentForm.prototype.isPocketTypeValid = function () {
+  if (!this.pocketTypeAdded()) return true;
+  const validationArray = [];
+  this.pocketTypes.items.forEach((item, index) => {
+    validationArray.push(this.refreshPocketTypeAmountValidation(index));
+    validationArray.push(this.refreshPocketTypeSelectValidation(index));
+    validationArray.push(this.refreshPocketTypeInstallmentsValidation(index));
+  });
+  return !validationArray.includes(false);
+};
+
 /**
  * Is the given data a valid card?
  *
@@ -1068,6 +1078,31 @@ PaymentForm.prototype.refreshPocketTypeValidation = function () {
   valid ? this.pocketType.removeClass("has-error") : this.pocketType.addClass("has-error");
   return valid
 };
+
+PaymentForm.prototype.refreshPocketTypeAmountValidation = function (index) {
+  const cAmountField = this.pocketTypes.items[index].amount;
+  let valid = this.isPocketTypeAmountValid(index);
+  valid ? cAmountField.removeClass("has-error") : cAmountField.addClass("has-error");
+  return valid
+};
+
+PaymentForm.prototype.refreshPocketTypeSelectValidation = function (index) {
+  const cSelectField = this.pocketTypes.items[index].select;
+  let valid = this.isPocketTypeSelectValid(index);
+  valid ? cSelectField.removeClass("has-error") : cSelectField.addClass("has-error");
+  return valid
+};
+
+PaymentForm.prototype.refreshPocketTypeInstallmentsValidation = function (index) {
+  const cInstallmentsField = this.pocketTypes.items[index].installments;
+  let valid = this.isPocketTypeInstallmentsValid(index);
+  valid ? cInstallmentsField.removeClass("has-error") : cInstallmentsField.addClass("has-error");
+  return valid
+};
+
+
+
+
 //======================================================================================================
 
 PaymentForm.prototype.addValueToNip = function (value, key) {
@@ -1242,22 +1277,22 @@ PaymentForm.prototype.isBillingAddressAdditionalValid = function () {
   return (value === null || value === "") || (0 < value.length && value.length < 100);
 };
 
-PaymentForm.prototype.isPocketTypeValid = function () {
-  if (!this.pocketTypeAdded()) return true;
-  // es valido si cada campo amount tiene almenos dos caracteres y si el campo type no es vacio
-  // let valid = true;
-  // for (let i = 0; i < this.pocketTypes.items.length; i++) {
-  //   valid = valid && this.isPocketTypeAmountValid(i);
-  // }
-  return true;
-  // let value = this.getPocketType();
-  // return value !== null && value.length >= 2;
-};
 PaymentForm.prototype.isPocketTypeAmountValid = function (index) {
   if (!this.pocketTypes.items[index]) return true;
   let value = this.getPocketTypeAmount(index);
-  console.log(value);
   return value !== null && value.length > 0;
+};
+
+PaymentForm.prototype.isPocketTypeSelectValid = function (index) {
+  if (!this.pocketTypes.items[index]) return true;
+  let value = this.getPocketTypeSelect(index);
+  return value !== null && value.length > 0;
+};
+
+PaymentForm.prototype.isPocketTypeInstallmentsValid = function (index) {
+  if (!this.pocketTypes.items[index]) return true;
+  let value = this.getPocketTypeInstallments(index);
+  return value !== null;
 };
 //========================================================================================================
 
@@ -1371,9 +1406,15 @@ PaymentForm.prototype.pocketTypeAdded = function () {
   return pocket_type.length >= 1;
 };
 
-
+/**
+ * Check if a specific pocket type element (select, amount, or installments) exists in the form.
+ * 
+ * @param {string} type - The type of the pocket type element to check, can be "select", "amount", or "installments".
+ * @param {number} index - The index of the pocket type element to check.
+ * @returns {boolean} - Returns true if the pocket type element exists, false otherwise.
+ */
 PaymentForm.prototype.pocketTypeElmAdded = function (type, index) {
-  const pocket_elm = this.elem.find(`.pocket-${type}-${index}]`);
+  const pocket_elm = this.pocketTypes.items[index][type];
   return pocket_elm.length >= 1;
 }
 
@@ -1384,7 +1425,7 @@ PaymentForm.prototype.pocketTypeElmAdded = function (type, index) {
  *
  * @returns {object}
  */
-PaymentForm.prototype.getCard = function () {
+PaymentForm.prototype.getCard = function (e) {
   let data = null;
   if (!this.isValidData()) return data;
 
@@ -1406,45 +1447,13 @@ PaymentForm.prototype.getCard = function () {
       "cvc": this.getCvc(),
       "nip": this.getNip(),
       "card_auth": this.getValidationOption(),
-      "fiscal_number": this.getFiscalNumber()
+      "fiscal_number": this.getFiscalNumber(),
+      "brand_options": this.getPocketTypeData(),
     }
   };
-
-  if (this.getPocketType()) {
-    //aqui se agrega la data del bolsillo
-    console.log("pocket type", this.getPocketType());
-    const dummyData = {
-      "split_colsubsidio": {
-        "transactions": [
-          {
-            "type_pocket": "CSD1",
-            "amount": 200
-          },
-          {
-            "type_pocket": "CSD2",
-            "installments": 1,
-            "amount": 100
-          },
-          {
-            "type_pocket": "CSD3",
-            "installments": 1,
-            "amount": 100
-          },
-          {
-            "type_pocket": "CSD4",
-            "installments": 1,
-            "amount": 1100
-          }
-        ]
-      }
-    }
-    // data.card.brand_options = {
-    //   'type_pocket': this.getPocketType()
-    // }
-    data.card.brand_options = dummyData;
-  }
-
-  return data;
+  // return data;
+  e.preventDefault();
+  return null
 };
 
 /**
@@ -1656,24 +1665,77 @@ PaymentForm.prototype.getBillingAddress = function () {
   return billing_address;
 };
 
-PaymentForm.prototype.getPocketType = function () {
+PaymentForm.prototype.getPocketTransactions = function () {
+  return this.pocketTypes.items.map(function (_, index) {
+    const pocketTransaction = {
+      amount: this.getPocketTypeAmount(index),
+      type_pocket: this.getPocketTypeSelect(index),
+    };
+    if (this.pocketTypes.optionsType[pocketTransaction.type_pocket] === "credit") {
+      pocketTransaction.installments = this.getPocketTypeInstallments(index);
+    }
+    return pocketTransaction;
+  }, this);
+}
+
+PaymentForm.prototype.getPocketTypeData = function () {
   if (this.pocketTypeAdded()) {
-
-    // pendiente
-    return 123;
-    // return this.pocketType.val().trim();
+    const splitId = "split_" + Object.keys(this.configuration)[0];
+    const pocketData = {
+      [splitId]: {
+        transactions: this.getPocketTransactions()
+      }
+    }
+    return pocketData;
   } else {
     return null;
   }
 };
 
+/**
+ * Get the amount for a specific pocket type item.
+ *
+ * @param {number} index - The index of the pocket type item to get the amount for.
+ * @returns {string|null} - The amount of the pocket type item as a string, or null if the amount element does not exist.
+ */
 PaymentForm.prototype.getPocketTypeAmount = function (index) {
-  if (this.pocketTypeElmAdded("amount", index)) {
-    return this.pocketTypes.items[index]["amount"].val().trim();
-  } else {
-    return null;
+  const pocketItem = this.pocketTypes.items[index];
+  if (pocketItem.amount && pocketItem.amount[0]) {
+    return pocketItem.amount[0].value.trim();
   }
+  return null;
 };
+
+/**
+ * Get the value of the selection field for a specific pocket type item.
+ *
+ * @param {number} index - The index of the pocket type item to get the selection field value for.
+ * The index must be an integer and must be within the range of items in the `this.pocketTypes.items` property.
+ * @returns {string|null} - The value of the selection field for the pocket type item, or null if the item does not exist.
+ */
+PaymentForm.prototype.getPocketTypeSelect = function (index) {
+  const pocketItem = this.pocketTypes.items[index];
+  if (pocketItem) {
+    return pocketItem.selectController.getValue().trim();
+  }
+  return null;
+};
+
+/**
+ * Get the value of the installments field for a specific pocket type item.
+ *
+ * @param {number} index - The index of the pocket type item to get the installments field value for.
+ * The index must be an integer and must be within the range of items in the `this.pocketTypes.items` property.
+ * @returns {string|null} - The value of the installments field for the pocket type item, or null if the item does not exist.
+ */
+PaymentForm.prototype.getPocketTypeInstallments = function (index) {
+  const pocketItem = this.pocketTypes.items[index];
+  if (pocketItem) {
+    return pocketItem.installments.val().trim();
+  }
+  return null;
+};
+
 
 // --- --- --- --- --- --- --- --- --- --- ---
 
@@ -2857,86 +2919,79 @@ PaymentForm.prototype.setupBillingAddress = function () {
   });
 };
 
+PaymentForm.prototype.createUniqueName = function (prefix) {
+  return `${prefix}${PaymentForm.generateRandoms().join("").slice(4)}`;
+}
 
 PaymentForm.prototype.setupPocketTypeAmount = function (pocketTypeItemSelectWrapper, index) {
-
-  PaymentForm.pocketTypes.items[index]["amount"] = PaymentForm.detachOrCreateElement(
+  const cPTAmountInput = this.pocketTypes.items[index].amount = PaymentForm.detachOrCreateElement(
     this.elem,
     '.pocketTypeAmount',
     `<input class='pocket-type-amount' />`
   );
-  const cPTAmountInput = PaymentForm.pocketTypes.items[index]["amount"];
+
   pocketTypeItemSelectWrapper.append(cPTAmountInput);
 
-  if (!PaymentForm.elementHasAttribute(cPTAmountInput, "name")) {
-    const randomId = PaymentForm.generateRandoms().join("").slice(4);
-    cPTAmountInput.attr("name", "amount-" + randomId);
-  }
+  cPTAmountInput.attr({
+    name: this.createUniqueName("pocket-type-amount-"),
+    placeholder: this.__('pocketTypeAmount'),
+    type: "number",
+    autocorrect: "off",
+    spellcheck: "off",
+    autocapitalize: "off",
+  });
 
-  if (!PaymentForm.elementHasAttribute(cPTAmountInput, "placeholder")) {
-    cPTAmountInput.attr("placeholder", this.__('pocketTypeAmount'));
-  }
-
-  cPTAmountInput
-    .attr("type", "number")
-    .attr("autocorrect", "off")
-    .attr("spellcheck", "off")
-    .attr("autocapitalize", "off");
-
-  // Events
-  let $this = this;
   cPTAmountInput.keydown(PaymentForm.filterNumberOnlyKey);
-  cPTAmountInput.blur(function () {
-    // $this.refreshPocketTypeAmountValidation();
+  cPTAmountInput.blur(() => {
+    this.refreshPocketTypeAmountValidation(index);
   });
 }
 
 PaymentForm.prototype.setupPocketTypeSelect = function (pocketTypeItemSelectWrapper, index) {
-  PaymentForm.pocketTypes.items[index]["select"] = PaymentForm.detachOrCreateElement(
+  $this = this;
+  const { pocketTypes } = $this;
+  const pocketTypeItem = pocketTypes.items[index];
+  const cPTSelectField = pocketTypeItem.select = PaymentForm.detachOrCreateElement(
     this.elem,
-    ".pocketTypeSelect-",
-    "<select class='pocket-type-select pocket-type-select' />"
+    ".pocketTypeSelect",
+    "<select class='pocket-type-select' />"
   );
-  const cPTSelect = PaymentForm.pocketTypes.items[index]["select"];
 
-  if (!PaymentForm.elementHasAttribute(cPTSelect, "name")) {
-    const randomId = PaymentForm.generateRandoms().join("").slice(4);
-    cPTSelect.attr("name", "amount-" + randomId);
-  }
+  pocketTypeItemSelectWrapper.append(cPTSelectField);
 
-  const options = PaymentForm.pocketTypes.options.filter((option) => {
-    return [...PaymentForm.pocketTypes.availableOptions].includes(option.code);
+  const options = pocketTypes.options.filter(function (option) {
+    return pocketTypes.availableOptions.has(option.code);
   });
 
-  pocketTypeItemSelectWrapper.append(cPTSelect);
-
-  cPTSelect
+  cPTSelectField
     .attr("placeholder", this.__('pocketTypeSelect'))
-    .selectize(
-      {
-        valueField: 'code',
-        labelField: 'name',
-        searchField: 'name',
-        options: options,
-        hideSelected: true,
-        onInitialize: function () {
-          PaymentForm.pocketTypes.items[index]["selectController"] = this;
-          this.setValue(options[0]["code"]);
-        },
-        onChange(value) {
-          pocketTypeItemSelectWrapper.attr("data-type", PaymentForm.pocketTypes.optionsType[value]);
-        }
+    .attr("name", this.createUniqueName("pocket-type-select-"))
+    .selectize({
+      valueField: 'code',
+      labelField: 'name',
+      searchField: 'name',
+      options: options,
+      hideSelected: true,
+      onInitialize: function () {
+        pocketTypeItem.selectController = this;
+        this.setValue(options[0].code);
       },
-    );
-}
+      onChange: function (value) {
+        pocketTypeItemSelectWrapper.attr("data-type", pocketTypes.optionsType[value]);
+        $this.refreshPocketTypeSelectValidation(index);
+      }
+    });
+};
 
 PaymentForm.prototype.removePocketTypeItem = function (index) {
-  $this.elem.find(".pocket-type-item").eq(index).remove();
-  PaymentForm.pocketTypes.items.splice(index, 1);
-  if (PaymentForm.pocketTypes.items.length <= 1) {
+  this.pocketTypes.items[index].selectController.destroy();
+  this.elem.find(".pocket-type-item").eq(index).remove()
+  this.pocketTypes.items.splice(index, 1);
+
+  if (this.pocketTypes.items.length <= 1) {
     $this.elem.find(".pocket-type-button-remove").addClass("disabled");
   }
-  if (PaymentForm.pocketTypes.items.length <= 3) {
+  if (this.pocketTypes.items.length <= 3) {
     $this.elem.find(".pocket-type-button-add").removeClass("disabled");
   }
   // let $this = this;
@@ -2946,119 +3001,97 @@ PaymentForm.prototype.removePocketTypeItem = function (index) {
 }
 
 PaymentForm.prototype.setupPocketTypeInstallments = function (pocketTypeItemSelectWrapper, index) {
-  PaymentForm.pocketTypes.items[index]["installments"] = PaymentForm.detachOrCreateElement(
+  const cPTInstallments = this.pocketTypes.items[index]["installments"] = PaymentForm.detachOrCreateElement(
     this.elem, '.pocketTypeInstallments',
     "<select class='pocket-type-installments' />"
   );
-
-  const cPTInstallments = PaymentForm.pocketTypes.items[index]["installments"];
-  // if (!PaymentForm.elementHasAttribute(cPTInstallments, "placeholder")) {
-  //   cPTInstallments.attr("placeholder", this.__('pocketInstallments'));
-  // }
-
-  //pendiente agregar opciones
-  // for (let i = 1; i <= 12; i++) {
-  //   const option = new Option(i, i);
-  //   cPTInstallments.add(option);
-  // }
+  this.setInstallmentsOptions([...Array(48).keys()], cPTInstallments);
+  cPTInstallments.attr("name", this.createUniqueName("pocket-type-installments-"));
   pocketTypeItemSelectWrapper.append(cPTInstallments);
 }
 
 PaymentForm.prototype.setupPocketTypeButton = function (pocketTypeItemSelectWrapper, index) {
+  const pocketTypesItems = this.pocketTypes.items;
 
-  PaymentForm.pocketTypes.items[index]["button"] = PaymentForm.detachOrCreateElement(
-    this.elem, '.pocketTypeButton',
-    "<span class='pocket-type-button pocket-type-button-remove pocket-type-button'>" +
-    `<span class='icon icon-remove'>${PaymentForm.REMOVE_SVG}</span>` +
-    "</span>"
+  const cPTAmountButton = pocketTypesItems[index].button = PaymentForm.detachOrCreateElement(
+    this.elem,
+    '.pocketTypeButton',
+    `<span class='pocket-type-button pocket-type-button-remove'>
+      <span class='icon icon-remove'>${PaymentForm.REMOVE_SVG}</span>
+    </span>`
   );
+  cPTAmountButton.click(function (event) {
+    const currentIndex = [...document.querySelectorAll('.pocket-type-item')].indexOf(event.target.parentNode);
+    this.removePocketTypeItem(currentIndex);
+  }.bind(this));
 
-  const currentPocketTypeAmountButton = PaymentForm.pocketTypes.items[index]["button"];
-  pocketTypeItemSelectWrapper.append(currentPocketTypeAmountButton);
+  pocketTypesItems.length > 1 ?
+    pocketTypesItems[0].button.removeClass('disabled') :
+    cPTAmountButton.addClass('disabled');
 
-  let $this = this;
+  pocketTypeItemSelectWrapper.append(cPTAmountButton);
 
-  currentPocketTypeAmountButton.click(function (event) {
-    const currentIndex = Array.from(document.querySelectorAll('.pocket-type-item')).indexOf(event.target.parentNode);
-    $this.removePocketTypeItem(currentIndex);
-  });
-
-  if (PaymentForm.pocketTypes.items.length <= 1) {
-    currentPocketTypeAmountButton.addClass("disabled");
-  } else {
-    PaymentForm.pocketTypes.items[0]["button"].removeClass("disabled");
-  }
-
-}
+};
 
 PaymentForm.prototype.createPocketTypeItem = function (pocketTypeIndex) {
-
-  PaymentForm.pocketTypes.items[pocketTypeIndex] = {
-    "amount": null,
-    "type": null,
-    "selectController": null,
-    "installments": null,
-    "button": null
-  }
-
-  const pocketTypeItemContainer = this.elem.find(".pocket-type-items-container");
-  // let $this = this;
-  pocketTypeItemContainer.append(`<div class='pocket-type-item'></div>`);
-  const pocketTypeItemSelectWrapper = pocketTypeItemContainer.find(".pocket-type-item").last();
+  const pocketTypeItemSelectWrapper = $("<div>", { class: "pocket-type-item" })
+    .appendTo(this.elem.find(".pocket-type-items-container"));
+  this.pocketTypes.items[pocketTypeIndex] = {
+    amount: null,
+    select: null,
+    selectController: null,
+    installments: null,
+    button: null,
+  };
   this.setupPocketTypeAmount(pocketTypeItemSelectWrapper, pocketTypeIndex);
   this.setupPocketTypeSelect(pocketTypeItemSelectWrapper, pocketTypeIndex);
   this.setupPocketTypeInstallments(pocketTypeItemSelectWrapper, pocketTypeIndex);
   this.setupPocketTypeButton(pocketTypeItemSelectWrapper, pocketTypeIndex);
-}
+};
+
 
 
 PaymentForm.prototype.setupPocketTypeContainer = function () {
 
-  this.elem.append(
-    "<div class='pocket-type-container'>" +
-    "<p>" +
-    `<span>${this.__('pocketTypeRequired')}</span>` +
-    "<div class='pocket-type-items-container'></div>" +
-    "</p>" +
-    "</div>"
-  );
-
+  const { pocketTypes, configuration } = this;
   $this = this;
 
-  const pocketTypes = PaymentForm.pocketTypes;
-  const optionsType = Object.keys(this.configuration).reduce(function (result, key) {
-    const currentFields = $this.configuration[key]["type_pockets"];
-    return { ...result, ...currentFields };
-  }, {});
-  const options = Object.values(this.configuration)
+  const options = Object.values(configuration)
     .flatMap(config => Object.keys(config.type_pockets))
     .sort();
-  pocketTypes.optionsType = optionsType;
-  pocketTypes.availableOptions = new Set(options);
-  pocketTypes.optionsType = Object.values(this.configuration)
-    .flatMap(config => Object.entries(config.type_pockets))
-    .reduce((result, [key, value]) => ({ ...result, [key]: value }), {});
 
-  let container = this.elem.find(".pocket-type-container");
+  pocketTypes.availableOptions = new Set(options);
+  pocketTypes.optionsType = Object.keys(configuration).reduce((result, key) => {
+    const currentFields = configuration[key].type_pockets;
+    return { ...result, ...currentFields };
+  }, {});
+
+  const pocketTypeContainer = $("<div>", { class: "pocket-type-container" });
+  pocketTypeContainer.append(`
+    <p><span>${this.__("pocketTypeRequired")}</span></p>
+    <div class="pocket-type-items-container"></div>
+  `);
+
+  this.elem.append(pocketTypeContainer);
 
   this.createPocketTypeItem(0);
 
-  container.append(
-    "<div class='pocket-type-footer'>" +
-    "<div class='pocketTypeAmountLabel'>" +
-    "<span>$ 0,00 de $1.000,00</span>" +
-    "</div>" +
-    "<div class='pocket-type-add-item'>" +
-    "<span class='pocket-type-button pocket-type-button-add'>" +
-    `<span class='icon icon-add'>${PaymentForm.ADD_SVG}</span>` +
-    `<span>${this.__('pocketTypeAddLabel')}</span>` +
-    "</span>" +
-    "</div>" +
-    "</div>");
+  pocketTypeContainer.append(`
+    <div class="pocket-type-footer">
+      <div class="pocketTypeAmountLabel">
+        <span>$ 0,00 de $1.000,00</span>
+      </div>
+      <div class="pocket-type-add-item">
+        <span class="pocket-type-button pocket-type-button-add">
+          <span class="icon icon-add">${PaymentForm.ADD_SVG}</span>
+          <span>${this.__("pocketTypeAddLabel")}</span>
+        </span>
+      </div>
+    </div>
+  `);
 
-  const addButton = this.elem.find(".pocket-type-button-add");
-
-  addButton.click(() => {
+  const addButton = pocketTypeContainer.find(".pocket-type-button-add");
+  addButton.on("click", () => {
     if (pocketTypes.items.length <= 3) {
       if (pocketTypes.items.length >= 3) {
         addButton.addClass("disabled");

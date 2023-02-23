@@ -10,10 +10,10 @@ translations['en'] = {
   billingAddressCountry: 'Country',
   billingAddressDistrict: 'District',
   billingAddressAdditional: 'Additional Information',
+  installments: 'No installments',
   pocketTypeRequired: 'Pocket Type is required',
   pocketTypeAmount: 'Amount',
   pocketTypeSelect: 'Pocket Type',
-  pocketInstallments: 'Installments',
   pocketTypeAddLabel: 'Add Pocket',
 }
 
@@ -27,11 +27,12 @@ translations['es'] = {
   billingAddressCountry: 'País',
   billingAddressDistrict: 'Distrito',
   billingAddressAdditional: 'Información adicional',
+  installments: 'Sin cuotas',
   pocketTypeRequired: 'Se requiere el tipo de bolsillo',
   pocketTypeAmount: 'Monto',
   pocketTypeSelect: 'Tipo de bolsillo',
-  pocketInstallments: 'Cuotas',
   pocketTypeAddLabel: 'Agregar bolsillo',
+
 }
 
 translations['pt'] = {
@@ -44,10 +45,10 @@ translations['pt'] = {
   billingAddressCountry: 'País',
   billingAddressDistrict: 'Bairro',
   billingAddressAdditional: 'Complemento',
+  installments: 'Sem parcelas',
   pocketTypeRequired: 'Tipo de bolso é obrigatório',
   pocketTypeAmount: 'Valor',
   pocketTypeSelect: 'Tipo de bolso',
-  pocketInstallments: 'Parcelas',
   pocketTypeAddLabel: 'Adicionar bolso',
 }
 
