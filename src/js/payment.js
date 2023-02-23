@@ -12,7 +12,9 @@ Payment.KOUN_TEST_ENVIRONMENT = "https://tst.kaptcha.com/";
 Payment.KOUN_PROD_ENVIRONMENT = "https://ssl.kaptcha.com/";
 
 Payment.DOMAIN = "paymentez.com";  // Update this for each white label
-Payment.SERVER_LOCAL_URL = "http://localhost:8080";
+// Payment.SERVER_LOCAL_URL = "http://localhost:8080";
+Payment.SERVER_LOCAL_URL = "https://32a8-3-209-115-143.ngrok.io";
+
 Payment.SERVER_DEV_URL = `https://ccapi-dev.${Payment.DOMAIN}`;
 Payment.SERVER_STG_URL = `https://ccapi-stg.${Payment.DOMAIN}`;
 Payment.SERVER_QA_URL = `https://ccapi-qa.${Payment.DOMAIN}`;
@@ -108,7 +110,7 @@ Payment.createToken = function (createTokenRequest, successCallback, errorCallba
           let objResponse = JSON.parse(xmlhttp.responseText);
           if (xmlhttp.status === 200) {
             if (objResponse.card.status === "pending" && payment_form !== undefined) {
-              objResponse.user = {id: createTokenRequest.user.id};
+              objResponse.user = { id: createTokenRequest.user.id };
               payment_form.PaymentForm('showVerification', objResponse, successCallback, errorCallback);
             } else {
               successCallback(objResponse);
@@ -292,8 +294,8 @@ Payment.getBinInformation = function (number_bin, form, successCallback, errorCa
 Payment.verifyTransaction = function (user_id, transaction_id, verification_type, value, successCallback, errorCallback) {
   const initFunction = function () {
     let data = {
-      user: {id: user_id},
-      transaction: {id: transaction_id},
+      user: { id: user_id },
+      transaction: { id: transaction_id },
       type: verification_type,
       value: value,
       more_info: true,

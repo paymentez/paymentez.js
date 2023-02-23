@@ -468,7 +468,11 @@ PaymentForm.prototype.verifyTransaction = function () {
   let verification_type = 'BY_OTP';  // TODO: Dynamic, according to the message in the answer
   let value = this.getVerificationValue();
   let $this = this;
-  Payment.verifyTransaction(user_id, transaction_id, verification_type, value,
+  Payment.verifyTransaction(
+    user_id,
+    transaction_id,
+    verification_type,
+    value,
     function (response) {
       $this.unBlockVerificationContainer();
       $this.removeVerificationContainer();
@@ -485,6 +489,9 @@ PaymentForm.prototype.verifyTransaction = function () {
     },
     function (response) {
       console.log(response);
+      console.log("Es justo aki");
+      console.log("hola ke haze");
+      console.log('Error verifying transaction');
       $this.unBlockVerificationContainer();
       $this.removeVerificationContainer();
       $this.addCardProcess.errorAddCardCallback($this.addCardProcess.response);
