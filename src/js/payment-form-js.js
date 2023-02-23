@@ -555,11 +555,11 @@ PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
 
 PaymentForm.prototype.successBinCallback = function (objResponse, form) {
   // BORRAR AL SUBIR A PRODUCCION
-  console.log(DEBUG_DATA)
-  if (DEBUG_DATA) {
-    objResponse = DEBUG_DATA;
-  }
-  console.log(objResponse, "objResponse")
+  // console.log(DEBUG_DATA)
+  // if (DEBUG_DATA) {
+  //   objResponse = DEBUG_DATA;
+  // }
+  // console.log(objResponse, "objResponse")
   // BORRAR AL SUBIR A PRODUCCION
 
   // Set luhn flag
