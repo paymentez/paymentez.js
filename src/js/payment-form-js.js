@@ -1243,9 +1243,10 @@ PaymentForm.prototype.isBillingAddressAdditionalValid = function () {
 };
 
 PaymentForm.prototype.isPocketTypeValid = function () {
-  if (!this.pocketTypeAdded()) return true
-  let value = this.getPocketType();
-  return value !== null && value.length >= 2;
+  if (!this.pocketTypeAdded()) return true;
+  return true;
+  // let value = this.getPocketType();
+  // return value !== null && value.length >= 2;
 };
 PaymentForm.prototype.isPocketTypeAmountValid = function (index) {
   if (!this.pocketTypes.items[index]) return true;
@@ -1404,9 +1405,37 @@ PaymentForm.prototype.getCard = function () {
   };
 
   if (this.getPocketType()) {
-    data.card.brand_options = {
-      'type_pocket': this.getPocketType()
+    //aqui se agrega la data del bolsillo
+    console.log("pocket type", this.getPocketType());
+    const dummyData = {
+      "split_colsubsidio": {
+        "transactions": [
+          {
+            "type_pocket": "CSD1",
+            "amount": 200
+          },
+          {
+            "type_pocket": "CSD2",
+            "installments": 1,
+            "amount": 100
+          },
+          {
+            "type_pocket": "CSD3",
+            "installments": 1,
+            "amount": 100
+          },
+          {
+            "type_pocket": "CSD4",
+            "installments": 1,
+            "amount": 100
+          }
+        ]
+      }
     }
+    // data.card.brand_options = {
+    //   'type_pocket': this.getPocketType()
+    // }
+    data.card.brand_options = dummyData;
   }
 
   return data;
@@ -1623,7 +1652,9 @@ PaymentForm.prototype.getBillingAddress = function () {
 
 PaymentForm.prototype.getPocketType = function () {
   if (this.pocketTypeAdded()) {
-    return this.pocketType.val().trim();
+    // pendiente 
+    return 123;
+    // return this.pocketType.val().trim();
   } else {
     return null;
   }
@@ -2345,6 +2376,10 @@ PaymentForm.prototype.initBillingAddress = function () {
   this.billingAddressHouseNumber.attr("placeholder", this.__('billingAddressHouseNumber'));
   this.billingAddressAdditional.attr("placeholder", this.__('billingAddressAdditional'));
 };
+
+/**
+ * Initialise the pocket type input
+ */
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 
