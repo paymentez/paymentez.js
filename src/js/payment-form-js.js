@@ -1699,6 +1699,7 @@ PaymentForm.prototype.getPocketTypeData = function () {
 PaymentForm.prototype.getPocketTypeAmount = function (index) {
   const pocketItem = this.pocketTypes.items[index];
   if (pocketItem.amount && pocketItem.amount[0]) {
+    console.log(pocketItem.amount[0].value)
     return pocketItem.amount[0].value;
   }
   return null;
@@ -1729,6 +1730,7 @@ PaymentForm.prototype.getPocketTypeSelect = function (index) {
 PaymentForm.prototype.getPocketTypeInstallments = function (index) {
   const pocketItem = this.pocketTypes.items[index];
   if (pocketItem) {
+    console.log(pocketItem.installments.val());
     return pocketItem.installments.val();
   }
   return null;
