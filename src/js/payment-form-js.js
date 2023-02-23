@@ -1451,9 +1451,8 @@ PaymentForm.prototype.getCard = function (e) {
       "brand_options": this.getPocketTypeData(),
     }
   };
-  // return data;
-  e.preventDefault();
-  return null
+  return data;
+
 };
 
 /**
