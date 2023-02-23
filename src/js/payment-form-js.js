@@ -1452,7 +1452,6 @@ PaymentForm.prototype.getCard = function (e) {
     }
   };
   return data;
-
 };
 
 /**
@@ -1700,7 +1699,7 @@ PaymentForm.prototype.getPocketTypeData = function () {
 PaymentForm.prototype.getPocketTypeAmount = function (index) {
   const pocketItem = this.pocketTypes.items[index];
   if (pocketItem.amount && pocketItem.amount[0]) {
-    return pocketItem.amount[0].value.trim();
+    return pocketItem.amount[0].value;
   }
   return null;
 };
@@ -1730,7 +1729,7 @@ PaymentForm.prototype.getPocketTypeSelect = function (index) {
 PaymentForm.prototype.getPocketTypeInstallments = function (index) {
   const pocketItem = this.pocketTypes.items[index];
   if (pocketItem) {
-    return pocketItem.installments.val().trim();
+    return pocketItem.installments.val();
   }
   return null;
 };
