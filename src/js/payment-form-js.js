@@ -474,6 +474,7 @@ PaymentForm.prototype.verifyTransaction = function () {
     verification_type,
     value,
     function (response) {
+      console.log("response test", response);
       $this.unBlockVerificationContainer();
       $this.removeVerificationContainer();
       $this.addCardProcess.response.transaction = $this.addCardProcess.response.transaction ? response.transaction : undefined;
@@ -488,10 +489,7 @@ PaymentForm.prototype.verifyTransaction = function () {
       $this.addCardProcess.successAddCardCallback($this.addCardProcess.response);
     },
     function (response) {
-      console.log(response);
-      console.log("Es justo aki");
-      console.log("hola ke haze");
-      console.log('Error verifying transaction');
+      console.log("response test", response);
       $this.unBlockVerificationContainer();
       $this.removeVerificationContainer();
       $this.addCardProcess.errorAddCardCallback($this.addCardProcess.response);
