@@ -13,7 +13,7 @@ Payment.KOUN_PROD_ENVIRONMENT = "https://ssl.kaptcha.com/";
 
 Payment.DOMAIN = "paymentez.com";  // Update this for each white label
 // Payment.SERVER_LOCAL_URL = "http://localhost:8080";
-Payment.SERVER_LOCAL_URL = "https://32a8-3-209-115-143.ngrok.io";
+Payment.SERVER_LOCAL_URL = "http://localhost:8080";
 
 Payment.SERVER_DEV_URL = `https://ccapi-dev.${Payment.DOMAIN}`;
 Payment.SERVER_STG_URL = `https://ccapi-stg.${Payment.DOMAIN}`;

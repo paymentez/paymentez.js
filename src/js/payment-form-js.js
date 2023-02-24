@@ -1454,10 +1454,13 @@ PaymentForm.prototype.getCard = function (e) {
       "cvc": this.getCvc(),
       "nip": this.getNip(),
       "card_auth": this.getValidationOption(),
-      "fiscal_number": this.getFiscalNumber(),
-      "brand_options": this.getPocketTypeData(),
+      "fiscal_number": this.getFiscalNumber()
     }
+    
   };
+  if (this.getPocketTypeData()) {
+    data.card.brand_options = this.getPocketTypeData()
+  }
   return data;
 };
 
@@ -1693,7 +1696,7 @@ PaymentForm.prototype.getPocketTypeData = function () {
     }
     return pocketData;
   } else {
-    return null;
+    return {};
   }
 };
 
