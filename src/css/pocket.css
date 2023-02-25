@@ -97,11 +97,13 @@
   width: 16px;
   height: 16px;
   margin-right: 7px;
+  display: block !important;
 }
 
 .payment-form .pocket-type-button .icon-remove {
   width: 20px;
   height: 20px;
+  display: block !important;
 }
 
 .payment-form .pocket-type-footer {
