@@ -42,7 +42,7 @@
 }
 
 .payment-form .pocket-type-item[data-type="credit"] {
-  grid-template-columns: minmax(0, 3fr)minmax(0, 4fr) minmax(0, 2fr) 20px;
+  grid-template-columns: minmax(0, 3fr)minmax(0, 4fr) minmax(0, 40px) 20px;
   opacity: 1;
 }
 
@@ -58,17 +58,23 @@
   padding-right: 20px;
 }
 
+.payment-form .selectize-input.disabled {
+  pointer-events: none;
+}
+
 .payment-form .pocket-type-button {
   height: 36px;
   position: relative;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .payment-form .pocket-type-button-remove {
   width: 30px;
   justify-content: left;
-  color: #1DBE86
+  color: #1DBE86;
+  /* display: flex !important; */
 }
 
 .payment-form .pocket-type-button-remove.disabled {
@@ -78,6 +84,7 @@
 
 .payment-form .pocket-type-button-add {
   justify-content: flex-end;
+  /* display: flex !important; */
 }
 
 .payment-form .pocket-type-button-add.disabled {
@@ -127,6 +134,12 @@
   color: #1DBE86;
 }
 
+.payment-form .pocketTypeAmountLabelText {
+  display: none;
+}
+
+.payment-form .pocket-type-button .icon-remove:hover,
+.payment-form .pocket-type-button .icon-remove:active,
 .payment-form .pocket-type-add-item:hover,
 .payment-form .pocket-type-add-item:active {
   color: #138E6F;

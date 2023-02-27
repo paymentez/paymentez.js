@@ -64,6 +64,7 @@ function PaymentForm(elem) {
     items: [],
     availableOptions: new Set([]),
     optionsType: {},
+    configurationOptions: {},
     "options": [
       { 'code': 'CSD1', 'name': 'Cuota Monetaria' },
       { 'code': 'CSD2', 'name': 'Subsidio Escolar' },
@@ -563,14 +564,6 @@ PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
 };
 
 PaymentForm.prototype.successBinCallback = function (objResponse, form) {
-  // BORRAR AL SUBIR A PRODUCCION
-  // console.log(DEBUG_DATA)
-  // if (DEBUG_DATA) {
-  //   objResponse = DEBUG_DATA;
-  // }
-  // console.log(objResponse, "objResponse")
-  // BORRAR AL SUBIR A PRODUCCION
-
   // Set luhn flag
   form.useLunh = objResponse.use_luhn;
 
@@ -644,11 +637,16 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
  *
  * @param installments - array
  */
-PaymentForm.prototype.setInstallmentsOptions = function (installments, selectedInstallment = null) {
+PaymentForm.prototype.setInstallmentsOptions = function (installments, selectedInstallment = null, isDefaultText = true) {
   const selectInstallments = selectedInstallment || $(".installments");
   selectInstallments.empty();
-  installments.forEach(function (value) {
-    const text = value === 0 ? this.__('installments') : value;
+  installments.forEach(function (value, index) {
+    const isInitialIndex = index === 0;
+    const text = isInitialIndex
+      ? isDefaultText
+        ? this.__('installments')
+        : value
+      : value;
     selectInstallments.append($("<option>").attr("value", value).text(text));
   }, this);
 };
@@ -1456,10 +1454,11 @@ PaymentForm.prototype.getCard = function (e) {
       "card_auth": this.getValidationOption(),
       "fiscal_number": this.getFiscalNumber()
     }
-    
+
   };
-  if (this.getPocketTypeData()) {
+  if (this.pocketTypeAdded()) {
     data.card.brand_options = this.getPocketTypeData()
+    console.log(data.card.brand_options)
   }
   return data;
 };
@@ -1679,8 +1678,9 @@ PaymentForm.prototype.getPocketTransactions = function () {
       amount: this.getPocketTypeAmount(index),
       type_pocket: this.getPocketTypeSelect(index),
     };
+    const currentInstallments = parseInt(this.getPocketTypeInstallments(index));
     if (this.pocketTypes.optionsType[pocketTransaction.type_pocket] === "credit") {
-      pocketTransaction.installments = parseInt(this.getPocketTypeInstallments(index));
+      pocketTransaction.installments = currentInstallments;
     }
     return pocketTransaction;
   }, this);
@@ -2946,6 +2946,7 @@ PaymentForm.prototype.setupPocketTypeAmount = function (pocketTypeItemSelectWrap
     type: "number",
     autocorrect: "off",
     spellcheck: "off",
+    min: 0,
     autocapitalize: "off",
   });
 
@@ -2955,10 +2956,43 @@ PaymentForm.prototype.setupPocketTypeAmount = function (pocketTypeItemSelectWrap
   });
 }
 
+PaymentForm.prototype.updateAvaliableOptions = function (value, type) {
+  const { pocketTypes } = this;
+  const { availableOptions, optionsType, configurationOptions } = pocketTypes;
+  if (type === 'add') {
+    availableOptions.add(value);
+  } else if (type === 'delete') {
+    availableOptions.delete(value);
+  } else {
+    const usedOptions = pocketTypes.items.map((item) => {
+      return item.selectController.getValue();
+    });
+    const newAvaliableOptions = configurationOptions.filter((currentOption) => {
+      return !usedOptions.includes(currentOption);
+    });
+    availableOptions.clear();
+    newAvaliableOptions.forEach(item => availableOptions.add(item));
+  }
+}
+
+PaymentForm.prototype.updatePocketTypeSelectsState = function (action = "remove") {
+  const pocketTypesItems = this.pocketTypes.items;
+  const numItems = pocketTypesItems.length;
+
+  const indexOfActiveElm = action === "remove" ? numItems - 2 : numItems - 1;
+  for (let i = 0; i < numItems; i++) {
+    pocketTypesItems[i].selectController.$control.addClass('disabled');
+    if (i === indexOfActiveElm) {
+      pocketTypesItems[i].selectController.$control.removeClass('disabled');
+    }
+  }
+};
+
 PaymentForm.prototype.setupPocketTypeSelect = function (pocketTypeItemSelectWrapper, index) {
   $this = this;
   const { pocketTypes } = $this;
-  const pocketTypeItem = pocketTypes.items[index];
+  const { items } = pocketTypes;
+  const pocketTypeItem = items[index];
   const cPTSelectField = pocketTypeItem.select = PaymentForm.detachOrCreateElement(
     this.elem,
     ".pocketTypeSelect",
@@ -2970,6 +3004,7 @@ PaymentForm.prototype.setupPocketTypeSelect = function (pocketTypeItemSelectWrap
   const options = pocketTypes.options.filter(function (option) {
     return pocketTypes.availableOptions.has(option.code);
   });
+
 
   cPTSelectField
     .attr("placeholder", this.__('pocketTypeSelect'))
@@ -2986,26 +3021,27 @@ PaymentForm.prototype.setupPocketTypeSelect = function (pocketTypeItemSelectWrap
       },
       onChange: function (value) {
         pocketTypeItemSelectWrapper.attr("data-type", pocketTypes.optionsType[value]);
+        $this.updateAvaliableOptions(value, 'change');
         $this.refreshPocketTypeSelectValidation(index);
       }
     });
+
+  this.updatePocketTypeSelectsState("add");
+
 };
 
 PaymentForm.prototype.removePocketTypeItem = function (index) {
+  this.pocketTypes.availableOptions.add(this.pocketTypes.items[index].selectController.getValue());
   this.pocketTypes.items[index].selectController.destroy();
   this.elem.find(".pocket-type-item").eq(index).remove()
   this.pocketTypes.items.splice(index, 1);
-
   if (this.pocketTypes.items.length <= 1) {
     $this.elem.find(".pocket-type-button-remove").addClass("disabled");
   }
   if (this.pocketTypes.items.length <= 3) {
     $this.elem.find(".pocket-type-button-add").removeClass("disabled");
   }
-  // let $this = this;
-  // $this.refreshPocketTypeAmountValidation();
-  // $this.refreshPocketTypeSelectValidation();
-  // $this.refreshPocketTypeAmounts();
+
 }
 
 PaymentForm.prototype.setupPocketTypeInstallments = function (pocketTypeItemSelectWrapper, index) {
@@ -3013,10 +3049,23 @@ PaymentForm.prototype.setupPocketTypeInstallments = function (pocketTypeItemSele
     this.elem, '.pocketTypeInstallments',
     "<select class='pocket-type-installments' />"
   );
-  this.setInstallmentsOptions([...Array(49).keys()], cPTInstallments);
+  const installmentsOptions = Array.from({ length: 48 }, (_, i) => i + 1);
+  this.setInstallmentsOptions(installmentsOptions, cPTInstallments, false);
   cPTInstallments.attr("name", this.createUniqueName("pocket-type-installments-"));
   pocketTypeItemSelectWrapper.append(cPTInstallments);
 }
+
+PaymentForm.prototype.updatePocketTypeButtonsState = function (action = "remove") {
+  const pocketTypesItems = this.pocketTypes.items;
+  const numItems = pocketTypesItems.length;
+  const indexOfActiveButton = action === "remove" ? numItems - 2 : numItems - 1;
+  for (let i = 0; i < numItems; i++) {
+    pocketTypesItems[i].button.addClass('disabled');
+    if (i === indexOfActiveButton) {
+      pocketTypesItems[i].button.removeClass('disabled');
+    }
+  }
+};
 
 PaymentForm.prototype.setupPocketTypeButton = function (pocketTypeItemSelectWrapper, index) {
   const pocketTypesItems = this.pocketTypes.items;
@@ -3028,20 +3077,22 @@ PaymentForm.prototype.setupPocketTypeButton = function (pocketTypeItemSelectWrap
       <span class='icon icon-remove'>${PaymentForm.REMOVE_SVG}</span>
     </span>`
   );
+  this.updatePocketTypeButtonsState("add");
+
   cPTAmountButton.click(function (event) {
+    this.updatePocketTypeButtonsState("remove");
+    this.updatePocketTypeSelectsState("remove");
     const currentIndex = [...document.querySelectorAll('.pocket-type-item')].indexOf(event.target.parentNode);
     this.removePocketTypeItem(currentIndex);
   }.bind(this));
-
-  pocketTypesItems.length > 1 ?
-    pocketTypesItems[0].button.removeClass('disabled') :
-    cPTAmountButton.addClass('disabled');
-
   pocketTypeItemSelectWrapper.append(cPTAmountButton);
-
 };
 
 PaymentForm.prototype.createPocketTypeItem = function (pocketTypeIndex) {
+  const availableOptions = this.pocketTypes.availableOptions;
+  const selectedOptions = this.pocketTypes.items.map(item => item.selectController.getValue());
+
+  selectedOptions.forEach(option => availableOptions.delete(option));
   const pocketTypeItemSelectWrapper = $("<div>", { class: "pocket-type-item" })
     .appendTo(this.elem.find(".pocket-type-items-container"));
   this.pocketTypes.items[pocketTypeIndex] = {
@@ -3051,6 +3102,15 @@ PaymentForm.prototype.createPocketTypeItem = function (pocketTypeIndex) {
     installments: null,
     button: null,
   };
+
+  this.pocketTypes.items.map((item, index) => {
+    [document.querySelectorAll('.payment-form .selectize-input')].map((item, index) => {
+      // item[index].setAttribute('data-index', index);
+    });
+    // item.selectController.
+    // item.select.attr("disabled", "disabled");
+  });
+
   this.setupPocketTypeAmount(pocketTypeItemSelectWrapper, pocketTypeIndex);
   this.setupPocketTypeSelect(pocketTypeItemSelectWrapper, pocketTypeIndex);
   this.setupPocketTypeInstallments(pocketTypeItemSelectWrapper, pocketTypeIndex);
@@ -3074,6 +3134,8 @@ PaymentForm.prototype.setupPocketTypeContainer = function () {
     return { ...result, ...currentFields };
   }, {});
 
+  pocketTypes.configurationOptions = Object.keys(pocketTypes.optionsType).map(key => key);
+
   const pocketTypeContainer = $("<div>", { class: "pocket-type-container" });
   pocketTypeContainer.append(`
     <p><span>${this.__("pocketTypeRequired")}</span></p>
@@ -3087,7 +3149,7 @@ PaymentForm.prototype.setupPocketTypeContainer = function () {
   pocketTypeContainer.append(`
     <div class="pocket-type-footer">
       <div class="pocketTypeAmountLabel">
-        <span>$ 0,00 de $1.000,00</span>
+        <span class="pocketTypeAmountLabelText">$ 0,00 de $1.000,00</span>
       </div>
       <div class="pocket-type-add-item">
         <span class="pocket-type-button pocket-type-button-add">
@@ -3100,8 +3162,10 @@ PaymentForm.prototype.setupPocketTypeContainer = function () {
 
   const addButton = pocketTypeContainer.find(".pocket-type-button-add");
   addButton.on("click", () => {
-    if (pocketTypes.items.length <= 3) {
-      if (pocketTypes.items.length >= 3) {
+    const existingSelects = pocketTypes.items.length;
+    const availableOptions = pocketTypes.availableOptions.size;
+    if (existingSelects <= 4 || availableOptions >= 1) {
+      if (existingSelects >= 4 || availableOptions <= 1) {
         addButton.addClass("disabled");
       }
       $this.createPocketTypeItem(pocketTypes.items.length);
