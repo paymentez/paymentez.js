@@ -290,12 +290,21 @@ Payment.getBinInformation = function (number_bin, form, successCallback, errorCa
   }
 };
 
+Payment.buildPocketWarning = function (amount) {
+  console.log(amount);
+  const pocketWarnigText = amount + " of " + 1910;
+  $(".pocketTypeAmountLabelText").text(pocketWarnigText);
+  $("pocketTypeAmountLabelText").addClass("error")
+  $("pocketTypeAmountLabelText").removeClass("hidden");
+
+};
+
 Payment.verifyTransaction = function (user_id, transaction_id, verification_type, value, successCallback, errorCallback) {
   const initFunction = function () {
     let data = {
       user: { id: user_id },
       transaction: { id: transaction_id },
-      type: verification_type,
+      type: 'BY_CRES',
       value: value,
       more_info: true,
     };
@@ -312,6 +321,36 @@ Payment.verifyTransaction = function (user_id, transaction_id, verification_type
       )
     );
 
+    const invertQuotes = (str) => {
+      const invertedQuotes = { "'": '"', '"': "'" };
+      return str.replace(/['"]/g, match => invertedQuotes[match]);
+    }
+
+    const handleErrorPreprocess = function (objResponse) {
+      // const objResponse = {
+      //   "error":
+      //   {
+      //     "type": "Invalid data card.brand_options",
+      //     "help": "{'amount_should_be': 1500}",
+      //     "description": "{u'non_field_errors': [u'The sum of the split pocket amounts 2000.0 must be equal to the order amount 1500.00']}"
+      //   }
+      // }
+      console.log("momo")
+      console.log(objResponse);
+      if (objResponse.error.type === "Invalid data card.brand_options") {
+        const amount = objResponse.error.help;
+        if (amount) {
+          console.log(amount);
+          const parsedAmount = JSON.parse(invertQuotes(amount));
+          console.log(parsedAmount);
+          const quantity = parsedAmount.amount_should_be;
+          Payment.buildPocketWarning(quantity);
+        }
+      }
+
+      errorCallback(objResponse);
+    }
+
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState === XMLHttpRequest.DONE) {
         try {
@@ -319,7 +358,7 @@ Payment.verifyTransaction = function (user_id, transaction_id, verification_type
           if (xmlhttp.status === 200) {
             successCallback(objResponse);
           } else {
-            errorCallback(objResponse);
+            handleErrorPreprocess(objResponse)
           }
         } catch (e) {
           let server_error = {
@@ -329,7 +368,7 @@ Payment.verifyTransaction = function (user_id, transaction_id, verification_type
               description: "Server Error"
             }
           };
-          errorCallback(server_error);
+          handleErrorPreprocess(server_error)
         }
       }
     };

@@ -475,7 +475,6 @@ PaymentForm.prototype.verifyTransaction = function () {
     verification_type,
     value,
     function (response) {
-      console.log("response test", response);
       $this.unBlockVerificationContainer();
       $this.removeVerificationContainer();
       $this.addCardProcess.response.transaction = $this.addCardProcess.response.transaction ? response.transaction : undefined;
@@ -490,7 +489,6 @@ PaymentForm.prototype.verifyTransaction = function () {
       $this.addCardProcess.successAddCardCallback($this.addCardProcess.response);
     },
     function (response) {
-      console.log("response test", response);
       $this.unBlockVerificationContainer();
       $this.removeVerificationContainer();
       $this.addCardProcess.errorAddCardCallback($this.addCardProcess.response);
@@ -907,6 +905,7 @@ PaymentForm.prototype.isPocketTypeValid = function () {
     validationArray.push(this.refreshPocketTypeSelectValidation(index));
     validationArray.push(this.refreshPocketTypeInstallmentsValidation(index));
   });
+  //si no es valido dispara el método Payment.buildPocketWarning
   return !validationArray.includes(false);
 };
 
@@ -1458,7 +1457,6 @@ PaymentForm.prototype.getCard = function (e) {
   };
   if (this.pocketTypeAdded()) {
     data.card.brand_options = this.getPocketTypeData()
-    console.log(data.card.brand_options)
   }
   return data;
 };
@@ -3061,7 +3059,7 @@ PaymentForm.prototype.updatePocketTypeButtonsState = function (action = "remove"
   const indexOfActiveButton = action === "remove" ? numItems - 2 : numItems - 1;
   for (let i = 0; i < numItems; i++) {
     pocketTypesItems[i].button.addClass('disabled');
-    if (i === indexOfActiveButton) {
+    if (i === indexOfActiveButton && i !== 0) {
       pocketTypesItems[i].button.removeClass('disabled');
     }
   }
@@ -3073,7 +3071,7 @@ PaymentForm.prototype.setupPocketTypeButton = function (pocketTypeItemSelectWrap
   const cPTAmountButton = pocketTypesItems[index].button = PaymentForm.detachOrCreateElement(
     this.elem,
     '.pocketTypeButton',
-    `<span class='pocket-type-button pocket-type-button-remove'>
+    `<span class='pocket-type-button pocket-type-button-remove disabled'>
       <span class='icon icon-remove'>${PaymentForm.REMOVE_SVG}</span>
     </span>`
   );
@@ -3141,7 +3139,7 @@ PaymentForm.prototype.setupPocketTypeContainer = function () {
   pocketTypeContainer.append(`
     <div class="pocket-type-footer">
       <div class="pocketTypeAmountLabel">
-        <span class="pocketTypeAmountLabelText">$ 0,00 de $1.000,00</span>
+        <span class="pocketTypeAmountLabelText hidden">$ 0,00 de $1.000,00</span>
       </div>
       <div class="pocket-type-add-item">
         <span class="pocket-type-button pocket-type-button-add">

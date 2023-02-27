@@ -134,8 +134,12 @@
   color: #1DBE86;
 }
 
-.payment-form .pocketTypeAmountLabelText {
+.payment-form .pocketTypeAmountLabelText.hiddden {
   display: none;
+}
+
+.payment-form .pocketTypeAmountLabelText.error {
+  color: #f64b2f
 }
 
 .payment-form .pocket-type-button .icon-remove:hover,
