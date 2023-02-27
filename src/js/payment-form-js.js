@@ -3103,14 +3103,6 @@ PaymentForm.prototype.createPocketTypeItem = function (pocketTypeIndex) {
     button: null,
   };
 
-  this.pocketTypes.items.map((item, index) => {
-    [document.querySelectorAll('.payment-form .selectize-input')].map((item, index) => {
-      // item[index].setAttribute('data-index', index);
-    });
-    // item.selectController.
-    // item.select.attr("disabled", "disabled");
-  });
-
   this.setupPocketTypeAmount(pocketTypeItemSelectWrapper, pocketTypeIndex);
   this.setupPocketTypeSelect(pocketTypeItemSelectWrapper, pocketTypeIndex);
   this.setupPocketTypeInstallments(pocketTypeItemSelectWrapper, pocketTypeIndex);
