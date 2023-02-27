@@ -905,7 +905,6 @@ PaymentForm.prototype.isPocketTypeValid = function () {
     validationArray.push(this.refreshPocketTypeSelectValidation(index));
     validationArray.push(this.refreshPocketTypeInstallmentsValidation(index));
   });
-  //si no es valido dispara el método Payment.buildPocketWarning
   return !validationArray.includes(false);
 };
 
@@ -3138,8 +3137,8 @@ PaymentForm.prototype.setupPocketTypeContainer = function () {
 
   pocketTypeContainer.append(`
     <div class="pocket-type-footer">
-      <div class="pocketTypeAmountLabel">
-        <span class="pocketTypeAmountLabelText hidden">$ 0,00 de $1.000,00</span>
+      <div class="pocketTypeAmountLabel ">
+        <span class="pocketTypeAmountLabelText hidden"></span>
       </div>
       <div class="pocket-type-add-item">
         <span class="pocket-type-button pocket-type-button-add">

@@ -98,15 +98,8 @@
      * @param payment_client_app_code provided by Paymentez.
      * @param payment_client_app_key provided by Paymentez.
      */
-
-    const success = () => {
-      console.log('success 1');
-    };
-    const fail = () => {
-      console.log('fail 1');
-    };
     // Payment.init('stg', 'PAYMENT_CLIENT_APP_CODE', 'PAYMENT_CLIENT_APP_KEY');
-    Payment.init('stg', 'AbiColApp', '2PmoFfjZJzjKTnuSYCFySMfHlOIBz7');
+    Payment.init('stg', 'PAYMENT_CLIENT_APP_CODE', 'PAYMENT_CLIENT_APP_KEY');
 
     let form = $("#add-card-form");
     let submitButton = form.find("button");
@@ -149,9 +142,7 @@
          * @param success_callback a callback to receive the token
          * @param failure_callback a callback to receive an error
          */
-        // Payment.addCard(uid, email, cardToSave, successHandler, errorHandler);
         Payment.addCard(uid, email, cardToSave, successHandler, errorHandler);
-
 
       }
 
@@ -159,27 +150,14 @@
     });
 
 
-
-
     let successHandler = function (cardResponse) {
-      console.log(cardResponse);
+      console.log(cardResponse.card);
       if (cardResponse.card.status === 'valid') {
         $('#messages').html('Card Successfully Added<br>' +
           'status: ' + cardResponse.card.status + '<br>' +
           "Card Token: " + cardResponse.card.token + "<br>" +
           "transaction_reference: " + cardResponse.card.transaction_reference
         );
-
-        Payment.verifyTransaction(
-          "uid1234",
-          "jhon@doe.com",
-          cardResponse.card.token,
-          19000,
-          // cardResponse.card.cardToSave,
-          success,
-          fail
-        );
-
       } else if (cardResponse.card.status === 'review') {
         $('#messages').html('Card Under Review<br>' +
           'status: ' + cardResponse.card.status + '<br>' +
