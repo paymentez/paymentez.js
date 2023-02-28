@@ -65,6 +65,7 @@ function PaymentForm(elem) {
     availableOptions: new Set([]),
     optionsType: {},
     configurationOptions: {},
+    totalAmount: 0,
     "options": [
       { 'code': 'CSD1', 'name': 'Cuota Monetaria' },
       { 'code': 'CSD2', 'name': 'Subsidio Escolar' },
@@ -3066,7 +3067,6 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
       // const regex = /\b[A-Z]{3}\b/g;
 
       const totalAmountText = $(".payment-button-popup").text();
-      // const btnCurrency = totalAmountText.match(regex)[0];
       const totalAmount = this.getPocketTotalAmout(totalAmountText);
 
       let totalPocketFieldsSum = 0;
@@ -3084,7 +3084,7 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
           }, 0);
           break;
         case "init":
-
+          $this.pocketTypes.totalAmount = totalAmount;
           if ($this.pocketTypes.items.length > 0) {
           }
         default:
@@ -3098,7 +3098,7 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
         currency: "COP",
       });
 
-      const pocketsLabel = formatter.format(totalPocketFieldsSum) + " de " + formatter.format(totalAmount);
+      const pocketsLabel = formatter.format(totalPocketFieldsSum) + " de " + formatter.format($this.pocketTypes.totalAmount);
 
       $(".pocketTypeAmountLabelText").text(pocketsLabel);
       $("pocketTypeAmountLabelText").addClass("error")
