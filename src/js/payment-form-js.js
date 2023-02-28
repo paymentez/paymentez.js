@@ -3073,6 +3073,7 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
 
       switch (type) {
         case "validate":
+        case "error":
           totalPocketFieldsSum = $this.pocketTypes.items.reduce((acc, item, index) => {
             const current = $this.getPocketTypeAmount(index);
             if (isNaN(current)) {
@@ -3083,6 +3084,9 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
           }, 0);
           break;
         case "init":
+
+          if ($this.pocketTypes.items.length > 0) {
+          }
         default:
           totalPocketFieldsSum = 0;
           break;
