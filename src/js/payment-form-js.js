@@ -3063,10 +3063,10 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
     const paymentBtn = $(".payment-button-popup");
     $this = this;
     if (paymentBtn.length > 0) {
-      const regex = /\b[A-Z]{3}\b/g;
+      // const regex = /\b[A-Z]{3}\b/g;
 
       const totalAmountText = $(".payment-button-popup").text();
-      const btnCurrency = totalAmountText.match(regex)[0];
+      // const btnCurrency = totalAmountText.match(regex)[0];
       const totalAmount = this.getPocketTotalAmout(totalAmountText);
 
       let totalPocketFieldsSum = 0;
@@ -3091,7 +3091,7 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
       // console.log("formaterType", formaterType)
       const formatter = new Intl.NumberFormat("es-CO", {
         style: 'currency',
-        currency: btnCurrency,
+        currency: "COP",
       });
 
       const pocketsLabel = formatter.format(totalPocketFieldsSum) + " de " + formatter.format(totalAmount);
