@@ -905,6 +905,7 @@ PaymentForm.prototype.isPocketTypeValid = function () {
     validationArray.push(this.refreshPocketTypeSelectValidation(index));
     validationArray.push(this.refreshPocketTypeInstallmentsValidation(index));
   });
+  this.updatePocketsLabel({ value: 0, type: "validate" });
   return !validationArray.includes(false);
 };
 
@@ -3040,6 +3041,71 @@ PaymentForm.prototype.removePocketTypeItem = function (index) {
   }
 
 }
+PaymentForm.prototype.getPocketTotalAmout = function (string = "") {
+  if (!string) return null;
+  console.log("ejecuto");
+  var cur_re = /\D*(\d+|\d.*?\d)(?:\D+(\d{2}))?\D*$/;
+  var parts = cur_re.exec(string);
+  var number = parseFloat(parts[1].replace(/\D/, '') + '.' + (parts[2] ? parts[2] : '00'));
+  return number.toFixed(2);
+
+}
+
+PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
+  const { amount = 0, type = "init" } = data;
+  const {
+    getPocketTypeAmount,
+    pocketTypes: { items: pocketTypesItems }
+  } = this;
+  if (this.pocketTypeAdded()) {
+
+    //GET THE AMOUNT OF THE POCKET TYPE FROM #pay-button BUTTON
+    const paymentBtn = $(".payment-button-popup");
+    $this = this;
+    if (paymentBtn.length > 0) {
+      const regex = /\b[A-Z]{3}\b/g;
+
+      const totalAmountText = $(".payment-button-popup").text();
+      const btnCurrency = totalAmountText.match(regex)[0];
+      const totalAmount = this.getPocketTotalAmout(totalAmountText);
+
+      let totalPocketFieldsSum = 0;
+
+      switch (type) {
+        case "validate":
+          totalPocketFieldsSum = $this.pocketTypes.items.reduce((acc, item, index) => {
+            const current = $this.getPocketTypeAmount(index);
+            if (isNaN(current)) {
+              return acc;
+            }
+            acc += current;
+            return acc;
+          }, 0);
+          break;
+        case "init":
+        default:
+          totalPocketFieldsSum = 0;
+          break;
+      }
+      // const formaterType = btnCurrency === "COP" ? "es-CO" : btnCurrency === "BRL" ? "pt-BR" : "en-US";
+      // console.log("formaterType", formaterType)
+      const formatter = new Intl.NumberFormat("es-CO", {
+        style: 'currency',
+        currency: btnCurrency,
+      });
+
+      const pocketsLabel = formatter.format(totalPocketFieldsSum) + " de " + formatter.format(totalAmount);
+
+      $(".pocketTypeAmountLabelText").text(pocketsLabel);
+      $("pocketTypeAmountLabelText").addClass("error")
+      $("pocketTypeAmountLabelText").removeClass("hidden");
+
+
+    }
+  } else {
+    console.log("nel");
+  }
+}
 
 PaymentForm.prototype.setupPocketTypeInstallments = function (pocketTypeItemSelectWrapper, index) {
   const cPTInstallments = this.pocketTypes.items[index]["installments"] = PaymentForm.detachOrCreateElement(
@@ -3158,8 +3224,10 @@ PaymentForm.prototype.setupPocketTypeContainer = function () {
         addButton.addClass("disabled");
       }
       $this.createPocketTypeItem(pocketTypes.items.length);
+
     }
-  })
+  });
+  this.updatePocketsLabel({ amount: 0, type: "init" });
 
 };
 

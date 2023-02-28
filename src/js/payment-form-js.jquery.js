@@ -37,6 +37,9 @@
     },
     showVerification: function (objResponse, successCallback, errorCallback) {
       return this.data("paymentform").showVerification(objResponse, successCallback, errorCallback);
+    },
+    updatePocketsLabel: function (label) {
+      return this.data("paymentform").updatePocketsLabel(label);
     }
   };
 
