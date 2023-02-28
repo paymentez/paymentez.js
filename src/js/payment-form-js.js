@@ -2153,6 +2153,7 @@ PaymentForm.prototype.addPocketType = function () {
 PaymentForm.prototype.removePocketType = function () {
   if (this.pocketTypeAdded()) {
     this.elem.find(".pocket-type-container").remove();
+    this.pocketTypes.items = [];
   }
 };
 
@@ -3043,7 +3044,6 @@ PaymentForm.prototype.removePocketTypeItem = function (index) {
 }
 PaymentForm.prototype.getPocketTotalAmout = function (string = "") {
   if (!string) return null;
-  console.log("ejecuto");
   var cur_re = /\D*(\d+|\d.*?\d)(?:\D+(\d{2}))?\D*$/;
   var parts = cur_re.exec(string);
   var number = parseFloat(parts[1].replace(/\D/, '') + '.' + (parts[2] ? parts[2] : '00'));
@@ -3102,8 +3102,6 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
 
 
     }
-  } else {
-    console.log("nel");
   }
 }
 
