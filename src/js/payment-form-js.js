@@ -906,7 +906,8 @@ PaymentForm.prototype.isPocketTypeValid = function () {
     validationArray.push(this.refreshPocketTypeSelectValidation(index));
     validationArray.push(this.refreshPocketTypeInstallmentsValidation(index));
   });
-  this.updatePocketsLabel({ value: 0, type: "validate" });
+  validationArray.push(this.updatePocketsLabel({ type: "validateSum" }));
+
   return !validationArray.includes(false);
 };
 
@@ -1088,6 +1089,7 @@ PaymentForm.prototype.refreshPocketTypeAmountValidation = function (index) {
   const cAmountField = this.pocketTypes.items[index].amount;
   let valid = this.isPocketTypeAmountValid(index);
   valid ? cAmountField.removeClass("has-error") : cAmountField.addClass("has-error");
+  this.updatePocketsLabel({ type: "validate" });
   return valid
 };
 
@@ -3023,6 +3025,7 @@ PaymentForm.prototype.setupPocketTypeSelect = function (pocketTypeItemSelectWrap
         pocketTypeItemSelectWrapper.attr("data-type", pocketTypes.optionsType[value]);
         $this.updateAvaliableOptions(value, 'change');
         $this.refreshPocketTypeSelectValidation(index);
+
       }
     });
 
@@ -3041,7 +3044,7 @@ PaymentForm.prototype.removePocketTypeItem = function (index) {
   if (this.pocketTypes.items.length <= 3) {
     $this.elem.find(".pocket-type-button-add").removeClass("disabled");
   }
-
+  this.updatePocketsLabel({ type: "remove" });
 }
 PaymentForm.prototype.getPocketTotalAmout = function (string = "") {
   if (!string) return null;
@@ -3051,60 +3054,79 @@ PaymentForm.prototype.getPocketTotalAmout = function (string = "") {
   return number.toFixed(2);
 
 }
+// PaymentForm.prototype.getPocketsAmountFielsSum = function () {
+//   const {
+//     pocketTypes: { items: pocketTypesItems }
+//   } = this;
+//   const totalPocketFieldsSum = pocketTypesItems.reduce((acc, item, index) => {
+//     const current = this.getPocketTypeAmount(index);
+//     if (isNaN(current)) {
+//       return acc;
+//     }
+//     acc += current;
+//     return acc;
+//   }, 0);
+//   return totalPocketFieldsSum;
+// }
+PaymentForm.prototype.getPocketsAmountFieldsSum = function () {
+  const { pocketTypes: { items: pocketTypesItems } } = this;
+  const totalPocketFieldsSum = pocketTypesItems.reduce((acc, item, index) => {
+    const current = this.getPocketTypeAmount(index);
+    if (isNaN(current)) {
+      return acc;
+    }
+    acc += current;
+    return acc;
+  }, 0);
+  return totalPocketFieldsSum;
+}
 
 PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
-  const { amount = 0, type = "init" } = data;
-  const {
-    getPocketTypeAmount,
-    pocketTypes: { items: pocketTypesItems }
-  } = this;
   if (this.pocketTypeAdded()) {
+    const { type = "init" } = data;
+    const { pocketTypes: { totalAmount } } = this;
 
-    //GET THE AMOUNT OF THE POCKET TYPE FROM #pay-button BUTTON
     const paymentBtn = $(".payment-button-popup");
+    const label = $(".pocketTypeAmountLabelText");
+
     $this = this;
+
     if (paymentBtn.length > 0) {
-      // const regex = /\b[A-Z]{3}\b/g;
-
-      const totalAmountText = $(".payment-button-popup").text();
-      const totalAmount = this.getPocketTotalAmout(totalAmountText);
-
       let totalPocketFieldsSum = 0;
-
       switch (type) {
+        case "init":
+          const initialTotalAmountText = paymentBtn.text();
+          $this.pocketTypes.totalAmount = this.getPocketTotalAmout(initialTotalAmountText);
+          label.removeClass("hidden");
+          break;
         case "validate":
         case "error":
-          totalPocketFieldsSum = $this.pocketTypes.items.reduce((acc, item, index) => {
-            const current = $this.getPocketTypeAmount(index);
-            if (isNaN(current)) {
-              return acc;
-            }
-            acc += current;
-            return acc;
-          }, 0);
+        case "remove":
+          totalPocketFieldsSum = this.getPocketsAmountFieldsSum();
+          if (totalPocketFieldsSum > totalAmount) {
+            label.removeClass("valid").addClass("error");
+          } else if (totalPocketFieldsSum == totalAmount) {
+            label.removeClass("error").addClass("valid");
+          } else {
+            label.removeClass("error").removeClass("valid");
+          };
           break;
-        case "init":
-          $this.pocketTypes.totalAmount = totalAmount;
-          if ($this.pocketTypes.items.length > 0) {
+        case "validateSum":
+          totalPocketFieldsSum = this.getPocketsAmountFieldsSum();
+          if (totalPocketFieldsSum == totalAmount) {
+            return true;
           }
+          label.removeClass("valid").addClass("error");
+          return false;
         default:
-          totalPocketFieldsSum = 0;
           break;
       }
-      // const formaterType = btnCurrency === "COP" ? "es-CO" : btnCurrency === "BRL" ? "pt-BR" : "en-US";
-      // console.log("formaterType", formaterType)
       const formatter = new Intl.NumberFormat("es-CO", {
         style: 'currency',
         currency: "COP",
       });
-
-      const pocketsLabel = formatter.format(totalPocketFieldsSum) + " de " + formatter.format($this.pocketTypes.totalAmount);
-
-      $(".pocketTypeAmountLabelText").text(pocketsLabel);
-      $("pocketTypeAmountLabelText").addClass("error")
-      $("pocketTypeAmountLabelText").removeClass("hidden");
-
-
+      const pocketsLabel = formatter.format(totalPocketFieldsSum) + " de " + formatter.format(totalAmount);
+      label.text(pocketsLabel);
     }
   }
 }
@@ -3145,7 +3167,6 @@ PaymentForm.prototype.setupPocketTypeButton = function (pocketTypeItemSelectWrap
   this.updatePocketTypeButtonsState("add");
 
   cPTAmountButton.click(function (event) {
-    this.updatePocketTypeButtonsState("remove");
     this.updatePocketTypeSelectsState("remove");
     const currentIndex = [...document.querySelectorAll('.pocket-type-item')].indexOf(event.target.parentNode);
     this.removePocketTypeItem(currentIndex);
@@ -3229,7 +3250,7 @@ PaymentForm.prototype.setupPocketTypeContainer = function () {
 
     }
   });
-  this.updatePocketsLabel({ amount: 0, type: "init" });
+  this.updatePocketsLabel({ type: "init" });
 
 };
 
