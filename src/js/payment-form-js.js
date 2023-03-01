@@ -500,7 +500,14 @@ PaymentForm.prototype.cardTypeFromNumberBin = function (number) {
   let number_bin = number.replace(" ", "").substring(0, 6);
   if (number >= 6 && this.numberBin !== number_bin) {
     this.numberBin = number_bin;
+    const $this = this;
     Payment.getBinInformation(number_bin, this, this.successBinCallback, function (error) {
+      const { error: { description } } = error;
+      const constErrorText = description == "'NoneType' object has no attribute 'code'"
+        ? "El token ha caducado, recargue el formulario."
+        : description;
+      $this.invalidCardTypeMessage = constErrorText;
+      $this.addWarningMessage();
     });
   }
 };
