@@ -5,6 +5,7 @@
   margin: 10px 0px;
   padding: 6px;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 .payment-form .payment_dialog_info {
