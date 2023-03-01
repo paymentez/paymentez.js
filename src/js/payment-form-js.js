@@ -502,12 +502,12 @@ PaymentForm.prototype.cardTypeFromNumberBin = function (number) {
     this.numberBin = number_bin;
     const $this = this;
     Payment.getBinInformation(number_bin, this, this.successBinCallback, function (error) {
-      const { error: { description } } = error;
-      const constErrorText = description == "'NoneType' object has no attribute 'code'"
-        ? "El token ha caducado, recargue el formulario."
-        : description;
-      $this.invalidCardTypeMessage = constErrorText;
-      $this.addWarningMessage();
+      // const { error: { description } } = error;
+      // const constErrorText = description == "'NoneType' object has no attribute 'code'"
+      //   ? "El token ha caducado, recargue este formulario."
+      //   : description;
+      // $this.invalidCardTypeMessage = constErrorText;
+      // $this.addWarningMessage();
     });
   }
 };
