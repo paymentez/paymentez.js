@@ -1106,9 +1106,7 @@ PaymentForm.prototype.refreshPocketTypeAmountValidation = function (index) {
 };
 
 PaymentForm.prototype.refreshPocketTypeSelectValidation = function (index) {
-  const cSelectField = this.pocketTypes.items[index].select;
   let valid = this.isPocketTypeSelectValid(index);
-  valid ? cSelectField.removeClass("has-error") : cSelectField.addClass("has-error");
   return valid
 };
 
@@ -2970,23 +2968,18 @@ PaymentForm.prototype.setupPocketTypeAmount = function (pocketTypeItemSelectWrap
   });
 }
 
-PaymentForm.prototype.updateAvaliableOptions = function (value, type) {
+PaymentForm.prototype.updateAvaliableOptions = function (value) {
   const { pocketTypes } = this;
   const { availableOptions, optionsType, configurationOptions } = pocketTypes;
-  if (type === 'add') {
-    availableOptions.add(value);
-  } else if (type === 'delete') {
-    availableOptions.delete(value);
-  } else {
-    const usedOptions = pocketTypes.items.map((item) => {
-      return item.selectController.getValue();
-    });
-    const newAvaliableOptions = configurationOptions.filter((currentOption) => {
-      return !usedOptions.includes(currentOption);
-    });
-    availableOptions.clear();
-    newAvaliableOptions.forEach(item => availableOptions.add(item));
-  }
+  const usedOptions = pocketTypes.items.map((item) => {
+    return item.selectController.getValue();
+  });
+  const newAvaliableOptions = configurationOptions.filter((currentOption) => {
+    return !usedOptions.includes(currentOption);
+  });
+  availableOptions.clear();
+  newAvaliableOptions.forEach(item => availableOptions.add(item));
+
 }
 
 PaymentForm.prototype.getPocketTotalAmout = function (string = "") {
@@ -3104,11 +3097,10 @@ PaymentForm.prototype.setupPocketTypeSelect = function (pocketTypeItemSelectWrap
         pocketTypeItem.selectController = this;
         this.setValue(options[0].code);
       },
-      onChange: function (value) {
+      onChange: function (value, a, b, c) {
         pocketTypeItemSelectWrapper.attr("data-type", pocketTypes.optionsType[value]);
-        $this.updateAvaliableOptions(value, 'change');
+        $this.updateAvaliableOptions(value);
         $this.refreshPocketTypeSelectValidation(index);
-
       }
     });
 
@@ -3248,8 +3240,8 @@ PaymentForm.prototype.setupPocketTypeContainer = function () {
       if (existingSelects >= 4 || availableOptions <= 1) {
         addButton.addClass("disabled");
       }
-      $this.createPocketTypeItem(pocketTypes.items.length);
-
+      const isLastSelectValid = $this.refreshPocketTypeSelectValidation(existingSelects - 1);
+      isLastSelectValid && $this.createPocketTypeItem(pocketTypes.items.length);
     }
   });
   this.updatePocketsLabel({ type: "init" });

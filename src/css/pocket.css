@@ -42,7 +42,7 @@
 }
 
 .payment-form .pocket-type-item[data-type="credit"] {
-  grid-template-columns: minmax(0, 3fr)minmax(0, 4fr) minmax(0, 40px) 20px;
+  grid-template-columns: minmax(0, 3fr)minmax(0, 5fr) minmax(0, 40px) 20px;
   opacity: 1;
 }
 
@@ -132,6 +132,10 @@
   align-items: center;
   justify-content: flex-end;
   color: #1DBE86;
+}
+
+.payment-form .pocketTypeAmountLabelText {
+  transition: color 0.3s ease;
 }
 
 .payment-form .pocketTypeAmountLabelText.hidden {
