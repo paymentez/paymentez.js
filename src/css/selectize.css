@@ -66,7 +66,7 @@
     background-color: #fff;
 }
 
-.selectize-input.not-full {
+.selectize-input.has-options.not-full {
     border-color: #f64b2f !important;
     box-shadow: none;
 }

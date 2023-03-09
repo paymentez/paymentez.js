@@ -66,6 +66,8 @@ function PaymentForm(elem) {
     optionsType: {},
     configurationOptions: {},
     totalAmount: 0,
+    totalPocketFieldsSum: 0,
+    addButton: null,
     "options": [
       { 'code': 'CSD1', 'name': 'Cuota Monetaria' },
       { 'code': 'CSD2', 'name': 'Subsidio Escolar' },
@@ -480,7 +482,11 @@ PaymentForm.prototype.verifyTransaction = function () {
       $this.removeVerificationContainer();
       $this.addCardProcess.response.transaction = $this.addCardProcess.response.transaction ? response.transaction : undefined;
       if (response.transaction.status === 'pending') {
-        return $this.showVerification($this.addCardProcess.response, $this.addCardProcess.successAddCardCallback, $this.addCardProcess.errorAddCardCallback)
+        return $this.showVerification(
+          $this.addCardProcess.response,
+          $this.addCardProcess.successAddCardCallback,
+          $this.addCardProcess.errorAddCardCallback
+        )
       } else if (response.transaction.status === 'success') {
         $this.addCardProcess.response.card.status = 'valid';
       } else {
@@ -918,7 +924,7 @@ PaymentForm.prototype.isPocketTypeValid = function () {
     validationArray.push(this.refreshPocketTypeSelectValidation(index));
     validationArray.push(this.refreshPocketTypeInstallmentsValidation(index));
   });
-  validationArray.push(this.updatePocketsLabel({ type: "validateSum" }));
+  validationArray.push(this.updatePocketsLabel({ type: "globalValidation" }));
 
   return !validationArray.includes(false);
 };
@@ -1088,12 +1094,6 @@ PaymentForm.prototype.refreshBillingAddressHouseNumberValidation = function () {
 PaymentForm.prototype.refreshBillingAddressAdditionalValidation = function () {
   let valid = this.isBillingAddressAdditionalValid();
   valid ? this.billingAddressAdditional.removeClass("has-error") : this.billingAddressAdditional.addClass("has-error");
-  return valid
-};
-
-PaymentForm.prototype.refreshPocketTypeValidation = function () {
-  let valid = this.isPocketTypeValid();
-  valid ? this.pocketType.removeClass("has-error") : this.pocketType.addClass("has-error");
   return valid
 };
 
@@ -1764,6 +1764,7 @@ PaymentForm.prototype.getPocketTypeInstallments = function (index) {
  * @returns {string}
  */
 PaymentForm.prototype.blockForm = function () {
+
   this.isBlocked = true;
 
   // Setup display
@@ -2115,6 +2116,15 @@ PaymentForm.prototype.addVerificationContainer = function () {
   }
 };
 
+PaymentForm.prototype.disablePocketTypesBtns = function () {
+  this.pocketTypes.addButton.addClass('disabled');
+  $(".pocket-type-button-remove").addClass('disabled');
+};
+PaymentForm.prototype.enablePocketTypesBtns = function () {
+  this.pocketTypes.addButton.removeClass('disabled');
+  $(".pocket-type-button-remove").last().removeClass('disabled');
+};
+
 PaymentForm.prototype.blockVerificationContainer = function () {
   if (this.verificationContainerAdded()) {
     this.verificationInput.attr('disabled', 'disabled');
@@ -2159,7 +2169,6 @@ PaymentForm.prototype.removeVerificationContainer = function () {
 PaymentForm.prototype.addPocketType = function () {
   if (!this.pocketTypeAdded()) {
     this.setupPocketTypeContainer();
-    this.setIconColour(this.iconColour);
   }
 };
 
@@ -2964,6 +2973,7 @@ PaymentForm.prototype.setupPocketTypeAmount = function (pocketTypeItemSelectWrap
 
   cPTAmountInput.keydown(PaymentForm.filterNumberOnlyKey);
   cPTAmountInput.blur(() => {
+    this.setSumOfPocketsAmountFields();
     this.refreshPocketTypeAmountValidation(index);
   });
 }
@@ -2982,7 +2992,7 @@ PaymentForm.prototype.updateAvaliableOptions = function (value) {
 
 }
 
-PaymentForm.prototype.getPocketTotalAmout = function (string = "") {
+PaymentForm.prototype.extractPocketTotalAmoutFormBtnString = function (string = "") {
   if (!string) return null;
   var cur_re = /\D*(\d+|\d.*?\d)(?:\D+(\d{2}))?\D*$/;
   var parts = cur_re.exec(string);
@@ -2990,7 +3000,8 @@ PaymentForm.prototype.getPocketTotalAmout = function (string = "") {
   return number.toFixed(2);
 }
 
-PaymentForm.prototype.getPocketsAmountFieldsSum = function () {
+
+PaymentForm.prototype.setSumOfPocketsAmountFields = function () {
   const { pocketTypes: { items: pocketTypesItems } } = this;
   const totalPocketFieldsSum = pocketTypesItems.reduce((acc, item, index) => {
     const current = this.getPocketTypeAmount(index);
@@ -3000,13 +3011,27 @@ PaymentForm.prototype.getPocketsAmountFieldsSum = function () {
     acc += current;
     return acc;
   }, 0);
-  return totalPocketFieldsSum;
+  this.pocketTypes.totalPocketFieldsSum = totalPocketFieldsSum;
+}
+
+PaymentForm.prototype.getSumOfPocketsAmountFields = function () {
+  return this.pocketTypes.totalPocketFieldsSum;
+}
+
+PaymentForm.prototype.setPocketTypesTotalAmount = function (amountText = "") {
+  const amount = this.extractPocketTotalAmoutFormBtnString(amountText);
+  this.pocketTypes.totalAmount = amount;
+}
+
+PaymentForm.prototype.getPocketTotalAmout = function () {
+  return this.pocketTypes.totalAmount;
 }
 
 PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
+
   if (this.pocketTypeAdded()) {
+
     const { type = "init" } = data;
-    const { pocketTypes: { totalAmount } } = this;
 
     const paymentBtn = $(".payment-button-popup");
     const label = $(".pocketTypeAmountLabelText");
@@ -3014,17 +3039,17 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
     $this = this;
 
     if (paymentBtn.length > 0) {
-      let totalPocketFieldsSum = 0;
+      const totalPocketFieldsSum = $this.getSumOfPocketsAmountFields();
+      const totalAmount = $this.getPocketTotalAmout();
       switch (type) {
         case "init":
-          const initialTotalAmountText = paymentBtn.text();
-          $this.pocketTypes.totalAmount = this.getPocketTotalAmout(initialTotalAmountText);
           label.removeClass("hidden");
+          $this.setPocketTypesTotalAmount(paymentBtn.text());
           break;
-        case "validate":
         case "error":
+          this.enablePocketTypesBtns();
         case "remove":
-          totalPocketFieldsSum = this.getPocketsAmountFieldsSum();
+        case "validate":
           if (totalPocketFieldsSum > totalAmount) {
             label.removeClass("valid").addClass("error");
           } else if (totalPocketFieldsSum == totalAmount) {
@@ -3033,9 +3058,9 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
             label.removeClass("error").removeClass("valid");
           };
           break;
-        case "validateSum":
-          totalPocketFieldsSum = this.getPocketsAmountFieldsSum();
+        case "globalValidation":
           if (totalPocketFieldsSum == totalAmount) {
+            $this.disablePocketTypesBtns();
             return true;
           }
           label.removeClass("valid").addClass("error");
@@ -3047,6 +3072,7 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
         style: 'currency',
         currency: "COP",
       });
+
       const pocketsLabel = formatter.format(totalPocketFieldsSum) + " de " + formatter.format(totalAmount);
       label.text(pocketsLabel);
     }
@@ -3164,7 +3190,7 @@ PaymentForm.prototype.removePocketTypeItem = function (index) {
     $this.elem.find(".pocket-type-button-remove").addClass("disabled");
   }
   if (this.pocketTypes.items.length <= 3) {
-    $this.elem.find(".pocket-type-button-add").removeClass("disabled");
+    $this.pocketTypes.addButton.removeClass("disabled");
   };
   this.updatePocketTypeRemoveButtonsState("remove");
   this.updatePocketsLabel({ type: "remove" });
@@ -3232,18 +3258,19 @@ PaymentForm.prototype.setupPocketTypeContainer = function () {
     </div>
   `);
 
-  const addButton = pocketTypeContainer.find(".pocket-type-button-add");
-  addButton.on("click", () => {
-    const existingSelects = pocketTypes.items.length;
-    const availableOptions = pocketTypes.availableOptions.size;
-    if (existingSelects <= 4 || availableOptions >= 1) {
-      if (existingSelects >= 4 || availableOptions <= 1) {
-        addButton.addClass("disabled");
+  this.pocketTypes.addButton = pocketTypeContainer
+    .find(".pocket-type-button-add")
+    .on("click", () => {
+      const existingSelects = pocketTypes.items.length;
+      const availableOptions = pocketTypes.availableOptions.size;
+      if (existingSelects <= 4 || availableOptions >= 1) {
+        if (existingSelects >= 4 || availableOptions <= 1) {
+          $this.pocketTypes.addButton.addClass("disabled");
+        }
+        const isLastSelectValid = $this.refreshPocketTypeSelectValidation(existingSelects - 1);
+        isLastSelectValid && $this.createPocketTypeItem(pocketTypes.items.length);
       }
-      const isLastSelectValid = $this.refreshPocketTypeSelectValidation(existingSelects - 1);
-      isLastSelectValid && $this.createPocketTypeItem(pocketTypes.items.length);
-    }
-  });
+    });
   this.updatePocketsLabel({ type: "init" });
 
 };
