@@ -61,6 +61,7 @@ function PaymentForm(elem) {
   }
 
   this.pocketTypes = {
+    exists: false,
     items: [],
     availableOptions: new Set([]),
     optionsType: {},
@@ -1419,8 +1420,9 @@ PaymentForm.prototype.billingAddressAdded = function () {
  * @returns {boolean}
  */
 PaymentForm.prototype.pocketTypeAdded = function () {
-  let pocket_type = this.elem.find(".pocket-type-container");
-  return pocket_type.length >= 1;
+  // console.log(this.pocketTypes.exists);
+  // let pocket_type = this.elem.find(".pocket-type-container");
+  return this.pocketTypes.exists;
 };
 
 /**
@@ -1469,6 +1471,7 @@ PaymentForm.prototype.getCard = function (e) {
 
   };
   if (this.pocketTypeAdded()) {
+    console.log(this.getPocketTypeData());
     data.card.brand_options = this.getPocketTypeData()
   }
   return data;
@@ -2176,6 +2179,7 @@ PaymentForm.prototype.removePocketType = function () {
   if (this.pocketTypeAdded()) {
     this.elem.find(".pocket-type-container").remove();
     this.pocketTypes.items = [];
+    this.pocketTypes.exists = false;
   }
 };
 
@@ -3220,6 +3224,7 @@ PaymentForm.prototype.createPocketTypeItem = function (pocketTypeIndex) {
 PaymentForm.prototype.setupPocketTypeContainer = function () {
 
   const { pocketTypes, configuration } = this;
+  this.pocketTypes.exists = true;
   $this = this;
 
   const options = Object.values(configuration)
