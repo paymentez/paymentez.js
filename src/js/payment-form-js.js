@@ -472,6 +472,7 @@ PaymentForm.prototype.verifyTransaction = function () {
   let transaction_id = this.addCardProcess.response.card.transaction_reference;
   let verification_type = 'BY_OTP';  // TODO: Dynamic, according to the message in the answer
   let value = this.getVerificationValue();
+
   let $this = this;
   Payment.verifyTransaction(
     user_id,
@@ -918,15 +919,16 @@ PaymentForm.prototype.isValidBillingAddress = function () {
 }
 
 PaymentForm.prototype.isPocketTypeValid = function () {
-  if (!this.pocketTypeAdded()) return true;
-  const validationArray = [];
+  const { configuration: { colsubsidio: { type_pockets = null } } } = this;
+  if (!this.pocketTypeAdded() && type_pockets === null) return true;
+  const validationArray = new Array();
   this.pocketTypes.items.forEach((item, index) => {
     validationArray.push(this.refreshPocketTypeAmountValidation(index));
     validationArray.push(this.refreshPocketTypeSelectValidation(index));
     validationArray.push(this.refreshPocketTypeInstallmentsValidation(index));
   });
   validationArray.push(this.updatePocketsLabel({ type: "globalValidation" }));
-
+  if (this.pocketTypes.items.length === 0) return false;
   return !validationArray.includes(false);
 };
 
@@ -1445,7 +1447,6 @@ PaymentForm.prototype.pocketTypeElmAdded = function (type, index) {
 PaymentForm.prototype.getCard = function (e) {
   let data = null;
   if (!this.isValidData()) return data;
-
   let today = new Date();
   let currentYear = "" + today.getFullYear();
   let year = this.getExpiryYear();
@@ -1472,6 +1473,7 @@ PaymentForm.prototype.getCard = function (e) {
     data.card.brand_options = this.getPocketTypeData()
   }
   return data;
+
 };
 
 /**
@@ -2167,6 +2169,7 @@ PaymentForm.prototype.removeVerificationContainer = function () {
 };
 
 PaymentForm.prototype.addPocketType = function () {
+  console.log(this.isPocketTypeValid())
   if (!this.pocketTypeAdded()) {
     this.setupPocketTypeContainer();
   }
