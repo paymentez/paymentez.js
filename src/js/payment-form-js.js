@@ -927,8 +927,8 @@ PaymentForm.prototype.isPocketTypeValid = function () {
     validationArray.push(this.refreshPocketTypeSelectValidation(index));
     validationArray.push(this.refreshPocketTypeInstallmentsValidation(index));
   });
-  validationArray.push(this.updatePocketsLabel({ type: "globalValidation" }));
-  if (this.pocketTypes.items.length === 0) return false;
+  if (validationArray.length === 0) return false;
+  this.updatePocketsLabel({ type: "globalValidation" });
   return !validationArray.includes(false);
 };
 
@@ -1447,6 +1447,7 @@ PaymentForm.prototype.pocketTypeElmAdded = function (type, index) {
 PaymentForm.prototype.getCard = function (e) {
   let data = null;
   if (!this.isValidData()) return data;
+
   let today = new Date();
   let currentYear = "" + today.getFullYear();
   let year = this.getExpiryYear();
@@ -2169,7 +2170,6 @@ PaymentForm.prototype.removeVerificationContainer = function () {
 };
 
 PaymentForm.prototype.addPocketType = function () {
-  console.log(this.isPocketTypeValid())
   if (!this.pocketTypeAdded()) {
     this.setupPocketTypeContainer();
   }
@@ -3044,11 +3044,12 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
 
     if (paymentBtn.length > 0) {
       const totalPocketFieldsSum = $this.getSumOfPocketsAmountFields();
-      const totalAmount = $this.getPocketTotalAmout();
+      let totalAmount = $this.getPocketTotalAmout();
       switch (type) {
         case "init":
           label.removeClass("hidden");
           $this.setPocketTypesTotalAmount(paymentBtn.text());
+          totalAmount = $this.getPocketTotalAmout();
           break;
         case "error":
           this.enablePocketTypesBtns();

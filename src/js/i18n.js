@@ -32,7 +32,6 @@ translations['es'] = {
   pocketTypeAmount: 'Monto',
   pocketTypeSelect: 'Tipo de bolsillo',
   pocketTypeAddLabel: 'Agregar bolsillo',
-
 }
 
 translations['pt'] = {
