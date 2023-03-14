@@ -919,8 +919,9 @@ PaymentForm.prototype.isValidBillingAddress = function () {
 }
 
 PaymentForm.prototype.isPocketTypeValid = function () {
-  const { configuration: { colsubsidio: { type_pockets = null } } } = this;
-  if (!this.pocketTypeAdded() && type_pockets === null) return true;
+
+  const { configuration: { colsubsidio: { type_pockets } = {} } = {} } = this;
+  if (!this.pocketTypeAdded() && !type_pockets) return true;
   const validationArray = new Array();
   this.pocketTypes.items.forEach((item, index) => {
     validationArray.push(this.refreshPocketTypeAmountValidation(index));
