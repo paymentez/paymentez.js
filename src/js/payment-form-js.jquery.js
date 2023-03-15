@@ -40,6 +40,9 @@
     },
     updatePocketsLabel: function (label) {
       return this.data("paymentform").updatePocketsLabel(label);
+    },
+    isPocketTypeValid: function () {
+      return this.data("paymentform").isPocketTypeValid();
     }
   };
 

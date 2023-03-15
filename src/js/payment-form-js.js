@@ -921,7 +921,7 @@ PaymentForm.prototype.isValidBillingAddress = function () {
 PaymentForm.prototype.isPocketTypeValid = function () {
 
   const { configuration: { colsubsidio: { type_pockets } = {} } = {} } = this;
-  if (!this.pocketTypeAdded() && !type_pockets) return true;
+  if (!this.isPocketTypeAdded() && !type_pockets) return true;
   const validationArray = new Array();
   this.pocketTypes.items.forEach((item, index) => {
     validationArray.push(this.refreshPocketTypeAmountValidation(index));
@@ -1422,7 +1422,7 @@ PaymentForm.prototype.billingAddressAdded = function () {
  *
  * @returns {boolean}
  */
-PaymentForm.prototype.pocketTypeAdded = function () {
+PaymentForm.prototype.isPocketTypeAdded = function () {
   return this.pocketTypes.init;
 };
 
@@ -1471,7 +1471,7 @@ PaymentForm.prototype.getCard = function (e) {
     }
 
   };
-  if (this.pocketTypeAdded()) {
+  if (this.isPocketTypeAdded()) {
     data.card.brand_options = this.getPocketTypeData()
   }
   return data;
@@ -1702,7 +1702,7 @@ PaymentForm.prototype.getPocketTransactions = function () {
 }
 
 PaymentForm.prototype.getPocketTypeData = function () {
-  if (this.pocketTypeAdded()) {
+  if (this.isPocketTypeAdded()) {
     const splitId = "split_" + Object.keys(this.configuration)[0];
     const pocketData = {
       [splitId]: {
@@ -2171,13 +2171,13 @@ PaymentForm.prototype.removeVerificationContainer = function () {
 };
 
 PaymentForm.prototype.addPocketType = function () {
-  if (!this.pocketTypeAdded()) {
+  if (!this.isPocketTypeAdded()) {
     this.setupPocketTypeContainer();
   }
 };
 
 PaymentForm.prototype.removePocketType = function () {
-  if (this.pocketTypeAdded()) {
+  if (this.isPocketTypeAdded()) {
     this.elem.find(".pocket-type-container").remove();
     this.pocketTypes.items = [];
     this.pocketTypes.init = false;
@@ -3034,7 +3034,7 @@ PaymentForm.prototype.getPocketTotalAmout = function () {
 
 PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
 
-  if (this.pocketTypeAdded()) {
+  if (this.isPocketTypeAdded()) {
 
     const { type = "init" } = data;
 
