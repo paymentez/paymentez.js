@@ -919,7 +919,6 @@ PaymentForm.prototype.isValidBillingAddress = function () {
 }
 
 PaymentForm.prototype.isPocketTypeValid = function () {
-
   const { configuration: { colsubsidio: { type_pockets } = {} } = {} } = this;
   if (!this.isPocketTypeAdded() && !type_pockets) return true;
   const validationArray = new Array();
@@ -929,8 +928,11 @@ PaymentForm.prototype.isPocketTypeValid = function () {
     validationArray.push(this.refreshPocketTypeInstallmentsValidation(index));
   });
   if (validationArray.length === 0) return false;
-  this.updatePocketsLabel({ type: "globalValidation" });
-  return !validationArray.includes(false);
+  const isValid = !validationArray.includes(false);
+  if (isValid) {
+    this.updatePocketsLabel({ type: "globalValidation" });
+  };
+  return isValid;
 };
 
 /**
