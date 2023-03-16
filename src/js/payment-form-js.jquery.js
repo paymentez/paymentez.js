@@ -43,6 +43,9 @@
     },
     isPocketTypeValid: function () {
       return this.data("paymentform").isPocketTypeValid();
+    },
+    isValidData: function () {
+      return this.data("paymentform").isValidData();
     }
   };
 
