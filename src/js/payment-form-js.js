@@ -932,6 +932,7 @@ PaymentForm.prototype.isPocketTypeValid = function () {
   if (isValid) {
     this.updatePocketsLabel({ type: "globalValidation" });
   };
+  console.log({ isValid })
   return isValid;
 };
 
