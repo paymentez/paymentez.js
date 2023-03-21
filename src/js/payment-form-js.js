@@ -538,7 +538,6 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
 
   required_fields.forEach(function (required_field) {
     let field_name = typeof (required_field) === 'object' ? Object.keys(required_field)[0] : required_field;
-
     // Only should be contemplated the no default fields from SDK form (fiscal_number, tuya_key, fiscal_number_type)
     switch (field_name) {
       case 'fiscal_number':
@@ -555,6 +554,9 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
     }
   }
   );
+  if (!required_fields.includes('pocket_type')) {
+    this.pocketTypes.init = false;
+  }
 };
 
 PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
@@ -583,6 +585,9 @@ PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
 };
 
 PaymentForm.prototype.successBinCallback = function (objResponse, form) {
+
+  form.pocketTypes.init = true;
+
   // Set luhn flag
   form.useLunh = objResponse.use_luhn;
 
@@ -1449,6 +1454,7 @@ PaymentForm.prototype.pocketTypeElmAdded = function (type, index) {
  */
 PaymentForm.prototype.getCard = function (e) {
   let data = null;
+
   if (!this.isValidData()) return data;
 
   let today = new Date();
