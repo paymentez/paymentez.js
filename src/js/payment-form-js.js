@@ -533,6 +533,7 @@ PaymentForm.prototype.setRequiredFields = function (required_fields) {
     }
     form.removeNip();
     form.removePocketType();
+    this.pocketTypes.init = false;
     return
   }
 
@@ -585,8 +586,12 @@ PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
 };
 
 PaymentForm.prototype.successBinCallback = function (objResponse, form) {
-
+  //aqui MONO
   form.pocketTypes.init = true;
+  console.log(form.pocketTypes.init);
+  console.log("Está agregado", form.isPocketTypeAdded());
+  console.log("Es valido", form.isPocketTypeValid());
+  // this.pocketTypes.init = true;
 
   // Set luhn flag
   form.useLunh = objResponse.use_luhn;
@@ -924,8 +929,13 @@ PaymentForm.prototype.isValidBillingAddress = function () {
 }
 
 PaymentForm.prototype.isPocketTypeValid = function () {
-  const { configuration: { colsubsidio: { type_pockets } = {} } = {} } = this;
-  if (!this.isPocketTypeAdded() && !type_pockets) return true;
+  const { pocketTypes: { init = false }, configuration: { colsubsidio: { type_pockets } = {} } = {} } = this;
+  console.log("isPocketTypeAdded === false", this.isPocketTypeAdded() === false)
+  console.log("type_pockets", type_pockets)
+  console.log("no type_pockets", !type_pockets)
+  console.log("init", init)
+  console.log("init === false", init === false)
+  if (this.isPocketTypeAdded() === false && !type_pockets && init === false) return true;
   const validationArray = new Array();
   this.pocketTypes.items.forEach((item, index) => {
     validationArray.push(this.refreshPocketTypeAmountValidation(index));
@@ -956,6 +966,7 @@ PaymentForm.prototype.isValidData = function () {
   let is_nip_valid = this.refreshNipValidation();
   let is_valid_billing_address = this.isValidBillingAddress();
   let is_valid_pocket_type = this.isPocketTypeValid();
+  console.log("is_valid_pocket_type", is_valid_pocket_type);
   return is_date_valid && is_cvc_valid && is_card_holder_valid && is_card_number_valid
     && is_email_valid && is_cellphone_valid && is_fiscal_number_valid && is_nip_valid
     && is_valid_billing_address && is_valid_pocket_type;
@@ -1430,7 +1441,24 @@ PaymentForm.prototype.billingAddressAdded = function () {
  * @returns {boolean}
  */
 PaymentForm.prototype.isPocketTypeAdded = function () {
-  return this.pocketTypes.init;
+
+  const { pocketTypes: { init = false }, configuration: { colsubsidio: { type_pockets } = {} } = {} } = this;
+
+
+  const pocketItemLenght = this.pocketTypes.items.length;
+  console.log("this", this)
+  console.log('init', init);
+  console.log('type_pockets', type_pockets);
+  console.log('pocketItemLenght', pocketItemLenght);
+  let isAdded = false;
+  if (type_pockets) {
+    isAdded = (init === true && type_pockets && pocketItemLenght > 0) ? true : false;
+  } else {
+    console.log("no lo amerita");
+    isAdded = pocketItemLenght > 0;
+  }
+  console.log("isAdded", isAdded);
+  return isAdded;
 };
 
 /**
@@ -1454,6 +1482,8 @@ PaymentForm.prototype.pocketTypeElmAdded = function (type, index) {
  */
 PaymentForm.prototype.getCard = function (e) {
   let data = null;
+
+  console.log("isValidData", this.isValidData());
 
   if (!this.isValidData()) return data;
 
@@ -2179,12 +2209,17 @@ PaymentForm.prototype.removeVerificationContainer = function () {
 };
 
 PaymentForm.prototype.addPocketType = function () {
+  console.log("Running addPocketType");
+  console.log("isPocketTypeValid", this.isPocketTypeValid());
+  console.log("isPocketTypeAdded", this.isPocketTypeAdded());
   if (!this.isPocketTypeAdded()) {
     this.setupPocketTypeContainer();
   }
 };
 
 PaymentForm.prototype.removePocketType = function () {
+  console.log("Running removePocketType");
+  console.log("isPocketTypeAdded en running", this.isPocketTypeAdded());
   if (this.isPocketTypeAdded()) {
     this.elem.find(".pocket-type-container").remove();
     this.pocketTypes.items = [];
