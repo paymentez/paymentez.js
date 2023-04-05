@@ -2,18 +2,13 @@
 <html>
 
 <head>
-
   <title>Example Add Card</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
-  <!-- <link href="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.css" rel="stylesheet" type="text/css" /> -->
-  <link rel="stylesheet" href="../payment_stable.min.css">
-  <!-- <script src="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.js" charset="UTF-8"></script> -->
-
-
-  <script src="../payment_stable.min.js"></script>
+  <link href="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.paymentez.com/ccapi/sdk/payment_stable.min.js" charset="UTF-8"></script>
 
   <style>
     .panel {
@@ -98,7 +93,6 @@
      * @param payment_client_app_code provided by Paymentez.
      * @param payment_client_app_key provided by Paymentez.
      */
-    // Payment.init('stg', 'PAYMENT_CLIENT_APP_CODE', 'PAYMENT_CLIENT_APP_KEY');
     Payment.init('stg', 'PAYMENT_CLIENT_APP_CODE', 'PAYMENT_CLIENT_APP_KEY');
 
     let form = $("#add-card-form");
