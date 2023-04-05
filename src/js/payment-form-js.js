@@ -3055,8 +3055,6 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
   if (this.isPocketTypeAdded()) {
 
     const { type = "init" } = data;
-    console.log(type);
-
     const paymentBtn = $(".payment-button-popup");
     const label = $(".pocketTypeAmountLabelText");
 
@@ -3097,7 +3095,6 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
         style: 'currency',
         currency: "COP",
       });
-      console.log(label);
       const pocketsLabel = formatter.format(totalPocketFieldsSum) + " de " + formatter.format(totalAmount);
       label.text(pocketsLabel);
     }
