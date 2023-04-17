@@ -931,11 +931,20 @@ PaymentForm.prototype.isPocketTypeValid = function () {
     validationArray.push(this.refreshPocketTypeSelectValidation(index));
     validationArray.push(this.refreshPocketTypeInstallmentsValidation(index));
   });
+
   if (validationArray.length === 0) return false;
+
   const isValid = !validationArray.includes(false);
   if (isValid) {
     this.updatePocketsLabel({ type: "globalValidation" });
   };
+
+  const sumOfPocketsAmountFields = this.getSumOfPocketsAmountFields();
+  const totalAmountNumber = Number(this.pocketTypes.totalAmount);
+  if (sumOfPocketsAmountFields !== totalAmountNumber) {
+    return false;
+  }
+
   return isValid;
 };
 
