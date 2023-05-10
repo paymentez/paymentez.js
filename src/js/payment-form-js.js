@@ -663,8 +663,11 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
 PaymentForm.prototype.setInstallmentsOptions = function (installments, selectedInstallment = null, isDefaultText = true) {
   const selectInstallments = selectedInstallment || $(".installments");
   selectInstallments.empty();
+  if (!installments.includes(0)) {
+    installments.unshift(0);
+  };
   installments.forEach(function (value, index) {
-    const isInitialIndex = index === 0;
+    const isInitialIndex = value === 0;
     const text = isInitialIndex
       ? isDefaultText
         ? this.__('installments')
