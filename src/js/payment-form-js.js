@@ -586,6 +586,7 @@ PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
 };
 
 PaymentForm.prototype.successBinCallback = function (objResponse, form) {
+
   form.pocketTypes.init = true;
   // Set luhn flag
   form.useLunh = objResponse.use_luhn;
@@ -663,9 +664,6 @@ PaymentForm.prototype.successBinCallback = function (objResponse, form) {
 PaymentForm.prototype.setInstallmentsOptions = function (installments, selectedInstallment = null, isDefaultText = true) {
   const selectInstallments = selectedInstallment || $(".installments");
   selectInstallments.empty();
-  if (!installments.includes(0)) {
-    installments.unshift(0);
-  };
   installments.forEach(function (value, index) {
     const isInitialIndex = value === 0;
     const text = isInitialIndex
