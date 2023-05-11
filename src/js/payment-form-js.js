@@ -586,7 +586,6 @@ PaymentForm.prototype.setNoRequiredFields = function (no_required_fields) {
 };
 
 PaymentForm.prototype.successBinCallback = function (objResponse, form) {
-
   form.pocketTypes.init = true;
   // Set luhn flag
   form.useLunh = objResponse.use_luhn;
