@@ -1441,7 +1441,6 @@ PaymentForm.prototype.isPocketTypeAdded = function () {
 
   const { pocketTypes: { init = false }, configuration: { colsubsidio: { type_pockets } = {} } = {} } = this;
 
-
   const pocketItemLenght = this.pocketTypes.items.length;
   let isAdded = false;
   if (type_pockets) {
@@ -3116,9 +3115,12 @@ PaymentForm.prototype.updatePocketTypeSelectsState = function (action = "remove"
 
   const indexOfActiveElm = action === "remove" ? numItems - 2 : numItems - 1;
   for (let i = 0; i < numItems; i++) {
-    pocketTypesItems[i].selectController.$control.addClass('disabled');
+    // pocketTypesItems[i].selectController.$control.addClass('disabled');
+    pocketTypesItems[i].selectController.disable();
+
     if (i === indexOfActiveElm) {
-      pocketTypesItems[i].selectController.$control.removeClass('disabled');
+      // pocketTypesItems[i].selectController.$control.removeClass('disabled');
+      pocketTypesItems[i].selectController.enable();
     }
   }
 };
@@ -3231,7 +3233,6 @@ PaymentForm.prototype.removePocketTypeItem = function (index) {
 PaymentForm.prototype.createPocketTypeItem = function (pocketTypeIndex) {
   const availableOptions = this.pocketTypes.availableOptions;
   const selectedOptions = this.pocketTypes.items.map(item => item.selectController.getValue());
-
   selectedOptions.forEach(option => availableOptions.delete(option));
   const pocketTypeItemSelectWrapper = $("<div>", { class: "pocket-type-item" })
     .appendTo(this.elem.find(".pocket-type-items-container"));
@@ -3242,7 +3243,6 @@ PaymentForm.prototype.createPocketTypeItem = function (pocketTypeIndex) {
     installments: null,
     button: null,
   };
-
   this.setupPocketTypeAmount(pocketTypeItemSelectWrapper, pocketTypeIndex);
   this.setupPocketTypeSelect(pocketTypeItemSelectWrapper, pocketTypeIndex);
   this.setupPocketTypeInstallments(pocketTypeItemSelectWrapper, pocketTypeIndex);
