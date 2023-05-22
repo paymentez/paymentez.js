@@ -1750,7 +1750,7 @@ PaymentForm.prototype.getPocketTypeData = function () {
 PaymentForm.prototype.getPocketTypeAmount = function (index) {
   const pocketItem = this.pocketTypes.items[index];
   if (pocketItem.amount && pocketItem.amount[0]) {
-    return parseInt(pocketItem.amount[0].value);
+    return parseFloat(pocketItem.amount[0].value);
   }
   return null;
 };
@@ -2983,14 +2983,24 @@ PaymentForm.prototype.createUniqueName = function (prefix) {
   return `${prefix}${PaymentForm.generateRandoms().join("").slice(4)}`;
 }
 
+PaymentForm.limitDecimalsTo = function (e, limit = 2) {
+  let isNumber = PaymentForm.keyIsNumber(e);
+  const str = e.target.value.toString();
+  const decimalExist = str.indexOf(".") >= 1 ? true : false;
+  if (decimalExist) {
+    const decimalIndex = str.split(".");
+    if (decimalIndex[1].length >= limit && isNumber) {
+      e.preventDefault();
+    }
+  }
+}
+
 PaymentForm.prototype.setupPocketTypeAmount = function (pocketTypeItemSelectWrapper, index) {
   const cPTAmountInput = this.pocketTypes.items[index].amount = PaymentForm.detachOrCreateElement(
     this.elem,
     '.pocketTypeAmount',
     `<input class='pocket-type-amount' />`
   );
-
-  pocketTypeItemSelectWrapper.append(cPTAmountInput);
 
   cPTAmountInput.attr({
     name: this.createUniqueName("pocket-type-amount-"),
@@ -3000,9 +3010,15 @@ PaymentForm.prototype.setupPocketTypeAmount = function (pocketTypeItemSelectWrap
     spellcheck: "off",
     min: 0,
     autocapitalize: "off",
+    step: ".01",
   });
 
-  cPTAmountInput.keydown(PaymentForm.filterNumberOnlyKey);
+  pocketTypeItemSelectWrapper.append(cPTAmountInput);
+
+  cPTAmountInput.keydown(function (e) {
+    PaymentForm.limitDecimalsTo(e, 2);
+  });
+
   cPTAmountInput.blur(() => {
     this.setSumOfPocketsAmountFields();
     this.refreshPocketTypeAmountValidation(index);
