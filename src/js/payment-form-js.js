@@ -3041,12 +3041,11 @@ PaymentForm.prototype.updateAvaliableOptions = function (value) {
 
 PaymentForm.prototype.extractPocketTotalAmoutFormBtnString = function (string = "") {
   if (!string) return null;
-  var cur_re = /\D*(\d+|\d.*?\d)(?:\D+(\d{2}))?\D*$/;
+  var cur_re = /(\d{1,3}(?:\.\d{3})*)(?:,(\d{2}))?/;
   var parts = cur_re.exec(string);
-  var number = parseFloat(parts[1].replace(/\D/, '') + '.' + (parts[2] ? parts[2] : '00'));
+  var number = parseFloat(parts[1].replace(/\./g, '') + '.' + (parts[2] ? parts[2] : '00'));
   return number.toFixed(2);
 }
-
 
 PaymentForm.prototype.setSumOfPocketsAmountFields = function () {
   const { pocketTypes: { items: pocketTypesItems } } = this;
@@ -3119,6 +3118,7 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
         style: 'currency',
         currency: "COP",
       });
+      console.log("totalAmount", totalAmount)
       const pocketsLabel = formatter.format(totalPocketFieldsSum) + " de " + formatter.format(totalAmount);
       label.text(pocketsLabel);
     }
