@@ -2140,16 +2140,13 @@ PaymentForm.prototype.initCvcInput = function () {
   if (!PaymentForm.elementHasAttribute(this.cvcInput, "placeholder")) {
     this.cvcInput.attr("placeholder", PaymentForm.CVC_PLACEHOLDER);
   }
-  this.cvcInput.attr("type", "tel");
+  this.cvcInput.attr("type", "password");
   this.cvcInput.attr("maxlength", this.cvcLenght);
   this.cvcInput.attr("x-autocompletetype", "cc-csc");
   this.cvcInput.attr("autocompletetype", "cc-csc");
   this.cvcInput.attr("autocorrect", "off");
   this.cvcInput.attr("spellcheck", "off");
   this.cvcInput.attr("autocapitalize", "off");
-  if (!this.IS_MOBILE) {
-    this.cvcInput.attr("type", "password");
-  }
 };
 
 /**
