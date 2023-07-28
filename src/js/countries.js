@@ -12083,43 +12083,43 @@ Payment.COUNTRIES = [
     "numeric_code": "591",
     "states": [
       {
-        "code": "1",
+        "code": "01",
         "name": "Botas del Toro"
       },
       {
-        "code": "2",
+        "code": "02",
         "name": "Cocle"
       },
       {
-        "code": "3",
+        "code": "03",
         "name": "Colon"
       },
       {
-        "code": "4",
+        "code": "04",
         "name": "Chiriqui"
       },
       {
-        "code": "5",
+        "code": "05",
         "name": "Darien"
       },
       {
-        "code": "6",
+        "code": "06",
         "name": "Herrera"
       },
       {
-        "code": "7",
+        "code": "07",
         "name": "Los Santos"
       },
       {
-        "code": "8",
+        "code": "08",
         "name": "Panama"
       },
       {
-        "code": "9",
+        "code": "09",
         "name": "Veraguas"
       },
       {
-        "code": "0",
+        "code": "00",
         "name": "Comarca de San Blas"
       }
     ]
