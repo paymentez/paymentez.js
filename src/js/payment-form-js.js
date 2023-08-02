@@ -3118,7 +3118,6 @@ PaymentForm.prototype.updatePocketsLabel = function (data = {}) {
         style: 'currency',
         currency: "COP",
       });
-      console.log("totalAmount", totalAmount)
       const pocketsLabel = formatter.format(totalPocketFieldsSum) + " de " + formatter.format(totalAmount);
       label.text(pocketsLabel);
     }
