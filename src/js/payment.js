@@ -26,24 +26,25 @@ let AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
 
 function _getTime(callback) {
   let xhr = new XMLHttpRequest();
-  xhr.onload = function () {
-    if (xhr.status >= 200 && xhr.status < 300) {
-      let response = JSON.parse(xhr.responseText);
-      if (!!response.unixtime) {
-        AUTH_TIMESTAMP_SERVER = String(response.unixtime);
-      }
-    } else {
-      AUTH_TIMESTAMP_SERVER = String(new Date().getTime());
-    }
-    callback();
-  };
 
+  // Abre la solicitud antes de configurar los eventos y enviarla
   if (["local", "dev", "stg"].indexOf(Payment.ENV_MODE) >= 0) {
     xhr.open("GET", Payment.PG_MICROS_STAGING);
   } else if (["prod", "prod-qa"].indexOf(Payment.ENV_MODE) >= 0) {
     xhr.open("GET", Payment.PG_MICROS_PRODUCTION);
   }
 
+  xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 300) {
+      let response = JSON.parse(xhr.responseText);
+      response.unixtime && (AUTH_TIMESTAMP_SERVER = String(response.unixtime));
+    } else {
+      AUTH_TIMESTAMP_SERVER = String((new Date).getTime());
+    }
+    callback();
+  };
+
+  // Envía la solicitud después de configurar los eventos
   xhr.send();
 }
 

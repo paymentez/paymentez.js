@@ -27,7 +27,7 @@ module.exports = function (grunt) {
     cssmin: {
       options: {
         shorthandCompacting: false,
-        roundingPrecision: -1
+        roundingPrecision: -1,
       },
       "css": {
         files: {
@@ -40,13 +40,16 @@ module.exports = function (grunt) {
     // JavaScript Minify
     //
     uglify: {
-      options: {
-        mangle: false
-      },
+
       js: {
+        options: {
+          mangle: false,
+          compress: false,
+          beautify: true,
+        },
         files: {
           "payment_<%= version_sdk %>.min.js": ["src/js/**/*.js"]
-        }
+        },
       }
     },
 
@@ -67,7 +70,7 @@ module.exports = function (grunt) {
         files: [
           './src/js/**/*.js'
         ],
-        tasks: ["uglify:js"],
+        tasks: ["uglify-es:js"],
         options: {
           livereload: true
         }
