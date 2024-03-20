@@ -25,7 +25,6 @@ Payment.PG_MICROS_PRODUCTION = `https://pg-micros.${Payment.DOMAIN}/v1/unixtime/
 let AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
 
 function _getTime(callback) {
-  console.log("callback", callback);
   let xhr = new XMLHttpRequest();
 
   // Step 1: Open the request before setting up events and sending it
