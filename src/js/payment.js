@@ -13,6 +13,7 @@ Payment.KOUN_PROD_ENVIRONMENT = "https://ssl.kaptcha.com/";
 
 Payment.DOMAIN = "paymentez.com";  // Update this for each white label
 Payment.SERVER_LOCAL_URL = "http://localhost:8080";
+
 Payment.SERVER_DEV_URL = `https://ccapi-dev.${Payment.DOMAIN}`;
 Payment.SERVER_STG_URL = `https://ccapi-stg.${Payment.DOMAIN}`;
 Payment.SERVER_QA_URL = `https://ccapi-qa.${Payment.DOMAIN}`;
@@ -25,26 +26,33 @@ let AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
 
 function _getTime(callback) {
   let xhr = new XMLHttpRequest();
-  xhr.onload = function () {
-    if (xhr.status >= 200 && xhr.status < 300) {
-      let response = JSON.parse(xhr.responseText);
-      if (!!response.unixtime) {
-        AUTH_TIMESTAMP_SERVER = String(response.unixtime);
-      }
-    } else {
-      AUTH_TIMESTAMP_SERVER = String(new Date().getTime());
-    }
-    callback();
-  };
 
+  // Step 1: Open the request before setting up events and sending it
   if (["local", "dev", "stg"].indexOf(Payment.ENV_MODE) >= 0) {
     xhr.open("GET", Payment.PG_MICROS_STAGING);
   } else if (["prod", "prod-qa"].indexOf(Payment.ENV_MODE) >= 0) {
     xhr.open("GET", Payment.PG_MICROS_PRODUCTION);
   }
 
+  // Step 2: Set up the event listener for when the request is complete
+  xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 300) {
+      // Process the successful response
+      let response = JSON.parse(xhr.responseText);
+      response.unixtime && (AUTH_TIMESTAMP_SERVER = String(response.unixtime));
+    } else {
+      // Handle errors
+      AUTH_TIMESTAMP_SERVER = String((new Date).getTime());
+    }
+
+    // Step 3: Call the callback function after handling the response
+    callback();
+  };
+
+  // Step 4: Send the request after setting up events
   xhr.send();
 }
+
 
 function Payment() {
 }
@@ -108,7 +116,7 @@ Payment.createToken = function (createTokenRequest, successCallback, errorCallba
           let objResponse = JSON.parse(xmlhttp.responseText);
           if (xmlhttp.status === 200) {
             if (objResponse.card.status === "pending" && payment_form !== undefined) {
-              objResponse.user = {id: createTokenRequest.user.id};
+              objResponse.user = { id: createTokenRequest.user.id };
               payment_form.PaymentForm('showVerification', objResponse, successCallback, errorCallback);
             } else {
               successCallback(objResponse);
@@ -292,8 +300,8 @@ Payment.getBinInformation = function (number_bin, form, successCallback, errorCa
 Payment.verifyTransaction = function (user_id, transaction_id, verification_type, value, successCallback, errorCallback) {
   const initFunction = function () {
     let data = {
-      user: {id: user_id},
-      transaction: {id: transaction_id},
+      user: { id: user_id },
+      transaction: { id: transaction_id },
       type: verification_type,
       value: value,
       more_info: true,
