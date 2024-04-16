@@ -3306,7 +3306,7 @@ Payment.COUNTRIES = [
       },
       {
         "code": "ANT",
-        "name": "Antioguia"
+        "name": "Antioquia"
       },
       {
         "code": "ARA",
