@@ -11304,7 +11304,7 @@ Payment.COUNTRIES = [
     ]
   },
   {
-    "active": false,
+    "active": true,
     "calling_code": "31",
     "code": "NLD",
     "code_2": "NL",
