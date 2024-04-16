@@ -25,34 +25,40 @@ let AUTH_TIMESTAMP_SERVER = "" + String(new Date().getTime());
 
 function _getTime(callback) {
   let xhr = new XMLHttpRequest();
-  xhr.onload = function () {
-    if (xhr.status >= 200 && xhr.status < 300) {
-      let response = JSON.parse(xhr.responseText);
-      if (!!response.unixtime) {
-        AUTH_TIMESTAMP_SERVER = String(response.unixtime);
-      }
-    } else {
-      AUTH_TIMESTAMP_SERVER = String(new Date().getTime());
-    }
-    callback();
-  };
 
+  // Step 1: Open the request before setting up events and sending it
   if (["local", "dev", "stg"].indexOf(Payment.ENV_MODE) >= 0) {
     xhr.open("GET", Payment.PG_MICROS_STAGING);
   } else if (["prod", "prod-qa"].indexOf(Payment.ENV_MODE) >= 0) {
     xhr.open("GET", Payment.PG_MICROS_PRODUCTION);
   }
 
+  // Step 2: Set up the event listener for when the request is complete
+  xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 300) {
+      // Process the successful response
+      let response = JSON.parse(xhr.responseText);
+      response.unixtime && (AUTH_TIMESTAMP_SERVER = String(response.unixtime));
+    } else {
+      // Handle errors
+      AUTH_TIMESTAMP_SERVER = String((new Date).getTime());
+    }
+
+    // Step 3: Call the callback function after handling the response
+    callback();
+  };
+
+  // Step 4: Send the request after setting up events
   xhr.send();
 }
+
 
 function Payment() {
 }
 
 Payment.uuidv4 = function () {
   return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    let r = (Math.random() * 16) | 0,
-      v = c === "x" ? r : (r & 0x3) | 0x8;
+    let r = (Math.random() * 16) | 0, v = c === "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 };
@@ -119,9 +125,7 @@ Payment.createToken = function (createTokenRequest, successCallback, errorCallba
         } catch (e) {
           let server_error = {
             error: {
-              type: "Server Error",
-              help: "Server Error",
-              description: "Server Error"
+              type: "Server Error", help: "Server Error", description: "Server Error"
             }
           };
           errorCallback(server_error);
@@ -139,8 +143,7 @@ Payment.dataCollector = function (session_id) {
     threeDS2_data: {
       term_url: 'https://example.com',  // TODO: Remove this
       device_type: 'browser',
-    },
-    browser_info: {
+    }, browser_info: {
       ip: '127.0.0.1',  // TODO: Remove this
       language: navigator.language || navigator.userLanguage,
       java_enabled: navigator.javaEnabled(),
@@ -155,13 +158,7 @@ Payment.dataCollector = function (session_id) {
   }
 
   let body, iframe, image;
-  if (
-    typeof document !== "undefined" &&
-    typeof document.body !== "undefined" &&
-    document.body &&
-    (document.readyState === "interactive" ||
-      document.readyState === "complete")
-  ) {
+  if (typeof document !== "undefined" && typeof document.body !== "undefined" && document.body && (document.readyState === "interactive" || document.readyState === "complete")) {
     const kount_url = `${Payment.KOUNT_ENVIRONMENT}logo.htm?m=${Payment.MERCHANT_ID}&s=${session_id}`
     body = document.getElementsByTagName("body")[0];
     iframe = document.createElement("iframe");
@@ -226,16 +223,12 @@ Payment.addCard = function (uid, email, card, success_callback, failure_callback
   const session_id = Payment.getSessionId();
   Payment.dataCollector(session_id);
   let params = {
-    session_id: session_id,
-    user: {
+    session_id: session_id, user: {
       id: uid,
       email: email,
       phone: payment_form ? payment_form.PaymentForm('cellPhone') : $(".cellphone").val(),
       fiscal_number: payment_form ? payment_form.PaymentForm('fiscalNumber') : $(".fiscal-number").val(),
-    },
-    card: card["card"],
-    extra_params: this.TDS_2,
-    billing_address: payment_form ? payment_form.PaymentForm('billingAddress') : {},
+    }, card: card["card"], extra_params: this.TDS_2, billing_address: payment_form ? payment_form.PaymentForm('billingAddress') : {},
   };
   Payment.createToken(params, success_callback, failure_callback, payment_form);
 };
@@ -251,13 +244,7 @@ Payment.getBinInformation = function (number_bin, form, successCallback, errorCa
       let SERVER_URL = this.getServerURL();
       let url_bin = SERVER_URL + "/v2/card_bin/" + number_bin;
       xmlhttp.open("GET", url_bin, true);
-      xmlhttp.setRequestHeader(
-        "Auth-Token",
-        this.getAuthToken(
-          this.PAYMENT_CLIENT_APP_CODE,
-          this.PAYMENT_CLIENT_APP_KEY
-        )
-      );
+      xmlhttp.setRequestHeader("Auth-Token", this.getAuthToken(this.PAYMENT_CLIENT_APP_CODE, this.PAYMENT_CLIENT_APP_KEY));
     }
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState === XMLHttpRequest.DONE) {
@@ -271,9 +258,7 @@ Payment.getBinInformation = function (number_bin, form, successCallback, errorCa
         } catch (e) {
           let server_error = {
             error: {
-              type: "Server Error",
-              help: "Server Error",
-              description: "Server Error"
+              type: "Server Error", help: "Server Error", description: "Server Error"
             }
           };
           errorCallback(server_error);
@@ -292,24 +277,14 @@ Payment.getBinInformation = function (number_bin, form, successCallback, errorCa
 Payment.verifyTransaction = function (user_id, transaction_id, verification_type, value, successCallback, errorCallback) {
   const initFunction = function () {
     let data = {
-      user: {id: user_id},
-      transaction: {id: transaction_id},
-      type: verification_type,
-      value: value,
-      more_info: true,
+      user: {id: user_id}, transaction: {id: transaction_id}, type: verification_type, value: value, more_info: true,
     };
     let xmlhttp = new XMLHttpRequest();
     let url_verify = "/v2/transaction/verify";
     let SERVER_URL = this.getServerURL();
     xmlhttp.open("POST", SERVER_URL + url_verify, true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.setRequestHeader(
-      "Auth-Token",
-      Payment.getAuthToken(
-        Payment.PAYMENT_CLIENT_APP_CODE,
-        Payment.PAYMENT_CLIENT_APP_KEY
-      )
-    );
+    xmlhttp.setRequestHeader("Auth-Token", Payment.getAuthToken(Payment.PAYMENT_CLIENT_APP_CODE, Payment.PAYMENT_CLIENT_APP_KEY));
 
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState === XMLHttpRequest.DONE) {
@@ -323,9 +298,7 @@ Payment.verifyTransaction = function (user_id, transaction_id, verification_type
         } catch (e) {
           let server_error = {
             error: {
-              type: "Server Error",
-              help: "Server Error",
-              description: "Server Error"
+              type: "Server Error", help: "Server Error", description: "Server Error"
             }
           };
           errorCallback(server_error);
