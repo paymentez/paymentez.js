@@ -914,16 +914,14 @@ PaymentForm.prototype.isValidBillingAddress = function () {
   let iv_state = this.refreshBillingAddressStateValidation();
   let iv_city = this.refreshBillingAddressCityValidation();
   let iv_district = this.refreshBillingAddressDistrictValidation();
+  let iv_zip = true;
   if (this.billingAddressZip) {
-    let iv_zip = this.refreshBillingAddressZipValidation();
-  } else {
-    let iv_zip = true;
+    iv_zip = this.refreshBillingAddressZipValidation();
   }
   let iv_street = this.refreshBillingAddressStreetValidation();
+  let iv_housenumber = true;
   if (this.billingAddressHouseNumber) {
-    let iv_housenumber = this.refreshBillingAddressHouseNumberValidation();
-  } else {
-    let iv_housenumber = true;
+    iv_housenumber = this.refreshBillingAddressHouseNumberValidation();
   }
   let iv_additional = this.refreshBillingAddressAdditionalValidation();
   return iv_country && iv_state && iv_city && iv_district && iv_zip && iv_street && iv_housenumber && iv_additional;
@@ -2983,11 +2981,14 @@ PaymentForm.prototype.setupBillingAddress = function () {
   let wrapper3 = container.find(".billing-address-wrapper3");
   if (this.billingAddressHouseNumber && !this.billingAddressZip) {
     wrapper2.append(this.billingAddressHouseNumber);
+    wrapper3.append(this.billingAddressAdditional);
   } else if (this.billingAddressHouseNumber && this.billingAddressZip) {
     wrapper3.append(this.billingAddressHouseNumber);
     wrapper3.append(this.billingAddressAdditional);
   } else if (!this.billingAddressHouseNumber && !this.billingAddressZip) {
     wrapper2.append(this.billingAddressAdditional);
+  } else if (!this.billingAddressHouseNumber && this.billingAddressZip) {
+    wrapper3.append(this.billingAddressAdditional);
   }
 
   // Events
